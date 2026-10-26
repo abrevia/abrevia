@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrevia | Bilingual SMS Support Relay</title>
+    <link rel="icon" type="image/png" href="/assets/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#3B82F6',
+                            600: '#2D74C4',
+                            700: '#1D4ED8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-600 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md px-6 py-4 sticky top-0 z-50 flex items-center justify-between max-w-7xl mx-auto w-full">
+        <div class="flex items-center space-x-3">
+            <img src="/assets/logo.png" alt="Abrevia Logo" class="h-9 w-9 rounded-lg shadow">
+            <span class="text-xl font-bold tracking-tight text-white">Abrevia</span>
+            <span class="text-[11px] bg-slate-800 text-slate-300 font-medium px-2.5 py-0.5 rounded-full border border-slate-700">SaaS Relay</span>
+        </div>
+        <div>
+            <a href="/dashboard.html" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-lg shadow-brand-600/20">
+                Agent Workspace &rarr;
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Content -->
+    <main class="max-w-4xl mx-auto w-full px-6 py-16 flex-grow flex flex-col items-center justify-center text-center">
+        
+        <div class="inline-flex items-center space-x-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs text-slate-300 mb-6">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Zero-Download Administrative Relay &bull; httpSMS + Gemini 1.5</span>
+        </div>
+
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+            Instant Bilingual SMS for <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-brand-500">Fast Operations & Logistics</span>
+        </h1>
+
+        <p class="text-slate-400 text-base md:text-lg max-w-2xl mb-8 leading-relaxed">
+            Support your Spanish-speaking customers seamlessly over SMS. Your agents type in English, AI translates instantly with Human-In-The-Loop review, and replies arrive right in the customer's native text thread.
+        </p>
+
+        <!-- Login / Enter Card -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-8 max-w-md w-full shadow-2xl backdrop-blur-sm">
+            <h2 class="text-lg font-bold text-white mb-2">Agent & Dispatcher Sign-In</h2>
+            <p class="text-xs text-slate-400 mb-6">Access your live two-way SMS communication console.</p>
+
+            <form onsubmit="event.preventDefault(); window.location.href='/dashboard.html';" class="space-y-4">
+                <div>
+                    <label class="block text-left text-xs font-medium text-slate-300 mb-1.5">Work Email / Agent ID</label>
+                    <input type="text" value="agent@abrevia.live" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                </div>
+                <div>
+                    <label class="block text-left text-xs font-medium text-slate-300 mb-1.5">Access PIN / Password</label>
+                    <input type="password" value="••••••••" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center space-x-2">
+                    <span>Enter Workspace</span>
+                    <span>&rarr;</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Verticals Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 w-full text-left">
+            <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
+                <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">Logistics</span>
+                <p class="text-xs text-slate-400">Driver updates, delivery coordinates & schedule dispatch.</p>
+            </div>
+            <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
+                <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">Property</span>
+                <p class="text-xs text-slate-400">Tenant inquiries, maintenance notices & unit access codes.</p>
+            </div>
+            <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
+                <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">Field Services</span>
+                <p class="text-xs text-slate-400">Technician arrival alerts, quote approvals & rescheduling.</p>
+            </div>
+            <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
+                <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">Customer Care</span>
+                <p class="text-xs text-slate-400">Zero-app friction: customer texts naturally from any phone.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer with Mandatory Non-Healthcare Disclaimer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-6 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <p class="text-xs text-slate-500 font-medium mb-2">
+                &copy; 2026 Abrevia Inc. All rights reserved. &bull; Powered by Gemini 1.5 Flash & httpSMS.
+            </p>
+            <p class="text-[11px] text-amber-500/80 bg-amber-500/10 border border-amber-500/20 rounded-lg py-1.5 px-3 inline-block">
+                <strong>Notice:</strong> Abrevia is an administrative operations tool and is not available for healthcare organizations or PHI processing.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
