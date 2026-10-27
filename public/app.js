@@ -15,6 +15,7 @@ const I18N = {
         newThreadBtn: 'New Customer Thread',
         selectConversation: 'Select a conversation',
         selectSubtitle: 'Choose a ticket from the sidebar or start a new thread',
+        threadSubtitle: (id) => `Thread: ${id.slice(0, 8)}... • Two-Way SMS Relay`,
         activeBadge: 'Active',
         purgeBtn: 'End & Purge Thread',
         emptyFeedTitle: 'Select an active conversation to view and send bilingual messages',
@@ -57,6 +58,7 @@ const I18N = {
         newThreadBtn: 'Nuevo Hilo de Cliente',
         selectConversation: 'Selecciona una conversación',
         selectSubtitle: 'Elige un ticket de la barra lateral o inicia un nuevo hilo',
+        threadSubtitle: (id) => `Hilo: ${id.slice(0, 8)}... • Relevo SMS Bilingüe`,
         activeBadge: 'Activo',
         purgeBtn: 'Finalizar y Purgar Hilo',
         emptyFeedTitle: 'Selecciona una conversación activa para ver y enviar mensajes bilingües',
@@ -180,6 +182,9 @@ function applyDashboardLocalization() {
     if (!currentTicket) {
         document.getElementById('activeCustomerTitle').textContent = t.selectConversation;
         document.getElementById('activeSubtitle').textContent = t.selectSubtitle;
+    } else {
+        document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Customer' : 'Cliente'}: ${currentTicket.customer_phone}`;
+        document.getElementById('activeSubtitle').textContent = t.threadSubtitle(currentTicket.id);
     }
 
     document.getElementById('activeBadge').textContent = t.activeBadge;
@@ -326,8 +331,8 @@ async function selectTicket(ticketId, customerPhone) {
     const t = I18N[dashboardMode];
     
     // Update Header
-    document.getElementById('activeCustomerTitle').textContent = `Customer: ${customerPhone}`;
-    document.getElementById('activeSubtitle').textContent = `Thread ID: ${ticketId.slice(0, 8)}... • Two-Way SMS Active`;
+    document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Customer' : 'Cliente'}: ${customerPhone}`;
+    document.getElementById('activeSubtitle').textContent = t.threadSubtitle(ticketId);
     document.getElementById('activeBadge').classList.remove('hidden');
     document.getElementById('purgeBtn').classList.remove('hidden');
     document.getElementById('inputArea').classList.remove('hidden');
