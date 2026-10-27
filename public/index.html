@@ -145,21 +145,72 @@
 
     </main>
 
-    <!-- Footer with Mandatory Non-Healthcare Disclaimer (Bilingual) -->
-    <footer class="border-t border-slate-800/80 bg-slate-950 py-6 px-6 text-center">
-        <div class="max-w-4xl mx-auto space-y-3">
+    <!-- Footer with Sleek Neutral Administrative Note & HIPAA Learn More Link -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-8 px-6 text-center">
+        <div class="max-w-4xl mx-auto space-y-4">
             <p class="text-xs text-slate-500 font-medium">
                 &copy; 2026 Abrevia Inc. All rights reserved. &bull; Powered by Gemini AI & httpSMS Gateway.
             </p>
-            <div class="text-[11px] text-amber-500/90 bg-amber-500/10 border border-amber-500/20 rounded-xl py-2 px-4 inline-block text-left max-w-2xl">
-                <p class="font-semibold text-amber-400 mb-0.5">Administrative Use Notice &bull; Aviso de Uso Administrativo:</p>
-                <p class="text-slate-400 text-[10px] leading-relaxed">
-                    Abrevia is strictly an administrative operations tool and is not available for healthcare organizations or PHI processing. &bull; 
-                    Abrevia es estrictamente una herramienta de operaciones administrativas y no está disponible para organizaciones de salud ni procesamiento de datos médicos.
-                </p>
+
+            <!-- Sleek Neutral Administrative Notice Card -->
+            <div class="text-xs text-slate-400 bg-slate-900 border border-slate-800 rounded-xl p-4 inline-block text-left max-w-2xl shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <p id="footerNoticeText" class="leading-relaxed text-[11px] text-slate-400">
+                        <span id="footerNoticeTitle" class="font-semibold text-slate-300">Notice:</span> 
+                        Abrevia is strictly an administrative operations tool and is not designed for PHI processing. Learn more about HIPAA and our HIPAA-compliant app, available soon.
+                    </p>
+                    <button onclick="openHipaaModal()" class="shrink-0 text-brand-400 hover:text-brand-300 font-semibold text-xs transition inline-flex items-center space-x-1">
+                        <span id="footerLearnMoreBtn">Learn More</span>
+                        <span>&rarr;</span>
+                    </button>
+                </div>
             </div>
         </div>
     </footer>
+
+    <!-- HIPAA & Abrevia 2 Roadmap Modal -->
+    <div id="hipaaModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl text-left relative">
+            <button onclick="closeHipaaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-base shadow-sm">
+                    🛡️
+                </div>
+                <div>
+                    <h3 id="hipaaModalTitle" class="text-base font-bold text-white">HIPAA & Healthcare Roadmap</h3>
+                    <span id="hipaaModalBadge" class="text-[10px] text-brand-400 font-semibold uppercase tracking-wider">Abrevia 2 Preview</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-xs text-slate-300 leading-relaxed mb-6">
+                <p id="hipaaP1">
+                    <strong>Abrevia 1</strong> is strictly an administrative operations tool built for non-medical communication across logistics, property management, retail, and field services.
+                </p>
+                <p id="hipaaP2">
+                    We are patiently engineering <strong>Abrevia 2</strong>, our clinical-grade edition designed specifically for covered healthcare organizations, clinics, and medical interpreter workflows.
+                </p>
+                
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2 text-[11px] text-slate-400 mt-2">
+                    <div id="hipaaUpcomingTitle" class="font-semibold text-slate-200">Upcoming Clinical Features in Abrevia 2:</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-400">
+                        <li id="hipaaFeat1">Signed Business Associate Agreements (BAAs) with cloud and telecommunication providers.</li>
+                        <li id="hipaaFeat2">Automated PHI sanitization and de-identification pre-translation.</li>
+                        <li id="hipaaFeat3">Immutable audit logs complying with HIPAA Security Rule §164.312(b).</li>
+                        <li id="hipaaFeat4">ACA Section 1557 qualified human-in-the-loop language assistance review.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="hipaaCloseBtn" onclick="closeHipaaModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const content = {
@@ -170,6 +221,19 @@
                 labelEmail: 'Work Email / Agent ID',
                 labelPassword: 'Access PIN / Password',
                 submitBtnText: 'Enter English Workspace',
+                footerNoticeTitle: 'Notice:',
+                footerNotice: 'Abrevia is strictly an administrative operations tool and is not designed for PHI processing. Learn more about HIPAA and our HIPAA-compliant app, available soon.',
+                footerLearnMore: 'Learn More',
+                hipaaTitle: 'HIPAA & Healthcare Roadmap',
+                hipaaBadge: 'Abrevia 2 Preview',
+                hipaaP1: 'Abrevia 1 is strictly an administrative operations tool built for non-medical communication across logistics, property management, retail, and field services.',
+                hipaaP2: 'We are patiently engineering Abrevia 2, our clinical-grade edition designed specifically for covered healthcare organizations, clinics, and medical interpreter workflows.',
+                hipaaUpcomingTitle: 'Upcoming Clinical Features in Abrevia 2:',
+                hipaaFeat1: 'Signed Business Associate Agreements (BAAs) with cloud and telecommunication providers.',
+                hipaaFeat2: 'Automated PHI sanitization and de-identification pre-translation.',
+                hipaaFeat3: 'Immutable audit logs complying with HIPAA Security Rule §164.312(b).',
+                hipaaFeat4: 'ACA Section 1557 qualified human-in-the-loop language assistance review.',
+                hipaaClose: 'Close',
                 verticals: [
                     { title: 'Logistics', desc: 'Driver updates, delivery coordinates & schedule dispatch.' },
                     { title: 'Property', desc: 'Tenant inquiries, maintenance notices & access codes.' },
@@ -180,10 +244,23 @@
             es: {
                 loginTitle: 'Inicio de Sesión - Agente y Despacho',
                 loginLangTag: 'Modo Español',
-                loginSubtitle: 'Acceda a la consola para gestionar hilos de clientes con traducción en tiempo real.',
+                loginSubtitle: 'Acceda a la consola para gestionar hilos de destinatarios con traducción en tiempo real.',
                 labelEmail: 'Correo Corporativo / ID de Agente',
                 labelPassword: 'PIN / Contraseña de Acceso',
                 submitBtnText: 'Entrar al Área en Español',
+                footerNoticeTitle: 'Aviso:',
+                footerNotice: 'Abrevia es estrictamente una herramienta de operaciones administrativas y no está diseñada para el procesamiento de PHI. Conozca más sobre HIPAA y nuestra app compatible, disponible pronto.',
+                footerLearnMore: 'Más Información',
+                hipaaTitle: 'Ruta de Cumplimiento HIPAA y Salud',
+                hipaaBadge: 'Vista Previa de Abrevia 2',
+                hipaaP1: 'Abrevia 1 es estrictamente una herramienta de operaciones administrativas diseñada para comunicación no médica (logística, bienes raíces, comercio y servicios en campo).',
+                hipaaP2: 'Estamos desarrollando pacientemente Abrevia 2, nuestra edición de grado clínico diseñada específicamente para entidades de salud e intérpretes médicos.',
+                hipaaUpcomingTitle: 'Próximas Funcionalidades Clínicas en Abrevia 2:',
+                hipaaFeat1: 'Acuerdos de Asociado Comercial (BAA) firmados con proveedores de nube y telecomunicaciones.',
+                hipaaFeat2: 'Sanitización automática de PHI y desidentificación previa a la traducción.',
+                hipaaFeat3: 'Registros de auditoría inmutables según la Regla de Seguridad HIPAA §164.312(b).',
+                hipaaFeat4: 'Protocolos de revisión humana calificada bajo ACA Sección 1557.',
+                hipaaClose: 'Cerrar',
                 verticals: [
                     { title: 'Logística', desc: 'Actualizaciones a transportistas, coordenadas y horarios de entrega.' },
                     { title: 'Inmobiliaria', desc: 'Consultas de inquilinos, reportes de mantenimiento y códigos de acceso.' },
@@ -237,6 +314,22 @@
             document.getElementById('labelPassword').textContent = c.labelPassword;
             document.getElementById('submitBtnText').textContent = c.submitBtnText;
 
+            // Update Footer Notice & Learn More
+            document.getElementById('footerNoticeText').innerHTML = `<span class="font-semibold text-slate-300">${c.footerNoticeTitle}</span> ${c.footerNotice}`;
+            document.getElementById('footerLearnMoreBtn').textContent = c.footerLearnMore;
+
+            // Update Modal Content
+            document.getElementById('hipaaModalTitle').textContent = c.hipaaTitle;
+            document.getElementById('hipaaModalBadge').textContent = c.hipaaBadge;
+            document.getElementById('hipaaP1').innerHTML = c.hipaaP1;
+            document.getElementById('hipaaP2').innerHTML = c.hipaaP2;
+            document.getElementById('hipaaUpcomingTitle').textContent = c.hipaaUpcomingTitle;
+            document.getElementById('hipaaFeat1').textContent = c.hipaaFeat1;
+            document.getElementById('hipaaFeat2').textContent = c.hipaaFeat2;
+            document.getElementById('hipaaFeat3').textContent = c.hipaaFeat3;
+            document.getElementById('hipaaFeat4').textContent = c.hipaaFeat4;
+            document.getElementById('hipaaCloseBtn').textContent = c.hipaaClose;
+
             // Render Verticals
             const verticalsContainer = document.getElementById('verticalsGrid');
             verticalsContainer.innerHTML = c.verticals.map(v => `
@@ -250,6 +343,15 @@
         function handleEnterWorkspace(e) {
             e.preventDefault();
             window.location.href = `/dashboard.html?lang=${currentLang}`;
+        }
+
+        // HIPAA Modal Handlers
+        function openHipaaModal() {
+            document.getElementById('hipaaModal').classList.remove('hidden');
+        }
+
+        function closeHipaaModal() {
+            document.getElementById('hipaaModal').classList.add('hidden');
         }
 
         // Initialize with default or saved language
