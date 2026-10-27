@@ -103,11 +103,11 @@
                         <img src="/assets/logo.png" alt="" class="h-6 w-6 opacity-60">
                     </div>
                     <p id="emptyFeedTitle" class="text-xs text-slate-400 font-medium">Select an active conversation to view and send bilingual messages</p>
-                    <p id="emptyFeedSubtitle" class="text-[11px] text-slate-600 mt-1">Inbound SMS is translated to English &bull; Outbound replies are reviewed in Spanish</p>
+                    <p id="emptyFeedSubtitle" class="text-[11px] text-slate-600 mt-1">Inbound SMS is translated to English &bull; Outbound replies are translated & dispatched instantly via SMS</p>
                 </div>
             </div>
 
-            <!-- Agent HITL Input Workspace -->
+            <!-- Agent Composer Workspace (Abrevia 1 Instant Dispatch) -->
             <div id="inputArea" class="bg-slate-950 border-t border-slate-800 p-4 shrink-0 hidden">
                 <div class="max-w-4xl mx-auto space-y-3">
                     
@@ -123,10 +123,28 @@
                             <input type="file" id="fileInput" onchange="handleFileSelected(event)" class="hidden" accept="image/*,.pdf,.doc,.docx,.txt">
 
                             <input id="agent-input" type="text" placeholder="Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-                            <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5">
+                            <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send SMS" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5">
                                 <span id="translateBtnText">Send</span>
                                 <span class="text-xs font-bold">↵</span>
                             </button>
+                        </div>
+
+                        <!-- Instant Status & Premium HITL Toggle Bar -->
+                        <div class="flex items-center justify-between text-[11px] px-1 mt-2 text-slate-400">
+                            <div class="flex items-center space-x-2">
+                                <span class="inline-flex items-center space-x-1 text-emerald-400 font-medium">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                    <span id="instantModeLabel">⚡ Secure Instant Translation (Abrevia 1)</span>
+                                </span>
+                                <span class="text-slate-700 hidden sm:inline">•</span>
+                                <span id="instantModeHint" class="text-slate-500 hidden sm:inline">Auto-translates & dispatches SMS directly</span>
+                            </div>
+                            <div>
+                                <button id="toggleHitlBtn" type="button" onclick="toggleHitlMode()" class="inline-flex items-center space-x-1 text-slate-400 hover:text-brand-300 transition px-2 py-0.5 rounded-md hover:bg-slate-900 border border-transparent hover:border-slate-800">
+                                    <span>🛡️</span>
+                                    <span id="hitlToggleText">Pre-Send Review (Premium)</span>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Translation Progress Bar Container (% progress) -->

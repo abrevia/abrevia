@@ -3,6 +3,7 @@ let currentTicket = null;
 let pollInterval = null;
 let dashboardMode = 'en';
 let currentAttachment = null; // { file, base64, name, size, type, uploadedUrl }
+let hitlModeEnabled = false; // Abrevia 1 default: Instant translation without human in the loop
 
 const I18N = {
     en: {
@@ -20,7 +21,7 @@ const I18N = {
         activeBadge: 'Active',
         purgeBtn: 'End & Purge Thread',
         emptyFeedTitle: 'Select an active conversation to view and send bilingual messages',
-        emptyFeedSubtitle: 'Inbound SMS translated to English • Outbound replies reviewed in Spanish',
+        emptyFeedSubtitle: 'Inbound SMS translated to English • Outbound replies translated & dispatched instantly via SMS',
         noMessagesInThread: 'No messages yet in this thread.<br>Send an outbound SMS reply below to start.',
         inputLabel: 'Type reply in English (Agent):',
         inputPlaceholder: 'Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)...',
@@ -28,6 +29,12 @@ const I18N = {
         translating: 'Translating...',
         progressStatus: 'AI Translating...',
         progressComplete: '✓ Translated & Verified (100%)',
+        progressSending: 'Sending SMS...',
+        progressSent: '✓ Sent via SMS!',
+        instantModeLabel: '⚡ Secure Instant Translation (Abrevia 1)',
+        instantModeHint: 'Auto-translates & dispatches SMS directly',
+        hitlTogglePremium: 'Pre-Send Review (Premium)',
+        hitlToggleActive: 'Pre-Send Review: ON',
         hitlTitle: 'Human-In-The-Loop Review (Spanish text to be sent via SMS):',
         hitlSubtitle: 'Edit text freely • Press Enter ↵ to send',
         cancelHitl: 'Cancel',
@@ -64,7 +71,7 @@ const I18N = {
         activeBadge: 'Activo',
         purgeBtn: 'Finalizar y Purgar Hilo',
         emptyFeedTitle: 'Selecciona una conversación activa para ver y enviar mensajes bilingües',
-        emptyFeedSubtitle: 'Mensajes entrantes traducidos a español • Respuestas salientes revisadas en inglés',
+        emptyFeedSubtitle: 'SMS entrantes traducidos al español • Respuestas traducidas y enviadas al instante por SMS',
         noMessagesInThread: 'Aún no hay mensajes en este hilo.<br>Envía una respuesta SMS abajo para iniciar.',
         inputLabel: 'Escribe respuesta en Español (Agente):',
         inputPlaceholder: 'Escribe tu respuesta en español (ej. Su entrega está programada para mañana a las 2 PM)...',
@@ -72,6 +79,12 @@ const I18N = {
         translating: 'Traduciendo...',
         progressStatus: 'Traducción IA en progreso...',
         progressComplete: '✓ Traducción Verificada (100%)',
+        progressSending: 'Enviando SMS...',
+        progressSent: '✓ ¡Enviado por SMS!',
+        instantModeLabel: '⚡ Traducción Instantánea Segura (Abrevia 1)',
+        instantModeHint: 'Traduce y envía SMS directamente',
+        hitlTogglePremium: 'Revisión Pre-Envío (Premium)',
+        hitlToggleActive: 'Revisión Pre-Envío: ACTIVA',
         hitlTitle: 'Revisión Humana HITL (Texto en inglés que se enviará por SMS):',
         hitlSubtitle: 'Edita el texto libremente • Presiona Enter ↵ para enviar',
         cancelHitl: 'Cancelar',
@@ -207,6 +220,13 @@ function applyDashboardLocalization() {
     document.getElementById('agent-input').placeholder = t.inputPlaceholder;
     document.getElementById('translate-btn').innerHTML = `<span>${t.translateBtn}</span> <span class="text-xs font-bold">↵</span>`;
 
+    // Instant Translation Status & Mode Indicator
+    const instantLabel = document.getElementById('instantModeLabel');
+    if (instantLabel) instantLabel.textContent = t.instantModeLabel;
+    const instantHint = document.getElementById('instantModeHint');
+    if (instantHint) instantHint.textContent = t.instantModeHint;
+    updateHitlToggleUI();
+
     // HITL
     document.getElementById('hitlTitleText').textContent = t.hitlTitle;
     document.getElementById('hitlSubtitle').textContent = t.hitlSubtitle;
@@ -220,6 +240,41 @@ function applyDashboardLocalization() {
     document.getElementById('modalPhoneLabel').textContent = t.modalPhoneLabel;
     document.getElementById('modalCancelBtn').textContent = t.modalCancel;
     document.getElementById('modalSubmitBtn').textContent = t.modalSubmit;
+}
+
+// Toggle Pre-Send Review Mode (Human-In-The-Loop) — Premium Tier feature
+function toggleHitlMode() {
+    const isPremium = localStorage.getItem('abrevia_tier') === 'premium';
+    if (!isPremium && !hitlModeEnabled) {
+        const wantsUpgrade = confirm(dashboardMode === 'es'
+            ? 'La revisión humana previa al envío es exclusiva del Nivel Premium ($49/mes Operaciones Pro).\n\n¿Desea ver los planes de suscripción en Facturación?'
+            : 'Pre-send human-in-the-loop review is reserved for the Premium Tier ($49/mo Operations Pro).\n\nWould you like to explore upgrade plans in Billing?');
+        if (wantsUpgrade) {
+            openBillingModal();
+        }
+        return;
+    }
+
+    hitlModeEnabled = !hitlModeEnabled;
+    if (!hitlModeEnabled) {
+        cancelHITL();
+    }
+    updateHitlToggleUI();
+}
+
+function updateHitlToggleUI() {
+    const toggleBtn = document.getElementById('toggleHitlBtn');
+    const hitlToggleText = document.getElementById('hitlToggleText');
+    const t = I18N[dashboardMode];
+    if (!toggleBtn || !hitlToggleText) return;
+
+    if (hitlModeEnabled) {
+        toggleBtn.className = 'inline-flex items-center space-x-1 text-emerald-300 font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30';
+        hitlToggleText.textContent = t.hitlToggleActive;
+    } else {
+        toggleBtn.className = 'inline-flex items-center space-x-1 text-slate-400 hover:text-brand-300 transition px-2 py-0.5 rounded-md hover:bg-slate-900 border border-transparent hover:border-slate-800';
+        hitlToggleText.textContent = t.hitlTogglePremium;
+    }
 }
 
 // File Attachment Handlers
@@ -471,8 +526,13 @@ function renderChatFeed(messages, scrollToBottom = false) {
     }
 }
 
-// HITL Step 1: Translate agent draft into target language for review with % progress
+// Abrevia 1 Composer: Auto-translates & dispatches SMS directly (Instant Mode).
+// Pre-send review is reserved for Premium Tier.
 async function handleTranslateAndSend() {
+    if (!currentTicket) {
+        alert(dashboardMode === 'es' ? 'Por favor seleccione o cree una conversación primero.' : 'Please select or create a conversation first.');
+        return;
+    }
     const inputEl = document.getElementById('agent-input');
     const draftText = inputEl.value.trim();
     if (!draftText && !currentAttachment) return;
@@ -526,16 +586,80 @@ async function handleTranslateAndSend() {
 
         clearInterval(progressTimer);
 
-        // Flash 100% completion
+        if (!hitlModeEnabled) {
+            // Abrevia 1 Instant Mode: Auto-dispatch translated SMS directly without human-in-the-loop review
+            if (progressStatusText) progressStatusText.textContent = t.sendingSms;
+            if (progressBarFill) progressBarFill.style.width = '94%';
+            if (progressPercentage) progressPercentage.textContent = '94%';
+
+            // 1. Upload attachment if present and not yet uploaded
+            let mediaUrl = currentAttachment?.uploadedUrl || null;
+            if (currentAttachment && !mediaUrl) {
+                if (progressStatusText) progressStatusText.textContent = t.uploadingFile;
+                try {
+                    const upRes = await fetch('/api/upload', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            filename: currentAttachment.name,
+                            contentType: currentAttachment.type,
+                            base64Data: currentAttachment.base64
+                        })
+                    });
+                    const upData = await upRes.json();
+                    if (!upRes.ok) throw new Error(upData.error || 'Failed to upload attachment');
+                    mediaUrl = upData.url;
+                    currentAttachment.uploadedUrl = mediaUrl;
+                } catch (upErr) {
+                    throw new Error('Attachment upload error: ' + upErr.message);
+                }
+            }
+
+            // 2. Dispatch SMS directly via /api/send-sms
+            const englishText = (dashboardMode === 'en') ? (draftText || (mediaUrl ? 'Attachment sent' : '')) : (translatedText || (mediaUrl ? 'Attachment sent' : ''));
+            const spanishText = (dashboardMode === 'en') ? (translatedText || (mediaUrl ? 'Adjunto enviado' : '')) : (draftText || (mediaUrl ? 'Adjunto enviado' : ''));
+            const smsBody = (dashboardMode === 'en' ? translatedText : draftText) || (dashboardMode === 'en' ? 'Adjunto recibido:' : 'Attachment:');
+
+            const res = await fetch('/api/send-sms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: currentTicket.customer_phone,
+                    body: smsBody,
+                    mediaUrl: mediaUrl,
+                    ticketId: currentTicket.id,
+                    englishText: englishText,
+                    spanishText: spanishText
+                })
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Failed to send SMS');
+
+            // 3. Clear inputs and flash sent notification
+            inputEl.value = '';
+            removeAttachment();
+
+            if (progressBarFill) progressBarFill.style.width = '100%';
+            if (progressPercentage) progressPercentage.textContent = '100%';
+            if (progressStatusText) progressStatusText.textContent = t.progressSent || '✓ Sent via SMS!';
+
+            await new Promise(r => setTimeout(r, 450));
+            if (progressContainer) progressContainer.classList.add('hidden');
+
+            // Refresh message feed
+            await fetchMessages(currentTicket.id, true);
+            return;
+        }
+
+        // Premium Tier HITL Review Box (Only when pre-send review is enabled)
         if (progressBarFill) progressBarFill.style.width = '100%';
         if (progressPercentage) progressPercentage.textContent = '100%';
         if (progressStatusText) progressStatusText.textContent = t.progressComplete;
 
-        // Brief pleasant pause to display 100% before opening review box
         await new Promise(r => setTimeout(r, 260));
         if (progressContainer) progressContainer.classList.add('hidden');
 
-        // Show HITL Review Box
         const hitlContainer = document.getElementById('hitlContainer');
         const reviewBox = document.getElementById('target-review-box');
         reviewBox.value = translatedText;
@@ -788,15 +912,23 @@ async function openStripeCustomerPortal() {
     }
 }
 
-// Check for Billing redirect notices
+// Check for Billing redirect notices & update tier
 (function checkBillingStatus() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('billing') === 'success') {
+        localStorage.setItem('abrevia_tier', 'premium');
         alert(dashboardMode === 'es' 
-            ? '✓ ¡Pago completado con éxito! Su cuenta de operaciones ha sido actualizada.'
-            : '✓ Payment completed successfully! Your operations workspace has been updated.');
+            ? '✓ ¡Pago completado con éxito! Su cuenta de operaciones ha sido actualizada a Nivel Premium con revisión HITL.'
+            : '✓ Payment completed successfully! Your operations workspace has been upgraded to Premium Tier with HITL review.');
         window.history.replaceState({}, document.title, window.location.pathname);
     } else if (params.get('billing') === 'canceled') {
         window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // Update billing modal badge if premium
+    const billingPlanBadge = document.getElementById('billingModalPlan');
+    if (billingPlanBadge && localStorage.getItem('abrevia_tier') === 'premium') {
+        billingPlanBadge.textContent = 'Premium Tier (Operations Pro)';
+        billingPlanBadge.className = 'text-[10px] text-amber-400 font-bold uppercase tracking-wider';
     }
 })();
