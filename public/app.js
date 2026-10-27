@@ -7,6 +7,7 @@ let currentAttachment = null; // { file, base64, name, size, type, uploadedUrl }
 const I18N = {
     en: {
         consoleBadge: 'Console',
+        billingBtn: 'Billing',
         signOut: 'Sign Out',
         sidebarTitle: 'Active Conversations',
         refresh: '↻ Refresh',
@@ -50,6 +51,7 @@ const I18N = {
     },
     es: {
         consoleBadge: 'Console',
+        billingBtn: 'Facturación',
         signOut: 'Cerrar Sesión',
         sidebarTitle: 'Conversaciones Activas',
         refresh: '↻ Actualizar',
@@ -175,6 +177,8 @@ function applyDashboardLocalization() {
     // Header title next to logo
     const headerTitle = document.getElementById('headerConsoleTitle');
     if (headerTitle) headerTitle.textContent = t.consoleBadge;
+    const billingBtnEl = document.getElementById('billingBtnText');
+    if (billingBtnEl) billingBtnEl.textContent = t.billingBtn || 'Billing';
     document.getElementById('signOutLink').textContent = t.signOut;
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
     document.getElementById('refreshBtn').textContent = t.refresh;
@@ -714,3 +718,85 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
+
+// --- Stripe Billing Integration ---
+function openBillingModal() {
+    document.getElementById('billingModal')?.classList.remove('hidden');
+}
+
+function closeBillingModal() {
+    document.getElementById('billingModal')?.classList.add('hidden');
+}
+
+async function triggerCheckout(plan) {
+    const btn = event?.currentTarget;
+    const orig = btn ? btn.textContent : '';
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = dashboardMode === 'es' ? 'Conectando...' : 'Connecting...';
+    }
+
+    try {
+        const res = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                plan: plan,
+                successUrl: window.location.origin + '/dashboard.html?billing=success',
+                cancelUrl: window.location.origin + '/dashboard.html?billing=canceled'
+            })
+        });
+
+        const data = await res.json();
+        if (data.url) {
+            window.location.href = data.url;
+        } else if (data.requiresKey) {
+            alert(dashboardMode === 'es'
+                ? 'Stripe Test Mode: Configure STRIPE_SECRET_KEY en las variables de entorno para procesar pagos.'
+                : 'Stripe Test Mode: Configure STRIPE_SECRET_KEY in environment variables to process checkouts.');
+        } else {
+            alert(data.error || 'Failed to start Stripe checkout session.');
+        }
+    } catch (err) {
+        alert('Checkout error: ' + err.message);
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = orig;
+        }
+    }
+}
+
+async function openStripeCustomerPortal() {
+    try {
+        const res = await fetch('/api/customer-portal', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                returnUrl: window.location.origin + '/dashboard.html'
+            })
+        });
+
+        const data = await res.json();
+        if (data.url) {
+            window.location.href = data.url;
+        } else {
+            alert(data.error || 'No active Stripe customer found. Subscribe to a plan first.');
+        }
+    } catch (err) {
+        alert('Portal error: ' + err.message);
+    }
+}
+
+// Check for Billing redirect notices
+(function checkBillingStatus() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('billing') === 'success') {
+        alert(dashboardMode === 'es' 
+            ? '✓ ¡Pago completado con éxito! Su cuenta de operaciones ha sido actualizada.'
+            : '✓ Payment completed successfully! Your operations workspace has been updated.');
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (params.get('billing') === 'canceled') {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+})();

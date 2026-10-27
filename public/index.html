@@ -34,6 +34,10 @@
             </span>
         </div>
         <div class="flex items-center space-x-3 text-xs">
+            <button onclick="openPricingModal()" class="text-xs text-slate-300 hover:text-white font-medium flex items-center space-x-1.5 transition mr-1 bg-slate-900 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg shadow-sm">
+                <span>💳</span>
+                <span id="navPricingText">Pricing & Plans</span>
+            </button>
             <span class="text-slate-500 hidden sm:inline">Operating Mode:</span>
             <button id="langHeaderEn" onclick="selectLanguage('en')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition">EN</button>
             <button id="langHeaderEs" onclick="selectLanguage('es')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition">ES</button>
@@ -168,6 +172,140 @@
         </div>
     </footer>
 
+    <!-- Pricing & Plans Modal (Stripe Checkout) -->
+    <div id="pricingModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl text-left relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closePricingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-xl font-bold p-1">
+                &times;
+            </button>
+
+            <div class="mb-6">
+                <div class="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-brand-400 uppercase tracking-wider mb-1">
+                    <span>💳</span>
+                    <span id="pricingModalTag">B2B SaaS Pricing</span>
+                </div>
+                <h3 id="pricingModalTitle" class="text-xl sm:text-2xl font-extrabold text-white">Simple, Transparent Relay Plans</h3>
+                <p id="pricingModalSubtitle" class="text-xs text-slate-400 mt-1">Start with pay-as-you-go credits or upgrade to unlimited operations relay. Cancel or adjust anytime.</p>
+            </div>
+
+            <!-- Tiers Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                
+                <!-- 1. Credit Pack (Pay-As-You-Go) -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
+                    <div>
+                        <span id="tier1Name" class="text-xs font-bold text-slate-400 uppercase tracking-wider">SMS Credit Pack</span>
+                        <div class="mt-2 mb-3">
+                            <span class="text-2xl sm:text-3xl font-extrabold text-white">$20</span>
+                            <span class="text-xs text-slate-500">/ one-time</span>
+                        </div>
+                        <p id="tier1Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
+                            Ideal for seasonal operations, drivers, and property moves without recurring fees.
+                        </p>
+                        <ul class="space-y-2 text-[11px] text-slate-300 mb-6">
+                            <li class="flex items-center space-x-2">
+                                <span class="text-emerald-400 font-bold">&#x2713;</span>
+                                <span id="tier1F1">500 Bilingual SMS Messages</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-emerald-400 font-bold">&#x2713;</span>
+                                <span id="tier1F2">Google Gemini AI Translation</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-emerald-400 font-bold">&#x2713;</span>
+                                <span id="tier1F3">Zero Monthly Commitment</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button onclick="startCheckout('credits')" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition shadow-sm">
+                        <span id="tier1Btn">Buy 500 Credits ($20)</span>
+                    </button>
+                </div>
+
+                <!-- 2. Operations Pro (Monthly Subscription) -->
+                <div class="bg-slate-950 border-2 border-brand-500 rounded-2xl p-5 flex flex-col justify-between relative shadow-xl shadow-brand-500/10">
+                    <div class="absolute -top-3 right-4 bg-brand-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        Most Popular
+                    </div>
+                    <div>
+                        <span id="tier2Name" class="text-xs font-bold text-brand-400 uppercase tracking-wider">Operations Pro</span>
+                        <div class="mt-2 mb-3">
+                            <span class="text-2xl sm:text-3xl font-extrabold text-white">$49</span>
+                            <span class="text-xs text-slate-400">/ month</span>
+                        </div>
+                        <p id="tier2Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
+                            Full two-way communication workstation for dispatchers, field teams, and support.
+                        </p>
+                        <ul class="space-y-2 text-[11px] text-slate-300 mb-6">
+                            <li class="flex items-center space-x-2">
+                                <span class="text-emerald-400 font-bold">&#x2713;</span>
+                                <span id="tier2F1">Unlimited Bilingual SMS Relay</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-emerald-400 font-bold">&#x2713;</span>
+                                <span id="tier2F2">Human-in-the-Loop Review</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-emerald-400 font-bold">&#x2713;</span>
+                                <span id="tier2F3">MMS Photo & Document Attachments</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-emerald-400 font-bold">&#x2713;</span>
+                                <span id="tier2F4">Persistent Latent Channels</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button onclick="startCheckout('pro')" class="w-full bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold py-2.5 rounded-xl transition shadow-lg shadow-brand-600/30">
+                        <span id="tier2Btn">Subscribe Monthly ($49/mo)</span>
+                    </button>
+                </div>
+
+                <!-- 3. Abrevia 2 Clinical (Preview) -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
+                    <div>
+                        <span id="tier3Name" class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Abrevia 2 Clinical</span>
+                        <div class="mt-2 mb-3">
+                            <span class="text-2xl sm:text-3xl font-extrabold text-white">Custom</span>
+                            <span class="text-xs text-slate-500">/ HIPAA</span>
+                        </div>
+                        <p id="tier3Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
+                            Engineered for covered healthcare entities, medical clinics, and interpreter teams.
+                        </p>
+                        <ul class="space-y-2 text-[11px] text-slate-300 mb-6">
+                            <li class="flex items-center space-x-2">
+                                <span class="text-indigo-400 font-bold">&#x2713;</span>
+                                <span id="tier3F1">Signed Healthcare BAA</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-indigo-400 font-bold">&#x2713;</span>
+                                <span id="tier3F2">Automated PHI De-identification</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-indigo-400 font-bold">&#x2713;</span>
+                                <span id="tier3F3">Immutable HIPAA Audit Logs</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button onclick="closePricingModal(); openHipaaModal();" class="w-full bg-slate-900 border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl transition">
+                        <span id="tier3Btn">View HIPAA Roadmap</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Security & Guarantee Footer -->
+            <div class="border-t border-slate-800/80 pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
+                <div class="flex items-center space-x-2">
+                    <span>🔒</span>
+                    <span id="pricingSecureText">Secured by Stripe • 256-bit SSL Encryption • PCI-DSS Compliant</span>
+                </div>
+                <button onclick="closePricingModal()" class="text-slate-400 hover:text-white transition">
+                    <span id="pricingCloseBtn">Back to Sign-In</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- HIPAA & Abrevia 2 Roadmap Modal -->
     <div id="hipaaModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl text-left relative">
@@ -215,6 +353,31 @@
     <script>
         const content = {
             en: {
+                navPricing: 'Pricing & Plans',
+                pricingModalTag: 'B2B SaaS Pricing',
+                pricingModalTitle: 'Simple, Transparent Relay Plans',
+                pricingModalSubtitle: 'Start with pay-as-you-go credits or upgrade to unlimited operations relay. Cancel or adjust anytime.',
+                tier1Name: 'SMS Credit Pack',
+                tier1Desc: 'Ideal for seasonal operations, drivers, and property moves without recurring fees.',
+                tier1F1: '500 Bilingual SMS Messages',
+                tier1F2: 'Google Gemini AI Translation',
+                tier1F3: 'Zero Monthly Commitment',
+                tier1Btn: 'Buy 500 Credits ($20)',
+                tier2Name: 'Operations Pro',
+                tier2Desc: 'Full two-way communication workstation for dispatchers, field teams, and support.',
+                tier2F1: 'Unlimited Bilingual SMS Relay',
+                tier2F2: 'Human-in-the-Loop Review',
+                tier2F3: 'MMS Photo & Document Attachments',
+                tier2F4: 'Persistent Latent Channels',
+                tier2Btn: 'Subscribe Monthly ($49/mo)',
+                tier3Name: 'Abrevia 2 Clinical',
+                tier3Desc: 'Engineered for covered healthcare entities, medical clinics, and interpreter teams.',
+                tier3F1: 'Signed Healthcare BAA',
+                tier3F2: 'Automated PHI De-identification',
+                tier3F3: 'Immutable HIPAA Audit Logs',
+                tier3Btn: 'View HIPAA Roadmap',
+                pricingSecure: 'Secured by Stripe • 256-bit SSL Encryption • PCI-DSS Compliant',
+                pricingClose: 'Back to Sign-In',
                 loginTitle: 'Agent & Dispatcher Sign-In',
                 loginLangTag: 'English Mode',
                 loginSubtitle: 'Enter your console to start managing bilingual recipient threads.',
@@ -242,6 +405,31 @@
                 ]
             },
             es: {
+                navPricing: 'Planes y Tarifas',
+                pricingModalTag: 'Tarifas SaaS B2B',
+                pricingModalTitle: 'Planes Simples y Transparentes',
+                pricingModalSubtitle: 'Inicia con créditos de pago por uso o contrata el relevo de operaciones ilimitado. Cancela cuando quieras.',
+                tier1Name: 'Paquete de Créditos SMS',
+                tier1Desc: 'Ideal para operaciones de temporada, transportistas y mudanzas sin cobros recurrentes.',
+                tier1F1: '500 Mensajes SMS Bilingües',
+                tier1F2: 'Traducción IA con Google Gemini',
+                tier1F3: 'Cero Compromiso Mensual',
+                tier1Btn: 'Comprar 500 Créditos ($20)',
+                tier2Name: 'Operaciones Pro',
+                tier2Desc: 'Estación de trabajo bidireccional completa para despachadores, técnicos y soporte.',
+                tier2F1: 'Relevo SMS Bilingüe Ilimitado',
+                tier2F2: 'Revisión Humana (HITL) Previa',
+                tier2F3: 'Envío de Archivos y Fotos MMS',
+                tier2F4: 'Canales Latentes Persistentes',
+                tier2Btn: 'Suscripción Mensual ($49/mes)',
+                tier3Name: 'Abrevia 2 Clínico',
+                tier3Desc: 'Diseñado para organizaciones de salud cubiertas, clínicas y equipos de intérpretes.',
+                tier3F1: 'Acuerdo BAA de Salud Firmado',
+                tier3F2: 'Desidentificación Automática de PHI',
+                tier3F3: 'Registros de Auditoría Inmutables',
+                tier3Btn: 'Ver Ruta de Cumplimiento HIPAA',
+                pricingSecure: 'Asegurado por Stripe • Cifrado SSL de 256 bits • Cumplimiento PCI-DSS',
+                pricingClose: 'Volver al Inicio',
                 loginTitle: 'Inicio de Sesión - Agente y Despacho',
                 loginLangTag: 'Modo Español',
                 loginSubtitle: 'Acceda a la consola para gestionar hilos de destinatarios con traducción en tiempo real.',
@@ -330,6 +518,33 @@
             document.getElementById('hipaaFeat4').textContent = c.hipaaFeat4;
             document.getElementById('hipaaCloseBtn').textContent = c.hipaaClose;
 
+            // Update Pricing Modal
+            document.getElementById('navPricingText').textContent = c.navPricing;
+            document.getElementById('pricingModalTag').textContent = c.pricingModalTag;
+            document.getElementById('pricingModalTitle').textContent = c.pricingModalTitle;
+            document.getElementById('pricingModalSubtitle').textContent = c.pricingModalSubtitle;
+            document.getElementById('tier1Name').textContent = c.tier1Name;
+            document.getElementById('tier1Desc').textContent = c.tier1Desc;
+            document.getElementById('tier1F1').textContent = c.tier1F1;
+            document.getElementById('tier1F2').textContent = c.tier1F2;
+            document.getElementById('tier1F3').textContent = c.tier1F3;
+            document.getElementById('tier1Btn').textContent = c.tier1Btn;
+            document.getElementById('tier2Name').textContent = c.tier2Name;
+            document.getElementById('tier2Desc').textContent = c.tier2Desc;
+            document.getElementById('tier2F1').textContent = c.tier2F1;
+            document.getElementById('tier2F2').textContent = c.tier2F2;
+            document.getElementById('tier2F3').textContent = c.tier2F3;
+            document.getElementById('tier2F4').textContent = c.tier2F4;
+            document.getElementById('tier2Btn').textContent = c.tier2Btn;
+            document.getElementById('tier3Name').textContent = c.tier3Name;
+            document.getElementById('tier3Desc').textContent = c.tier3Desc;
+            document.getElementById('tier3F1').textContent = c.tier3F1;
+            document.getElementById('tier3F2').textContent = c.tier3F2;
+            document.getElementById('tier3F3').textContent = c.tier3F3;
+            document.getElementById('tier3Btn').textContent = c.tier3Btn;
+            document.getElementById('pricingSecureText').textContent = c.pricingSecure;
+            document.getElementById('pricingCloseBtn').textContent = c.pricingClose;
+
             // Render Verticals
             const verticalsContainer = document.getElementById('verticalsGrid');
             verticalsContainer.innerHTML = c.verticals.map(v => `
@@ -343,6 +558,56 @@
         function handleEnterWorkspace(e) {
             e.preventDefault();
             window.location.href = `/dashboard.html?lang=${currentLang}`;
+        }
+
+        // Pricing Modal Handlers
+        function openPricingModal() {
+            document.getElementById('pricingModal').classList.remove('hidden');
+        }
+
+        function closePricingModal() {
+            document.getElementById('pricingModal').classList.add('hidden');
+        }
+
+        // Stripe Checkout Integration
+        async function startCheckout(plan) {
+            const btn = event?.currentTarget;
+            const originalText = btn ? btn.textContent : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = currentLang === 'es' ? 'Conectando con Stripe...' : 'Connecting to Stripe...';
+            }
+
+            try {
+                const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        plan: plan,
+                        customerEmail: document.getElementById('inputEmail')?.value || undefined,
+                        successUrl: window.location.origin + '/dashboard.html?billing=success',
+                        cancelUrl: window.location.origin + '/index.html?billing=canceled'
+                    })
+                });
+
+                const data = await res.json();
+                if (data.url) {
+                    window.location.href = data.url;
+                } else if (data.requiresKey) {
+                    alert(currentLang === 'es'
+                        ? 'Stripe Test Mode: Configure STRIPE_SECRET_KEY en las variables de entorno de Vercel para procesar pagos reales.'
+                        : 'Stripe Test Mode: Configure STRIPE_SECRET_KEY in Vercel environment variables to process live checkouts.');
+                } else {
+                    alert(data.error || 'Unable to initiate checkout session.');
+                }
+            } catch (err) {
+                alert('Stripe error: ' + err.message);
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            }
         }
 
         // HIPAA Modal Handlers
