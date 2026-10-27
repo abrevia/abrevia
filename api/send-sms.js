@@ -1,4 +1,5 @@
 import { supabase } from './lib/supabase.js';
+import { encryptMessage } from './lib/cipher.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -11,24 +12,34 @@ export default async function handler(req, res) {
 
   const httpsmsApiKey = process.env.HTTPSMS_API_KEY;
   const fromPhone = process.env.HTTPSMS_PHONE_NUMBER;
+  const encryptionKey = process.env.HTTPSMS_ENCRYPTION_KEY;
 
   if (!httpsmsApiKey || !fromPhone) {
     return res.status(500).json({ error: 'httpSMS environment variables are not configured' });
   }
 
   try {
+    const isEncrypted = Boolean(encryptionKey && encryptionKey.trim().length > 0);
+    const contentToSend = isEncrypted ? encryptMessage(encryptionKey.trim(), body) : body;
+
+    const requestPayload = {
+      content: contentToSend,
+      from: fromPhone, // Android device number
+      to: to,
+      attachments: mediaUrl ? [mediaUrl] : []
+    };
+
+    if (isEncrypted) {
+      requestPayload.encrypted = true;
+    }
+
     const response = await fetch('https://api.httpsms.com/v1/messages/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': httpsmsApiKey
       },
-      body: JSON.stringify({
-        content: body,
-        from: fromPhone, // Android device number
-        to: to,
-        attachments: mediaUrl ? [mediaUrl] : []
-      })
+      body: JSON.stringify(requestPayload)
     });
 
     if (!response.ok) {
@@ -65,7 +76,7 @@ export default async function handler(req, res) {
       }
     }
 
-    res.status(200).json({ success: true, message: savedMessage });
+    res.status(200).json({ success: true, encrypted: isEncrypted, message: savedMessage });
   } catch (error) {
     console.error('Failed to send SMS:', error);
     res.status(500).json({ error: 'Failed to send SMS: ' + error.message });

@@ -1,4 +1,5 @@
 import { supabase } from './lib/supabase.js';
+import { decryptMessage } from './lib/cipher.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -14,11 +15,23 @@ export default async function handler(req, res) {
   }
 
   const customerPhone = payload.data?.contact || payload.data?.from || payload.data?.phone_number;
-  const inboundContent = payload.data?.content || payload.data?.message || payload.data?.text;
+  let inboundContent = payload.data?.content || payload.data?.message || payload.data?.text;
 
   if (!customerPhone || !inboundContent) {
     console.warn('Inbound SMS missing contact or content:', payload);
     return res.status(400).json({ error: 'Missing contact or content in payload' });
+  }
+
+  // httpSMS End-to-End Encryption Decryption
+  const encryptionKey = process.env.HTTPSMS_ENCRYPTION_KEY;
+  const isPayloadEncrypted = payload.data?.encrypted === true || payload.encrypted === true;
+
+  if (encryptionKey && (isPayloadEncrypted || (typeof inboundContent === 'string' && /^[A-Za-z0-9+/=]{24,}$/.test(inboundContent.trim())))) {
+    const decrypted = decryptMessage(encryptionKey.trim(), inboundContent.trim());
+    if (decrypted && decrypted.length > 0) {
+      console.log(`[httpSMS E2EE] Successfully decrypted inbound message from ${customerPhone}`);
+      inboundContent = decrypted;
+    }
   }
 
   try {
