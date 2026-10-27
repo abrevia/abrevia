@@ -29,12 +29,25 @@
         <div class="flex items-center space-x-3">
             <img src="/assets/logo.png" alt="Abrevia" class="h-7 w-7 rounded-md">
             <span class="text-lg font-bold tracking-tight text-white">Abrevia</span>
-            <span class="text-[11px] bg-brand-500/10 text-brand-400 font-medium px-2.5 py-0.5 rounded-full border border-brand-500/20">
+            <span id="headerConsoleBadge" class="text-[11px] bg-brand-500/10 text-brand-400 font-medium px-2.5 py-0.5 rounded-full border border-brand-500/20">
                 Operations Console
             </span>
         </div>
+
+        <!-- Bidirectional Agent Mode Switcher -->
+        <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 p-1 rounded-xl shadow-inner">
+            <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
+                <span>🇺🇸</span>
+                <span>English Agent (EN &rarr; ES)</span>
+            </button>
+            <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
+                <span>🇲🇽</span>
+                <span>Agente en Español (ES &rarr; EN)</span>
+            </button>
+        </div>
+
         <div class="flex items-center space-x-4 text-xs">
-            <a href="/index.html" class="text-slate-400 hover:text-white transition">Sign Out</a>
+            <a id="signOutLink" href="/index.html" class="text-slate-400 hover:text-white transition">Sign Out</a>
         </div>
     </header>
 
@@ -44,8 +57,8 @@
         <!-- Sidebar: Active Conversations -->
         <aside class="w-80 bg-slate-950/70 border-r border-slate-800 flex flex-col shrink-0">
             <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Conversations</h2>
-                <button onclick="refreshTickets()" title="Refresh queues" class="text-slate-500 hover:text-slate-300 text-xs">
+                <h2 id="sidebarTitle" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Conversations</h2>
+                <button id="refreshBtn" onclick="refreshTickets()" title="Refresh queues" class="text-slate-500 hover:text-slate-300 text-xs">
                     &#x21bb; Refresh
                 </button>
             </div>
@@ -61,7 +74,7 @@
             <div class="p-3 border-t border-slate-800 bg-slate-950/40">
                 <button onclick="openNewTicketModal()" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition flex items-center justify-center space-x-2">
                     <span class="text-brand-400 font-bold text-sm">+</span>
-                    <span>New Customer Thread</span>
+                    <span id="newThreadBtnText">New Customer Thread</span>
                 </button>
             </div>
         </aside>
@@ -91,8 +104,8 @@
                     <div class="w-12 h-12 rounded-2xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-center mx-auto mb-3">
                         <img src="/assets/logo.png" alt="" class="h-6 w-6 opacity-60">
                     </div>
-                    <p class="text-xs text-slate-400 font-medium">Select an active conversation to view and send bilingual messages</p>
-                    <p class="text-[11px] text-slate-600 mt-1">Inbound SMS is translated to English &bull; Outbound replies are reviewed in Spanish</p>
+                    <p id="emptyFeedTitle" class="text-xs text-slate-400 font-medium">Select an active conversation to view and send bilingual messages</p>
+                    <p id="emptyFeedSubtitle" class="text-[11px] text-slate-600 mt-1">Inbound SMS is translated to English &bull; Outbound replies are reviewed in Spanish</p>
                 </div>
             </div>
 
@@ -100,36 +113,36 @@
             <div id="inputArea" class="bg-slate-950 border-t border-slate-800 p-4 shrink-0 hidden">
                 <div class="max-w-4xl mx-auto space-y-3">
                     
-                    <!-- 1. English Input -->
+                    <!-- 1. Agent Input -->
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                        <label id="agentInputLabel" class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
                             Type reply in English (Agent):
                         </label>
                         <div class="flex items-center space-x-2">
-                            <input id="english-input" type="text" placeholder="Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                            <input id="agent-input" type="text" placeholder="Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
                             <button id="translate-btn" onclick="handleTranslateAndSend()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition shrink-0 shadow-lg shadow-brand-600/20">
                                 Translate &rarr;
                             </button>
                         </div>
                     </div>
 
-                    <!-- 2. HITL Review Box (Spanish Preview & Edit) -->
+                    <!-- 2. HITL Review Box (Outbound SMS Preview & Edit) -->
                     <div id="hitlContainer" class="hidden bg-slate-900/90 border border-brand-500/40 rounded-xl p-3.5 space-y-2">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-semibold text-brand-400 flex items-center space-x-1">
+                            <span id="hitlTitle" class="text-xs font-semibold text-brand-400 flex items-center space-x-1">
                                 <span>&#x2713;</span>
-                                <span>Human-In-The-Loop Review (Spanish text to be sent via SMS):</span>
+                                <span id="hitlTitleText">Human-In-The-Loop Review (Spanish text to be sent via SMS):</span>
                             </span>
-                            <span class="text-[10px] text-slate-400">Edit text freely before sending</span>
+                            <span id="hitlSubtitle" class="text-[10px] text-slate-400">Edit text freely before sending</span>
                         </div>
-                        <textarea id="spanish-review-box" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition"></textarea>
+                        <textarea id="target-review-box" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition"></textarea>
                         
                         <div class="flex justify-end space-x-2">
-                            <button onclick="cancelHITL()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-lg transition">
+                            <button id="cancelHitlBtn" onclick="cancelHITL()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-lg transition">
                                 Cancel
                             </button>
                             <button id="send-btn" onclick="confirmAndSend()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition shadow-md shadow-emerald-600/20 flex items-center space-x-1.5">
-                                <span>Send SMS to Customer</span>
+                                <span id="sendBtnText">Send SMS to Customer</span>
                                 <span>&rarr;</span>
                             </button>
                         </div>
@@ -144,18 +157,18 @@
     <!-- New Thread Modal -->
     <div id="newTicketModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
-            <h3 class="text-base font-bold text-white mb-1">Start New Customer Thread</h3>
-            <p class="text-xs text-slate-400 mb-4">Enter customer's SMS phone number with country code (e.g. +14155552671).</p>
+            <h3 id="modalTitle" class="text-base font-bold text-white mb-1">Start New Customer Thread</h3>
+            <p id="modalSubtitle" class="text-xs text-slate-400 mb-4">Enter customer's SMS phone number with country code (e.g. +14155552671 or +526601750245).</p>
             <form onsubmit="handleCreateTicket(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Phone Number</label>
-                    <input id="newCustomerPhone" type="text" placeholder="+1..." required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                    <label id="modalPhoneLabel" class="block text-xs font-medium text-slate-300 mb-1">Phone Number</label>
+                    <input id="newCustomerPhone" type="text" placeholder="+1... or +52..." required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition">
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeNewTicketModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-2 rounded-lg transition">
+                    <button type="button" id="modalCancelBtn" onclick="closeNewTicketModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-2 rounded-lg transition">
                         Cancel
                     </button>
-                    <button type="submit" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition">
+                    <button type="submit" id="modalSubmitBtn" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition">
                         Create Thread
                     </button>
                 </div>

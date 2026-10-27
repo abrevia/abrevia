@@ -3,7 +3,7 @@ import { supabase } from './lib/supabase.js';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
-  const { to, body, mediaUrl, ticketId, englishText } = req.body || {};
+  const { to, body, mediaUrl, ticketId, englishText, spanishText } = req.body || {};
 
   if (!to || !body) {
     return res.status(400).json({ error: 'Missing recipient phone number (to) or message body' });
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
           ticket_id: ticketId,
           sender: 'agent',
           english_text: englishText || body,
-          spanish_text: body
+          spanish_text: spanishText || body
         })
         .select()
         .single();

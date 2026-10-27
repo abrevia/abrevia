@@ -29,85 +29,232 @@
         <div class="flex items-center space-x-3">
             <img src="/assets/logo.png" alt="Abrevia Logo" class="h-9 w-9 rounded-lg shadow">
             <span class="text-xl font-bold tracking-tight text-white">Abrevia</span>
-            <span class="text-[11px] bg-slate-800 text-slate-300 font-medium px-2.5 py-0.5 rounded-full border border-slate-700">SaaS Relay</span>
+            <span class="text-[11px] bg-slate-800 text-slate-300 font-medium px-2.5 py-0.5 rounded-full border border-slate-700">
+                SaaS Relay &bull; Relevo SMS
+            </span>
         </div>
-        <div>
-            <a href="/dashboard.html" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-lg shadow-brand-600/20">
-                Agent Workspace &rarr;
-            </a>
+        <div class="flex items-center space-x-3 text-xs">
+            <span class="text-slate-500 hidden sm:inline">Operating Mode:</span>
+            <button id="langHeaderEn" onclick="selectLanguage('en')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition">EN</button>
+            <button id="langHeaderEs" onclick="selectLanguage('es')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition">ES</button>
         </div>
     </header>
 
-    <!-- Hero Content -->
-    <main class="max-w-4xl mx-auto w-full px-6 py-16 flex-grow flex flex-col items-center justify-center text-center">
+    <!-- Main Content Area -->
+    <main class="max-w-4xl mx-auto w-full px-6 py-12 flex-grow flex flex-col items-center justify-center text-center">
         
-        <div class="inline-flex items-center space-x-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs text-slate-300 mb-6">
+        <!-- Bilingual Scope Indicator -->
+        <div class="inline-flex items-center space-x-2 bg-slate-900 border border-slate-800 px-4 py-1.5 rounded-full text-xs text-slate-300 mb-6 shadow-sm">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Zero-Download Administrative Relay &bull; httpSMS + Gemini 1.5</span>
+            <span>Zero-Download Administrative SMS Relay &bull; Relevo SMS Sin Descargas</span>
         </div>
 
-        <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Instant Bilingual SMS for <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-brand-500">Fast Operations & Logistics</span>
-        </h1>
+        <!-- Bilingual Scope Headline -->
+        <div class="mb-6">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-2">
+                Instant Bilingual SMS Relay
+            </h1>
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-brand-500">
+                Relevo SMS Bilingüe Instantáneo
+            </h2>
+        </div>
 
-        <p class="text-slate-400 text-base md:text-lg max-w-2xl mb-8 leading-relaxed">
-            Support your Spanish-speaking customers seamlessly over SMS. Your agents type in English, AI translates instantly with Human-In-The-Loop review, and replies arrive right in the customer's native text thread.
-        </p>
+        <!-- Bilingual Explanatory Intro -->
+        <div class="max-w-2xl mb-10 text-slate-400 space-y-2 text-sm sm:text-base leading-relaxed">
+            <p>
+                Bridge the language gap in logistics, property, and field operations. English and Spanish speakers text naturally over native SMS while your team manages replies with Human-In-The-Loop review.
+            </p>
+            <p class="text-xs sm:text-sm text-slate-500 italic">
+                Comunique su equipo con clientes o conductores en su idioma nativo a través de SMS tradicional, sin requerir descargas ni registro para los clientes.
+            </p>
+        </div>
 
-        <!-- Login / Enter Card -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-8 max-w-md w-full shadow-2xl backdrop-blur-sm">
-            <h2 class="text-lg font-bold text-white mb-2">Agent & Dispatcher Sign-In</h2>
-            <p class="text-xs text-slate-400 mb-6">Access your live two-way SMS communication console.</p>
+        <!-- Prompt to Choose Preferred Operating Language -->
+        <div class="w-full max-w-xl mb-8">
+            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+                Select Your Operating Profile &bull; Elija su Perfil de Operación
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Option A: English -->
+                <button id="cardEn" onclick="selectLanguage('en')" class="p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/90 border-brand-500/80 shadow-lg shadow-brand-500/10">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-2xl">🇺🇸</span>
+                            <span id="badgeEn" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">Selected</span>
+                        </div>
+                        <div class="font-bold text-white text-base">English Operations</div>
+                        <div class="text-xs text-slate-400 mt-1 leading-normal">
+                            Agent writes in English &rarr; Customer receives Spanish SMS. Inbound Spanish translates to English.
+                        </div>
+                    </div>
+                    <div class="text-xs font-semibold text-brand-400 mt-4 flex items-center space-x-1">
+                        <span>Operate in English</span>
+                        <span>&rarr;</span>
+                    </div>
+                </button>
 
-            <form onsubmit="event.preventDefault(); window.location.href='/dashboard.html';" class="space-y-4">
+                <!-- Option B: Español -->
+                <button id="cardEs" onclick="selectLanguage('es')" class="p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/40 border-slate-800 hover:border-slate-700">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-2xl">🇲🇽</span>
+                            <span id="badgeEs" class="hidden text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">Seleccionado</span>
+                        </div>
+                        <div class="font-bold text-white text-base">Operaciones en Español</div>
+                        <div class="text-xs text-slate-400 mt-1 leading-normal">
+                            El agente escribe en español &rarr; El cliente recibe SMS en inglés. Los mensajes en inglés se traducen a español.
+                        </div>
+                    </div>
+                    <div class="text-xs font-semibold text-slate-400 mt-4 flex items-center space-x-1">
+                        <span>Operar en Español</span>
+                        <span>&rarr;</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dynamic Sign-In Card (Adapts to Selected Profile) -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-8 max-w-md w-full shadow-2xl backdrop-blur-sm text-left">
+            <div class="flex items-center justify-between mb-2">
+                <h2 id="loginTitle" class="text-lg font-bold text-white">Agent & Dispatcher Sign-In</h2>
+                <span id="loginLangTag" class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300">English Mode</span>
+            </div>
+            <p id="loginSubtitle" class="text-xs text-slate-400 mb-6">Enter your console to start managing bilingual customer threads.</p>
+
+            <form onsubmit="handleEnterWorkspace(event)" class="space-y-4">
                 <div>
-                    <label class="block text-left text-xs font-medium text-slate-300 mb-1.5">Work Email / Agent ID</label>
-                    <input type="text" value="agent@abrevia.live" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                    <label id="labelEmail" class="block text-xs font-medium text-slate-300 mb-1.5">Work Email / Agent ID</label>
+                    <input id="inputEmail" type="text" value="agent@abrevia.live" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
                 </div>
                 <div>
-                    <label class="block text-left text-xs font-medium text-slate-300 mb-1.5">Access PIN / Password</label>
+                    <label id="labelPassword" class="block text-xs font-medium text-slate-300 mb-1.5">Access PIN / Password</label>
                     <input type="password" value="••••••••" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
                 </div>
-                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center space-x-2">
-                    <span>Enter Workspace</span>
+                <button type="submit" id="submitBtn" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center space-x-2">
+                    <span id="submitBtnText">Enter English Workspace</span>
                     <span>&rarr;</span>
                 </button>
             </form>
         </div>
 
-        <!-- Verticals Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 w-full text-left">
-            <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
-                <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">Logistics</span>
-                <p class="text-xs text-slate-400">Driver updates, delivery coordinates & schedule dispatch.</p>
-            </div>
-            <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
-                <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">Property</span>
-                <p class="text-xs text-slate-400">Tenant inquiries, maintenance notices & unit access codes.</p>
-            </div>
-            <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
-                <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">Field Services</span>
-                <p class="text-xs text-slate-400">Technician arrival alerts, quote approvals & rescheduling.</p>
-            </div>
-            <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
-                <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">Customer Care</span>
-                <p class="text-xs text-slate-400">Zero-app friction: customer texts naturally from any phone.</p>
-            </div>
+        <!-- Verticals Grid (Localized) -->
+        <div id="verticalsGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 w-full text-left">
+            <!-- Dynamically populated based on active language -->
         </div>
 
     </main>
 
-    <!-- Footer with Mandatory Non-Healthcare Disclaimer -->
+    <!-- Footer with Mandatory Non-Healthcare Disclaimer (Bilingual) -->
     <footer class="border-t border-slate-800/80 bg-slate-950 py-6 px-6 text-center">
-        <div class="max-w-4xl mx-auto">
-            <p class="text-xs text-slate-500 font-medium mb-2">
-                &copy; 2026 Abrevia Inc. All rights reserved. &bull; Powered by Gemini 1.5 Flash & httpSMS.
+        <div class="max-w-4xl mx-auto space-y-3">
+            <p class="text-xs text-slate-500 font-medium">
+                &copy; 2026 Abrevia Inc. All rights reserved. &bull; Powered by Gemini AI & httpSMS Gateway.
             </p>
-            <p class="text-[11px] text-amber-500/80 bg-amber-500/10 border border-amber-500/20 rounded-lg py-1.5 px-3 inline-block">
-                <strong>Notice:</strong> Abrevia is an administrative operations tool and is not available for healthcare organizations or PHI processing.
-            </p>
+            <div class="text-[11px] text-amber-500/90 bg-amber-500/10 border border-amber-500/20 rounded-xl py-2 px-4 inline-block text-left max-w-2xl">
+                <p class="font-semibold text-amber-400 mb-0.5">Administrative Use Notice &bull; Aviso de Uso Administrativo:</p>
+                <p class="text-slate-400 text-[10px] leading-relaxed">
+                    Abrevia is strictly an administrative operations tool and is not available for healthcare organizations or PHI processing. &bull; 
+                    Abrevia es estrictamente una herramienta de operaciones administrativas y no está disponible para organizaciones de salud ni procesamiento de datos médicos.
+                </p>
+            </div>
         </div>
     </footer>
+
+    <script>
+        const content = {
+            en: {
+                loginTitle: 'Agent & Dispatcher Sign-In',
+                loginLangTag: 'English Mode',
+                loginSubtitle: 'Enter your console to start managing bilingual customer threads.',
+                labelEmail: 'Work Email / Agent ID',
+                labelPassword: 'Access PIN / Password',
+                submitBtnText: 'Enter English Workspace',
+                verticals: [
+                    { title: 'Logistics', desc: 'Driver updates, delivery coordinates & schedule dispatch.' },
+                    { title: 'Property', desc: 'Tenant inquiries, maintenance notices & access codes.' },
+                    { title: 'Field Services', desc: 'Technician arrival alerts, quote approvals & rebooking.' },
+                    { title: 'Customer Care', desc: 'Zero-app friction: customer texts naturally from any phone.' }
+                ]
+            },
+            es: {
+                loginTitle: 'Inicio de Sesión - Agente y Despacho',
+                loginLangTag: 'Modo Español',
+                loginSubtitle: 'Acceda a la consola para gestionar hilos de clientes con traducción en tiempo real.',
+                labelEmail: 'Correo Corporativo / ID de Agente',
+                labelPassword: 'PIN / Contraseña de Acceso',
+                submitBtnText: 'Entrar al Área en Español',
+                verticals: [
+                    { title: 'Logística', desc: 'Actualizaciones a transportistas, coordenadas y horarios de entrega.' },
+                    { title: 'Inmobiliaria', desc: 'Consultas de inquilinos, reportes de mantenimiento y códigos de acceso.' },
+                    { title: 'Servicios en Campo', desc: 'Avisos de llegada de técnicos, cotizaciones y reprogramación.' },
+                    { title: 'Atención al Cliente', desc: 'Sin aplicaciones: el cliente responde vía SMS tradicional.' }
+                ]
+            }
+        };
+
+        let currentLang = localStorage.getItem('abrevia_agent_lang') || 'en';
+
+        function selectLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('abrevia_agent_lang', lang);
+
+            // Update Header Switchers
+            const btnEn = document.getElementById('langHeaderEn');
+            const btnEs = document.getElementById('langHeaderEs');
+            if (lang === 'en') {
+                btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition';
+                btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition';
+            } else {
+                btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition';
+                btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition';
+            }
+
+            // Update Selection Cards
+            const cardEn = document.getElementById('cardEn');
+            const cardEs = document.getElementById('cardEs');
+            const badgeEn = document.getElementById('badgeEn');
+            const badgeEs = document.getElementById('badgeEs');
+
+            if (lang === 'en') {
+                cardEn.className = 'p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/90 border-brand-500/80 shadow-lg shadow-brand-500/10';
+                cardEs.className = 'p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/40 border-slate-800 hover:border-slate-700';
+                badgeEn.classList.remove('hidden');
+                badgeEs.classList.add('hidden');
+            } else {
+                cardEs.className = 'p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/90 border-brand-500/80 shadow-lg shadow-brand-500/10';
+                cardEn.className = 'p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/40 border-slate-800 hover:border-slate-700';
+                badgeEs.classList.remove('hidden');
+                badgeEn.classList.add('hidden');
+            }
+
+            // Update Login Form
+            const c = content[lang];
+            document.getElementById('loginTitle').textContent = c.loginTitle;
+            document.getElementById('loginLangTag').textContent = c.loginLangTag;
+            document.getElementById('loginSubtitle').textContent = c.loginSubtitle;
+            document.getElementById('labelEmail').textContent = c.labelEmail;
+            document.getElementById('labelPassword').textContent = c.labelPassword;
+            document.getElementById('submitBtnText').textContent = c.submitBtnText;
+
+            // Render Verticals
+            const verticalsContainer = document.getElementById('verticalsGrid');
+            verticalsContainer.innerHTML = c.verticals.map(v => `
+                <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
+                    <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">${v.title}</span>
+                    <p class="text-xs text-slate-400">${v.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function handleEnterWorkspace(e) {
+            e.preventDefault();
+            window.location.href = `/dashboard.html?lang=${currentLang}`;
+        }
+
+        // Initialize with default or saved language
+        selectLanguage(currentLang);
+    </script>
 
 </body>
 </html>

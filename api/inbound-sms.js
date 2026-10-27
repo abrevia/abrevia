@@ -14,16 +14,17 @@ export default async function handler(req, res) {
   }
 
   const customerPhone = payload.data?.contact || payload.data?.from || payload.data?.phone_number;
-  const spanishText = payload.data?.content || payload.data?.message || payload.data?.text;
+  const inboundContent = payload.data?.content || payload.data?.message || payload.data?.text;
 
-  if (!customerPhone || !spanishText) {
+  if (!customerPhone || !inboundContent) {
     console.warn('Inbound SMS missing contact or content:', payload);
     return res.status(400).json({ error: 'Missing contact or content in payload' });
   }
 
   try {
-    // 1. Translate to English via Gemini 1.5 Flash
-    let englishText = spanishText;
+    // 1. Bidirectional translation & detection via Gemini
+    let englishText = inboundContent;
+    let spanishText = inboundContent;
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (apiKey) {
@@ -38,16 +39,20 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
               systemInstruction: {
-                parts: [{ text: 'Translate accurately from Spanish to English. Return ONLY the translated English text with no extra commentary.' }]
+                parts: [{ text: 'You are a bilingual SMS relay assistant. Detect whether the message is in Spanish or English. Return a JSON object with: "detected" ("es" or "en"), "english" (the message in English), "spanish" (the message in Spanish). Return ONLY raw valid JSON.' }]
               },
-              contents: [{ parts: [{ text: spanishText }] }]
+              contents: [{ parts: [{ text: inboundContent }] }],
+              generationConfig: { responseMimeType: 'application/json' }
             }),
             signal: AbortSignal.timeout(3000)
           });
 
           const geminiData = await geminiRes.json();
-          if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
-            englishText = geminiData.candidates[0].content.parts[0].text.trim();
+          const raw = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.english) englishText = parsed.english.trim();
+            if (parsed.spanish) spanishText = parsed.spanish.trim();
             break;
           }
         } catch (transErr) {
