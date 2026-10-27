@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (apiKey) {
-      const models = ['gemini-3.8-flash', 'gemini-flash-latest'];
+      const models = ['gemini-flash-lite-latest', 'gemini-3.5-flash-lite', 'gemini-3.8-flash'];
       for (const model of models) {
         try {
           const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
@@ -41,7 +41,8 @@ export default async function handler(req, res) {
                 parts: [{ text: 'Translate accurately from Spanish to English. Return ONLY the translated English text with no extra commentary.' }]
               },
               contents: [{ parts: [{ text: spanishText }] }]
-            })
+            }),
+            signal: AbortSignal.timeout(3000)
           });
 
           const geminiData = await geminiRes.json();

@@ -169,7 +169,8 @@ async function handleTranslateAndSend() {
         const transRes = await fetch('/api/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: englishText, targetLang: 'Spanish' })
+            body: JSON.stringify({ text: englishText, targetLang: 'Spanish' }),
+            signal: AbortSignal.timeout(8000)
         });
 
         const data = await transRes.json();
@@ -182,7 +183,7 @@ async function handleTranslateAndSend() {
         hitlContainer.classList.remove('hidden');
         reviewBox.focus();
     } catch (err) {
-        alert('Translation error: ' + err.message);
+        alert('Translation error: ' + (err.name === 'TimeoutError' ? 'Translation request timed out. Please try again.' : err.message));
     } finally {
         translateBtn.disabled = false;
         translateBtn.textContent = 'Translate →';

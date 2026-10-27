@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const models = ['gemini-3.8-flash', 'gemini-flash-latest'];
+    const models = ['gemini-flash-lite-latest', 'gemini-3.5-flash-lite', 'gemini-3.8-flash'];
     let translated = null;
     let lastErr = null;
 
@@ -29,7 +29,8 @@ export default async function handler(req, res) {
               parts: [{ text: `Translate accurately to ${targetLang}. Return ONLY the translated string.` }]
             },
             contents: [{ parts: [{ text }] }]
-          })
+          }),
+          signal: AbortSignal.timeout(3000)
         });
 
         const data = await response.json();
