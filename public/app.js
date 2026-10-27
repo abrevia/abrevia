@@ -8,7 +8,8 @@ let contactsMap = {}; // phone -> { phone, name, company, email, notes, updatedA
 
 const I18N = {
     en: {
-        consoleBadge: 'Console',
+        consoleBadge: 'Console Status',
+        consoleStatus: 'Active',
         billingBtn: 'Billing',
         signOut: 'Sign Out',
         sidebarTitle: 'Conversations',
@@ -71,7 +72,8 @@ const I18N = {
         viewAttachment: 'View Attached File'
     },
     es: {
-        consoleBadge: 'Console',
+        consoleBadge: 'Estado de Consola',
+        consoleStatus: 'Activo',
         billingBtn: 'Facturación',
         signOut: 'Cerrar Sesión',
         sidebarTitle: 'Conversaciones',
@@ -221,6 +223,8 @@ function applyDashboardLocalization() {
     // Header title next to logo
     const headerTitle = document.getElementById('headerConsoleTitle');
     if (headerTitle) headerTitle.textContent = t.consoleBadge;
+    const consoleStatusTextEl = document.getElementById('consoleStatusText');
+    if (consoleStatusTextEl) consoleStatusTextEl.textContent = t.consoleStatus;
     const billingBtnEl = document.getElementById('billingBtnText');
     if (billingBtnEl) billingBtnEl.textContent = t.billingBtn || 'Billing';
     document.getElementById('signOutLink').textContent = t.signOut;
@@ -236,7 +240,8 @@ function applyDashboardLocalization() {
         document.getElementById('activeSubtitle').textContent = t.threadSubtitle(currentTicket.id);
     }
 
-    document.getElementById('activeBadge').textContent = t.activeBadge;
+    const activeBadgeEl = document.getElementById('activeBadge');
+    if (activeBadgeEl) activeBadgeEl.textContent = t.activeBadge;
     const purgeBtnEl = document.getElementById('purgeBtn');
     if (purgeBtnEl) purgeBtnEl.textContent = t.purgeBtn;
 
@@ -463,7 +468,8 @@ async function selectTicket(ticketId, customerPhone, contactData = null) {
     updateHeaderWithContact(customerPhone, contact);
 
     document.getElementById('activeSubtitle').textContent = t.threadSubtitle(ticketId);
-    document.getElementById('activeBadge').classList.remove('hidden');
+    const activeBadgeEl = document.getElementById('activeBadge');
+    if (activeBadgeEl) activeBadgeEl.classList.remove('hidden');
     const purgeBtnEl = document.getElementById('purgeBtn');
     if (purgeBtnEl) purgeBtnEl.classList.remove('hidden');
     const editContactBtn = document.getElementById('editContactBtn');
@@ -907,7 +913,8 @@ async function purgeCurrentConversation() {
         currentTicket = null;
         document.getElementById('activeCustomerTitle').textContent = t.selectConversation;
         document.getElementById('activeSubtitle').textContent = t.selectSubtitle;
-        document.getElementById('activeBadge').classList.add('hidden');
+        const activeBadgeEl = document.getElementById('activeBadge');
+        if (activeBadgeEl) activeBadgeEl.classList.add('hidden');
         document.getElementById('purgeBtn').classList.add('hidden');
         document.getElementById('inputArea').classList.add('hidden');
         document.getElementById('chatFeed').innerHTML = `
@@ -1241,6 +1248,15 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// --- Console Status Modal ---
+function showConsoleStatusModal() {
+    document.getElementById('consoleStatusModal')?.classList.remove('hidden');
+}
+
+function closeConsoleStatusModal() {
+    document.getElementById('consoleStatusModal')?.classList.add('hidden');
 }
 
 // --- Stripe Billing Integration ---

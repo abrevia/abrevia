@@ -29,7 +29,11 @@
         <!-- Logo & Title (Left) -->
         <div class="flex items-center space-x-2.5">
             <img src="/assets/logo.png" alt="Abrevia Logo" class="h-6 w-6 rounded-md">
-            <span id="headerConsoleTitle" class="text-xs text-slate-400 font-normal">Console</span>
+            <span id="headerConsoleTitle" class="text-xs text-slate-400 font-normal">Console Status</span>
+            <button id="consoleStatusBtn" type="button" onclick="showConsoleStatusModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition shadow-sm cursor-pointer" title="System Operational • Two-Way SMS & Translation Active">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="consoleStatusText">Active</span>
+            </button>
         </div>
 
         <!-- Center: Bidirectional Agent Mode Switcher (Middle) -->
@@ -100,7 +104,6 @@
                     <div>
                         <div class="flex items-center space-x-2">
                             <h2 id="activeCustomerTitle" class="font-bold text-base text-white">Select a conversation</h2>
-                            <span id="activeBadge" class="hidden text-[10px] bg-emerald-500/10 text-emerald-400 font-medium px-2 py-0.5 rounded-full border border-emerald-500/20">Active</span>
                             <span id="activeContactCompany" class="hidden text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md border border-slate-700 font-medium"></span>
                         </div>
                         <div class="flex items-center space-x-2 text-xs text-slate-400">
@@ -446,6 +449,54 @@
             <div class="border-t border-slate-800 pt-3 mt-3 flex justify-between items-center text-xs">
                 <span id="contactsCountText" class="text-slate-500">0 contacts saved</span>
                 <button onclick="closeContactsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-lg transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Console Status Modal -->
+    <div id="consoleStatusModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative">
+            <button type="button" onclick="closeConsoleStatusModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-2.5 pb-3 border-b border-slate-800">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">Console Status: Active</h3>
+            </div>
+            <div class="space-y-3 text-xs text-slate-300">
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60">
+                    <span class="text-slate-400">Two-Way SMS Relay</span>
+                    <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span>Operational</span>
+                    </span>
+                </div>
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60">
+                    <span class="text-slate-400">Instant AI Translation</span>
+                    <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span>Operational</span>
+                    </span>
+                </div>
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60">
+                    <span class="text-slate-400">Bilingual Spell & Grammar</span>
+                    <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span>Active</span>
+                    </span>
+                </div>
+                <div class="flex items-center justify-between py-1.5">
+                    <span class="text-slate-400">Encrypted Storage</span>
+                    <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span>Encrypted (AES-256)</span>
+                    </span>
+                </div>
+            </div>
+            <div class="pt-2">
+                <button onclick="closeConsoleStatusModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
                     Close
                 </button>
             </div>
