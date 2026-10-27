@@ -49,7 +49,7 @@ const I18N = {
         viewAttachment: 'View Attached File'
     },
     es: {
-        consoleBadge: 'Consola',
+        consoleBadge: 'Console',
         signOut: 'Cerrar Sesión',
         sidebarTitle: 'Conversaciones Activas',
         refresh: '↻ Actualizar',
