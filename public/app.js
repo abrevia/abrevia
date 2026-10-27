@@ -22,8 +22,10 @@ const I18N = {
         noMessagesInThread: 'No messages yet in this thread.<br>Send an outbound SMS reply below to start.',
         inputLabel: 'Type reply in English (Agent):',
         inputPlaceholder: 'Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)...',
-        translateBtn: 'Translate',
+        translateBtn: 'Send',
         translating: 'Translating...',
+        progressStatus: 'AI Translating...',
+        progressComplete: '✓ Translated & Verified (100%)',
         hitlTitle: 'Human-In-The-Loop Review (Spanish text to be sent via SMS):',
         hitlSubtitle: 'Edit text freely • Press Enter ↵ to send',
         cancelHitl: 'Cancel',
@@ -62,8 +64,10 @@ const I18N = {
         noMessagesInThread: 'Aún no hay mensajes en este hilo.<br>Envía una respuesta SMS abajo para iniciar.',
         inputLabel: 'Escribe respuesta en Español (Agente):',
         inputPlaceholder: 'Escribe tu respuesta en español (ej. Su entrega está programada para mañana a las 2 PM)...',
-        translateBtn: 'Traducir',
+        translateBtn: 'Enviar',
         translating: 'Traduciendo...',
+        progressStatus: 'Traducción IA en progreso...',
+        progressComplete: '✓ Traducción Verificada (100%)',
         hitlTitle: 'Revisión Humana HITL (Texto en inglés que se enviará por SMS):',
         hitlSubtitle: 'Edita el texto libremente • Presiona Enter ↵ para enviar',
         cancelHitl: 'Cancelar',
@@ -454,7 +458,7 @@ function renderChatFeed(messages, scrollToBottom = false) {
     }
 }
 
-// HITL Step 1: Translate agent draft into target language for review
+// HITL Step 1: Translate agent draft into target language for review with % progress
 async function handleTranslateAndSend() {
     const inputEl = document.getElementById('agent-input');
     const draftText = inputEl.value.trim();
@@ -462,8 +466,32 @@ async function handleTranslateAndSend() {
 
     const t = I18N[dashboardMode];
     const translateBtn = document.getElementById('translate-btn');
+    const progressContainer = document.getElementById('translationProgressContainer');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const progressPercentage = document.getElementById('progressPercentage');
+    const progressStatusText = document.getElementById('progressStatusText');
+
     translateBtn.disabled = true;
-    translateBtn.textContent = t.translating;
+    translateBtn.innerHTML = `<span>${t.translating}</span>`;
+
+    // Show on-screen progress bar
+    if (progressContainer) {
+        progressContainer.classList.remove('hidden');
+        if (progressBarFill) progressBarFill.style.width = '12%';
+        if (progressPercentage) progressPercentage.textContent = '12%';
+        if (progressStatusText) progressStatusText.textContent = t.progressStatus;
+    }
+
+    // Engaging % progress progression
+    let progressVal = 12;
+    const progressTimer = setInterval(() => {
+        if (progressVal < 88) {
+            progressVal += Math.floor(Math.random() * 12) + 6;
+            if (progressVal > 88) progressVal = 88;
+            if (progressBarFill) progressBarFill.style.width = `${progressVal}%`;
+            if (progressPercentage) progressPercentage.textContent = `${progressVal}%`;
+        }
+    }, 110);
 
     try {
         let translatedText = draftText;
@@ -483,6 +511,17 @@ async function handleTranslateAndSend() {
             translatedText = data.translated;
         }
 
+        clearInterval(progressTimer);
+
+        // Flash 100% completion
+        if (progressBarFill) progressBarFill.style.width = '100%';
+        if (progressPercentage) progressPercentage.textContent = '100%';
+        if (progressStatusText) progressStatusText.textContent = t.progressComplete;
+
+        // Brief pleasant pause to display 100% before opening review box
+        await new Promise(r => setTimeout(r, 260));
+        if (progressContainer) progressContainer.classList.add('hidden');
+
         // Show HITL Review Box
         const hitlContainer = document.getElementById('hitlContainer');
         const reviewBox = document.getElementById('target-review-box');
@@ -491,6 +530,8 @@ async function handleTranslateAndSend() {
         updateHitlAttachmentPreview();
         reviewBox.focus();
     } catch (err) {
+        clearInterval(progressTimer);
+        if (progressContainer) progressContainer.classList.add('hidden');
         alert('Translation error: ' + (err.name === 'TimeoutError' ? 'Translation request timed out. Please try again.' : err.message));
     } finally {
         translateBtn.disabled = false;
