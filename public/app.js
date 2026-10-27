@@ -30,8 +30,8 @@ const I18N = {
         selectConversation: 'Select a conversation',
         selectSubtitle: 'Choose a ticket from the sidebar or start a new thread',
         threadSubtitle: (id) => `Thread: ${id.slice(0, 8)}... • Two-Way Asynchronous Communication Relay`,
-        activeBadge: 'Active',
-        purgeBtn: 'End & Purge Thread',
+        purgeBtn: 'Purge',
+        purgeBtnTitle: 'End & Purge Thread',
         emptyFeedTitle: 'Select an active conversation to view and send bilingual messages',
         emptyFeedSubtitle: 'Inbound asynchronous communication translated to English • Outbound replies translated & dispatched in real time',
         noMessagesInThread: 'No messages yet in this thread.<br>Send an outbound message below to start.',
@@ -101,8 +101,8 @@ const I18N = {
         selectConversation: 'Selecciona una conversación',
         selectSubtitle: 'Elige un ticket de la barra lateral o inicia un nuevo hilo',
         threadSubtitle: (id) => `Hilo: ${id.slice(0, 8)}... • Relevo de Comunicación Asíncrona Bilingüe`,
-        activeBadge: 'Activo',
-        purgeBtn: 'Finalizar y Purgar Hilo',
+        purgeBtn: 'Purgar',
+        purgeBtnTitle: 'Finalizar y Purgar Hilo',
         emptyFeedTitle: 'Selecciona una conversación activa para ver y enviar mensajes bilingües',
         emptyFeedSubtitle: 'Comunicación asíncrona entrante traducida al español • Respuestas traducidas y enviadas en tiempo real',
         noMessagesInThread: 'Aún no hay mensajes en este hilo.<br>Envía un mensaje abajo para iniciar.',
@@ -260,10 +260,10 @@ function applyDashboardLocalization() {
         document.getElementById('activeSubtitle').textContent = t.threadSubtitle(currentTicket.id);
     }
 
-    const activeBadgeEl = document.getElementById('activeBadge');
-    if (activeBadgeEl) activeBadgeEl.textContent = t.activeBadge;
+    const purgeBtnTextEl = document.getElementById('purgeBtnText');
+    if (purgeBtnTextEl) purgeBtnTextEl.textContent = t.purgeBtn;
     const purgeBtnEl = document.getElementById('purgeBtn');
-    if (purgeBtnEl) purgeBtnEl.textContent = t.purgeBtn;
+    if (purgeBtnEl && t.purgeBtnTitle) purgeBtnEl.title = t.purgeBtnTitle;
 
     const emptyTitle = document.getElementById('emptyFeedTitle');
     if (emptyTitle) emptyTitle.textContent = t.emptyFeedTitle;
@@ -492,8 +492,6 @@ async function selectTicket(ticketId, customerPhone, contactData = null) {
     updateHeaderWithContact(customerPhone, contact);
 
     document.getElementById('activeSubtitle').textContent = t.threadSubtitle(ticketId);
-    const activeBadgeEl = document.getElementById('activeBadge');
-    if (activeBadgeEl) activeBadgeEl.classList.remove('hidden');
     const purgeBtnEl = document.getElementById('purgeBtn');
     if (purgeBtnEl) purgeBtnEl.classList.remove('hidden');
     const editContactBtn = document.getElementById('editContactBtn');
@@ -984,8 +982,6 @@ async function purgeCurrentConversation() {
         currentTicket = null;
         document.getElementById('activeCustomerTitle').textContent = t.selectConversation;
         document.getElementById('activeSubtitle').textContent = t.selectSubtitle;
-        const activeBadgeEl = document.getElementById('activeBadge');
-        if (activeBadgeEl) activeBadgeEl.classList.add('hidden');
         document.getElementById('purgeBtn').classList.add('hidden');
         document.getElementById('inputArea').classList.add('hidden');
         document.getElementById('chatFeed').innerHTML = `
@@ -1027,8 +1023,6 @@ function closeMobileConversation() {
     if (titleEl) titleEl.textContent = t.selectConversation;
     const subEl = document.getElementById('activeSubtitle');
     if (subEl) subEl.textContent = t.selectSubtitle;
-    const activeBadgeEl = document.getElementById('activeBadge');
-    if (activeBadgeEl) activeBadgeEl.classList.add('hidden');
     const purgeBtnEl = document.getElementById('purgeBtn');
     if (purgeBtnEl) purgeBtnEl.classList.add('hidden');
     const editContactBtn = document.getElementById('editContactBtn');

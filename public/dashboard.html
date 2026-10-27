@@ -94,8 +94,8 @@
         <main id="chatWorkspace" class="hidden md:flex flex-grow min-w-0 flex-col bg-slate-900 justify-between overflow-hidden w-full">
             
             <!-- Conversation Header with Auto-Saved Contact Info -->
-            <div class="bg-slate-950/40 border-b border-slate-800 px-3.5 sm:px-6 py-2.5 sm:py-3.5 flex justify-between items-center shrink-0">
-                <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
+            <div class="bg-slate-950/40 border-b border-slate-800 px-3.5 sm:px-6 py-2.5 sm:py-3.5 flex justify-between items-center shrink-0 gap-2">
+                <div class="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 overflow-hidden mr-2">
                     <!-- Mobile Back to Conversations Button -->
                     <button id="mobileBackBtn" type="button" onclick="closeMobileConversation()" class="md:hidden bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1 shrink-0" title="Back to conversations">
                         <span>&larr;</span>
@@ -104,11 +104,10 @@
                     <div id="contactAvatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 border border-slate-700 hidden sm:flex items-center justify-center text-slate-300 font-bold text-xs uppercase shadow-sm shrink-0">
                         👤
                     </div>
-                    <div class="min-w-0">
+                    <div class="min-w-0 flex-1 overflow-hidden">
                         <div class="flex items-center space-x-2 min-w-0">
                             <h2 id="activeCustomerTitle" class="font-bold text-sm sm:text-base text-white truncate">Select a conversation</h2>
-                            <span id="activeBadge" class="hidden text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md font-semibold">Active</span>
-                            <span id="activeContactCompany" class="hidden text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md border border-slate-700 font-medium truncate"></span>
+                            <span id="activeContactCompany" class="hidden text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md border border-slate-700 font-medium truncate shrink-0"></span>
                         </div>
                         <div class="flex items-center space-x-1.5 text-xs text-slate-400 min-w-0 truncate">
                             <p id="activeSubtitle" class="truncate">Choose a ticket from the sidebar or start a new thread</p>
@@ -126,7 +125,7 @@
                     </button>
 
                     <!-- Edit / View Contact Details Button -->
-                    <button id="editContactBtn" onclick="openCurrentContactModal()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm">
+                    <button id="editContactBtn" onclick="openCurrentContactModal()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm shrink-0">
                         <span id="editContactBtnIcon">👤</span>
                         <span id="editContactBtnText" class="inline">Contact Info</span>
                     </button>
@@ -138,7 +137,7 @@
                     </button>
 
                     <!-- Purge / End Thread Button -->
-                    <button id="purgeBtn" onclick="purgeCurrentConversation()" class="hidden bg-slate-900 hover:bg-red-950/40 text-slate-400 hover:text-red-400 border border-slate-800 hover:border-red-500/40 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                    <button id="purgeBtn" onclick="purgeCurrentConversation()" class="hidden bg-slate-900 hover:bg-red-950/40 text-slate-400 hover:text-red-400 border border-slate-800 hover:border-red-500/40 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1 shadow-sm shrink-0" title="End and purge conversation">
                         <span>🗑️</span>
                         <span id="purgeBtnText" class="hidden sm:inline">Purge</span>
                     </button>
