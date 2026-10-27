@@ -24,6 +24,9 @@ const I18N = {
         loadingQueues: 'Loading conversations...',
         noTickets: 'No active conversations.<br>Click "New Recipient Thread" below.',
         newThreadBtn: 'New Recipient Thread',
+        newThreadHeaderBtn: 'New Thread',
+        mobileBackBtn: 'Chats',
+        closeThreadBtn: 'Close',
         selectConversation: 'Select a conversation',
         selectSubtitle: 'Choose a ticket from the sidebar or start a new thread',
         threadSubtitle: (id) => `Thread: ${id.slice(0, 8)}... • Two-Way Asynchronous Communication Relay`,
@@ -92,6 +95,9 @@ const I18N = {
         loadingQueues: 'Cargando conversaciones...',
         noTickets: 'No hay conversaciones activas.<br>Haga clic en "Nuevo Hilo de Destinatario" abajo.',
         newThreadBtn: 'Nuevo Hilo de Destinatario',
+        newThreadHeaderBtn: 'Nuevo Hilo',
+        mobileBackBtn: 'Hilos',
+        closeThreadBtn: 'Cerrar',
         selectConversation: 'Selecciona una conversación',
         selectSubtitle: 'Elige un ticket de la barra lateral o inicia un nuevo hilo',
         threadSubtitle: (id) => `Hilo: ${id.slice(0, 8)}... • Relevo de Comunicación Asíncrona Bilingüe`,
@@ -239,6 +245,12 @@ function applyDashboardLocalization() {
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
     document.getElementById('refreshBtn').textContent = t.refresh;
     document.getElementById('newThreadBtnText').textContent = t.newThreadBtn;
+    const headerNewThreadBtnTextEl = document.getElementById('headerNewThreadBtnText');
+    if (headerNewThreadBtnTextEl) headerNewThreadBtnTextEl.textContent = t.newThreadHeaderBtn;
+    const mobileBackBtnTextEl = document.getElementById('mobileBackBtnText');
+    if (mobileBackBtnTextEl) mobileBackBtnTextEl.textContent = t.mobileBackBtn;
+    const closeThreadBtnTextEl = document.getElementById('closeThreadBtnText');
+    if (closeThreadBtnTextEl) closeThreadBtnTextEl.textContent = t.closeThreadBtn;
 
     if (!currentTicket) {
         document.getElementById('activeCustomerTitle').textContent = t.selectConversation;
@@ -486,16 +498,27 @@ async function selectTicket(ticketId, customerPhone, contactData = null) {
     if (purgeBtnEl) purgeBtnEl.classList.remove('hidden');
     const editContactBtn = document.getElementById('editContactBtn');
     if (editContactBtn) editContactBtn.classList.remove('hidden');
+    const closeThreadBtn = document.getElementById('closeThreadBtn');
+    if (closeThreadBtn) closeThreadBtn.classList.remove('hidden');
     document.getElementById('inputArea').classList.remove('hidden');
 
-    // Mobile responsive: switch view from sidebar to chat on small screens
+    // Responsive view management:
+    // On mobile (< 768px): collapse sidebar and display chat workspace full screen
+    // On desktop (>= 768px): keep BOTH sidebar and chat workspace visible side-by-side
     const sidebar = document.getElementById('conversationsSidebar');
     const workspace = document.getElementById('chatWorkspace');
     if (sidebar && workspace) {
-        sidebar.classList.add('hidden');
-        sidebar.classList.remove('flex');
-        workspace.classList.remove('hidden');
-        workspace.classList.add('flex');
+        if (window.innerWidth < 768) {
+            sidebar.classList.add('hidden');
+            sidebar.classList.remove('flex');
+            workspace.classList.remove('hidden');
+            workspace.classList.add('flex');
+        } else {
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('flex');
+            workspace.classList.remove('hidden');
+            workspace.classList.add('flex');
+        }
     }
 
     cancelHITL();
@@ -981,27 +1004,68 @@ async function purgeCurrentConversation() {
     }
 }
 
-// Mobile navigation handler: return to conversations list
+// Navigation handler: return to conversations list on mobile, or deselect active conversation on desktop
 function closeMobileConversation() {
     const sidebar = document.getElementById('conversationsSidebar');
     const workspace = document.getElementById('chatWorkspace');
     if (sidebar && workspace) {
-        workspace.classList.add('hidden');
-        workspace.classList.remove('flex');
-        sidebar.classList.remove('hidden');
-        sidebar.classList.add('flex');
+        if (window.innerWidth < 768) {
+            workspace.classList.add('hidden');
+            workspace.classList.remove('flex');
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('flex');
+        } else {
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('flex');
+            workspace.classList.remove('hidden');
+            workspace.classList.add('flex');
+        }
     }
     currentTicket = null;
     const t = I18N[dashboardMode];
-    document.getElementById('activeCustomerTitle').textContent = t.selectConversation;
-    document.getElementById('activeSubtitle').textContent = t.selectSubtitle;
+    const titleEl = document.getElementById('activeCustomerTitle');
+    if (titleEl) titleEl.textContent = t.selectConversation;
+    const subEl = document.getElementById('activeSubtitle');
+    if (subEl) subEl.textContent = t.selectSubtitle;
+    const activeBadgeEl = document.getElementById('activeBadge');
+    if (activeBadgeEl) activeBadgeEl.classList.add('hidden');
     const purgeBtnEl = document.getElementById('purgeBtn');
     if (purgeBtnEl) purgeBtnEl.classList.add('hidden');
     const editContactBtn = document.getElementById('editContactBtn');
     if (editContactBtn) editContactBtn.classList.add('hidden');
-    document.getElementById('inputArea').classList.add('hidden');
+    const closeThreadBtn = document.getElementById('closeThreadBtn');
+    if (closeThreadBtn) closeThreadBtn.classList.add('hidden');
+    const inputArea = document.getElementById('inputArea');
+    if (inputArea) inputArea.classList.add('hidden');
+
+    const contactAvatar = document.getElementById('contactAvatar');
+    if (contactAvatar) {
+        contactAvatar.textContent = '👤';
+        contactAvatar.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 border border-slate-700 hidden sm:flex items-center justify-center text-slate-300 font-bold text-xs uppercase shadow-sm shrink-0';
+    }
+    const compEl = document.getElementById('activeContactCompany');
+    if (compEl) compEl.classList.add('hidden');
+    const phoneSep = document.getElementById('activePhoneSeparator');
+    if (phoneSep) phoneSep.classList.add('hidden');
+    const phoneDisplay = document.getElementById('activeCustomerPhoneDisplay');
+    if (phoneDisplay) phoneDisplay.classList.add('hidden');
+
+    const feed = document.getElementById('chatFeed');
+    if (feed) {
+        feed.innerHTML = `
+            <div class="text-center py-12">
+                <div class="w-12 h-12 rounded-2xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-center mx-auto mb-3">
+                    <img src="/assets/logo.png" alt="" class="h-6 w-6 opacity-60">
+                </div>
+                <p id="emptyFeedTitle" class="text-xs text-slate-400 font-medium">${t.emptyFeedTitle}</p>
+                <p id="emptyFeedSubtitle" class="text-[11px] text-slate-600 mt-1">${t.emptyFeedSubtitle}</p>
+            </div>
+        `;
+    }
+
     cancelHITL();
     removeAttachment();
+    refreshTickets(false);
 }
 
 // Modal handling for New Ticket
@@ -1662,3 +1726,30 @@ async function openStripeCustomerPortal() {
         billingPlanBadge.className = 'text-[10px] text-emerald-400 font-bold uppercase tracking-wider';
     }
 })();
+
+// Window resize handler: Keep sidebar and chat layout coherent across device rotations and window resizes
+window.addEventListener('resize', () => {
+    const sidebar = document.getElementById('conversationsSidebar');
+    const workspace = document.getElementById('chatWorkspace');
+    if (!sidebar || !workspace) return;
+    if (window.innerWidth >= 768) {
+        // Desktop (>= 768px): always display both sidebar and workspace side-by-side
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('flex');
+        workspace.classList.remove('hidden');
+        workspace.classList.add('flex');
+    } else {
+        // Mobile (< 768px): if a ticket is open, show workspace; otherwise show sidebar
+        if (currentTicket) {
+            sidebar.classList.add('hidden');
+            sidebar.classList.remove('flex');
+            workspace.classList.remove('hidden');
+            workspace.classList.add('flex');
+        } else {
+            workspace.classList.add('hidden');
+            workspace.classList.remove('flex');
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('flex');
+        }
+    }
+});

@@ -103,7 +103,7 @@
                     <!-- Mobile Back to Conversations Button -->
                     <button id="mobileBackBtn" type="button" onclick="closeMobileConversation()" class="md:hidden bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1 shrink-0" title="Back to conversations">
                         <span>&larr;</span>
-                        <span class="font-medium">Chats</span>
+                        <span id="mobileBackBtnText" class="font-medium">Chats</span>
                     </button>
                     <div id="contactAvatar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 border border-slate-700 hidden sm:flex items-center justify-center text-slate-300 font-bold text-xs uppercase shadow-sm shrink-0">
                         👤
@@ -111,6 +111,7 @@
                     <div class="min-w-0">
                         <div class="flex items-center space-x-2 min-w-0">
                             <h2 id="activeCustomerTitle" class="font-bold text-sm sm:text-base text-white truncate">Select a conversation</h2>
+                            <span id="activeBadge" class="hidden text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md font-semibold">Active</span>
                             <span id="activeContactCompany" class="hidden text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md border border-slate-700 font-medium truncate"></span>
                         </div>
                         <div class="flex items-center space-x-1.5 text-xs text-slate-400 min-w-0 truncate">
@@ -122,10 +123,22 @@
                 </div>
 
                 <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+                    <!-- Quick Action: Start New Recipient Thread -->
+                    <button id="headerNewThreadBtn" type="button" onclick="openNewTicketModal()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm font-semibold shrink-0" title="Start a new recipient thread">
+                        <span>➕</span>
+                        <span id="headerNewThreadBtnText" class="hidden sm:inline">New Thread</span>
+                    </button>
+
                     <!-- Edit / View Contact Details Button -->
                     <button id="editContactBtn" onclick="openCurrentContactModal()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm">
                         <span id="editContactBtnIcon">👤</span>
                         <span id="editContactBtnText" class="inline">Contact Info</span>
+                    </button>
+
+                    <!-- Deselect / Return to Neutral State (Desktop) -->
+                    <button id="closeThreadBtn" type="button" onclick="closeMobileConversation()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-xs px-2 py-1.5 rounded-lg transition items-center space-x-1 shadow-sm shrink-0" title="Deselect active conversation">
+                        <span>✕</span>
+                        <span id="closeThreadBtnText" class="hidden xl:inline text-[11px]">Close</span>
                     </button>
 
                     <!-- Purge / End Thread Button -->
