@@ -31,12 +31,13 @@ const I18N = {
         inputPlaceholder: 'Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)...',
         translateBtn: 'Send',
         translating: 'Translating...',
-        progressStatus: 'AI Translating...',
+        progressStatus: 'Auto-Correcting Grammar & Translating...',
         progressComplete: '✓ Translated & Verified (100%)',
         progressSending: 'Sending SMS...',
-        progressSent: '✓ Sent via SMS!',
+        progressSent: '✓ Self-Corrected & Sent via SMS!',
         instantModeLabel: '⚡ Secure Instant Translation (Abrevia 1)',
         instantModeHint: 'Auto-translates & dispatches SMS directly',
+        grammarBadge: 'Bilingual Self-Correcting Grammar',
         hitlTogglePremium: 'Pre-Send Review (Premium)',
         hitlToggleActive: 'Pre-Send Review: ON',
         hitlTitle: 'Human-In-The-Loop Review (Spanish text to be sent via SMS):',
@@ -94,12 +95,13 @@ const I18N = {
         inputPlaceholder: 'Escribe tu respuesta en español (ej. Su entrega está programada para mañana a las 2 PM)...',
         translateBtn: 'Enviar',
         translating: 'Traduciendo...',
-        progressStatus: 'Traducción IA en progreso...',
+        progressStatus: 'Auto-corrigiendo gramática y traduciendo...',
         progressComplete: '✓ Traducción Verificada (100%)',
         progressSending: 'Enviando SMS...',
-        progressSent: '✓ ¡Enviado por SMS!',
+        progressSent: '✓ ¡Auto-corregido y enviado por SMS!',
         instantModeLabel: '⚡ Traducción Instantánea Segura (Abrevia 1)',
         instantModeHint: 'Traduce y envía SMS directamente',
+        grammarBadge: 'Gramática Bilingüe Auto-Correctora',
         hitlTogglePremium: 'Revisión Pre-Envío (Premium)',
         hitlToggleActive: 'Revisión Pre-Envío: ACTIVA',
         hitlTitle: 'Revisión Humana HITL (Texto en inglés que se enviará por SMS):',
@@ -254,8 +256,8 @@ function applyDashboardLocalization() {
     // Instant Translation Status & Mode Indicator
     const instantLabel = document.getElementById('instantModeLabel');
     if (instantLabel) instantLabel.textContent = t.instantModeLabel;
-    const instantHint = document.getElementById('instantModeHint');
-    if (instantHint) instantHint.textContent = t.instantModeHint;
+    const grammarBadgeEl = document.getElementById('grammarBadge');
+    if (grammarBadgeEl) grammarBadgeEl.textContent = t.grammarBadge;
     updateHitlToggleUI();
 
     // HITL
@@ -684,6 +686,7 @@ async function handleTranslateAndSend() {
 
     try {
         let translatedText = draftText;
+        let polishedDraft = draftText;
         if (draftText) {
             const transRes = await fetch('/api/translate', {
                 method: 'POST',
@@ -698,6 +701,9 @@ async function handleTranslateAndSend() {
             const data = await transRes.json();
             if (!transRes.ok) throw new Error(data.error || 'Translation failed');
             translatedText = data.translated;
+            if (data.correctedDraft) {
+                polishedDraft = data.correctedDraft;
+            }
         }
 
         clearInterval(progressTimer);
@@ -731,10 +737,10 @@ async function handleTranslateAndSend() {
                 }
             }
 
-            // 2. Dispatch SMS directly via /api/send-sms
-            const englishText = (dashboardMode === 'en') ? (draftText || (mediaUrl ? 'Attachment sent' : '')) : (translatedText || (mediaUrl ? 'Attachment sent' : ''));
-            const spanishText = (dashboardMode === 'en') ? (translatedText || (mediaUrl ? 'Adjunto enviado' : '')) : (draftText || (mediaUrl ? 'Adjunto enviado' : ''));
-            const smsBody = (dashboardMode === 'en' ? translatedText : draftText) || (dashboardMode === 'en' ? 'Adjunto recibido:' : 'Attachment:');
+            // 2. Dispatch SMS directly via /api/send-sms with self-corrected text
+            const englishText = (dashboardMode === 'en') ? (polishedDraft || (mediaUrl ? 'Attachment sent' : '')) : (translatedText || (mediaUrl ? 'Attachment sent' : ''));
+            const spanishText = (dashboardMode === 'en') ? (translatedText || (mediaUrl ? 'Adjunto enviado' : '')) : (polishedDraft || (mediaUrl ? 'Adjunto enviado' : ''));
+            const smsBody = (dashboardMode === 'en' ? translatedText : polishedDraft) || (dashboardMode === 'en' ? 'Adjunto recibido:' : 'Attachment:');
 
             const res = await fetch('/api/send-sms', {
                 method: 'POST',
@@ -758,7 +764,7 @@ async function handleTranslateAndSend() {
 
             if (progressBarFill) progressBarFill.style.width = '100%';
             if (progressPercentage) progressPercentage.textContent = '100%';
-            if (progressStatusText) progressStatusText.textContent = t.progressSent || '✓ Sent via SMS!';
+            if (progressStatusText) progressStatusText.textContent = t.progressSent || '✓ Self-Corrected & Sent via SMS!';
 
             await new Promise(r => setTimeout(r, 450));
             if (progressContainer) progressContainer.classList.add('hidden');
@@ -779,6 +785,9 @@ async function handleTranslateAndSend() {
         const hitlContainer = document.getElementById('hitlContainer');
         const reviewBox = document.getElementById('target-review-box');
         reviewBox.value = translatedText;
+        if (polishedDraft && polishedDraft !== draftText) {
+            inputEl.value = polishedDraft;
+        }
         hitlContainer.classList.remove('hidden');
         updateHitlAttachmentPreview();
         reviewBox.focus();

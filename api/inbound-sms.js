@@ -53,7 +53,7 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
               systemInstruction: {
-                parts: [{ text: 'You are a bilingual SMS relay assistant. Detect whether the message is in Spanish or English. Return a JSON object with: "detected" ("es" or "en"), "english" (the message in English), "spanish" (the message in Spanish). Return ONLY raw valid JSON.' }]
+                parts: [{ text: 'You are Abrevia\'s Bilingual Self-Correcting SMS Relay. Always auto-correct all misspellings, typos, SMS shorthand/abbreviations, phonetic errors, missing accents, and grammatical mistakes in the inbound text. Detect whether the message is in Spanish or English. Return a JSON object with: "detected" ("es" or "en"), "english" (the clean, grammatically correct and polished message in English), "spanish" (the clean, grammatically correct and polished message in Spanish). Return ONLY raw valid JSON.' }]
               },
               contents: [{ parts: [{ text: inboundContent }] }],
               generationConfig: { responseMimeType: 'application/json' }
