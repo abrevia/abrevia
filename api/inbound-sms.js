@@ -1,5 +1,6 @@
 import { supabase } from './lib/supabase.js';
 import { decryptMessage } from './lib/cipher.js';
+import { saveContact } from './lib/contacts.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -110,6 +111,13 @@ export default async function handler(req, res) {
       }
 
       if (ticketId) {
+        // Auto-save sender as contact if not already saved
+        try {
+          await saveContact({ phone: customerPhone });
+        } catch (cErr) {
+          console.warn('Inbound SMS auto-save contact error:', cErr.message);
+        }
+
         const { error: msgErr } = await supabase
           .from('messages')
           .insert({

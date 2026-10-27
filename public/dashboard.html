@@ -59,11 +59,17 @@
         
         <!-- Sidebar: Active Conversations -->
         <aside class="w-80 bg-slate-950/70 border-r border-slate-800 flex flex-col shrink-0">
-            <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-                <h2 id="sidebarTitle" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Conversations</h2>
-                <button id="refreshBtn" onclick="refreshTickets()" title="Refresh queues" class="text-slate-500 hover:text-slate-300 text-xs">
-                    &#x21bb; Refresh
-                </button>
+            <div class="p-3.5 border-b border-slate-800 flex justify-between items-center">
+                <h2 id="sidebarTitle" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Conversations</h2>
+                <div class="flex items-center space-x-1.5">
+                    <button id="contactsDirectoryBtn" onclick="openContactsModal()" title="View saved contacts" class="text-xs text-brand-400 hover:text-brand-300 font-medium flex items-center space-x-1 bg-brand-500/10 border border-brand-500/20 px-2.5 py-1 rounded-lg transition">
+                        <span>👥</span>
+                        <span id="contactsBtnText">Contacts</span>
+                    </button>
+                    <button id="refreshBtn" onclick="refreshTickets()" title="Refresh conversations" class="text-slate-500 hover:text-slate-300 text-xs p-1">
+                        &#x21bb;
+                    </button>
+                </div>
             </div>
             
             <!-- Ticket Queue List -->
@@ -85,14 +91,38 @@
         <!-- Main Workspace -->
         <main class="flex-grow flex flex-col bg-slate-900 justify-between overflow-hidden">
             
-            <!-- Conversation Header -->
+            <!-- Conversation Header with Auto-Saved Contact Info -->
             <div class="bg-slate-950/40 border-b border-slate-800 px-6 py-3.5 flex justify-between items-center shrink-0">
-                <div>
-                    <div class="flex items-center space-x-2">
-                        <h2 id="activeCustomerTitle" class="font-bold text-base text-white">Select a conversation</h2>
-                        <span id="activeBadge" class="hidden text-[10px] bg-emerald-500/10 text-emerald-400 font-medium px-2 py-0.5 rounded-full border border-emerald-500/20">Active</span>
+                <div class="flex items-center space-x-3">
+                    <div id="contactAvatar" class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 hidden sm:flex items-center justify-center text-slate-300 font-bold text-xs uppercase shadow-sm">
+                        👤
                     </div>
-                    <p id="activeSubtitle" class="text-xs text-slate-400">Choose a ticket from the sidebar or start a new thread</p>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h2 id="activeCustomerTitle" class="font-bold text-base text-white">Select a conversation</h2>
+                            <span id="activeBadge" class="hidden text-[10px] bg-emerald-500/10 text-emerald-400 font-medium px-2 py-0.5 rounded-full border border-emerald-500/20">Active</span>
+                            <span id="activeContactCompany" class="hidden text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md border border-slate-700 font-medium"></span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs text-slate-400">
+                            <p id="activeSubtitle">Choose a ticket from the sidebar or start a new thread</p>
+                            <span id="activePhoneSeparator" class="hidden text-slate-600">•</span>
+                            <span id="activeCustomerPhoneDisplay" class="hidden font-mono text-slate-300"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <!-- Edit / View Contact Details Button -->
+                    <button id="editContactBtn" onclick="openCurrentContactModal()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm">
+                        <span>👤</span>
+                        <span id="editContactBtnText">Contact Info</span>
+                    </button>
+
+                    <!-- Purge / End Thread Button -->
+                    <button id="purgeBtn" onclick="purgeCurrentConversation()" class="hidden bg-slate-900 hover:bg-red-950/40 text-slate-400 hover:text-red-400 border border-slate-800 hover:border-red-500/40 text-xs px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm">
+                        <span>🗑️</span>
+                        <span id="purgeBtnText">Purge</span>
+                    </button>
                 </div>
             </div>
 
@@ -278,18 +308,54 @@
         </div>
     </div>
 
-    <!-- New Thread Modal -->
-    <div id="newTicketModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
-            <h3 id="modalTitle" class="text-base font-bold text-white mb-1">Start New Recipient Thread</h3>
-            <p id="modalSubtitle" class="text-xs text-slate-400 mb-4">Enter recipient's SMS phone number with country code (e.g. +14155552671 or +526601750245).</p>
-            <form onsubmit="handleCreateTicket(event)" class="space-y-4">
+    <!-- New Thread & Auto-Save Contact Modal -->
+    <div id="newTicketModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl relative">
+            <button type="button" onclick="closeNewTicketModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-2.5 mb-1">
+                <span class="text-lg">💬</span>
+                <h3 id="modalTitle" class="text-base font-bold text-white">Start New Recipient Thread</h3>
+            </div>
+            <p id="modalSubtitle" class="text-xs text-slate-400 mb-4">Phone numbers are auto-saved as contacts. You can optionally add a name and details.</p>
+            
+            <form onsubmit="handleCreateTicket(event)" class="space-y-3.5">
                 <div>
-                    <label id="modalPhoneLabel" class="block text-xs font-medium text-slate-300 mb-1">Phone Number</label>
-                    <input id="newCustomerPhone" type="text" placeholder="+1... or +52..." required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                    <label id="modalPhoneLabel" class="block text-xs font-medium text-slate-300 mb-1">
+                        Phone Number <span class="text-red-400">*</span>
+                    </label>
+                    <input id="newCustomerPhone" type="text" oninput="checkExistingContactLookup(this.value)" placeholder="+1... or +52..." required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                    <p class="text-[11px] text-emerald-400/90 mt-1.5 flex items-center space-x-1">
+                        <span>✓</span>
+                        <span id="modalAutoSaveNote">Auto-saved to your contact directory upon creation</span>
+                    </p>
                 </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" id="modalCancelBtn" onclick="closeNewTicketModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-2 rounded-lg transition">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div>
+                        <label id="modalNameLabel" class="block text-xs font-medium text-slate-300 mb-1">
+                            Contact Name <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                        </label>
+                        <input id="newCustomerName" type="text" placeholder="e.g. Carlos Mendez" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                    </div>
+                    <div>
+                        <label id="modalCompanyLabel" class="block text-xs font-medium text-slate-300 mb-1">
+                            Company / Role <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                        </label>
+                        <input id="newCustomerCompany" type="text" placeholder="e.g. Acme Logistics" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label id="modalNotesLabel" class="block text-xs font-medium text-slate-300 mb-1">
+                        Internal Notes <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                    </label>
+                    <input id="newCustomerNotes" type="text" placeholder="e.g. Gate code #4012, prefers Spanish" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" id="modalCancelBtn" onclick="closeNewTicketModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2 rounded-lg transition">
                         Cancel
                     </button>
                     <button type="submit" id="modalSubmitBtn" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition">
@@ -297,6 +363,94 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Edit Contact Modal -->
+    <div id="editContactModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl relative">
+            <button type="button" onclick="closeEditContactModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-2.5 mb-1">
+                <span class="text-lg">👤</span>
+                <h3 id="editContactModalTitle" class="text-base font-bold text-white">Contact Information</h3>
+            </div>
+            <p id="editContactModalSubtitle" class="text-xs text-slate-400 mb-4">Edit name, company, and notes for this recipient.</p>
+            
+            <form onsubmit="handleSaveContactDetails(event)" class="space-y-3.5">
+                <div>
+                    <label id="editPhoneLabel" class="block text-xs font-medium text-slate-400 mb-1">Phone Number</label>
+                    <input id="editContactPhone" type="text" readonly class="w-full bg-slate-900/60 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-slate-300 cursor-not-allowed">
+                </div>
+
+                <div>
+                    <label id="editNameLabel" class="block text-xs font-medium text-slate-300 mb-1">
+                        Contact Name <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                    </label>
+                    <input id="editContactName" type="text" placeholder="e.g. Carlos Mendez" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label id="editCompanyLabel" class="block text-xs font-medium text-slate-300 mb-1">
+                            Company / Role <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                        </label>
+                        <input id="editContactCompany" type="text" placeholder="e.g. Acme Logistics" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                    </div>
+                    <div>
+                        <label id="editEmailLabel" class="block text-xs font-medium text-slate-300 mb-1">
+                            Email <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                        </label>
+                        <input id="editContactEmail" type="email" placeholder="carlos@example.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label id="editNotesLabel" class="block text-xs font-medium text-slate-300 mb-1">
+                        Internal Notes <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                    </label>
+                    <textarea id="editContactNotes" rows="2" placeholder="e.g. Gate code #4012, prefers Spanish" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" id="editCancelBtn" onclick="closeEditContactModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2 rounded-lg transition">
+                        Cancel
+                    </button>
+                    <button type="submit" id="editSaveBtn" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition">
+                        Save Contact
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contacts Directory Modal -->
+    <div id="contactsModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl flex flex-col max-h-[85vh] relative">
+            <button type="button" onclick="closeContactsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-2.5 mb-1">
+                <span class="text-lg">👥</span>
+                <h3 id="contactsModalTitle" class="text-base font-bold text-white">Contact Directory</h3>
+            </div>
+            <p id="contactsModalSubtitle" class="text-xs text-slate-400 mb-4">All recipients are automatically saved here once their phone number is entered.</p>
+
+            <div class="mb-3">
+                <input id="contactSearchInput" type="text" oninput="filterContactsList(this.value)" placeholder="Search contacts by name, phone, or company..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+            </div>
+
+            <div id="contactsDirectoryList" class="flex-grow overflow-y-auto space-y-2 pr-1 min-h-[220px]">
+                <!-- Dynamically populated -->
+            </div>
+
+            <div class="border-t border-slate-800 pt-3 mt-3 flex justify-between items-center text-xs">
+                <span id="contactsCountText" class="text-slate-500">0 contacts saved</span>
+                <button onclick="closeContactsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-lg transition">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
 

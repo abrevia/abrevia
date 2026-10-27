@@ -4,13 +4,17 @@ let pollInterval = null;
 let dashboardMode = 'en';
 let currentAttachment = null; // { file, base64, name, size, type, uploadedUrl }
 let hitlModeEnabled = false; // Abrevia 1 default: Instant translation without human in the loop
+let contactsMap = {}; // phone -> { phone, name, company, email, notes, updatedAt }
 
 const I18N = {
     en: {
         consoleBadge: 'Console',
         billingBtn: 'Billing',
         signOut: 'Sign Out',
-        sidebarTitle: 'Active Conversations',
+        sidebarTitle: 'Conversations',
+        contactsBtn: 'Contacts',
+        editContactBtn: 'Contact Info',
+        addContactBtn: '+ Add Info',
         refresh: '↻ Refresh',
         loadingQueues: 'Loading conversations...',
         noTickets: 'No active conversations.<br>Click "New Recipient Thread" below.',
@@ -43,10 +47,20 @@ const I18N = {
         uploadingFile: 'Uploading attachment...',
         mmsNotice: 'MMS Attachment queued:',
         modalTitle: 'Start New Recipient Thread',
-        modalSubtitle: 'Enter recipient\'s SMS phone number with country code (e.g. +14155552671 or +526601750245).',
+        modalSubtitle: 'Phone numbers are auto-saved as contacts. You can optionally add a name and details.',
         modalPhoneLabel: 'Phone Number',
+        modalAutoSaveNote: 'Auto-saved to your contact directory upon creation',
+        modalNameLabel: 'Contact Name (Optional)',
+        modalCompanyLabel: 'Company / Role (Optional)',
+        modalNotesLabel: 'Internal Notes (Optional)',
         modalCancel: 'Cancel',
         modalSubmit: 'Create Thread',
+        editContactModalTitle: 'Contact Information',
+        editContactModalSubtitle: 'Edit name, company, and notes for this recipient.',
+        contactsModalTitle: 'Contact Directory',
+        contactsModalSubtitle: 'All recipients are automatically saved here once their phone number is entered.',
+        contactsSearchPlaceholder: 'Search contacts by name, phone, or company...',
+        noContactsFound: 'No contacts saved yet.',
         targetLang: 'Spanish',
         purgeConfirm: (phone) => `Are you sure you want to end and permanently purge conversation with ${phone}? All message records will be deleted.`,
         purgedNotice: 'Conversation data purged from server.',
@@ -60,7 +74,10 @@ const I18N = {
         consoleBadge: 'Console',
         billingBtn: 'Facturación',
         signOut: 'Cerrar Sesión',
-        sidebarTitle: 'Conversaciones Activas',
+        sidebarTitle: 'Conversaciones',
+        contactsBtn: 'Contactos',
+        editContactBtn: 'Info de Contacto',
+        addContactBtn: '+ Agregar Info',
         refresh: '↻ Actualizar',
         loadingQueues: 'Cargando conversaciones...',
         noTickets: 'No hay conversaciones activas.<br>Haga clic en "Nuevo Hilo de Destinatario" abajo.',
@@ -93,10 +110,20 @@ const I18N = {
         uploadingFile: 'Subiendo archivo adjunto...',
         mmsNotice: 'Archivo MMS adjunto:',
         modalTitle: 'Iniciar Nuevo Hilo de Destinatario',
-        modalSubtitle: 'Ingresa el número de teléfono del destinatario con código de país (ej. +526601750245 o +14155552671).',
+        modalSubtitle: 'Los teléfonos se guardan automáticamente como contactos. Puede agregar nombre y datos opcionalmente.',
         modalPhoneLabel: 'Número de Teléfono',
+        modalAutoSaveNote: 'Guardado automáticamente en su directorio al crear el hilo',
+        modalNameLabel: 'Nombre del Contacto (Opcional)',
+        modalCompanyLabel: 'Empresa / Rol (Opcional)',
+        modalNotesLabel: 'Notas Internas (Opcional)',
         modalCancel: 'Cancelar',
         modalSubmit: 'Crear Hilo',
+        editContactModalTitle: 'Información del Contacto',
+        editContactModalSubtitle: 'Edita el nombre, empresa y notas de este destinatario.',
+        contactsModalTitle: 'Directorio de Contactos',
+        contactsModalSubtitle: 'Todos los destinatarios se guardan automáticamente aquí al ingresar su teléfono.',
+        contactsSearchPlaceholder: 'Buscar contactos por nombre, teléfono o empresa...',
+        noContactsFound: 'No hay contactos guardados aún.',
         targetLang: 'English',
         purgeConfirm: (phone) => `¿Estás seguro de que deseas finalizar y purgar permanentemente la conversación con ${phone}? Todos los registros se eliminarán.`,
         purgedNotice: 'Los datos de la conversación han sido purgados del servidor.',
@@ -119,6 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         dashboardMode = localStorage.getItem('abrevia_agent_lang') || 'en';
     }
+
+    // Load contacts from cache and background fetch
+    loadContactsFromLocalStorage();
+    fetchContacts();
 
     applyDashboardLocalization();
     refreshTickets();
@@ -201,7 +232,7 @@ function applyDashboardLocalization() {
         document.getElementById('activeCustomerTitle').textContent = t.selectConversation;
         document.getElementById('activeSubtitle').textContent = t.selectSubtitle;
     } else {
-        document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Recipient' : 'Destinatario'}: ${currentTicket.customer_phone}`;
+        updateHeaderWithContact(currentTicket.customer_phone, currentTicket.contact);
         document.getElementById('activeSubtitle').textContent = t.threadSubtitle(currentTicket.id);
     }
 
@@ -234,10 +265,32 @@ function applyDashboardLocalization() {
     document.getElementById('sendBtnText').textContent = t.sendBtn;
     updateHitlAttachmentPreview();
 
+    // Contacts & New Thread Modal Localization
+    const contactsBtnEl = document.getElementById('contactsBtnText');
+    if (contactsBtnEl) contactsBtnEl.textContent = t.contactsBtn;
+    const autoSaveNoteEl = document.getElementById('modalAutoSaveNote');
+    if (autoSaveNoteEl) autoSaveNoteEl.textContent = t.modalAutoSaveNote;
+    const nameLabelEl = document.getElementById('modalNameLabel');
+    if (nameLabelEl) nameLabelEl.innerHTML = `${t.modalNameLabel}`;
+    const compLabelEl = document.getElementById('modalCompanyLabel');
+    if (compLabelEl) compLabelEl.innerHTML = `${t.modalCompanyLabel}`;
+    const notesLabelEl = document.getElementById('modalNotesLabel');
+    if (notesLabelEl) notesLabelEl.innerHTML = `${t.modalNotesLabel}`;
+    const editModalTitle = document.getElementById('editContactModalTitle');
+    if (editModalTitle) editModalTitle.textContent = t.editContactModalTitle;
+    const editModalSub = document.getElementById('editContactModalSubtitle');
+    if (editModalSub) editModalSub.textContent = t.editContactModalSubtitle;
+    const dirModalTitle = document.getElementById('contactsModalTitle');
+    if (dirModalTitle) dirModalTitle.textContent = t.contactsModalTitle;
+    const dirModalSub = document.getElementById('contactsModalSubtitle');
+    if (dirModalSub) dirModalSub.textContent = t.contactsModalSubtitle;
+    const searchInput = document.getElementById('contactSearchInput');
+    if (searchInput) searchInput.placeholder = t.contactsSearchPlaceholder;
+
     // Modal
     document.getElementById('modalTitle').textContent = t.modalTitle;
     document.getElementById('modalSubtitle').textContent = t.modalSubtitle;
-    document.getElementById('modalPhoneLabel').textContent = t.modalPhoneLabel;
+    document.getElementById('modalPhoneLabel').innerHTML = `${t.modalPhoneLabel} <span class="text-red-400">*</span>`;
     document.getElementById('modalCancelBtn').textContent = t.modalCancel;
     document.getElementById('modalSubmitBtn').textContent = t.modalSubmit;
 }
@@ -362,6 +415,18 @@ async function refreshTickets(showLoading = true) {
         listEl.innerHTML = tickets.map(item => {
             const isSelected = currentTicket && currentTicket.id === item.id;
             const dateStr = new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const norm = normalizeClientPhone(item.customer_phone);
+            const contact = item.contact || contactsMap[norm] || null;
+            if (contact && !contactsMap[norm]) {
+                contactsMap[norm] = contact;
+            }
+
+            const hasName = contact && contact.name && contact.name.trim();
+            const displayName = hasName ? escapeHtml(contact.name) : escapeHtml(item.customer_phone);
+            const subDetail = hasName 
+                ? `${escapeHtml(item.customer_phone)}${contact.company ? ' • ' + escapeHtml(contact.company) : ''}`
+                : `<span class="text-brand-400 font-normal hover:underline">${t.addContactBtn}</span>`;
+
             return `
                 <div onclick="selectTicket('${item.id}', '${item.customer_phone}')" 
                      class="w-full text-left p-3 rounded-xl cursor-pointer transition border ${
@@ -370,12 +435,12 @@ async function refreshTickets(showLoading = true) {
                          : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:bg-slate-800/60 hover:border-slate-700'
                      }">
                     <div class="flex justify-between items-center mb-1">
-                        <span class="font-semibold text-xs text-white">${escapeHtml(item.customer_phone)}</span>
-                        <span class="text-[10px] text-slate-500">${dateStr}</span>
+                        <span class="font-semibold text-xs text-white truncate max-w-[170px]">${displayName}</span>
+                        <span class="text-[10px] text-slate-500 shrink-0">${dateStr}</span>
                     </div>
                     <div class="flex justify-between items-center text-[11px] text-slate-400">
-                        <span>SMS Relay</span>
-                        <span class="text-[10px] ${item.status === 'active' ? 'text-emerald-400' : 'text-slate-500'} font-medium uppercase">
+                        <span class="truncate max-w-[175px]">${subDetail}</span>
+                        <span class="text-[10px] ${item.status === 'active' ? 'text-emerald-400' : 'text-slate-500'} font-medium uppercase shrink-0">
                             ${item.status}
                         </span>
                     </div>
@@ -388,22 +453,73 @@ async function refreshTickets(showLoading = true) {
 }
 
 // Select a ticket to view conversation
-async function selectTicket(ticketId, customerPhone) {
-    currentTicket = { id: ticketId, customer_phone: customerPhone };
+async function selectTicket(ticketId, customerPhone, contactData = null) {
+    const norm = normalizeClientPhone(customerPhone);
+    const contact = contactData || contactsMap[norm] || { phone: customerPhone, name: '' };
+    currentTicket = { id: ticketId, customer_phone: customerPhone, contact };
     const t = I18N[dashboardMode];
     
-    // Update Header
-    document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Recipient' : 'Destinatario'}: ${customerPhone}`;
+    // Update Header with Contact details
+    updateHeaderWithContact(customerPhone, contact);
+
     document.getElementById('activeSubtitle').textContent = t.threadSubtitle(ticketId);
     document.getElementById('activeBadge').classList.remove('hidden');
     const purgeBtnEl = document.getElementById('purgeBtn');
     if (purgeBtnEl) purgeBtnEl.classList.remove('hidden');
+    const editContactBtn = document.getElementById('editContactBtn');
+    if (editContactBtn) editContactBtn.classList.remove('hidden');
     document.getElementById('inputArea').classList.remove('hidden');
 
     cancelHITL();
     removeAttachment();
     refreshTickets(false);
     await fetchMessages(ticketId, true);
+}
+
+// Update Active Conversation Header with Contact Info
+function updateHeaderWithContact(customerPhone, contact = null) {
+    const norm = normalizeClientPhone(customerPhone);
+    const c = contact || contactsMap[norm] || { phone: customerPhone, name: '' };
+    const t = I18N[dashboardMode];
+
+    const avatarEl = document.getElementById('contactAvatar');
+    const titleEl = document.getElementById('activeCustomerTitle');
+    const compEl = document.getElementById('activeContactCompany');
+    const phoneSep = document.getElementById('activePhoneSeparator');
+    const phoneDisplay = document.getElementById('activeCustomerPhoneDisplay');
+    const editBtnText = document.getElementById('editContactBtnText');
+
+    if (c && c.name && c.name.trim()) {
+        if (avatarEl) {
+            avatarEl.textContent = getInitials(c.name);
+            avatarEl.className = 'w-9 h-9 rounded-xl bg-brand-600 text-white font-bold text-xs flex items-center justify-center shadow-sm shrink-0';
+        }
+        if (titleEl) titleEl.textContent = c.name;
+        if (compEl) {
+            if (c.company) {
+                compEl.textContent = c.company;
+                compEl.classList.remove('hidden');
+            } else {
+                compEl.classList.add('hidden');
+            }
+        }
+        if (phoneSep) phoneSep.classList.remove('hidden');
+        if (phoneDisplay) {
+            phoneDisplay.textContent = customerPhone;
+            phoneDisplay.classList.remove('hidden');
+        }
+        if (editBtnText) editBtnText.textContent = t.editContactBtn;
+    } else {
+        if (avatarEl) {
+            avatarEl.textContent = '👤';
+            avatarEl.className = 'w-9 h-9 rounded-xl bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center shadow-sm border border-slate-700 shrink-0';
+        }
+        if (titleEl) titleEl.textContent = `${dashboardMode === 'en' ? 'Recipient' : 'Destinatario'}: ${customerPhone}`;
+        if (compEl) compEl.classList.add('hidden');
+        if (phoneSep) phoneSep.classList.add('hidden');
+        if (phoneDisplay) phoneDisplay.classList.add('hidden');
+        if (editBtnText) editBtnText.textContent = t.addContactBtn;
+    }
 }
 
 // Fetch messages for active ticket
@@ -809,13 +925,247 @@ function openNewTicketModal() {
 function closeNewTicketModal() {
     document.getElementById('newTicketModal').classList.add('hidden');
     document.getElementById('newCustomerPhone').value = '';
+    const nameEl = document.getElementById('newCustomerName');
+    if (nameEl) nameEl.value = '';
+    const compEl = document.getElementById('newCustomerCompany');
+    if (compEl) compEl.value = '';
+    const notesEl = document.getElementById('newCustomerNotes');
+    if (notesEl) notesEl.value = '';
+}
+
+// Auto-lookup contact as user enters phone number in the modal
+function checkExistingContactLookup(phoneVal) {
+    if (!phoneVal) return;
+    const norm = normalizeClientPhone(phoneVal);
+    const existing = contactsMap[norm];
+    if (existing) {
+        const nameInput = document.getElementById('newCustomerName');
+        const companyInput = document.getElementById('newCustomerCompany');
+        const notesInput = document.getElementById('newCustomerNotes');
+        if (nameInput && !nameInput.value && existing.name) {
+            nameInput.value = existing.name;
+        }
+        if (companyInput && !companyInput.value && existing.company) {
+            companyInput.value = existing.company;
+        }
+        if (notesInput && !notesInput.value && existing.notes) {
+            notesInput.value = existing.notes;
+        }
+    }
 }
 
 async function handleCreateTicket(e) {
     e.preventDefault();
     const phone = document.getElementById('newCustomerPhone').value.trim();
+    const name = document.getElementById('newCustomerName')?.value.trim() || '';
+    const company = document.getElementById('newCustomerCompany')?.value.trim() || '';
+    const notes = document.getElementById('newCustomerNotes')?.value.trim() || '';
     if (!phone) return;
 
+    try {
+        const res = await fetch('/api/tickets', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                customerPhone: phone,
+                customerName: name,
+                company: company,
+                notes: notes
+            })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to create thread');
+
+        // Immediately register in local contact directory
+        const norm = normalizeClientPhone(phone);
+        const contactObj = data.ticket?.contact || {
+            phone: norm,
+            name: name,
+            company: company,
+            notes: notes,
+            updatedAt: new Date().toISOString()
+        };
+        contactsMap[norm] = contactObj;
+        saveContactsToLocalStorage();
+
+        closeNewTicketModal();
+        await refreshTickets(true);
+        if (data.ticket) {
+            selectTicket(data.ticket.id, data.ticket.customer_phone, contactObj);
+        }
+    } catch (err) {
+        alert('Create thread error: ' + err.message);
+    }
+}
+
+// --- Contact Management Modals & Operations ---
+
+// Open Edit Contact Details Modal for the active conversation
+function openCurrentContactModal() {
+    if (!currentTicket) return;
+    openEditContactForPhone(currentTicket.customer_phone);
+}
+
+function openEditContactForPhone(phone) {
+    const norm = normalizeClientPhone(phone);
+    const contact = contactsMap[norm] || (currentTicket?.contact) || { phone: phone };
+
+    document.getElementById('editContactPhone').value = phone;
+    document.getElementById('editContactName').value = contact.name || '';
+    document.getElementById('editContactCompany').value = contact.company || '';
+    document.getElementById('editContactEmail').value = contact.email || '';
+    document.getElementById('editContactNotes').value = contact.notes || '';
+
+    document.getElementById('editContactModal')?.classList.remove('hidden');
+    document.getElementById('editContactName')?.focus();
+}
+
+function closeEditContactModal() {
+    document.getElementById('editContactModal')?.classList.add('hidden');
+}
+
+async function handleSaveContactDetails(e) {
+    e.preventDefault();
+    const phone = document.getElementById('editContactPhone').value.trim();
+    const name = document.getElementById('editContactName').value.trim();
+    const company = document.getElementById('editContactCompany').value.trim();
+    const email = document.getElementById('editContactEmail').value.trim();
+    const notes = document.getElementById('editContactNotes').value.trim();
+    if (!phone) return;
+
+    const norm = normalizeClientPhone(phone);
+    const updated = {
+        phone: norm,
+        name,
+        company,
+        email,
+        notes,
+        updatedAt: new Date().toISOString()
+    };
+
+    // Instant local state update
+    contactsMap[norm] = updated;
+    saveContactsToLocalStorage();
+    closeEditContactModal();
+
+    // Update active conversation header if current
+    if (currentTicket && normalizeClientPhone(currentTicket.customer_phone) === norm) {
+        currentTicket.contact = updated;
+        updateHeaderWithContact(currentTicket.customer_phone, updated);
+    }
+
+    // Refresh tickets sidebar to reflect name
+    await refreshTickets(false);
+
+    // If contacts directory is open, re-render
+    const dirModal = document.getElementById('contactsModal');
+    if (dirModal && !dirModal.classList.contains('hidden')) {
+        renderContactsDirectory(document.getElementById('contactSearchInput')?.value || '');
+    }
+
+    // Sync to backend storage
+    try {
+        await fetch('/api/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updated)
+        });
+    } catch (err) {
+        console.warn('Background contact save error:', err);
+    }
+}
+
+// Contacts Directory Modal
+async function openContactsModal() {
+    await fetchContacts();
+    renderContactsDirectory();
+    document.getElementById('contactsModal')?.classList.remove('hidden');
+    document.getElementById('contactSearchInput')?.focus();
+}
+
+function closeContactsModal() {
+    document.getElementById('contactsModal')?.classList.add('hidden');
+    const input = document.getElementById('contactSearchInput');
+    if (input) input.value = '';
+}
+
+function filterContactsList(searchQuery) {
+    renderContactsDirectory(searchQuery);
+}
+
+function renderContactsDirectory(filter = '') {
+    const listEl = document.getElementById('contactsDirectoryList');
+    const countEl = document.getElementById('contactsCountText');
+    if (!listEl) return;
+    const t = I18N[dashboardMode];
+
+    const cleanFilter = filter.trim().toLowerCase();
+    const allContacts = Object.values(contactsMap).sort((a, b) => {
+        const nameA = (a.name || a.phone || '').toLowerCase();
+        const nameB = (b.name || b.phone || '').toLowerCase();
+        return nameA.localeCompare(nameB);
+    });
+
+    const filtered = allContacts.filter(c => {
+        if (!cleanFilter) return true;
+        const n = (c.name || '').toLowerCase();
+        const p = (c.phone || '').toLowerCase();
+        const comp = (c.company || '').toLowerCase();
+        const nt = (c.notes || '').toLowerCase();
+        return n.includes(cleanFilter) || p.includes(cleanFilter) || comp.includes(cleanFilter) || nt.includes(cleanFilter);
+    });
+
+    if (countEl) {
+        countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'contact' : 'contacts'} saved`;
+    }
+
+    if (filtered.length === 0) {
+        listEl.innerHTML = `
+            <div class="text-center py-10 text-slate-500 text-xs">
+                ${t.noContactsFound}
+            </div>
+        `;
+        return;
+    }
+
+    listEl.innerHTML = filtered.map(c => {
+        const initials = getInitials(c.name || c.phone);
+        const displayName = (c.name && c.name.trim()) ? escapeHtml(c.name) : escapeHtml(c.phone);
+        const hasCompany = Boolean(c.company && c.company.trim());
+        const hasNotes = Boolean(c.notes && c.notes.trim());
+
+        return `
+            <div class="p-3 bg-slate-900/90 border border-slate-800 rounded-xl flex items-center justify-between hover:border-slate-700 transition">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <div class="w-8 h-8 rounded-lg ${c.name ? 'bg-brand-600 text-white' : 'bg-slate-800 text-slate-400 border border-slate-700'} flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                        ${initials}
+                    </div>
+                    <div class="overflow-hidden">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-bold text-white truncate">${displayName}</span>
+                            ${hasCompany ? `<span class="text-[10px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700 truncate">${escapeHtml(c.company)}</span>` : ''}
+                        </div>
+                        <div class="text-[11px] text-slate-400 font-mono flex items-center space-x-2">
+                            <span>${escapeHtml(c.phone)}</span>
+                            ${hasNotes ? `<span class="text-slate-500 text-[10px] truncate max-w-xs">&bull; ${escapeHtml(c.notes)}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-1.5 shrink-0 ml-2">
+                    <button onclick="startThreadWithContact('${escapeHtml(c.phone)}')" class="bg-brand-600 hover:bg-brand-500 text-white text-xs px-2.5 py-1 rounded-lg transition font-medium shadow-sm">
+                        ${dashboardMode === 'es' ? 'Mensaje' : 'Message'}
+                    </button>
+                    <button onclick="openEditContactForPhone('${escapeHtml(c.phone)}')" title="Edit Contact" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded-lg transition">
+                        ✏️
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+async function startThreadWithContact(phone) {
+    closeContactsModal();
     try {
         const res = await fetch('/api/tickets', {
             method: 'POST',
@@ -823,15 +1173,58 @@ async function handleCreateTicket(e) {
             body: JSON.stringify({ customerPhone: phone })
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to create thread');
-
-        closeNewTicketModal();
         await refreshTickets(true);
         if (data.ticket) {
-            selectTicket(data.ticket.id, data.ticket.customer_phone);
+            selectTicket(data.ticket.id, data.ticket.customer_phone, data.ticket.contact);
         }
     } catch (err) {
-        alert('Create thread error: ' + err.message);
+        alert('Error opening thread: ' + err.message);
+    }
+}
+
+// Contacts Client Storage Helpers
+function normalizeClientPhone(phone) {
+    if (!phone) return '';
+    let clean = phone.trim().replace(/[^\d+]/g, '');
+    if (!clean.startsWith('+')) clean = '+' + clean;
+    return clean;
+}
+
+function getInitials(text) {
+    if (!text) return '👤';
+    const clean = text.replace(/^\+/, '').trim();
+    const parts = clean.split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+function saveContactsToLocalStorage() {
+    try {
+        localStorage.setItem('abrevia_contacts', JSON.stringify(contactsMap));
+    } catch (e) {}
+}
+
+function loadContactsFromLocalStorage() {
+    try {
+        const cached = localStorage.getItem('abrevia_contacts');
+        if (cached) {
+            contactsMap = Object.assign({}, JSON.parse(cached), contactsMap);
+        }
+    } catch (e) {}
+}
+
+async function fetchContacts() {
+    try {
+        const res = await fetch('/api/contacts');
+        if (res.ok) {
+            const data = await res.json();
+            if (data.contacts) {
+                contactsMap = Object.assign({}, contactsMap, data.contacts);
+                saveContactsToLocalStorage();
+            }
+        }
+    } catch (err) {
+        console.warn('Error fetching contacts:', err);
     }
 }
 
