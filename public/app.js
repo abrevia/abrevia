@@ -38,7 +38,7 @@ const I18N = {
         instantModeLabel: '⚡ Secure Instant Translation (Abrevia 1)',
         instantModeHint: 'Auto-translates & dispatches SMS directly',
         grammarBadge: 'Bilingual Self-Correcting Grammar',
-        hitlTogglePremium: 'Pre-Send Review (Premium)',
+        hitlTogglePremium: 'Pre-Send Review',
         hitlToggleActive: 'Pre-Send Review: ON',
         hitlTitle: 'Human-In-The-Loop Review (Spanish text to be sent via SMS):',
         hitlSubtitle: 'Edit text freely • Press Enter ↵ to send',
@@ -102,8 +102,8 @@ const I18N = {
         instantModeLabel: '⚡ Traducción Instantánea Segura (Abrevia 1)',
         instantModeHint: 'Traduce y envía SMS directamente',
         grammarBadge: 'Gramática Bilingüe Auto-Correctora',
-        hitlTogglePremium: 'Revisión Pre-Envío (Premium)',
-        hitlToggleActive: 'Revisión Pre-Envío: ACTIVA',
+        hitlTogglePremium: 'Revisión Previa',
+        hitlToggleActive: 'Revisión Previa: ACTIVA',
         hitlTitle: 'Revisión Humana HITL (Texto en inglés que se enviará por SMS):',
         hitlSubtitle: 'Edita el texto libremente • Presiona Enter ↵ para enviar',
         cancelHitl: 'Cancelar',
@@ -297,13 +297,13 @@ function applyDashboardLocalization() {
     document.getElementById('modalSubmitBtn').textContent = t.modalSubmit;
 }
 
-// Toggle Pre-Send Review Mode (Human-In-The-Loop) — Premium Tier feature
+// Toggle Pre-Send Review Mode (Human-In-The-Loop) — Paid Tier feature
 function toggleHitlMode() {
-    const isPremium = localStorage.getItem('abrevia_tier') === 'premium';
-    if (!isPremium && !hitlModeEnabled) {
+    const isPaid = localStorage.getItem('abrevia_tier') === 'paid' || localStorage.getItem('abrevia_tier') === 'pro' || localStorage.getItem('abrevia_tier') === 'premium';
+    if (!isPaid && !hitlModeEnabled) {
         const wantsUpgrade = confirm(dashboardMode === 'es'
-            ? 'La revisión humana previa al envío es exclusiva del Nivel Premium ($49/mes Operaciones Pro).\n\n¿Desea ver los planes de suscripción en Facturación?'
-            : 'Pre-send human-in-the-loop review is reserved for the Premium Tier ($49/mo Operations Pro).\n\nWould you like to explore upgrade plans in Billing?');
+            ? 'La revisión previa está disponible al actualizar a un plan de pago ($49/mes Operaciones Pro).\n\n¿Desea ver los planes en Facturación para actualizar?'
+            : 'Pre-send review is available when you upgrade to a paid tier ($49/mo Operations Pro).\n\nWould you like to explore upgrade plans in Billing?');
         if (wantsUpgrade) {
             openBillingModal();
         }
@@ -1318,19 +1318,20 @@ async function openStripeCustomerPortal() {
 (function checkBillingStatus() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('billing') === 'success') {
-        localStorage.setItem('abrevia_tier', 'premium');
+        localStorage.setItem('abrevia_tier', 'paid');
         alert(dashboardMode === 'es' 
-            ? '✓ ¡Pago completado con éxito! Su cuenta de operaciones ha sido actualizada a Nivel Premium con revisión HITL.'
-            : '✓ Payment completed successfully! Your operations workspace has been upgraded to Premium Tier with HITL review.');
+            ? '✓ ¡Pago completado con éxito! Su cuenta de operaciones ha sido actualizada a Operaciones Pro con revisión previa.'
+            : '✓ Payment completed successfully! Your operations workspace has been upgraded to Operations Pro with pre-send review.');
         window.history.replaceState({}, document.title, window.location.pathname);
     } else if (params.get('billing') === 'canceled') {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    // Update billing modal badge if premium
+    // Update billing modal badge if on paid tier
     const billingPlanBadge = document.getElementById('billingModalPlan');
-    if (billingPlanBadge && localStorage.getItem('abrevia_tier') === 'premium') {
-        billingPlanBadge.textContent = 'Premium Tier (Operations Pro)';
-        billingPlanBadge.className = 'text-[10px] text-amber-400 font-bold uppercase tracking-wider';
+    const isPaid = localStorage.getItem('abrevia_tier') === 'paid' || localStorage.getItem('abrevia_tier') === 'pro' || localStorage.getItem('abrevia_tier') === 'premium';
+    if (billingPlanBadge && isPaid) {
+        billingPlanBadge.textContent = 'Operations Pro';
+        billingPlanBadge.className = 'text-[10px] text-emerald-400 font-bold uppercase tracking-wider';
     }
 })();
