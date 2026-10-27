@@ -123,9 +123,9 @@
                             <input type="file" id="fileInput" onchange="handleFileSelected(event)" class="hidden" accept="image/*,.pdf,.doc,.docx,.txt">
 
                             <input id="agent-input" type="text" placeholder="Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-                            <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition shrink-0 shadow-lg shadow-brand-600/20 flex items-center space-x-1.5">
+                            <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5">
                                 <span id="translateBtnText">Send</span>
-                                <span class="text-[10px] bg-brand-700/80 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold">↵</span>
+                                <span class="text-xs font-bold">↵</span>
                             </button>
                         </div>
 
@@ -179,9 +179,9 @@
                             <button id="cancelHitlBtn" onclick="cancelHITL()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-lg transition">
                                 Cancel
                             </button>
-                            <button id="send-btn" onclick="confirmAndSend()" title="Press Enter to Send SMS" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition shadow-md shadow-emerald-600/20 flex items-center space-x-1.5">
+                            <button id="send-btn" onclick="confirmAndSend()" title="Press Enter to Send SMS" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition flex items-center space-x-1.5">
                                 <span id="sendBtnText">Send SMS to Recipient</span>
-                                <span class="text-[10px] bg-emerald-700/80 text-emerald-100 px-1.5 py-0.5 rounded font-mono font-bold">↵</span>
+                                <span class="text-xs font-bold">↵</span>
                             </button>
                         </div>
                     </div>

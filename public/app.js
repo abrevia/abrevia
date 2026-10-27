@@ -205,7 +205,7 @@ function applyDashboardLocalization() {
     const agentInputLabel = document.getElementById('agentInputLabel');
     if (agentInputLabel) agentInputLabel.textContent = t.inputLabel;
     document.getElementById('agent-input').placeholder = t.inputPlaceholder;
-    document.getElementById('translate-btn').innerHTML = `<span>${t.translateBtn}</span> <span class="text-[10px] bg-brand-700/80 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold">↵</span>`;
+    document.getElementById('translate-btn').innerHTML = `<span>${t.translateBtn}</span> <span class="text-xs font-bold">↵</span>`;
 
     // HITL
     document.getElementById('hitlTitleText').textContent = t.hitlTitle;
@@ -548,7 +548,7 @@ async function handleTranslateAndSend() {
         alert('Translation error: ' + (err.name === 'TimeoutError' ? 'Translation request timed out. Please try again.' : err.message));
     } finally {
         translateBtn.disabled = false;
-        translateBtn.innerHTML = `<span>${t.translateBtn}</span> <span class="text-[10px] bg-brand-700/80 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold">↵</span>`;
+        translateBtn.innerHTML = `<span>${t.translateBtn}</span> <span class="text-xs font-bold">↵</span>`;
     }
 }
 
