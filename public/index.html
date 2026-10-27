@@ -53,123 +53,96 @@
         </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="max-w-4xl mx-auto w-full px-6 py-12 flex-grow flex flex-col items-center justify-center text-center">
+    <!-- Main Content Area (Easy & Minimal, Inspired by Abrevia Squircle) -->
+    <main class="max-w-3xl mx-auto w-full px-6 py-12 sm:py-16 flex-grow flex flex-col items-center justify-center text-center">
         
-        <!-- High-Impact Value Proposition Badge -->
-        <div class="inline-flex items-center space-x-2 bg-slate-900 border border-slate-800 px-4 py-1.5 rounded-full text-xs text-slate-300 mb-6 shadow-sm">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>🔒 Secure Translation App for Business &bull; App de Traducción Segura para Empresas</span>
+        <!-- Authentic Squircle App Icon (Abrevia Minimalist Mark) -->
+        <div class="relative mb-6 group">
+            <img src="/assets/logo.png" alt="Abrevia" class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl shadow-2xl shadow-blue-500/25 mx-auto transition-transform duration-300 group-hover:scale-105 border border-blue-400/20">
         </div>
 
-        <!-- Self-Explanatory Headline -->
-        <div class="mb-6">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
-                The Secure Translation App <br class="hidden sm:inline">Designed for Business
-            </h1>
-            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-brand-500">
-                La App de Traducción Segura Diseñada para Empresas
-            </h2>
-        </div>
+        <!-- Clean, Bold, Minimal Headline -->
+        <h1 id="heroTitle" class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
+            Secure Bilingual Texting for Business
+        </h1>
 
-        <!-- Clear, Self-Explanatory Intro -->
-        <div class="max-w-2xl mb-8 text-slate-300 space-y-3 text-sm sm:text-base leading-relaxed">
-            <p class="font-normal text-slate-300">
-                Abrevia is a <strong>secure, enterprise translation platform</strong> that connects your operations team with English and Spanish-speaking recipients over native SMS. Your team communicates seamlessly from a protected web console, while recipients text back naturally from any mobile phone—<strong>no apps to download, no sign-ups, and zero customer friction</strong>.
-            </p>
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed border-t border-slate-800/80 pt-3">
-                Abrevia es una <strong>plataforma de traducción segura para empresas</strong> que conecta a su equipo de operaciones con clientes y personal en inglés y español mediante SMS tradicional. Su equipo gestiona mensajes desde una consola segura, mientras los destinatarios responden desde cualquier teléfono—<strong>sin descargar aplicaciones ni crear cuentas</strong>.
-            </p>
-        </div>
+        <!-- Crisp Minimal Subtitle -->
+        <p id="heroSubtitle" class="text-sm sm:text-base text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
+            Your team writes from a web console. Your recipients reply over native SMS. Real-time translation, Human-In-The-Loop review, zero apps to download.
+        </p>
 
-        <!-- 3 Pillars Proof Bar -->
-        <div class="flex flex-wrap items-center justify-center gap-3 mb-10 text-xs font-semibold">
-            <div class="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-slate-300 shadow-sm">
-                <span class="text-emerald-400">🌐</span>
-                <span>Real-Time Bilingual AI Translation</span>
-            </div>
-            <div class="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-slate-300 shadow-sm">
-                <span class="text-blue-400">🛡️</span>
-                <span>Human-In-The-Loop Security Verification</span>
-            </div>
-            <div class="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-slate-300 shadow-sm">
-                <span class="text-indigo-400">📱</span>
-                <span>Zero Downloads for Recipients</span>
-            </div>
-        </div>
-
-        <!-- Prompt to Choose Preferred Operating Language -->
-        <div class="w-full max-w-xl mb-8">
-            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-                Select Your Operating Profile &bull; Elija su Perfil de Operación
-            </div>
+        <!-- Effortless Minimal Launchpad -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-7 max-w-md w-full shadow-2xl backdrop-blur-sm text-center mb-8">
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Option A: English -->
-                <button id="cardEn" onclick="selectLanguage('en')" class="p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/90 border-brand-500/80 shadow-lg shadow-brand-500/10">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-2xl">🇺🇸</span>
-                            <span id="badgeEn" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">Selected</span>
-                        </div>
-                        <div class="font-bold text-white text-base">English Operations</div>
-                        <div class="text-xs text-slate-400 mt-1 leading-normal">
-                            Agent writes in English &rarr; Recipient receives Spanish SMS. Inbound Spanish translates to English.
-                        </div>
-                    </div>
-                    <div class="text-xs font-semibold text-brand-400 mt-4 flex items-center space-x-1">
-                        <span>Operate in English</span>
-                        <span>&rarr;</span>
-                    </div>
+            <!-- Language Mode Selector -->
+            <div class="inline-flex p-1 bg-slate-950 border border-slate-800 rounded-xl mb-4 w-full">
+                <button id="toggleEn" onclick="selectLanguage('en')" class="flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition bg-brand-600 text-white shadow-sm">
+                    <span>🇺🇸</span>
+                    <span>English Mode</span>
                 </button>
+                <button id="toggleEs" onclick="selectLanguage('es')" class="flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition text-slate-400 hover:text-white">
+                    <span>🇲🇽</span>
+                    <span>Modo Español</span>
+                </button>
+            </div>
 
-                <!-- Option B: Español -->
-                <button id="cardEs" onclick="selectLanguage('es')" class="p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/40 border-slate-800 hover:border-slate-700">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-2xl">🇲🇽</span>
-                            <span id="badgeEs" class="hidden text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">Seleccionado</span>
-                        </div>
-                        <div class="font-bold text-white text-base">Operaciones en Español</div>
-                        <div class="text-xs text-slate-400 mt-1 leading-normal">
-                            El agente escribe en español &rarr; El cliente recibe SMS en inglés. Los mensajes en inglés se traducen a español.
-                        </div>
-                    </div>
-                    <div class="text-xs font-semibold text-slate-400 mt-4 flex items-center space-x-1">
-                        <span>Operar en Español</span>
-                        <span>&rarr;</span>
-                    </div>
-                </button>
+            <!-- Directional Flow Hint -->
+            <p id="profileHint" class="text-xs text-slate-400 mb-5">
+                You write in English &rarr; Recipient receives Spanish SMS
+            </p>
+
+            <!-- 1-Click Launch Button (Inspired by the Blue Squircle) -->
+            <button onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm group">
+                <span id="launchBtnText">Launch English Console</span>
+                <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </button>
+
+            <!-- Quiet Trust Notes -->
+            <div class="flex items-center justify-center space-x-3 mt-4 text-[11px] text-slate-500">
+                <span>🔒 Secure Operations</span>
+                <span>&bull;</span>
+                <span>📱 Zero App Downloads</span>
             </div>
         </div>
 
-        <!-- Dynamic Sign-In Card (Adapts to Selected Profile) -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-8 max-w-md w-full shadow-2xl backdrop-blur-sm text-left">
-            <div class="flex items-center justify-between mb-2">
-                <h2 id="loginTitle" class="text-lg font-bold text-white">Agent & Dispatcher Sign-In</h2>
-                <span id="loginLangTag" class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300">English Mode</span>
+        <!-- 3 Quiet Minimal Pillars (Row) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl text-left mb-8">
+            <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
+                <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
+                    <span>🔒</span>
+                    <span id="pillar1Title">Secure & Private</span>
+                </div>
+                <p id="pillar1Desc" class="text-[11px] text-slate-400 leading-normal">
+                    Administrative workspace with Human-In-The-Loop review before SMS delivery.
+                </p>
             </div>
-            <p id="loginSubtitle" class="text-xs text-slate-400 mb-6">Enter your console to start managing bilingual recipient threads.</p>
-
-            <form onsubmit="handleEnterWorkspace(event)" class="space-y-4">
-                <div>
-                    <label id="labelEmail" class="block text-xs font-medium text-slate-300 mb-1.5">Work Email / Agent ID</label>
-                    <input id="inputEmail" type="text" value="agent@abrevia.live" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+            <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
+                <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
+                    <span>⚡</span>
+                    <span id="pillar2Title">Real-Time AI</span>
                 </div>
-                <div>
-                    <label id="labelPassword" class="block text-xs font-medium text-slate-300 mb-1.5">Access PIN / Password</label>
-                    <input type="password" value="••••••••" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                <p id="pillar2Desc" class="text-[11px] text-slate-400 leading-normal">
+                    Instant sub-second bilingual English ⇄ Spanish translation via Gemini.
+                </p>
+            </div>
+            <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
+                <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
+                    <span>📱</span>
+                    <span id="pillar3Title">Zero-Download SMS</span>
                 </div>
-                <button type="submit" id="submitBtn" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center space-x-2">
-                    <span id="submitBtnText">Enter English Workspace</span>
-                    <span>&rarr;</span>
-                </button>
-            </form>
+                <p id="pillar3Desc" class="text-[11px] text-slate-400 leading-normal">
+                    Drivers, tenants & clients text naturally from any mobile phone.
+                </p>
+            </div>
         </div>
 
-        <!-- Verticals Grid (Localized) -->
-        <div id="verticalsGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 w-full text-left">
-            <!-- Dynamically populated based on active language -->
+        <!-- Industry Pills (Minimal) -->
+        <div class="flex flex-wrap items-center justify-center gap-2 text-[11px] text-slate-400">
+            <span class="text-slate-500">Built for:</span>
+            <span class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Logistics & Dispatch</span>
+            <span class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Property Management</span>
+            <span class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Field Services</span>
+            <span class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Customer Care</span>
         </div>
 
     </main>
@@ -378,6 +351,16 @@
     <script>
         const content = {
             en: {
+                heroTitle: 'Secure Bilingual Texting for Business',
+                heroSubtitle: 'Your team writes from a web console. Your recipients reply over native SMS. Real-time translation, Human-In-The-Loop review, zero apps to download.',
+                profileHint: 'You write in English &rarr; Recipient receives Spanish SMS',
+                launchBtnText: 'Launch English Console',
+                pillar1Title: 'Secure & Private',
+                pillar1Desc: 'Administrative workspace with Human-In-The-Loop review before SMS delivery.',
+                pillar2Title: 'Real-Time AI',
+                pillar2Desc: 'Instant sub-second bilingual English ⇄ Spanish translation via Gemini.',
+                pillar3Title: 'Zero-Download SMS',
+                pillar3Desc: 'Drivers, tenants & clients text naturally from any mobile phone.',
                 navPricing: 'Pricing & Plans',
                 pricingModalTag: 'B2B SaaS Pricing',
                 pricingModalTitle: 'Simple, Transparent Relay Plans',
@@ -403,12 +386,6 @@
                 tier3Btn: 'View HIPAA Roadmap',
                 pricingSecure: 'Secured by Stripe • 256-bit SSL Encryption • PCI-DSS Compliant',
                 pricingClose: 'Back to Sign-In',
-                loginTitle: 'Agent & Dispatcher Sign-In',
-                loginLangTag: 'English Mode',
-                loginSubtitle: 'Enter your secure operations console to start managing bilingual recipient threads with real-time translation.',
-                labelEmail: 'Work Email / Agent ID',
-                labelPassword: 'Access PIN / Password',
-                submitBtnText: 'Enter English Workspace',
                 footerNoticeTitle: 'Notice:',
                 footerNotice: 'Abrevia is strictly an administrative operations tool and is not designed for PHI processing. Learn more about HIPAA and our HIPAA-compliant app, available soon.',
                 footerLearnMore: 'Learn More',
@@ -421,15 +398,19 @@
                 hipaaFeat2: 'Automated PHI sanitization and de-identification pre-translation.',
                 hipaaFeat3: 'Immutable audit logs complying with HIPAA Security Rule §164.312(b).',
                 hipaaFeat4: 'ACA Section 1557 qualified human-in-the-loop language assistance review.',
-                hipaaClose: 'Close',
-                verticals: [
-                    { title: 'Logistics', desc: 'Driver updates, delivery coordinates & schedule dispatch.' },
-                    { title: 'Property', desc: 'Tenant inquiries, maintenance notices & access codes.' },
-                    { title: 'Field Services', desc: 'Technician arrival alerts, quote approvals & rebooking.' },
-                    { title: 'Customer Care', desc: 'Zero-app friction: customer texts naturally from any phone.' }
-                ]
+                hipaaClose: 'Close'
             },
             es: {
+                heroTitle: 'Traducción Segura por SMS para Empresas',
+                heroSubtitle: 'Su equipo gestiona mensajes desde una consola web. Sus clientes responden por SMS tradicional. Traducción IA en tiempo real, revisión humana y sin descargar aplicaciones.',
+                profileHint: 'Usted escribe en español &rarr; El destinatario recibe SMS en inglés',
+                launchBtnText: 'Abrir Consola en Español',
+                pillar1Title: 'Seguro y Privado',
+                pillar1Desc: 'Espacio administrativo con revisión humana antes de enviar el SMS.',
+                pillar2Title: 'IA en Tiempo Real',
+                pillar2Desc: 'Traducción bilingüe instantánea y de baja latencia con Gemini.',
+                pillar3Title: 'Sin Descargas',
+                pillar3Desc: 'Clientes, inquilinos y transportistas responden vía SMS normal.',
                 navPricing: 'Planes y Tarifas',
                 pricingModalTag: 'Tarifas SaaS B2B',
                 pricingModalTitle: 'Planes Simples y Transparentes',
@@ -455,12 +436,6 @@
                 tier3Btn: 'Ver Ruta de Cumplimiento HIPAA',
                 pricingSecure: 'Asegurado por Stripe • Cifrado SSL de 256 bits • Cumplimiento PCI-DSS',
                 pricingClose: 'Volver al Inicio',
-                loginTitle: 'Inicio de Sesión - Agente y Despacho',
-                loginLangTag: 'Modo Español',
-                loginSubtitle: 'Acceda a su consola segura de operaciones para gestionar hilos de destinatarios con traducción en tiempo real.',
-                labelEmail: 'Correo Corporativo / ID de Agente',
-                labelPassword: 'PIN / Contraseña de Acceso',
-                submitBtnText: 'Entrar al Área en Español',
                 footerNoticeTitle: 'Aviso:',
                 footerNotice: 'Abrevia es estrictamente una herramienta de operaciones administrativas y no está diseñada para el procesamiento de PHI. Conozca más sobre HIPAA y nuestra app compatible, disponible pronto.',
                 footerLearnMore: 'Más Información',
@@ -473,13 +448,7 @@
                 hipaaFeat2: 'Sanitización automática de PHI y desidentificación previa a la traducción.',
                 hipaaFeat3: 'Registros de auditoría inmutables según la Regla de Seguridad HIPAA §164.312(b).',
                 hipaaFeat4: 'Protocolos de revisión humana calificada bajo ACA Sección 1557.',
-                hipaaClose: 'Cerrar',
-                verticals: [
-                    { title: 'Logística', desc: 'Actualizaciones a transportistas, coordenadas y horarios de entrega.' },
-                    { title: 'Inmobiliaria', desc: 'Consultas de inquilinos, reportes de mantenimiento y códigos de acceso.' },
-                    { title: 'Servicios en Campo', desc: 'Avisos de llegada de técnicos, cotizaciones y reprogramación.' },
-                    { title: 'Atención al Cliente', desc: 'Sin aplicaciones: el cliente responde vía SMS tradicional.' }
-                ]
+                hipaaClose: 'Cerrar'
             }
         };
 
@@ -500,32 +469,45 @@
                 btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition';
             }
 
-            // Update Selection Cards
-            const cardEn = document.getElementById('cardEn');
-            const cardEs = document.getElementById('cardEs');
-            const badgeEn = document.getElementById('badgeEn');
-            const badgeEs = document.getElementById('badgeEs');
-
-            if (lang === 'en') {
-                cardEn.className = 'p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/90 border-brand-500/80 shadow-lg shadow-brand-500/10';
-                cardEs.className = 'p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/40 border-slate-800 hover:border-slate-700';
-                badgeEn.classList.remove('hidden');
-                badgeEs.classList.add('hidden');
-            } else {
-                cardEs.className = 'p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/90 border-brand-500/80 shadow-lg shadow-brand-500/10';
-                cardEn.className = 'p-4 rounded-2xl border transition-all text-left relative flex flex-col justify-between bg-slate-900/40 border-slate-800 hover:border-slate-700';
-                badgeEs.classList.remove('hidden');
-                badgeEn.classList.add('hidden');
+            // Update Toggle Pills
+            const toggleEn = document.getElementById('toggleEn');
+            const toggleEs = document.getElementById('toggleEs');
+            if (toggleEn && toggleEs) {
+                if (lang === 'en') {
+                    toggleEn.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition bg-brand-600 text-white shadow-sm';
+                    toggleEs.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition text-slate-400 hover:text-white';
+                } else {
+                    toggleEs.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition bg-brand-600 text-white shadow-sm';
+                    toggleEn.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition text-slate-400 hover:text-white';
+                }
             }
 
-            // Update Login Form
+            // Update Hero & Launchpad
             const c = content[lang];
-            document.getElementById('loginTitle').textContent = c.loginTitle;
-            document.getElementById('loginLangTag').textContent = c.loginLangTag;
-            document.getElementById('loginSubtitle').textContent = c.loginSubtitle;
-            document.getElementById('labelEmail').textContent = c.labelEmail;
-            document.getElementById('labelPassword').textContent = c.labelPassword;
-            document.getElementById('submitBtnText').textContent = c.submitBtnText;
+            const heroTitle = document.getElementById('heroTitle');
+            if (heroTitle) heroTitle.textContent = c.heroTitle;
+            const heroSubtitle = document.getElementById('heroSubtitle');
+            if (heroSubtitle) heroSubtitle.textContent = c.heroSubtitle;
+            const profileHint = document.getElementById('profileHint');
+            if (profileHint) profileHint.innerHTML = c.profileHint;
+            const launchBtnText = document.getElementById('launchBtnText');
+            if (launchBtnText) launchBtnText.textContent = c.launchBtnText;
+
+            // Update Pillars
+            const p1Title = document.getElementById('pillar1Title');
+            if (p1Title) p1Title.textContent = c.pillar1Title;
+            const p1Desc = document.getElementById('pillar1Desc');
+            if (p1Desc) p1Desc.textContent = c.pillar1Desc;
+
+            const p2Title = document.getElementById('pillar2Title');
+            if (p2Title) p2Title.textContent = c.pillar2Title;
+            const p2Desc = document.getElementById('pillar2Desc');
+            if (p2Desc) p2Desc.textContent = c.pillar2Desc;
+
+            const p3Title = document.getElementById('pillar3Title');
+            if (p3Title) p3Title.textContent = c.pillar3Title;
+            const p3Desc = document.getElementById('pillar3Desc');
+            if (p3Desc) p3Desc.textContent = c.pillar3Desc;
 
             // Update Footer Notice & Learn More
             document.getElementById('footerNoticeText').innerHTML = `<span class="font-semibold text-slate-300">${c.footerNoticeTitle}</span> ${c.footerNotice}`;
@@ -569,15 +551,6 @@
             document.getElementById('tier3Btn').textContent = c.tier3Btn;
             document.getElementById('pricingSecureText').textContent = c.pricingSecure;
             document.getElementById('pricingCloseBtn').textContent = c.pricingClose;
-
-            // Render Verticals
-            const verticalsContainer = document.getElementById('verticalsGrid');
-            verticalsContainer.innerHTML = c.verticals.map(v => `
-                <div class="bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
-                    <span class="text-brand-500 font-bold text-xs uppercase tracking-wider block mb-1">${v.title}</span>
-                    <p class="text-xs text-slate-400">${v.desc}</p>
-                </div>
-            `).join('');
         }
 
         function handleEnterWorkspace(e) {
