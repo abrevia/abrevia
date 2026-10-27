@@ -22,10 +22,10 @@ const I18N = {
         noMessagesInThread: 'No messages yet in this thread.<br>Send an outbound SMS reply below to start.',
         inputLabel: 'Type reply in English (Agent):',
         inputPlaceholder: 'Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)...',
-        translateBtn: 'Translate →',
+        translateBtn: 'Translate',
         translating: 'Translating...',
         hitlTitle: 'Human-In-The-Loop Review (Spanish text to be sent via SMS):',
-        hitlSubtitle: 'Edit text freely before sending',
+        hitlSubtitle: 'Edit text freely • Press Enter ↵ to send',
         cancelHitl: 'Cancel',
         sendBtn: 'Send SMS to Customer',
         sendingSms: 'Sending SMS...',
@@ -62,10 +62,10 @@ const I18N = {
         noMessagesInThread: 'Aún no hay mensajes en este hilo.<br>Envía una respuesta SMS abajo para iniciar.',
         inputLabel: 'Escribe respuesta en Español (Agente):',
         inputPlaceholder: 'Escribe tu respuesta en español (ej. Su entrega está programada para mañana a las 2 PM)...',
-        translateBtn: 'Traducir →',
+        translateBtn: 'Traducir',
         translating: 'Traduciendo...',
         hitlTitle: 'Revisión Humana HITL (Texto en inglés que se enviará por SMS):',
-        hitlSubtitle: 'Edita el texto libremente antes de enviar',
+        hitlSubtitle: 'Edita el texto libremente • Presiona Enter ↵ para enviar',
         cancelHitl: 'Cancelar',
         sendBtn: 'Enviar SMS al Cliente',
         sendingSms: 'Enviando SMS...',
@@ -101,6 +101,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applyDashboardLocalization();
     refreshTickets();
+
+    // Keyboard shortcuts: Enter to Translate and Enter to Send SMS
+    const agentInput = document.getElementById('agent-input');
+    if (agentInput) {
+        agentInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                // If HITL box is open with text, send it; otherwise translate draft
+                const hitlContainer = document.getElementById('hitlContainer');
+                const targetReview = document.getElementById('target-review-box');
+                if (hitlContainer && !hitlContainer.classList.contains('hidden') && targetReview?.value.trim()) {
+                    confirmAndSend();
+                } else {
+                    handleTranslateAndSend();
+                }
+            }
+        });
+    }
+
+    const reviewBox = document.getElementById('target-review-box');
+    if (reviewBox) {
+        reviewBox.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                confirmAndSend();
+            }
+        });
+    }
 
     // Poll for new messages/tickets every 5 seconds
     pollInterval = setInterval(() => {
@@ -161,7 +189,7 @@ function applyDashboardLocalization() {
     // Composer
     document.getElementById('agentInputLabel').textContent = t.inputLabel;
     document.getElementById('agent-input').placeholder = t.inputPlaceholder;
-    document.getElementById('translate-btn').textContent = t.translateBtn;
+    document.getElementById('translate-btn').innerHTML = `<span>${t.translateBtn}</span> <span class="text-[10px] bg-brand-700/80 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold">↵</span>`;
 
     // HITL
     document.getElementById('hitlTitleText').textContent = t.hitlTitle;
@@ -466,7 +494,7 @@ async function handleTranslateAndSend() {
         alert('Translation error: ' + (err.name === 'TimeoutError' ? 'Translation request timed out. Please try again.' : err.message));
     } finally {
         translateBtn.disabled = false;
-        translateBtn.textContent = t.translateBtn;
+        translateBtn.innerHTML = `<span>${t.translateBtn}</span> <span class="text-[10px] bg-brand-700/80 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold">↵</span>`;
     }
 }
 
