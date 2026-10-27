@@ -11,8 +11,8 @@ const I18N = {
         sidebarTitle: 'Active Conversations',
         refresh: '↻ Refresh',
         loadingQueues: 'Loading conversations...',
-        noTickets: 'No active conversations.<br>Click "New Customer Thread" below.',
-        newThreadBtn: 'New Customer Thread',
+        noTickets: 'No active conversations.<br>Click "New Recipient Thread" below.',
+        newThreadBtn: 'New Recipient Thread',
         selectConversation: 'Select a conversation',
         selectSubtitle: 'Choose a ticket from the sidebar or start a new thread',
         threadSubtitle: (id) => `Thread: ${id.slice(0, 8)}... • Two-Way SMS Relay`,
@@ -30,22 +30,22 @@ const I18N = {
         hitlTitle: 'Human-In-The-Loop Review (Spanish text to be sent via SMS):',
         hitlSubtitle: 'Edit text freely • Press Enter ↵ to send',
         cancelHitl: 'Cancel',
-        sendBtn: 'Send SMS to Customer',
+        sendBtn: 'Send SMS to Recipient',
         sendingSms: 'Sending SMS...',
         uploadingFile: 'Uploading attachment...',
         mmsNotice: 'MMS Attachment queued:',
-        modalTitle: 'Start New Customer Thread',
-        modalSubtitle: 'Enter customer\'s SMS phone number with country code (e.g. +14155552671 or +526601750245).',
+        modalTitle: 'Start New Recipient Thread',
+        modalSubtitle: 'Enter recipient\'s SMS phone number with country code (e.g. +14155552671 or +526601750245).',
         modalPhoneLabel: 'Phone Number',
         modalCancel: 'Cancel',
         modalSubmit: 'Create Thread',
         targetLang: 'Spanish',
         purgeConfirm: (phone) => `Are you sure you want to end and permanently purge conversation with ${phone}? All message records will be deleted.`,
         purgedNotice: 'Conversation data purged from server.',
-        agentDeliveredSMS: 'Delivered SMS (Spanish):',
+        agentDeliveredSMS: 'Delivered SMS to Recipient (Spanish):',
         agentOriginalDraft: 'Original Agent Draft (English):',
         customerTranslated: 'Translated into English:',
-        customerOriginal: 'Original Inbound SMS (Spanish):',
+        customerOriginal: 'Original Inbound SMS from Recipient (Spanish):',
         viewAttachment: 'View Attached File'
     },
     es: {
@@ -54,8 +54,8 @@ const I18N = {
         sidebarTitle: 'Conversaciones Activas',
         refresh: '↻ Actualizar',
         loadingQueues: 'Cargando conversaciones...',
-        noTickets: 'No hay conversaciones activas.<br>Haga clic en "Nuevo Hilo de Cliente" abajo.',
-        newThreadBtn: 'Nuevo Hilo de Cliente',
+        noTickets: 'No hay conversaciones activas.<br>Haga clic en "Nuevo Hilo de Destinatario" abajo.',
+        newThreadBtn: 'Nuevo Hilo de Destinatario',
         selectConversation: 'Selecciona una conversación',
         selectSubtitle: 'Elige un ticket de la barra lateral o inicia un nuevo hilo',
         threadSubtitle: (id) => `Hilo: ${id.slice(0, 8)}... • Relevo SMS Bilingüe`,
@@ -73,22 +73,22 @@ const I18N = {
         hitlTitle: 'Revisión Humana HITL (Texto en inglés que se enviará por SMS):',
         hitlSubtitle: 'Edita el texto libremente • Presiona Enter ↵ para enviar',
         cancelHitl: 'Cancelar',
-        sendBtn: 'Enviar SMS al Cliente',
+        sendBtn: 'Enviar SMS al Destinatario',
         sendingSms: 'Enviando SMS...',
         uploadingFile: 'Subiendo archivo adjunto...',
         mmsNotice: 'Archivo MMS adjunto:',
-        modalTitle: 'Iniciar Nuevo Hilo de Cliente',
-        modalSubtitle: 'Ingresa el número de teléfono con código de país (ej. +526601750245 o +14155552671).',
+        modalTitle: 'Iniciar Nuevo Hilo de Destinatario',
+        modalSubtitle: 'Ingresa el número de teléfono del destinatario con código de país (ej. +526601750245 o +14155552671).',
         modalPhoneLabel: 'Número de Teléfono',
         modalCancel: 'Cancelar',
         modalSubmit: 'Crear Hilo',
         targetLang: 'English',
         purgeConfirm: (phone) => `¿Estás seguro de que deseas finalizar y purgar permanentemente la conversación con ${phone}? Todos los registros se eliminarán.`,
         purgedNotice: 'Los datos de la conversación han sido purgados del servidor.',
-        agentDeliveredSMS: 'SMS Enviado al Cliente (Inglés):',
+        agentDeliveredSMS: 'SMS Enviado al Destinatario (Inglés):',
         agentOriginalDraft: 'Borrador Original del Agente (Español):',
         customerTranslated: 'Traducido al Español:',
-        customerOriginal: 'SMS Original Entrante (Inglés):',
+        customerOriginal: 'SMS Original Entrante del Destinatario (Inglés):',
         viewAttachment: 'Ver Archivo Adjunto'
     }
 };
@@ -183,7 +183,7 @@ function applyDashboardLocalization() {
         document.getElementById('activeCustomerTitle').textContent = t.selectConversation;
         document.getElementById('activeSubtitle').textContent = t.selectSubtitle;
     } else {
-        document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Customer' : 'Cliente'}: ${currentTicket.customer_phone}`;
+        document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Recipient' : 'Destinatario'}: ${currentTicket.customer_phone}`;
         document.getElementById('activeSubtitle').textContent = t.threadSubtitle(currentTicket.id);
     }
 
@@ -331,7 +331,7 @@ async function selectTicket(ticketId, customerPhone) {
     const t = I18N[dashboardMode];
     
     // Update Header
-    document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Customer' : 'Cliente'}: ${customerPhone}`;
+    document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Recipient' : 'Destinatario'}: ${customerPhone}`;
     document.getElementById('activeSubtitle').textContent = t.threadSubtitle(ticketId);
     document.getElementById('activeBadge').classList.remove('hidden');
     document.getElementById('purgeBtn').classList.remove('hidden');
@@ -441,7 +441,7 @@ function renderChatFeed(messages, scrollToBottom = false) {
 
             return `
                 <div class="flex flex-col items-start space-y-1 max-w-xl mr-auto">
-                    <span class="text-[10px] text-slate-500 font-medium ml-1">${dashboardMode === 'en' ? 'Customer' : 'Cliente'} (${escapeHtml(currentTicket.customer_phone)}) &bull; ${time}</span>
+                    <span class="text-[10px] text-slate-500 font-medium ml-1">${dashboardMode === 'en' ? 'Recipient' : 'Destinatario'} (${escapeHtml(currentTicket.customer_phone)}) &bull; ${time}</span>
                     <div class="bg-slate-800 border border-slate-700 text-slate-100 rounded-2xl rounded-tl-sm p-3.5 shadow-md text-sm space-y-1.5 w-full">
                         <div class="text-sm font-medium text-emerald-300 pb-1 border-b border-slate-700">
                             <span class="font-bold uppercase tracking-wider text-[10px] text-emerald-400 block">${topLabel}</span>
