@@ -24,7 +24,6 @@ const I18N = {
         loadingQueues: 'Loading conversations...',
         noTickets: 'No active conversations.<br>Click "New Recipient Thread" below.',
         newThreadBtn: 'New Recipient Thread',
-        newThreadHeaderBtn: 'New Thread',
         mobileBackBtn: 'Chats',
         closeThreadBtn: 'Close',
         selectConversation: 'Select a conversation',
@@ -95,7 +94,6 @@ const I18N = {
         loadingQueues: 'Cargando conversaciones...',
         noTickets: 'No hay conversaciones activas.<br>Haga clic en "Nuevo Hilo de Destinatario" abajo.',
         newThreadBtn: 'Nuevo Hilo de Destinatario',
-        newThreadHeaderBtn: 'Nuevo Hilo',
         mobileBackBtn: 'Hilos',
         closeThreadBtn: 'Cerrar',
         selectConversation: 'Selecciona una conversación',
@@ -245,8 +243,6 @@ function applyDashboardLocalization() {
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
     document.getElementById('refreshBtn').textContent = t.refresh;
     document.getElementById('newThreadBtnText').textContent = t.newThreadBtn;
-    const headerNewThreadBtnTextEl = document.getElementById('headerNewThreadBtnText');
-    if (headerNewThreadBtnTextEl) headerNewThreadBtnTextEl.textContent = t.newThreadHeaderBtn;
     const mobileBackBtnTextEl = document.getElementById('mobileBackBtnText');
     if (mobileBackBtnTextEl) mobileBackBtnTextEl.textContent = t.mobileBackBtn;
     const closeThreadBtnTextEl = document.getElementById('closeThreadBtnText');
