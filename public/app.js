@@ -172,8 +172,9 @@ function applyDashboardLocalization() {
         btnEn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 text-slate-400 hover:text-white transition';
     }
 
-    // Header badge
-    document.getElementById('headerConsoleBadge').textContent = t.consoleBadge;
+    // Header title next to logo
+    const headerTitle = document.getElementById('headerConsoleTitle');
+    if (headerTitle) headerTitle.textContent = t.consoleBadge;
     document.getElementById('signOutLink').textContent = t.signOut;
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
     document.getElementById('refreshBtn').textContent = t.refresh;

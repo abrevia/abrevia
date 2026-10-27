@@ -26,27 +26,22 @@
 
     <!-- Top Navigation Header -->
     <header class="bg-slate-950 border-b border-slate-800 px-6 py-3 flex items-center justify-between shrink-0">
-        <!-- Brand Logo (Left) -->
+        <!-- Logo & Title (Left) -->
         <div class="flex items-center space-x-3">
-            <img src="/assets/logo.png" alt="Abrevia" class="h-7 w-7 rounded-md">
-            <span class="text-lg font-bold tracking-tight text-white">Abrevia</span>
+            <img src="/assets/logo.png" alt="Abrevia Logo" class="h-7 w-7 rounded-md">
+            <span id="headerConsoleTitle" class="text-lg font-bold tracking-tight text-white">Console</span>
         </div>
 
-        <!-- Center: Console Badge & Bidirectional Agent Mode Switcher (Middle) -->
-        <div class="flex items-center space-x-3">
-            <span id="headerConsoleBadge" class="text-xs bg-slate-900 border border-slate-700/80 text-brand-400 font-semibold px-3 py-1 rounded-full shadow-sm">
-                Console
-            </span>
-            <div class="flex items-center space-x-1 bg-slate-900 border border-slate-800 p-1 rounded-xl shadow-inner">
-                <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
-                    <span>🇺🇸</span>
-                    <span>English (EN &rarr; ES)</span>
-                </button>
-                <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
-                    <span>🇲🇽</span>
-                    <span>Español (ES &rarr; EN)</span>
-                </button>
-            </div>
+        <!-- Center: Bidirectional Agent Mode Switcher (Middle) -->
+        <div class="flex items-center space-x-1 bg-slate-900 border border-slate-800 p-1 rounded-xl shadow-inner">
+            <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
+                <span>🇺🇸</span>
+                <span>English (EN &rarr; ES)</span>
+            </button>
+            <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
+                <span>🇲🇽</span>
+                <span>Español (ES &rarr; EN)</span>
+            </button>
         </div>
 
         <!-- Right: Sign Out -->
