@@ -26,31 +26,31 @@ const I18N = {
         newThreadBtn: 'New Recipient Thread',
         selectConversation: 'Select a conversation',
         selectSubtitle: 'Choose a ticket from the sidebar or start a new thread',
-        threadSubtitle: (id) => `Thread: ${id.slice(0, 8)}... • Two-Way SMS Relay`,
+        threadSubtitle: (id) => `Thread: ${id.slice(0, 8)}... • Two-Way Encrypted Messaging Relay`,
         activeBadge: 'Active',
         purgeBtn: 'End & Purge Thread',
         emptyFeedTitle: 'Select an active conversation to view and send bilingual messages',
-        emptyFeedSubtitle: 'Inbound SMS translated to English • Outbound replies translated & dispatched instantly via SMS',
-        noMessagesInThread: 'No messages yet in this thread.<br>Send an outbound SMS reply below to start.',
+        emptyFeedSubtitle: 'Inbound encrypted messages translated to English • Outbound replies translated & dispatched instantly',
+        noMessagesInThread: 'No messages yet in this thread.<br>Send an outbound encrypted message below to start.',
         inputLabel: 'Type reply in English (Agent):',
         inputPlaceholder: 'Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)...',
         translateBtn: 'Send',
         translating: 'Translating...',
         progressStatus: 'Auto-Correcting Grammar & Translating...',
         progressComplete: '✓ Translated & Verified (100%)',
-        progressSending: 'Sending SMS...',
-        progressSent: '✓ Self-Corrected & Sent via SMS!',
+        progressSending: 'Sending Encrypted Message...',
+        progressSent: '✓ Self-Corrected & Sent!',
         instantModeLabel: 'Secure Instant Translation & Message Delivery',
         grammarBadge: 'Bilingual Self-Correcting Grammar',
         hitlTogglePremium: 'Proofread translated message',
         hitlToggleActive: 'Proofread translated message: ON',
-        hitlTitle: 'Human-In-The-Loop Review (Spanish text to be sent via SMS):',
+        hitlTitle: 'Human-In-The-Loop Review (Spanish encrypted message to be sent):',
         hitlSubtitle: 'Edit text freely • Press Enter ↵ to send',
         cancelHitl: 'Cancel',
-        sendBtn: 'Send SMS to Recipient',
-        sendingSms: 'Sending SMS...',
+        sendBtn: 'Send Encrypted Message',
+        sendingSms: 'Sending Encrypted Message...',
         uploadingFile: 'Uploading attachment...',
-        mmsNotice: 'MMS Attachment queued:',
+        mmsNotice: 'Attachment queued:',
         modalTitle: 'Start New Recipient Thread',
         modalSubtitle: 'Phone numbers are auto-saved as contacts. You can optionally add a name and details.',
         modalPhoneLabel: 'Phone Number',
@@ -69,10 +69,10 @@ const I18N = {
         targetLang: 'Spanish',
         purgeConfirm: (phone) => `Are you sure you want to end and permanently purge conversation with ${phone}? All message records will be deleted.`,
         purgedNotice: 'Conversation data purged from server.',
-        agentDeliveredSMS: 'Delivered SMS to Recipient (Spanish):',
+        agentDeliveredSMS: 'Delivered Encrypted Message to Recipient (Spanish):',
         agentOriginalDraft: 'Original Agent Draft (English):',
         customerTranslated: 'Translated into English:',
-        customerOriginal: 'Original Inbound SMS from Recipient (Spanish):',
+        customerOriginal: 'Original Inbound Message from Recipient (Spanish):',
         viewAttachment: 'View Attached File'
     },
     es: {
@@ -94,31 +94,31 @@ const I18N = {
         newThreadBtn: 'Nuevo Hilo de Destinatario',
         selectConversation: 'Selecciona una conversación',
         selectSubtitle: 'Elige un ticket de la barra lateral o inicia un nuevo hilo',
-        threadSubtitle: (id) => `Hilo: ${id.slice(0, 8)}... • Relevo SMS Bilingüe`,
+        threadSubtitle: (id) => `Hilo: ${id.slice(0, 8)}... • Relevo de Mensajería Encriptada Bilingüe`,
         activeBadge: 'Activo',
         purgeBtn: 'Finalizar y Purgar Hilo',
         emptyFeedTitle: 'Selecciona una conversación activa para ver y enviar mensajes bilingües',
-        emptyFeedSubtitle: 'SMS entrantes traducidos al español • Respuestas traducidas y enviadas al instante por SMS',
-        noMessagesInThread: 'Aún no hay mensajes en este hilo.<br>Envía una respuesta SMS abajo para iniciar.',
+        emptyFeedSubtitle: 'Mensajes encriptados entrantes traducidos al español • Respuestas traducidas y enviadas al instante',
+        noMessagesInThread: 'Aún no hay mensajes en este hilo.<br>Envía una respuesta de mensaje encriptado abajo para iniciar.',
         inputLabel: 'Escribe respuesta en Español (Agente):',
         inputPlaceholder: 'Escribe tu respuesta en español (ej. Su entrega está programada para mañana a las 2 PM)...',
         translateBtn: 'Enviar',
         translating: 'Traduciendo...',
         progressStatus: 'Auto-corrigiendo gramática y traduciendo...',
         progressComplete: '✓ Traducción Verificada (100%)',
-        progressSending: 'Enviando SMS...',
-        progressSent: '✓ ¡Auto-corregido y enviado por SMS!',
+        progressSending: 'Enviando Mensaje Encriptado...',
+        progressSent: '✓ ¡Auto-corregido y enviado!',
         instantModeLabel: 'Traducción Instantánea Segura y Entrega de Mensajes',
         grammarBadge: 'Gramática Bilingüe Auto-Correctora',
         hitlTogglePremium: 'Revisar mensaje traducido',
         hitlToggleActive: 'Revisar mensaje traducido: ACTIVO',
-        hitlTitle: 'Revisión Humana HITL (Texto en inglés que se enviará por SMS):',
+        hitlTitle: 'Revisión Humana HITL (Mensaje encriptado en inglés que se enviará):',
         hitlSubtitle: 'Edita el texto libremente • Presiona Enter ↵ para enviar',
         cancelHitl: 'Cancelar',
-        sendBtn: 'Enviar SMS al Destinatario',
-        sendingSms: 'Enviando SMS...',
+        sendBtn: 'Enviar Mensaje Encriptado',
+        sendingSms: 'Enviando Mensaje Encriptado...',
         uploadingFile: 'Subiendo archivo adjunto...',
-        mmsNotice: 'Archivo MMS adjunto:',
+        mmsNotice: 'Archivo adjunto:',
         modalTitle: 'Iniciar Nuevo Hilo de Destinatario',
         modalSubtitle: 'Los teléfonos se guardan automáticamente como contactos. Puede agregar nombre y datos opcionalmente.',
         modalPhoneLabel: 'Número de Teléfono',
@@ -137,10 +137,10 @@ const I18N = {
         targetLang: 'English',
         purgeConfirm: (phone) => `¿Estás seguro de que deseas finalizar y purgar permanentemente la conversación con ${phone}? Todos los registros se eliminarán.`,
         purgedNotice: 'Los datos de la conversación han sido purgados del servidor.',
-        agentDeliveredSMS: 'SMS Enviado al Destinatario (Inglés):',
+        agentDeliveredSMS: 'Mensaje Encriptado Enviado al Destinatario (Inglés):',
         agentOriginalDraft: 'Borrador Original del Agente (Español):',
         customerTranslated: 'Traducido al Español:',
-        customerOriginal: 'SMS Original Entrante del Destinatario (Inglés):',
+        customerOriginal: 'Mensaje Encriptado Original del Destinatario (Inglés):',
         viewAttachment: 'Ver Archivo Adjunto'
     }
 };
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyDashboardLocalization();
     refreshTickets();
 
-    // Keyboard shortcuts: Enter to Translate and Enter to Send SMS
+    // Keyboard shortcuts: Enter to Translate and Enter to Send Encrypted Message
     const agentInput = document.getElementById('agent-input');
     if (agentInput) {
         agentInput.addEventListener('keydown', (e) => {
@@ -696,7 +696,7 @@ function renderChatFeed(messages, scrollToBottom = false) {
     }
 }
 
-// Abrevia 1 Composer: Auto-translates & dispatches SMS directly (Instant Mode).
+// Abrevia 1 Composer: Auto-translates & dispatches encrypted messages directly (Instant Mode).
 // Pre-send review is reserved for Premium Tier.
 async function handleTranslateAndSend() {
     if (!currentTicket) {
@@ -761,7 +761,7 @@ async function handleTranslateAndSend() {
         clearInterval(progressTimer);
 
         if (!hitlModeEnabled) {
-            // Abrevia 1 Instant Mode: Auto-dispatch translated SMS directly without human-in-the-loop review
+            // Abrevia 1 Instant Mode: Auto-dispatch translated encrypted message directly without human-in-the-loop review
             if (progressStatusText) progressStatusText.textContent = t.sendingSms;
             if (progressBarFill) progressBarFill.style.width = '94%';
             if (progressPercentage) progressPercentage.textContent = '94%';
@@ -789,7 +789,7 @@ async function handleTranslateAndSend() {
                 }
             }
 
-            // 2. Dispatch SMS directly via /api/send-sms with self-corrected text
+            // 2. Dispatch encrypted message directly via /api/send-sms with self-corrected text
             const englishText = (dashboardMode === 'en') ? (polishedDraft || (mediaUrl ? 'Attachment sent' : '')) : (translatedText || (mediaUrl ? 'Attachment sent' : ''));
             const spanishText = (dashboardMode === 'en') ? (translatedText || (mediaUrl ? 'Adjunto enviado' : '')) : (polishedDraft || (mediaUrl ? 'Adjunto enviado' : ''));
             const smsBody = (dashboardMode === 'en' ? translatedText : polishedDraft) || (dashboardMode === 'en' ? 'Adjunto recibido:' : 'Attachment:');
@@ -808,7 +808,7 @@ async function handleTranslateAndSend() {
             });
 
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Failed to send SMS');
+            if (!res.ok) throw new Error(data.error || 'Failed to send encrypted message');
 
             // 3. Clear inputs and flash sent notification
             inputEl.value = '';
@@ -816,7 +816,7 @@ async function handleTranslateAndSend() {
 
             if (progressBarFill) progressBarFill.style.width = '100%';
             if (progressPercentage) progressPercentage.textContent = '100%';
-            if (progressStatusText) progressStatusText.textContent = t.progressSent || '✓ Self-Corrected & Sent via SMS!';
+            if (progressStatusText) progressStatusText.textContent = t.progressSent || '✓ Self-Corrected & Sent!';
 
             await new Promise(r => setTimeout(r, 450));
             if (progressContainer) progressContainer.classList.add('hidden');
@@ -853,7 +853,7 @@ async function handleTranslateAndSend() {
     }
 }
 
-// HITL Step 2: Confirm reviewed translation, upload attachment if any, and dispatch SMS via httpSMS
+// HITL Step 2: Confirm reviewed translation, upload attachment if any, and dispatch encrypted message via httpSMS
 async function confirmAndSend() {
     if (!currentTicket) return;
     const reviewedText = document.getElementById('target-review-box').value.trim();
@@ -914,7 +914,7 @@ async function confirmAndSend() {
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to send SMS');
+        if (!res.ok) throw new Error(data.error || 'Failed to send encrypted message');
 
         // Clear inputs and reset HITL box and attachment
         document.getElementById('agent-input').value = '';
@@ -924,7 +924,7 @@ async function confirmAndSend() {
         // Refresh feed
         await fetchMessages(currentTicket.id, true);
     } catch (err) {
-        alert('Send SMS error: ' + err.message);
+        alert((dashboardMode === 'es' ? 'Error al enviar mensaje: ' : 'Send message error: ') + err.message);
     } finally {
         sendBtn.disabled = false;
         sendBtnText.textContent = t.sendBtn;
