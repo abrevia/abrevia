@@ -198,7 +198,8 @@ function applyDashboardLocalization() {
     if (emptySub) emptySub.textContent = t.emptyFeedSubtitle;
 
     // Composer
-    document.getElementById('agentInputLabel').textContent = t.inputLabel;
+    const agentInputLabel = document.getElementById('agentInputLabel');
+    if (agentInputLabel) agentInputLabel.textContent = t.inputLabel;
     document.getElementById('agent-input').placeholder = t.inputPlaceholder;
     document.getElementById('translate-btn').innerHTML = `<span>${t.translateBtn}</span> <span class="text-[10px] bg-brand-700/80 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold">↵</span>`;
 
