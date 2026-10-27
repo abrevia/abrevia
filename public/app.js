@@ -223,15 +223,15 @@ function switchDashboardMode(mode) {
 function applyDashboardLocalization() {
     const t = I18N[dashboardMode];
 
-    // Header buttons
+    // Header language toggle buttons (compact segmented control)
     const btnEn = document.getElementById('modeBtnEn');
     const btnEs = document.getElementById('modeBtnEs');
     if (dashboardMode === 'en') {
-        btnEn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 bg-brand-600 text-white shadow-sm transition';
-        btnEs.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 text-slate-400 hover:text-white transition';
+        btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition';
+        btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition';
     } else {
-        btnEs.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 bg-brand-600 text-white shadow-sm transition';
-        btnEn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 text-slate-400 hover:text-white transition';
+        btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition';
+        btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition';
     }
 
     // Header title next to logo

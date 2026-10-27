@@ -36,17 +36,13 @@
             </button>
         </div>
 
-        <!-- Center: Bidirectional Agent Mode Switcher (Middle) -->
-        <div class="flex items-center space-x-0.5 sm:space-x-1 bg-slate-900 border border-slate-800 p-0.5 sm:p-1 rounded-xl shadow-inner">
-            <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1 transition">
-                <span>🇺🇸</span>
-                <span class="hidden md:inline">English (EN &rarr; ES)</span>
-                <span class="md:hidden">EN</span>
+        <!-- Center: Language Switcher (Compact Segmented Control) -->
+        <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
+            <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition" title="English Mode (Agent writes English &rarr; Recipient receives Spanish)">
+                EN
             </button>
-            <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1 transition">
-                <span>🇲🇽</span>
-                <span class="hidden md:inline">Español (ES &rarr; EN)</span>
-                <span class="md:hidden">ES</span>
+            <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition" title="Modo Español (Agente escribe Español &rarr; Destinatario recibe Inglés)">
+                ES
             </button>
         </div>
 
