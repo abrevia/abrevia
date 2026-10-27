@@ -188,7 +188,8 @@ function applyDashboardLocalization() {
     }
 
     document.getElementById('activeBadge').textContent = t.activeBadge;
-    document.getElementById('purgeBtn').textContent = t.purgeBtn;
+    const purgeBtnEl = document.getElementById('purgeBtn');
+    if (purgeBtnEl) purgeBtnEl.textContent = t.purgeBtn;
 
     const emptyTitle = document.getElementById('emptyFeedTitle');
     if (emptyTitle) emptyTitle.textContent = t.emptyFeedTitle;
@@ -334,7 +335,8 @@ async function selectTicket(ticketId, customerPhone) {
     document.getElementById('activeCustomerTitle').textContent = `${dashboardMode === 'en' ? 'Recipient' : 'Destinatario'}: ${customerPhone}`;
     document.getElementById('activeSubtitle').textContent = t.threadSubtitle(ticketId);
     document.getElementById('activeBadge').classList.remove('hidden');
-    document.getElementById('purgeBtn').classList.remove('hidden');
+    const purgeBtnEl = document.getElementById('purgeBtn');
+    if (purgeBtnEl) purgeBtnEl.classList.remove('hidden');
     document.getElementById('inputArea').classList.remove('hidden');
 
     cancelHITL();
