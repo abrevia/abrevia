@@ -1,4 +1,4 @@
-import { getAllContacts, saveContact, deleteContact, normalizePhone } from './lib/contacts.js';
+import { getAllContacts, saveContact, deleteContact, normalizePhone } from '../lib/contacts.js';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {

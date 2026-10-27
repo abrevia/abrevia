@@ -1,6 +1,6 @@
-import { supabase } from './lib/supabase.js';
-import { decryptMessage } from './lib/cipher.js';
-import { saveContact } from './lib/contacts.js';
+import { supabase } from '../lib/supabase.js';
+import { decryptMessage } from '../lib/cipher.js';
+import { saveContact } from '../lib/contacts.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

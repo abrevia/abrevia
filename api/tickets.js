@@ -1,5 +1,5 @@
-import { supabase } from './lib/supabase.js';
-import { getAllContacts, saveContact, normalizePhone } from './lib/contacts.js';
+import { supabase } from '../lib/supabase.js';
+import { getAllContacts, saveContact, normalizePhone } from '../lib/contacts.js';
 
 export default async function handler(req, res) {
   if (!supabase) {
