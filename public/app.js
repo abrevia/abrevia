@@ -1031,7 +1031,7 @@ function closeMobileConversation() {
     const contactAvatar = document.getElementById('contactAvatar');
     if (contactAvatar) {
         contactAvatar.textContent = '👤';
-        contactAvatar.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 border border-slate-700 hidden sm:flex items-center justify-center text-slate-300 font-bold text-xs uppercase shadow-sm shrink-0';
+        contactAvatar.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 font-bold text-xs uppercase shadow-sm shrink-0';
     }
     const compEl = document.getElementById('activeContactCompany');
     if (compEl) compEl.classList.add('hidden');
