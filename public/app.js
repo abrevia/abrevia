@@ -543,6 +543,20 @@ async function fetchMessages(ticketId, scrollToBottom = true) {
     }
 }
 
+// Clean message text by stripping raw internal Supabase attachment URLs that are already rendered by the media preview
+function formatMessageContent(rawText) {
+    if (!rawText) return '';
+    let cleaned = rawText
+        .replace(/\n*📎 (Attachment|Adjunto):\s*https?:\/\/[^\s]+/gi, '')
+        .trim();
+
+    if (!cleaned) {
+        cleaned = dashboardMode === 'es' ? '📎 Archivo adjunto' : '📎 Attached file';
+    }
+
+    return escapeHtml(cleaned);
+}
+
 // Render attachment link or preview if text contains a media link
 function renderAttachmentSnippet(rawText) {
     if (!rawText) return '';
@@ -554,18 +568,18 @@ function renderAttachmentSnippet(rawText) {
 
     if (isImage) {
         return `
-            <div class="mt-2 pt-2 border-t border-white/10">
-                <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
-                    <img src="${escapeHtml(url)}" alt="Attachment" class="max-h-44 rounded-lg border border-white/20 hover:opacity-90 transition object-cover" />
+            <div class="mt-2 pt-2 border-t border-white/10 max-w-full overflow-hidden">
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" class="block max-w-full">
+                    <img src="${escapeHtml(url)}" alt="Attachment" class="max-h-48 max-w-full rounded-lg border border-white/20 hover:opacity-90 transition object-cover" />
                 </a>
             </div>
         `;
     } else {
         return `
-            <div class="mt-2 pt-2 border-t border-white/10">
-                <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-black/30 hover:bg-black/50 border border-white/20 text-xs text-white transition">
+            <div class="mt-2 pt-2 border-t border-white/10 max-w-full overflow-hidden">
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-black/30 hover:bg-black/50 border border-white/20 text-xs text-white transition max-w-full truncate">
                     <span>📎</span>
-                    <span class="underline">${t.viewAttachment}</span>
+                    <span class="underline truncate">${t.viewAttachment}</span>
                     <span>&rarr;</span>
                 </a>
             </div>
@@ -601,16 +615,16 @@ function renderChatFeed(messages, scrollToBottom = false) {
             const attachmentHtml = renderAttachmentSnippet(m.spanish_text || m.english_text || '');
 
             return `
-                <div class="flex flex-col items-end space-y-1 max-w-xl ml-auto">
+                <div class="flex flex-col items-end space-y-1 max-w-xl sm:max-w-2xl ml-auto min-w-0 w-full">
                     <span class="text-[10px] text-slate-500 font-medium mr-1">${dashboardMode === 'en' ? 'Agent (You)' : 'Agente (Usted)'} &bull; ${time}</span>
-                    <div class="bg-brand-600 text-white rounded-2xl rounded-tr-sm p-3.5 shadow-md text-sm space-y-1.5 w-full">
-                        <div class="text-xs text-blue-100 pb-1 border-b border-blue-400/30">
-                            <span class="font-bold uppercase tracking-wider text-[10px] text-blue-200 block">${topLabel}</span>
-                            ${escapeHtml(topText)}
+                    <div class="bg-brand-600 text-white rounded-2xl rounded-tr-sm p-3.5 shadow-md text-sm space-y-1.5 max-w-full sm:max-w-xl w-fit ml-auto min-w-0 break-words [overflow-wrap:anywhere] overflow-hidden">
+                        <div class="text-xs text-blue-100 pb-1.5 border-b border-blue-400/30 min-w-0 break-words [overflow-wrap:anywhere]">
+                            <span class="font-bold uppercase tracking-wider text-[10px] text-blue-200 block mb-0.5">${topLabel}</span>
+                            <div class="whitespace-pre-wrap break-words [overflow-wrap:anywhere]">${formatMessageContent(topText)}</div>
                         </div>
-                        <div class="text-xs text-blue-200">
-                            <span class="font-bold uppercase tracking-wider text-[10px] text-blue-300 block">${bottomLabel}</span>
-                            ${escapeHtml(bottomText)}
+                        <div class="text-xs text-blue-200 min-w-0 break-words [overflow-wrap:anywhere]">
+                            <span class="font-bold uppercase tracking-wider text-[10px] text-blue-300 block mb-0.5">${bottomLabel}</span>
+                            <div class="whitespace-pre-wrap break-words [overflow-wrap:anywhere]">${formatMessageContent(bottomText)}</div>
                         </div>
                         ${attachmentHtml}
                     </div>
@@ -625,16 +639,16 @@ function renderChatFeed(messages, scrollToBottom = false) {
             const attachmentHtml = renderAttachmentSnippet(m.spanish_text || m.english_text || '');
 
             return `
-                <div class="flex flex-col items-start space-y-1 max-w-xl mr-auto">
+                <div class="flex flex-col items-start space-y-1 max-w-xl sm:max-w-2xl mr-auto min-w-0 w-full">
                     <span class="text-[10px] text-slate-500 font-medium ml-1">${dashboardMode === 'en' ? 'Recipient' : 'Destinatario'} (${escapeHtml(currentTicket.customer_phone)}) &bull; ${time}</span>
-                    <div class="bg-slate-800 border border-slate-700 text-slate-100 rounded-2xl rounded-tl-sm p-3.5 shadow-md text-sm space-y-1.5 w-full">
-                        <div class="text-sm font-medium text-emerald-300 pb-1 border-b border-slate-700">
-                            <span class="font-bold uppercase tracking-wider text-[10px] text-emerald-400 block">${topLabel}</span>
-                            ${escapeHtml(topText)}
+                    <div class="bg-slate-800 border border-slate-700 text-slate-100 rounded-2xl rounded-tl-sm p-3.5 shadow-md text-sm space-y-1.5 max-w-full sm:max-w-xl w-fit mr-auto min-w-0 break-words [overflow-wrap:anywhere] overflow-hidden">
+                        <div class="text-sm font-medium text-emerald-300 pb-1.5 border-b border-slate-700 min-w-0 break-words [overflow-wrap:anywhere]">
+                            <span class="font-bold uppercase tracking-wider text-[10px] text-emerald-400 block mb-0.5">${topLabel}</span>
+                            <div class="whitespace-pre-wrap break-words [overflow-wrap:anywhere]">${formatMessageContent(topText)}</div>
                         </div>
-                        <div class="text-xs text-slate-400">
-                            <span class="font-bold uppercase tracking-wider text-[10px] text-slate-500 block">${bottomLabel}</span>
-                            ${escapeHtml(bottomText)}
+                        <div class="text-xs text-slate-400 min-w-0 break-words [overflow-wrap:anywhere]">
+                            <span class="font-bold uppercase tracking-wider text-[10px] text-slate-500 block mb-0.5">${bottomLabel}</span>
+                            <div class="whitespace-pre-wrap break-words [overflow-wrap:anywhere]">${formatMessageContent(bottomText)}</div>
                         </div>
                         ${attachmentHtml}
                     </div>
