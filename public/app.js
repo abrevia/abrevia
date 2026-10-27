@@ -38,8 +38,8 @@ const I18N = {
         progressSent: '✓ Self-Corrected & Sent via SMS!',
         instantModeLabel: 'Secure Instant Translation & Message Delivery',
         grammarBadge: 'Bilingual Self-Correcting Grammar',
-        hitlTogglePremium: 'Pre-Send Review',
-        hitlToggleActive: 'Pre-Send Review: ON',
+        hitlTogglePremium: 'Proofread translated message',
+        hitlToggleActive: 'Proofread translated message: ON',
         hitlTitle: 'Human-In-The-Loop Review (Spanish text to be sent via SMS):',
         hitlSubtitle: 'Edit text freely • Press Enter ↵ to send',
         cancelHitl: 'Cancel',
@@ -102,8 +102,8 @@ const I18N = {
         progressSent: '✓ ¡Auto-corregido y enviado por SMS!',
         instantModeLabel: 'Traducción Instantánea Segura y Entrega de Mensajes',
         grammarBadge: 'Gramática Bilingüe Auto-Correctora',
-        hitlTogglePremium: 'Revisión Previa',
-        hitlToggleActive: 'Revisión Previa: ACTIVA',
+        hitlTogglePremium: 'Revisar mensaje traducido',
+        hitlToggleActive: 'Revisar mensaje traducido: ACTIVO',
         hitlTitle: 'Revisión Humana HITL (Texto en inglés que se enviará por SMS):',
         hitlSubtitle: 'Edita el texto libremente • Presiona Enter ↵ para enviar',
         cancelHitl: 'Cancelar',
@@ -300,13 +300,13 @@ function applyDashboardLocalization() {
     document.getElementById('modalSubmitBtn').textContent = t.modalSubmit;
 }
 
-// Toggle Pre-Send Review Mode (Human-In-The-Loop) — Paid Tier feature
+// Toggle Proofread Translated Message Mode (Human-In-The-Loop) — Paid Tier feature
 function toggleHitlMode() {
     const isPaid = localStorage.getItem('abrevia_tier') === 'paid' || localStorage.getItem('abrevia_tier') === 'pro' || localStorage.getItem('abrevia_tier') === 'premium';
     if (!isPaid && !hitlModeEnabled) {
         const wantsUpgrade = confirm(dashboardMode === 'es'
-            ? 'La revisión previa está disponible al actualizar a un plan de pago ($49/mes Operaciones Pro).\n\n¿Desea ver los planes en Facturación para actualizar?'
-            : 'Pre-send review is available when you upgrade to a paid tier ($49/mo Operations Pro).\n\nWould you like to explore upgrade plans in Billing?');
+            ? 'La opción de revisar el mensaje traducido antes de enviarlo está disponible al actualizar a un plan de pago ($49/mes Operaciones Pro).\n\n¿Desea ver los planes en Facturación para actualizar?'
+            : 'Proofreading translated messages before sending is available when you upgrade to a paid tier ($49/mo Operations Pro).\n\nWould you like to explore upgrade plans in Billing?');
         if (wantsUpgrade) {
             openBillingModal();
         }
