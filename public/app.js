@@ -476,6 +476,16 @@ async function selectTicket(ticketId, customerPhone, contactData = null) {
     if (editContactBtn) editContactBtn.classList.remove('hidden');
     document.getElementById('inputArea').classList.remove('hidden');
 
+    // Mobile responsive: switch view from sidebar to chat on small screens
+    const sidebar = document.getElementById('conversationsSidebar');
+    const workspace = document.getElementById('chatWorkspace');
+    if (sidebar && workspace) {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('flex');
+        workspace.classList.remove('hidden');
+        workspace.classList.add('flex');
+    }
+
     cancelHITL();
     removeAttachment();
     refreshTickets(false);
@@ -939,9 +949,35 @@ async function purgeCurrentConversation() {
         cancelHITL();
         removeAttachment();
         await refreshTickets(true);
+        if (window.innerWidth < 768) {
+            closeMobileConversation();
+        }
     } catch (err) {
         alert('Purge error: ' + err.message);
     }
+}
+
+// Mobile navigation handler: return to conversations list
+function closeMobileConversation() {
+    const sidebar = document.getElementById('conversationsSidebar');
+    const workspace = document.getElementById('chatWorkspace');
+    if (sidebar && workspace) {
+        workspace.classList.add('hidden');
+        workspace.classList.remove('flex');
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('flex');
+    }
+    currentTicket = null;
+    const t = I18N[dashboardMode];
+    document.getElementById('activeCustomerTitle').textContent = t.selectConversation;
+    document.getElementById('activeSubtitle').textContent = t.selectSubtitle;
+    const purgeBtnEl = document.getElementById('purgeBtn');
+    if (purgeBtnEl) purgeBtnEl.classList.add('hidden');
+    const editContactBtn = document.getElementById('editContactBtn');
+    if (editContactBtn) editContactBtn.classList.add('hidden');
+    document.getElementById('inputArea').classList.add('hidden');
+    cancelHITL();
+    removeAttachment();
 }
 
 // Modal handling for New Ticket
