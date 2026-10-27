@@ -27,27 +27,31 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (apiKey) {
-      try {
-        const geminiRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-goog-api-key': apiKey
-          },
-          body: JSON.stringify({
-            systemInstruction: {
-              parts: [{ text: 'Translate accurately from Spanish to English. Return ONLY the translated English text with no extra commentary.' }]
+      const models = ['gemini-3.8-flash', 'gemini-flash-latest'];
+      for (const model of models) {
+        try {
+          const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-goog-api-key': apiKey
             },
-            contents: [{ parts: [{ text: spanishText }] }]
-          })
-        });
+            body: JSON.stringify({
+              systemInstruction: {
+                parts: [{ text: 'Translate accurately from Spanish to English. Return ONLY the translated English text with no extra commentary.' }]
+              },
+              contents: [{ parts: [{ text: spanishText }] }]
+            })
+          });
 
-        const geminiData = await geminiRes.json();
-        if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
-          englishText = geminiData.candidates[0].content.parts[0].text.trim();
+          const geminiData = await geminiRes.json();
+          if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
+            englishText = geminiData.candidates[0].content.parts[0].text.trim();
+            break;
+          }
+        } catch (transErr) {
+          console.error(`Gemini translation error with ${model}:`, transErr);
         }
-      } catch (transErr) {
-        console.error('Gemini translation error:', transErr);
       }
     }
 

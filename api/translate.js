@@ -12,29 +12,43 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey
-      },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: `Translate accurately to ${targetLang}. Return ONLY the translated string.` }]
-        },
-        contents: [{ parts: [{ text }] }]
-      })
-    });
+    const models = ['gemini-3.8-flash', 'gemini-flash-latest'];
+    let translated = null;
+    let lastErr = null;
 
-    const data = await response.json();
+    for (const model of models) {
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey
+          },
+          body: JSON.stringify({
+            systemInstruction: {
+              parts: [{ text: `Translate accurately to ${targetLang}. Return ONLY the translated string.` }]
+            },
+            contents: [{ parts: [{ text }] }]
+          })
+        });
 
-    if (!response.ok || !data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
-      console.error('Gemini API Error:', data);
-      return res.status(500).json({ error: data.error?.message || 'Translation failed' });
+        const data = await response.json();
+        if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+          translated = data.candidates[0].content.parts[0].text.trim();
+          break;
+        } else {
+          lastErr = data.error?.message || 'Model call failed';
+        }
+      } catch (e) {
+        lastErr = e.message;
+      }
     }
 
-    const translated = data.candidates[0].content.parts[0].text.trim();
-    res.status(200).json({ translated });
+    if (translated) {
+      res.status(200).json({ translated });
+    } else {
+      res.status(500).json({ error: lastErr || 'Translation failed' });
+    }
   } catch (error) {
     console.error('Translation error:', error);
     res.status(500).json({ error: 'Translation failed: ' + error.message });
