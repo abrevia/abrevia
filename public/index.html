@@ -184,41 +184,44 @@
             <!-- Tiers Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 
-                <!-- 1. Credit Pack (Pay-As-You-Go) -->
+                <!-- 1. Free Forever (Community & Non-Profits) -->
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
                     <div>
-                        <span id="tier1Name" class="text-xs font-bold text-slate-400 uppercase tracking-wider">SMS Credit Pack</span>
+                        <div class="flex items-center justify-between">
+                            <span id="tier1Name" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Community & Non-Profit</span>
+                            <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.2 rounded-full border border-emerald-500/30">FREE FOREVER</span>
+                        </div>
                         <div class="mt-2 mb-3">
-                            <span class="text-2xl sm:text-3xl font-extrabold text-white">$20</span>
-                            <span class="text-xs text-slate-500">/ one-time</span>
+                            <span class="text-2xl sm:text-3xl font-extrabold text-white">$0</span>
+                            <span class="text-xs text-slate-500">/ forever</span>
                         </div>
                         <p id="tier1Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
-                            Ideal for seasonal operations, drivers, and property moves without recurring fees.
+                            Always free forever to remove language barriers for individuals, community members, and non-profits.
                         </p>
                         <ul class="space-y-2 text-[11px] text-slate-300 mb-6">
                             <li class="flex items-center space-x-2">
                                 <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier1F1">500 Bilingual SMS Messages</span>
+                                <span id="tier1F1">Essential Bilingual SMS Translation</span>
                             </li>
                             <li class="flex items-center space-x-2">
                                 <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier1F2">Instant AI Translation</span>
+                                <span id="tier1F2">Zero Monthly Cost or Card Required</span>
                             </li>
                             <li class="flex items-center space-x-2">
                                 <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier1F3">Zero Monthly Commitment</span>
+                                <span id="tier1F3">Device Contact Sync & Address Book</span>
                             </li>
                         </ul>
                     </div>
-                    <button onclick="startCheckout('credits')" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition shadow-sm">
-                        <span id="tier1Btn">Buy 500 Credits ($20)</span>
+                    <button onclick="window.location.href='/dashboard.html'" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition shadow-sm">
+                        <span id="tier1Btn">Start Free Forever</span>
                     </button>
                 </div>
 
-                <!-- 2. Operations Pro (Monthly Subscription) -->
+                <!-- 2. Operations Pro (Monthly Subscription for Businesses & Orgs) -->
                 <div class="bg-slate-950 border-2 border-brand-500 rounded-2xl p-5 flex flex-col justify-between relative shadow-xl shadow-brand-500/10">
                     <div class="absolute -top-3 right-4 bg-brand-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                        Most Popular
+                        Businesses & Orgs
                     </div>
                     <div>
                         <span id="tier2Name" class="text-xs font-bold text-brand-400 uppercase tracking-wider">Operations Pro</span>
@@ -227,7 +230,7 @@
                             <span class="text-xs text-slate-400">/ month</span>
                         </div>
                         <p id="tier2Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
-                            Full two-way communication workstation for dispatchers, field teams, and support.
+                            Enterprise advantages for businesses, logistics, and organizations. We can even manage your Spanish intake for you.
                         </p>
                         <ul class="space-y-2 text-[11px] text-slate-300 mb-6">
                             <li class="flex items-center space-x-2">
@@ -236,15 +239,15 @@
                             </li>
                             <li class="flex items-center space-x-2">
                                 <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier2F2">Human-in-the-Loop Review</span>
+                                <span id="tier2F2">Proofread Translated Messages</span>
                             </li>
                             <li class="flex items-center space-x-2">
                                 <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier2F3">MMS Photo & Document Attachments</span>
+                                <span id="tier2F3">Full Device Contact Sync & Directory</span>
                             </li>
                             <li class="flex items-center space-x-2">
                                 <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier2F4">Persistent Latent Channels</span>
+                                <span id="tier2F4">Managed Spanish Intake Available</span>
                             </li>
                         </ul>
                     </div>
@@ -361,18 +364,18 @@
                 pricingModalTag: 'B2B SaaS Pricing',
                 pricingModalTitle: 'Simple, Transparent Relay Plans',
                 pricingModalSubtitle: 'Abrevia 1 provides instant automated translation. Upgrade to a paid tier to proofread translated messages before delivery.',
-                tier1Name: 'Abrevia 1 (Instant Translator)',
-                tier1Desc: 'Automated real-time translation & SMS dispatch. Zero manual review needed.',
-                tier1F1: '500 Bilingual SMS Messages',
-                tier1F2: 'Instant AI Translation',
-                tier1F3: 'Zero Monthly Commitment',
-                tier1Btn: 'Buy 500 Credits ($20)',
+                tier1Name: 'Community & Non-Profit',
+                tier1Desc: 'Always free forever to remove language barriers for individuals, community members, and non-profits.',
+                tier1F1: 'Essential Bilingual SMS Translation',
+                tier1F2: 'Zero Monthly Cost or Card Required',
+                tier1F3: 'Device Contact Sync & Address Book',
+                tier1Btn: 'Start Free Forever',
                 tier2Name: 'Operations Pro',
-                tier2Desc: 'Includes proofreading translated messages before delivery and manual editing.',
+                tier2Desc: 'Enterprise advantages for businesses, logistics, and organizations. We can even manage your Spanish intake for you.',
                 tier2F1: 'Unlimited Bilingual SMS Relay',
                 tier2F2: 'Proofread Translated Messages',
-                tier2F3: 'MMS Photo & Document Attachments',
-                tier2F4: 'Persistent Latent Channels',
+                tier2F3: 'Full Device Contact Sync & Directory',
+                tier2F4: 'Managed Spanish Intake Available',
                 tier2Btn: 'Subscribe Monthly ($49/mo)',
                 tier3Name: 'Abrevia 2 Clinical',
                 tier3Desc: 'Engineered for covered healthcare entities, medical clinics, and interpreter teams.',
@@ -412,18 +415,18 @@
                 pricingModalTag: 'Tarifas SaaS B2B',
                 pricingModalTitle: 'Planes Simples y Transparentes',
                 pricingModalSubtitle: 'Abrevia 1 ofrece traducción instantánea automática. Actualice a un plan de pago para revisar mensajes traducidos antes del envío.',
-                tier1Name: 'Abrevia 1 (Traductor Instantáneo)',
-                tier1Desc: 'Traducción automática en tiempo real y envío directo sin revisión manual.',
-                tier1F1: '500 Mensajes SMS Bilingües',
-                tier1F2: 'Traducción IA Instantánea',
-                tier1F3: 'Cero Compromiso Mensual',
-                tier1Btn: 'Comprar 500 Créditos ($20)',
+                tier1Name: 'Comunidad y ONGs (Gratis)',
+                tier1Desc: 'Siempre gratis para eliminar barreras del idioma en la comunidad y organizaciones sin fines de lucro.',
+                tier1F1: 'Traducción SMS Bilingüe Esencial',
+                tier1F2: 'Cero Costo Mensual y Sin Tarjeta',
+                tier1F3: 'Sincronización de Contactos y Directorio',
+                tier1Btn: 'Comenzar Gratis para Siempre',
                 tier2Name: 'Operaciones Pro',
-                tier2Desc: 'Incluye revisión de mensajes traducidos antes del envío y ajuste manual.',
+                tier2Desc: 'Ventajas empresariales para negocios y organizaciones. Incluso podemos gestionar la recepción de mensajes en español.',
                 tier2F1: 'Relevo SMS Bilingüe Ilimitado',
                 tier2F2: 'Revisión de Mensajes Traducidos',
-                tier2F3: 'Envío de Archivos y Fotos MMS',
-                tier2F4: 'Canales Latentes Persistentes',
+                tier2F3: 'Sincronización Total de Contactos',
+                tier2F4: 'Gestión de Mensajes en Español Disponible',
                 tier2Btn: 'Suscripción Mensual ($49/mes)',
                 tier3Name: 'Abrevia 2 Clínico',
                 tier3Desc: 'Diseñado para organizaciones de salud cubiertas, clínicas y equipos de intérpretes.',

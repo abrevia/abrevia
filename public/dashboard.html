@@ -123,9 +123,9 @@
 
                 <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
                     <!-- Edit / View Contact Details Button -->
-                    <button id="editContactBtn" onclick="openCurrentContactModal()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1 shadow-sm">
-                        <span>👤</span>
-                        <span id="editContactBtnText" class="hidden sm:inline">Contact Info</span>
+                    <button id="editContactBtn" onclick="openCurrentContactModal()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm">
+                        <span id="editContactBtnIcon">👤</span>
+                        <span id="editContactBtnText" class="inline">Contact Info</span>
                     </button>
 
                     <!-- Purge / End Thread Button -->
@@ -269,6 +269,32 @@
             </p>
 
             <div class="space-y-3 mb-6">
+                <!-- Free Forever Community & Non-Profit Plan -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex items-center justify-between hover:border-slate-700 transition">
+                    <div>
+                        <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                            <span>Community & Non-Profit</span>
+                            <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.2 rounded-full border border-emerald-500/30">FREE FOREVER</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400">$0 • Free essential translation to remove language barriers for non-profits and community</div>
+                    </div>
+                    <span class="text-xs text-slate-400 font-medium px-2 py-1">Active</span>
+                </div>
+
+                <!-- Monthly Subscription Option (Business & Organizations) -->
+                <div class="bg-slate-950 border border-brand-500/40 rounded-xl p-3.5 flex items-center justify-between hover:border-brand-500 transition">
+                    <div>
+                        <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                            <span>Operations Pro</span>
+                            <span class="text-[9px] bg-brand-600 text-white font-bold px-1.5 py-0.2 rounded-full">BUSINESS & ORGS</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400">$49/month • Unlimited relay, proofreading & managed intake options</div>
+                    </div>
+                    <button onclick="triggerCheckout('pro')" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
+                        Subscribe
+                    </button>
+                </div>
+
                 <!-- Top Up Credits Option -->
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex items-center justify-between hover:border-slate-700 transition">
                     <div>
@@ -277,20 +303,6 @@
                     </div>
                     <button onclick="triggerCheckout('credits')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
                         Top Up
-                    </button>
-                </div>
-
-                <!-- Monthly Subscription Option -->
-                <div class="bg-slate-950 border border-brand-500/40 rounded-xl p-3.5 flex items-center justify-between hover:border-brand-500 transition">
-                    <div>
-                        <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
-                            <span>Operations Pro</span>
-                            <span class="text-[9px] bg-brand-600 text-white font-bold px-1.5 py-0.2 rounded-full">POPULAR</span>
-                        </div>
-                        <div class="text-[11px] text-slate-400">$49/month • Unlimited bilingual SMS</div>
-                    </div>
-                    <button onclick="triggerCheckout('pro')" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
-                        Subscribe
                     </button>
                 </div>
 
@@ -392,9 +404,15 @@
                 </div>
 
                 <div>
-                    <label id="editNameLabel" class="block text-xs font-medium text-slate-300 mb-1">
-                        Contact Name <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label id="editNameLabel" class="block text-xs font-medium text-slate-300">
+                            Contact Name <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                        </label>
+                        <button type="button" onclick="pullDeviceContactForCurrent()" class="text-[11px] text-brand-400 hover:text-brand-300 font-medium flex items-center space-x-1 transition" title="Pick from device address book to autofill">
+                            <span>📱</span>
+                            <span id="pullDeviceBtnText">Pull from Device</span>
+                        </button>
+                    </div>
                     <input id="editContactName" type="text" placeholder="e.g. Carlos Mendez" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
                 </div>
 
@@ -444,8 +462,14 @@
             </div>
             <p id="contactsModalSubtitle" class="text-xs text-slate-400 mb-4">All recipients are automatically saved here once their phone number is entered.</p>
 
-            <div class="mb-3">
-                <input id="contactSearchInput" type="text" oninput="filterContactsList(this.value)" placeholder="Search contacts by name, phone, or company..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-3">
+                <div class="flex-grow">
+                    <input id="contactSearchInput" type="text" oninput="filterContactsList(this.value)" placeholder="Search contacts by name, phone, or company..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                </div>
+                <button id="syncDeviceBtn" type="button" onclick="syncContactsFromDevice()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center justify-center space-x-1.5 shrink-0 shadow-sm" title="Pull contacts from your device address book or import vCard / CSV">
+                    <span>📱</span>
+                    <span id="syncDeviceBtnText">Sync Device Contacts</span>
+                </button>
             </div>
 
             <div id="contactsDirectoryList" class="flex-grow overflow-y-auto space-y-2 pr-1 min-h-[220px]">
@@ -508,6 +532,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
+    <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
     <script src="app.js"></script>
 </body>

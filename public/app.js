@@ -15,7 +15,11 @@ const I18N = {
         sidebarTitle: 'Conversations',
         contactsBtn: 'Contacts',
         editContactBtn: 'Contact Info',
-        addContactBtn: '+ Add Info',
+        addContactBtn: 'Add Contact',
+        syncDeviceBtn: '📱 Sync Device Contacts',
+        pullDeviceBtnText: 'Pull from Device',
+        contactsSyncedNotice: (count) => `Successfully synced ${count} contacts to your account!`,
+        contactsSyncFailed: 'No contacts could be imported. Please verify your file format (.vcf or .csv).',
         refresh: '↻ Refresh',
         loadingQueues: 'Loading conversations...',
         noTickets: 'No active conversations.<br>Click "New Recipient Thread" below.',
@@ -79,7 +83,11 @@ const I18N = {
         sidebarTitle: 'Conversaciones',
         contactsBtn: 'Contactos',
         editContactBtn: 'Info de Contacto',
-        addContactBtn: '+ Agregar Info',
+        addContactBtn: 'Agregar Contacto',
+        syncDeviceBtn: '📱 Sincronizar Contactos',
+        pullDeviceBtnText: 'Extraer de Dispositivo',
+        contactsSyncedNotice: (count) => `¡${count} contactos sincronizados a su cuenta con éxito!`,
+        contactsSyncFailed: 'No se pudieron importar contactos. Por favor verifique el formato (.vcf o .csv).',
         refresh: '↻ Actualizar',
         loadingQueues: 'Cargando conversaciones...',
         noTickets: 'No hay conversaciones activas.<br>Haga clic en "Nuevo Hilo de Destinatario" abajo.',
@@ -291,6 +299,10 @@ function applyDashboardLocalization() {
     if (dirModalSub) dirModalSub.textContent = t.contactsModalSubtitle;
     const searchInput = document.getElementById('contactSearchInput');
     if (searchInput) searchInput.placeholder = t.contactsSearchPlaceholder;
+    const syncDeviceBtnEl = document.getElementById('syncDeviceBtnText');
+    if (syncDeviceBtnEl) syncDeviceBtnEl.textContent = t.syncDeviceBtn.replace('📱 ', '');
+    const pullDeviceBtnEl = document.getElementById('pullDeviceBtnText');
+    if (pullDeviceBtnEl) pullDeviceBtnEl.textContent = t.pullDeviceBtnText;
 
     // Modal
     document.getElementById('modalTitle').textContent = t.modalTitle;
@@ -503,6 +515,8 @@ function updateHeaderWithContact(customerPhone, contact = null) {
     const compEl = document.getElementById('activeContactCompany');
     const phoneSep = document.getElementById('activePhoneSeparator');
     const phoneDisplay = document.getElementById('activeCustomerPhoneDisplay');
+    const editContactBtn = document.getElementById('editContactBtn');
+    const editBtnIcon = document.getElementById('editContactBtnIcon');
     const editBtnText = document.getElementById('editContactBtnText');
 
     if (c && c.name && c.name.trim()) {
@@ -524,7 +538,12 @@ function updateHeaderWithContact(customerPhone, contact = null) {
             phoneDisplay.textContent = customerPhone;
             phoneDisplay.classList.remove('hidden');
         }
+        if (editBtnIcon) editBtnIcon.textContent = '👤';
         if (editBtnText) editBtnText.textContent = t.editContactBtn;
+        if (editContactBtn) {
+            editContactBtn.className = 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm';
+            editContactBtn.title = t.editContactBtn;
+        }
     } else {
         if (avatarEl) {
             avatarEl.textContent = '👤';
@@ -534,7 +553,12 @@ function updateHeaderWithContact(customerPhone, contact = null) {
         if (compEl) compEl.classList.add('hidden');
         if (phoneSep) phoneSep.classList.add('hidden');
         if (phoneDisplay) phoneDisplay.classList.add('hidden');
+        if (editBtnIcon) editBtnIcon.textContent = '➕';
         if (editBtnText) editBtnText.textContent = t.addContactBtn;
+        if (editContactBtn) {
+            editContactBtn.className = 'bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 hover:text-white border border-brand-500/40 hover:border-brand-500 text-xs font-semibold px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm';
+            editContactBtn.title = t.addContactBtn;
+        }
     }
 }
 
@@ -1290,6 +1314,245 @@ async function fetchContacts() {
     } catch (err) {
         console.warn('Error fetching contacts:', err);
     }
+}
+
+// --- Device Contacts Synchronization & Address Book Import ---
+
+// Pull contacts from device (Contact Picker API on supported mobile browsers, fallback to vCard / CSV import)
+async function syncContactsFromDevice() {
+    const t = I18N[dashboardMode];
+
+    if ('contacts' in navigator && 'ContactsManager' in window && 'select' in navigator.contacts) {
+        try {
+            const props = ['name', 'tel', 'email'];
+            const opts = { multiple: true };
+            const contacts = await navigator.contacts.select(props, opts);
+            if (contacts && contacts.length > 0) {
+                const batch = [];
+                for (const item of contacts) {
+                    const name = (item.name && item.name[0]) ? item.name[0] : '';
+                    const email = (item.email && item.email[0]) ? item.email[0] : '';
+                    const phones = item.tel || [];
+                    for (const p of phones) {
+                        if (p && p.trim()) {
+                            batch.push({
+                                name: name.trim(),
+                                email: email.trim(),
+                                phone: p.trim()
+                            });
+                            break; // primary phone
+                        }
+                    }
+                }
+
+                if (batch.length > 0) {
+                    await saveBatchContactsAndNotify(batch);
+                    return;
+                }
+            }
+        } catch (err) {
+            console.warn('Native contact picker dismissed or unsupported:', err);
+            if (err.name === 'AbortError') return; // User closed picker
+        }
+    }
+
+    // Fallback: trigger file picker for .vcf / .csv address book
+    const fileInput = document.getElementById('contactsFileInput');
+    if (fileInput) {
+        fileInput.click();
+    }
+}
+
+// Pull a single contact from device to autofill the active contact modal
+async function pullDeviceContactForCurrent() {
+    if ('contacts' in navigator && 'ContactsManager' in window && 'select' in navigator.contacts) {
+        try {
+            const props = ['name', 'tel', 'email'];
+            const opts = { multiple: false };
+            const contacts = await navigator.contacts.select(props, opts);
+            if (contacts && contacts.length > 0) {
+                const item = contacts[0];
+                const name = (item.name && item.name[0]) ? item.name[0].trim() : '';
+                const email = (item.email && item.email[0]) ? item.email[0].trim() : '';
+                if (name) {
+                    const nameInput = document.getElementById('editContactName');
+                    if (nameInput) nameInput.value = name;
+                }
+                if (email) {
+                    const emailInput = document.getElementById('editContactEmail');
+                    if (emailInput) emailInput.value = email;
+                }
+                return;
+            }
+        } catch (err) {
+            console.warn('Native contact picker dismissed or error:', err);
+            if (err.name === 'AbortError') return;
+        }
+    }
+
+    // Fallback: trigger address book file picker
+    const fileInput = document.getElementById('contactsFileInput');
+    if (fileInput) {
+        fileInput.click();
+    }
+}
+
+// Handle .vcf / .csv file selection
+function handleContactsFileSelected(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const text = e.target.result;
+            const contacts = parseContactsFile(text, file.name);
+
+            if (contacts && contacts.length > 0) {
+                // If edit contact modal is open and 1 contact was selected, autofill it
+                const editModal = document.getElementById('editContactModal');
+                if (editModal && !editModal.classList.contains('hidden') && contacts.length === 1) {
+                    if (contacts[0].name) document.getElementById('editContactName').value = contacts[0].name;
+                    if (contacts[0].company) document.getElementById('editContactCompany').value = contacts[0].company;
+                    if (contacts[0].email) document.getElementById('editContactEmail').value = contacts[0].email;
+                }
+
+                await saveBatchContactsAndNotify(contacts);
+            } else {
+                const t = I18N[dashboardMode];
+                alert(t.contactsSyncFailed);
+            }
+        } catch (err) {
+            console.error('Error importing contacts file:', err);
+            alert('File import error: ' + err.message);
+        } finally {
+            event.target.value = '';
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Parse vCard (.vcf) or CSV text into contacts list
+function parseContactsFile(text, filename = '') {
+    if (!text || typeof text !== 'string') return [];
+    const isVcf = filename.toLowerCase().endsWith('.vcf') || filename.toLowerCase().endsWith('.vcard') || text.includes('BEGIN:VCARD');
+    if (isVcf) {
+        return parseVCF(text);
+    }
+    return parseCSV(text);
+}
+
+function parseVCF(vcfText) {
+    const contacts = [];
+    const cards = vcfText.split(/BEGIN:VCARD/i).slice(1);
+
+    for (const card of cards) {
+        const fnMatch = card.match(/FN(?:;[^:]*)?:([^\r\n]+)/i);
+        const orgMatch = card.match(/ORG(?:;[^:]*)?:([^\r\n]+)/i);
+        const telMatches = card.matchAll(/TEL(?:;[^:]*)?:([^\r\n]+)/gi);
+        const emailMatch = card.match(/EMAIL(?:;[^:]*)?:([^\r\n]+)/i);
+
+        const name = fnMatch ? fnMatch[1].trim() : '';
+        const company = orgMatch ? orgMatch[1].replace(/;/g, ' ').trim() : '';
+        const email = emailMatch ? emailMatch[1].trim() : '';
+
+        for (const tel of telMatches) {
+            const rawPhone = tel[1].trim();
+            if (rawPhone) {
+                contacts.push({ name, company, email, phone: rawPhone });
+                break; // primary phone
+            }
+        }
+    }
+    return contacts;
+}
+
+function parseCSV(csvText) {
+    const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
+    if (lines.length < 2) return [];
+
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/['"]/g, ''));
+    const nameIdx = headers.findIndex(h => h.includes('name') || h === 'full name' || h === 'contact');
+    const firstIdx = headers.findIndex(h => h.includes('first'));
+    const lastIdx = headers.findIndex(h => h.includes('last'));
+    const phoneIdx = headers.findIndex(h => h.includes('phone') || h.includes('mobile') || h.includes('tel') || h.includes('cell'));
+    const compIdx = headers.findIndex(h => h.includes('company') || h.includes('org'));
+    const emailIdx = headers.findIndex(h => h.includes('email') || h.includes('e-mail'));
+
+    if (phoneIdx === -1 && nameIdx === -1) return [];
+
+    const contacts = [];
+    for (let i = 1; i < lines.length; i++) {
+        const row = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^["']|["']$/g, ''));
+        const rawPhone = phoneIdx >= 0 ? row[phoneIdx] : '';
+        if (!rawPhone) continue;
+
+        let name = nameIdx >= 0 ? row[nameIdx] : '';
+        if (!name && firstIdx >= 0) {
+            name = `${row[firstIdx] || ''} ${lastIdx >= 0 ? row[lastIdx] || '' : ''}`.trim();
+        }
+        const company = compIdx >= 0 ? row[compIdx] : '';
+        const email = emailIdx >= 0 ? row[emailIdx] : '';
+
+        contacts.push({ name, phone: rawPhone, company, email });
+    }
+    return contacts;
+}
+
+async function saveBatchContactsAndNotify(contactsList) {
+    const t = I18N[dashboardMode];
+    let addedCount = 0;
+
+    for (const c of contactsList) {
+        if (!c.phone) continue;
+        const norm = normalizeClientPhone(c.phone);
+        if (!norm || norm.length < 5) continue;
+
+        const existing = contactsMap[norm] || { phone: norm };
+        contactsMap[norm] = {
+            ...existing,
+            phone: norm,
+            name: c.name || existing.name || '',
+            company: c.company || existing.company || '',
+            email: c.email || existing.email || '',
+            notes: c.notes || existing.notes || '',
+            updatedAt: new Date().toISOString()
+        };
+        addedCount++;
+    }
+
+    saveContactsToLocalStorage();
+
+    // Update active thread header if open and matching
+    if (currentTicket) {
+        const activeNorm = normalizeClientPhone(currentTicket.customer_phone);
+        if (contactsMap[activeNorm]) {
+            currentTicket.contact = contactsMap[activeNorm];
+            updateHeaderWithContact(currentTicket.customer_phone, contactsMap[activeNorm]);
+        }
+    }
+
+    // Refresh tickets sidebar
+    refreshTickets(false);
+
+    // Refresh directory modal if open
+    const dirModal = document.getElementById('contactsModal');
+    if (dirModal && !dirModal.classList.contains('hidden')) {
+        renderContactsDirectory(document.getElementById('contactSearchInput')?.value || '');
+    }
+
+    // Send batch to backend
+    try {
+        await fetch('/api/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ batch: contactsList })
+        });
+    } catch (err) {
+        console.warn('Backend batch sync error:', err);
+    }
+
+    alert(t.contactsSyncedNotice(addedCount));
 }
 
 // Utility: escape HTML

@@ -1,4 +1,4 @@
-import { getAllContacts, saveContact, deleteContact, normalizePhone } from '../lib/contacts.js';
+import { getAllContacts, saveContact, saveContactsBatch, deleteContact, normalizePhone } from '../lib/contacts.js';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
@@ -24,7 +24,13 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const { phone, name, company, email, notes } = req.body || {};
+      const { batch, phone, name, company, email, notes } = req.body || {};
+
+      if (batch && Array.isArray(batch)) {
+        const saved = await saveContactsBatch(batch);
+        return res.status(200).json({ success: true, count: saved.length, contacts: saved });
+      }
+
       if (!phone) {
         return res.status(400).json({ error: 'Phone number is required' });
       }
