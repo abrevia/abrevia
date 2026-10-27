@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrevia | Agent Operations Workspace</title>
+    <title>Abrevia | Agent Workspace</title>
     <link rel="icon" type="image/png" href="/assets/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -26,26 +26,30 @@
 
     <!-- Top Navigation Header -->
     <header class="bg-slate-950 border-b border-slate-800 px-6 py-3 flex items-center justify-between shrink-0">
+        <!-- Brand Logo (Left) -->
         <div class="flex items-center space-x-3">
             <img src="/assets/logo.png" alt="Abrevia" class="h-7 w-7 rounded-md">
             <span class="text-lg font-bold tracking-tight text-white">Abrevia</span>
-            <span id="headerConsoleBadge" class="text-[11px] bg-brand-500/10 text-brand-400 font-medium px-2.5 py-0.5 rounded-full border border-brand-500/20">
-                Operations Console
+        </div>
+
+        <!-- Center: Console Badge & Bidirectional Agent Mode Switcher (Middle) -->
+        <div class="flex items-center space-x-3">
+            <span id="headerConsoleBadge" class="text-xs bg-slate-900 border border-slate-700/80 text-brand-400 font-semibold px-3 py-1 rounded-full shadow-sm">
+                Console
             </span>
+            <div class="flex items-center space-x-1 bg-slate-900 border border-slate-800 p-1 rounded-xl shadow-inner">
+                <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
+                    <span>🇺🇸</span>
+                    <span>English (EN &rarr; ES)</span>
+                </button>
+                <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
+                    <span>🇲🇽</span>
+                    <span>Español (ES &rarr; EN)</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Bidirectional Agent Mode Switcher -->
-        <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 p-1 rounded-xl shadow-inner">
-            <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
-                <span>🇺🇸</span>
-                <span>English Agent (EN &rarr; ES)</span>
-            </button>
-            <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
-                <span>🇲🇽</span>
-                <span>Agente en Español (ES &rarr; EN)</span>
-            </button>
-        </div>
-
+        <!-- Right: Sign Out -->
         <div class="flex items-center space-x-4 text-xs">
             <a id="signOutLink" href="/index.html" class="text-slate-400 hover:text-white transition">Sign Out</a>
         </div>
@@ -113,15 +117,33 @@
             <div id="inputArea" class="bg-slate-950 border-t border-slate-800 p-4 shrink-0 hidden">
                 <div class="max-w-4xl mx-auto space-y-3">
                     
-                    <!-- 1. Agent Input -->
+                    <!-- 1. Agent Input with Attachment Paperclip -->
                     <div>
                         <label id="agentInputLabel" class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
                             Type reply in English (Agent):
                         </label>
                         <div class="flex items-center space-x-2">
+                            <!-- Paperclip Attachment Button -->
+                            <button id="attachBtn" type="button" onclick="triggerFileInput()" title="Attach file, photo or document" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-brand-500 text-slate-400 hover:text-white transition shrink-0 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                                </svg>
+                            </button>
+                            <input type="file" id="fileInput" onchange="handleFileSelected(event)" class="hidden" accept="image/*,.pdf,.doc,.docx,.txt">
+
                             <input id="agent-input" type="text" placeholder="Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
                             <button id="translate-btn" onclick="handleTranslateAndSend()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition shrink-0 shadow-lg shadow-brand-600/20">
                                 Translate &rarr;
+                            </button>
+                        </div>
+
+                        <!-- Selected Attachment Chip -->
+                        <div id="attachmentChip" class="hidden mt-2 inline-flex items-center space-x-2 bg-slate-900 border border-brand-500/40 px-3 py-1.5 rounded-lg text-xs text-brand-300">
+                            <span>📎</span>
+                            <span id="attachedFileName" class="font-medium truncate max-w-xs"></span>
+                            <span id="attachedFileSize" class="text-[10px] text-slate-400"></span>
+                            <button type="button" onclick="removeAttachment()" class="text-slate-400 hover:text-red-400 ml-1 font-bold transition" title="Remove attachment">
+                                &times;
                             </button>
                         </div>
                     </div>
@@ -135,6 +157,14 @@
                             </span>
                             <span id="hitlSubtitle" class="text-[10px] text-slate-400">Edit text freely before sending</span>
                         </div>
+
+                        <!-- HITL Attachment Alert if file is queued -->
+                        <div id="hitlAttachmentNotice" class="hidden flex items-center space-x-2 text-xs text-blue-300 bg-blue-500/10 border border-blue-500/20 px-3 py-1.5 rounded-lg">
+                            <span>📎</span>
+                            <span id="hitlAttachmentLabel">MMS Attachment queued:</span>
+                            <span id="hitlAttachmentFileName" class="font-bold underline"></span>
+                        </div>
+
                         <textarea id="target-review-box" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition"></textarea>
                         
                         <div class="flex justify-end space-x-2">

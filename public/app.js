@@ -2,10 +2,11 @@
 let currentTicket = null;
 let pollInterval = null;
 let dashboardMode = 'en';
+let currentAttachment = null; // { file, base64, name, size, type, uploadedUrl }
 
 const I18N = {
     en: {
-        consoleBadge: 'Operations Console',
+        consoleBadge: 'Console',
         signOut: 'Sign Out',
         sidebarTitle: 'Active Conversations',
         refresh: '↻ Refresh',
@@ -28,6 +29,8 @@ const I18N = {
         cancelHitl: 'Cancel',
         sendBtn: 'Send SMS to Customer',
         sendingSms: 'Sending SMS...',
+        uploadingFile: 'Uploading attachment...',
+        mmsNotice: 'MMS Attachment queued:',
         modalTitle: 'Start New Customer Thread',
         modalSubtitle: 'Enter customer\'s SMS phone number with country code (e.g. +14155552671 or +526601750245).',
         modalPhoneLabel: 'Phone Number',
@@ -39,10 +42,11 @@ const I18N = {
         agentDeliveredSMS: 'Delivered SMS (Spanish):',
         agentOriginalDraft: 'Original Agent Draft (English):',
         customerTranslated: 'Translated into English:',
-        customerOriginal: 'Original Inbound SMS (Spanish):'
+        customerOriginal: 'Original Inbound SMS (Spanish):',
+        viewAttachment: 'View Attached File'
     },
     es: {
-        consoleBadge: 'Consola de Operaciones',
+        consoleBadge: 'Consola',
         signOut: 'Cerrar Sesión',
         sidebarTitle: 'Conversaciones Activas',
         refresh: '↻ Actualizar',
@@ -65,6 +69,8 @@ const I18N = {
         cancelHitl: 'Cancelar',
         sendBtn: 'Enviar SMS al Cliente',
         sendingSms: 'Enviando SMS...',
+        uploadingFile: 'Subiendo archivo adjunto...',
+        mmsNotice: 'Archivo MMS adjunto:',
         modalTitle: 'Iniciar Nuevo Hilo de Cliente',
         modalSubtitle: 'Ingresa el número de teléfono con código de país (ej. +526601750245 o +14155552671).',
         modalPhoneLabel: 'Número de Teléfono',
@@ -76,7 +82,8 @@ const I18N = {
         agentDeliveredSMS: 'SMS Enviado al Cliente (Inglés):',
         agentOriginalDraft: 'Borrador Original del Agente (Español):',
         customerTranslated: 'Traducido al Español:',
-        customerOriginal: 'SMS Original Entrante (Inglés):'
+        customerOriginal: 'SMS Original Entrante (Inglés):',
+        viewAttachment: 'Ver Archivo Adjunto'
     }
 };
 
@@ -131,6 +138,7 @@ function applyDashboardLocalization() {
         btnEn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 text-slate-400 hover:text-white transition';
     }
 
+    // Header badge
     document.getElementById('headerConsoleBadge').textContent = t.consoleBadge;
     document.getElementById('signOutLink').textContent = t.signOut;
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
@@ -160,6 +168,7 @@ function applyDashboardLocalization() {
     document.getElementById('hitlSubtitle').textContent = t.hitlSubtitle;
     document.getElementById('cancelHitlBtn').textContent = t.cancelHitl;
     document.getElementById('sendBtnText').textContent = t.sendBtn;
+    updateHitlAttachmentPreview();
 
     // Modal
     document.getElementById('modalTitle').textContent = t.modalTitle;
@@ -167,6 +176,64 @@ function applyDashboardLocalization() {
     document.getElementById('modalPhoneLabel').textContent = t.modalPhoneLabel;
     document.getElementById('modalCancelBtn').textContent = t.modalCancel;
     document.getElementById('modalSubmitBtn').textContent = t.modalSubmit;
+}
+
+// File Attachment Handlers
+function triggerFileInput() {
+    document.getElementById('fileInput').click();
+}
+
+function handleFileSelected(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+        alert(dashboardMode === 'en' ? 'File size exceeds 10MB limit.' : 'El archivo supera el límite de 10MB.');
+        event.target.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        currentAttachment = {
+            file: file,
+            base64: reader.result,
+            name: file.name,
+            size: (file.size / 1024).toFixed(1) + ' KB',
+            type: file.type || 'application/octet-stream',
+            uploadedUrl: null
+        };
+
+        const chip = document.getElementById('attachmentChip');
+        document.getElementById('attachedFileName').textContent = currentAttachment.name;
+        document.getElementById('attachedFileSize').textContent = currentAttachment.size;
+        chip.classList.remove('hidden');
+
+        updateHitlAttachmentPreview();
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeAttachment() {
+    currentAttachment = null;
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) fileInput.value = '';
+    const chip = document.getElementById('attachmentChip');
+    if (chip) chip.classList.add('hidden');
+    updateHitlAttachmentPreview();
+}
+
+function updateHitlAttachmentPreview() {
+    const notice = document.getElementById('hitlAttachmentNotice');
+    if (!notice) return;
+    const t = I18N[dashboardMode];
+    if (currentAttachment) {
+        document.getElementById('hitlAttachmentLabel').textContent = t.mmsNotice;
+        document.getElementById('hitlAttachmentFileName').textContent = currentAttachment.name;
+        notice.classList.remove('hidden');
+    } else {
+        notice.classList.add('hidden');
+    }
 }
 
 // Fetch active tickets from backend
@@ -234,6 +301,7 @@ async function selectTicket(ticketId, customerPhone) {
     document.getElementById('inputArea').classList.remove('hidden');
 
     cancelHITL();
+    removeAttachment();
     refreshTickets(false);
     await fetchMessages(ticketId, true);
 }
@@ -250,6 +318,36 @@ async function fetchMessages(ticketId, scrollToBottom = true) {
         renderChatFeed(messages, scrollToBottom);
     } catch (err) {
         console.error('Error fetching messages:', err);
+    }
+}
+
+// Render attachment link or preview if text contains a media link
+function renderAttachmentSnippet(rawText) {
+    if (!rawText) return '';
+    const urlMatch = rawText.match(/(https?:\/\/[^\s]+)/);
+    if (!urlMatch) return '';
+    const url = urlMatch[1];
+    const isImage = /\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(url) || url.includes('/storage/v1/object/public/attachments/');
+    const t = I18N[dashboardMode];
+
+    if (isImage) {
+        return `
+            <div class="mt-2 pt-2 border-t border-white/10">
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
+                    <img src="${escapeHtml(url)}" alt="Attachment" class="max-h-44 rounded-lg border border-white/20 hover:opacity-90 transition object-cover" />
+                </a>
+            </div>
+        `;
+    } else {
+        return `
+            <div class="mt-2 pt-2 border-t border-white/10">
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-black/30 hover:bg-black/50 border border-white/20 text-xs text-white transition">
+                    <span>📎</span>
+                    <span class="underline">${t.viewAttachment}</span>
+                    <span>&rarr;</span>
+                </a>
+            </div>
+        `;
     }
 }
 
@@ -274,12 +372,11 @@ function renderChatFeed(messages, scrollToBottom = false) {
 
         if (isAgent) {
             // Outbound message from Agent
-            // If English Agent Mode: top is delivered Spanish SMS, bottom is original draft in English
-            // If Spanish Agent Mode: top is delivered English SMS, bottom is original draft in Spanish
             const topLabel = t.agentDeliveredSMS;
             const topText = (dashboardMode === 'en') ? (m.spanish_text || '') : (m.english_text || '');
             const bottomLabel = t.agentOriginalDraft;
             const bottomText = (dashboardMode === 'en') ? (m.english_text || '') : (m.spanish_text || '');
+            const attachmentHtml = renderAttachmentSnippet(m.spanish_text || m.english_text || '');
 
             return `
                 <div class="flex flex-col items-end space-y-1 max-w-xl ml-auto">
@@ -293,17 +390,17 @@ function renderChatFeed(messages, scrollToBottom = false) {
                             <span class="font-bold uppercase tracking-wider text-[10px] text-blue-300 block">${bottomLabel}</span>
                             ${escapeHtml(bottomText)}
                         </div>
+                        ${attachmentHtml}
                     </div>
                 </div>
             `;
         } else {
             // Inbound message from Customer
-            // If English Agent Mode: top is translated English, bottom is original customer text (Spanish)
-            // If Spanish Agent Mode: top is translated Spanish, bottom is original customer text (English)
             const topLabel = t.customerTranslated;
             const topText = (dashboardMode === 'en') ? (m.english_text || '') : (m.spanish_text || '');
             const bottomLabel = t.customerOriginal;
             const bottomText = (dashboardMode === 'en') ? (m.spanish_text || '') : (m.english_text || '');
+            const attachmentHtml = renderAttachmentSnippet(m.spanish_text || m.english_text || '');
 
             return `
                 <div class="flex flex-col items-start space-y-1 max-w-xl mr-auto">
@@ -317,6 +414,7 @@ function renderChatFeed(messages, scrollToBottom = false) {
                             <span class="font-bold uppercase tracking-wider text-[10px] text-slate-500 block">${bottomLabel}</span>
                             ${escapeHtml(bottomText)}
                         </div>
+                        ${attachmentHtml}
                     </div>
                 </div>
             `;
@@ -332,7 +430,7 @@ function renderChatFeed(messages, scrollToBottom = false) {
 async function handleTranslateAndSend() {
     const inputEl = document.getElementById('agent-input');
     const draftText = inputEl.value.trim();
-    if (!draftText) return;
+    if (!draftText && !currentAttachment) return;
 
     const t = I18N[dashboardMode];
     const translateBtn = document.getElementById('translate-btn');
@@ -340,24 +438,29 @@ async function handleTranslateAndSend() {
     translateBtn.textContent = t.translating;
 
     try {
-        const transRes = await fetch('/api/translate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                text: draftText, 
-                targetLang: t.targetLang 
-            }),
-            signal: AbortSignal.timeout(8000)
-        });
+        let translatedText = draftText;
+        if (draftText) {
+            const transRes = await fetch('/api/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    text: draftText, 
+                    targetLang: t.targetLang 
+                }),
+                signal: AbortSignal.timeout(8000)
+            });
 
-        const data = await transRes.json();
-        if (!transRes.ok) throw new Error(data.error || 'Translation failed');
+            const data = await transRes.json();
+            if (!transRes.ok) throw new Error(data.error || 'Translation failed');
+            translatedText = data.translated;
+        }
 
         // Show HITL Review Box
         const hitlContainer = document.getElementById('hitlContainer');
         const reviewBox = document.getElementById('target-review-box');
-        reviewBox.value = data.translated;
+        reviewBox.value = translatedText;
         hitlContainer.classList.remove('hidden');
+        updateHitlAttachmentPreview();
         reviewBox.focus();
     } catch (err) {
         alert('Translation error: ' + (err.name === 'TimeoutError' ? 'Translation request timed out. Please try again.' : err.message));
@@ -367,24 +470,51 @@ async function handleTranslateAndSend() {
     }
 }
 
-// HITL Step 2: Confirm reviewed translation and dispatch SMS via httpSMS
+// HITL Step 2: Confirm reviewed translation, upload attachment if any, and dispatch SMS via httpSMS
 async function confirmAndSend() {
     if (!currentTicket) return;
     const reviewedText = document.getElementById('target-review-box').value.trim();
     const originalDraft = document.getElementById('agent-input').value.trim();
-    if (!reviewedText) return;
+    if (!reviewedText && !currentAttachment) return;
 
     const t = I18N[dashboardMode];
     const sendBtn = document.getElementById('send-btn');
     const sendBtnText = document.getElementById('sendBtnText');
     sendBtn.disabled = true;
+
+    // 1. Upload attachment if present and not yet uploaded
+    let mediaUrl = currentAttachment?.uploadedUrl || null;
+    if (currentAttachment && !mediaUrl) {
+        sendBtnText.textContent = t.uploadingFile;
+        try {
+            const upRes = await fetch('/api/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    filename: currentAttachment.name,
+                    contentType: currentAttachment.type,
+                    base64Data: currentAttachment.base64
+                })
+            });
+
+            const upData = await upRes.json();
+            if (!upRes.ok) throw new Error(upData.error || 'Failed to upload attachment');
+            mediaUrl = upData.url;
+            currentAttachment.uploadedUrl = mediaUrl;
+        } catch (upErr) {
+            alert('Attachment upload error: ' + upErr.message);
+            sendBtn.disabled = false;
+            sendBtnText.textContent = t.sendBtn;
+            return;
+        }
+    }
+
     sendBtnText.textContent = t.sendingSms;
 
     // Depending on mode:
-    // en mode: draft is english, reviewedText is spanish (SMS body)
-    // es mode: draft is spanish, reviewedText is english (SMS body)
-    const englishText = (dashboardMode === 'en') ? originalDraft : reviewedText;
-    const spanishText = (dashboardMode === 'en') ? reviewedText : originalDraft;
+    const englishText = (dashboardMode === 'en') ? (originalDraft || (mediaUrl ? 'Attachment sent' : '')) : (reviewedText || (mediaUrl ? 'Attachment sent' : ''));
+    const spanishText = (dashboardMode === 'en') ? (reviewedText || (mediaUrl ? 'Adjunto enviado' : '')) : (originalDraft || (mediaUrl ? 'Adjunto enviado' : ''));
+    const smsBody = reviewedText || (dashboardMode === 'en' ? 'Adjunto recibido:' : 'Attachment:');
 
     try {
         const res = await fetch('/api/send-sms', {
@@ -392,7 +522,8 @@ async function confirmAndSend() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 to: currentTicket.customer_phone,
-                body: reviewedText, // The SMS sent across cellular
+                body: smsBody,
+                mediaUrl: mediaUrl,
                 ticketId: currentTicket.id,
                 englishText: englishText,
                 spanishText: spanishText
@@ -402,8 +533,9 @@ async function confirmAndSend() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to send SMS');
 
-        // Clear inputs and reset HITL box
+        // Clear inputs and reset HITL box and attachment
         document.getElementById('agent-input').value = '';
+        removeAttachment();
         cancelHITL();
 
         // Refresh feed
@@ -455,6 +587,7 @@ async function purgeCurrentConversation() {
             </div>
         `;
         cancelHITL();
+        removeAttachment();
         await refreshTickets(true);
     } catch (err) {
         alert('Purge error: ' + err.message);

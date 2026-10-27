@@ -40,13 +40,20 @@ export default async function handler(req, res) {
     // Save outbound message to Supabase if ticketId is present
     let savedMessage = null;
     if (supabase && ticketId) {
+      const finalEnglish = mediaUrl 
+        ? `${englishText || body}\n\n📎 Attachment: ${mediaUrl}`
+        : (englishText || body);
+      const finalSpanish = mediaUrl
+        ? `${spanishText || body}\n\n📎 Adjunto: ${mediaUrl}`
+        : (spanishText || body);
+
       const { data, error } = await supabase
         .from('messages')
         .insert({
           ticket_id: ticketId,
           sender: 'agent',
-          english_text: englishText || body,
-          spanish_text: spanishText || body
+          english_text: finalEnglish,
+          spanish_text: finalSpanish
         })
         .select()
         .single();
