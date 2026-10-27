@@ -1,53 +1,61 @@
 import { supabase } from './lib/supabase.js';
 
 export default async function handler(req, res) {
-  // 1. IMMEDIATE ACK (httpSMS requires a response within 5 seconds)
-  res.status(200).json({ received: true });
-
-  const eventType = req.headers['x-event-type'];
-  if (eventType !== 'message.phone.received') {
-    return;
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const payload = req.body || {};
-  const customerPhone = payload.data?.contact;
-  const spanishText = payload.data?.content;
+  const eventType = req.headers['x-event-type'] || payload.event_type || payload.type;
+  
+  // Accept message.phone.received or allow if not specified in simulation
+  if (eventType && eventType !== 'message.phone.received') {
+    return res.status(200).json({ ignored: true, reason: 'Event type not message.phone.received' });
+  }
+
+  const customerPhone = payload.data?.contact || payload.data?.from || payload.data?.phone_number;
+  const spanishText = payload.data?.content || payload.data?.message || payload.data?.text;
 
   if (!customerPhone || !spanishText) {
     console.warn('Inbound SMS missing contact or content:', payload);
-    return;
+    return res.status(400).json({ error: 'Missing contact or content in payload' });
   }
 
   try {
-    // 2. Translate to English via Gemini 1.5 Flash
+    // 1. Translate to English via Gemini 1.5 Flash
     let englishText = spanishText;
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (apiKey) {
-      const geminiRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': apiKey
-        },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [{ text: 'Translate accurately from Spanish to English. Return ONLY the translated English text with no extra commentary.' }]
+      try {
+        const geminiRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey
           },
-          contents: [{ parts: [{ text: spanishText }] }]
-        })
-      });
+          body: JSON.stringify({
+            systemInstruction: {
+              parts: [{ text: 'Translate accurately from Spanish to English. Return ONLY the translated English text with no extra commentary.' }]
+            },
+            contents: [{ parts: [{ text: spanishText }] }]
+          })
+        });
 
-      const geminiData = await geminiRes.json();
-      if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
-        englishText = geminiData.candidates[0].content.parts[0].text.trim();
+        const geminiData = await geminiRes.json();
+        if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
+          englishText = geminiData.candidates[0].content.parts[0].text.trim();
+        }
+      } catch (transErr) {
+        console.error('Gemini translation error:', transErr);
       }
     }
 
-    // 3. Save to Supabase
+    // 2. Save to Supabase
+    let ticketId = null;
     if (supabase) {
       // Find or create active ticket for this customer
-      let { data: ticket, error: ticketErr } = await supabase
+      const { data: existingTicket, error: ticketErr } = await supabase
         .from('tickets')
         .select('id')
         .eq('customer_phone', customerPhone)
@@ -60,7 +68,7 @@ export default async function handler(req, res) {
         console.error('Error fetching ticket:', ticketErr);
       }
 
-      let ticketId = ticket?.id;
+      ticketId = existingTicket?.id;
       if (!ticketId) {
         const { data: newTicket, error: createErr } = await supabase
           .from('tickets')
@@ -93,7 +101,11 @@ export default async function handler(req, res) {
         }
       }
     }
+
+    // 3. Send final 200 OK after async work is completed
+    return res.status(200).json({ received: true, ticketId, translated: englishText });
   } catch (err) {
     console.error('Error processing inbound SMS webhook:', err);
+    return res.status(500).json({ error: 'Processing error: ' + err.message });
   }
 }
