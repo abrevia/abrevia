@@ -39,11 +39,6 @@
         <div class="flex items-center space-x-2.5">
             <img src="/assets/logo.png?v=3" alt="Abrevia Logo" class="h-6 w-6 rounded-md">
             <span class="font-bold text-xs sm:text-sm text-white tracking-tight">Abrevia</span>
-            <span class="text-slate-700">|</span>
-            <button id="consoleStatusBtn" type="button" onclick="showConsoleStatusModal()" class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition shadow-sm cursor-pointer" title="System Operational • Click to open Console & Controls">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span id="consoleStatusText">Operational</span>
-            </button>
         </div>
 
         <!-- Settings Trigger (Right) -->
@@ -102,14 +97,17 @@
                     <span class="text-brand-400 font-bold text-sm">+</span>
                     <span id="newThreadBtnText">New Conversation</span>
                 </button>
-                <div class="flex items-center justify-between text-[10px] text-slate-500 px-1">
-                    <button type="button" onclick="showConsoleStatusModal()" class="hover:text-slate-300 transition flex items-center space-x-1" title="Legal, Terms, Privacy & Disclaimers">
-                        <span>⚖️</span>
-                        <span id="sidebarLegalBtnText">Terms & Privacy</span>
+                <div class="flex items-center justify-between text-[11px] text-slate-400 px-1 pt-0.5">
+                    <button id="monitorStatusBtn" type="button" onclick="showConsoleStatusModal()" class="hover:text-emerald-400 transition flex items-center space-x-1.5 text-slate-400 cursor-pointer" title="Monitor Status & System Health">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span id="monitorStatusBtnText" class="font-medium text-slate-300 hover:text-white">Monitor Status</span>
                     </button>
-                    <button type="button" onclick="shareAbreviaApp()" class="hover:text-white text-brand-400 transition flex items-center space-x-1" title="Share Abrevia">
-                        <span>↗</span>
-                        <span id="sidebarShareBtnText">Share App</span>
+                    <button type="button" onclick="showEncryptionProofModal()" class="hover:text-slate-200 transition flex items-center space-x-1 text-slate-500 text-[10px] cursor-pointer" title="Security & Compliance">
+                        <span>🛡️</span>
+                        <span id="sidebarLegalBtnText">HIPAA & Title VI</span>
                     </button>
                 </div>
             </div>
@@ -630,26 +628,66 @@
         </div>
     </div>
 
-    <!-- Dedicated System Status & Infrastructure Modal -->
+    <!-- Dedicated Monitor Status Modal -->
     <div id="consoleStatusModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full flex flex-col shadow-2xl relative overflow-hidden">
             
             <!-- Modal Header -->
             <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
                 <div class="flex items-center space-x-2">
-                    <span class="relative flex h-2 w-2">
+                    <span class="relative flex h-2.5 w-2.5">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                     </span>
-                    <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">System Status & Infrastructure</h3>
+                    <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">Monitor Status</h3>
                 </div>
-                <button type="button" onclick="closeConsoleStatusModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition" title="Close">
+                <button type="button" onclick="closeConsoleStatusModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition cursor-pointer" title="Close">
                     &times;
                 </button>
             </div>
 
             <!-- Modal Body -->
             <div class="p-4 sm:p-5 space-y-3.5 text-xs text-slate-300">
+                <!-- Status Banner: All Systems Operational with slow blinking button -->
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-xs font-bold text-white">All Systems Operational</span>
+                    </div>
+                    <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Status: Operational</span>
+                </div>
+
+                <!-- Core Telemetry Breakdown -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Communication & Translation Relay</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2.5 text-[11px]">
+                        <div class="flex items-center justify-between pb-2 border-b border-slate-800/60">
+                            <span class="text-slate-400">Two-Way Asynchronous Communication Relay</span>
+                            <span class="text-emerald-400 font-medium flex items-center space-x-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>Operational</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between pb-2 border-b border-slate-800/60">
+                            <span class="text-slate-400">Two-Way Instant Translation</span>
+                            <span class="text-emerald-400 font-medium flex items-center space-x-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>Operational</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-400">Bilingual Spell & Grammar</span>
+                            <span class="text-emerald-400 font-medium flex items-center space-x-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>Active</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Primary Dispatch Channel -->
                 <div>
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Primary Dispatch Channel</span>
@@ -665,37 +703,9 @@
                     </div>
                 </div>
 
-                <!-- Operational Telemetry Breakdown -->
+                <!-- Security Architecture & Compliance Scope -->
                 <div>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Relay & Intelligence Engines</span>
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 text-[11px]">
-                        <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
-                            <span class="text-slate-400">Two-Way Asynchronous Relay</span>
-                            <span class="text-emerald-400 font-medium flex items-center space-x-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                <span>Operational</span>
-                            </span>
-                        </div>
-                        <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
-                            <span class="text-slate-400">Two-Way Translation (AWS HIPAA BAA)</span>
-                            <span class="text-emerald-400 font-medium flex items-center space-x-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                <span>Operational</span>
-                            </span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-slate-400">Bilingual Spell & Grammar</span>
-                            <span class="text-emerald-400 font-medium flex items-center space-x-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                <span>Active</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Security & Compliance -->
-                <div>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Security & Compliance</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Security & Compliance Scope</span>
                     <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 text-[11px]">
                         <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
                             <span class="text-slate-400">Security Architecture</span>
@@ -738,7 +748,7 @@
 
             <!-- Modal Footer -->
             <div class="p-3 border-t border-slate-800 bg-slate-950/60 shrink-0 flex justify-end">
-                <button onclick="closeConsoleStatusModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-5 py-2 rounded-xl transition">
+                <button onclick="closeConsoleStatusModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-5 py-2 rounded-xl transition cursor-pointer">
                     Close
                 </button>
             </div>
@@ -1130,7 +1140,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_08"></script>
+    <script src="app.js?v=20261029_09"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
