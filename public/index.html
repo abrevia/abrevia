@@ -27,17 +27,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Abrevia">
     <link rel="apple-touch-icon" href="/assets/logo.png?v=3">
-    <script>
-        // ZERO FRICTION: By default, app opens directly on the user dashboard
-        (function checkAutoRedirect() {
-            const isSignedOut = localStorage.getItem('abrevia_signed_out') === 'true';
-            const params = new URLSearchParams(window.location.search);
-            if (!isSignedOut && !params.get('view')) {
-                const lang = localStorage.getItem('abrevia_agent_lang') || 'en';
-                window.location.replace('/dashboard.html?lang=' + lang);
-            }
-        })();
-    </script>
+    <!-- Home Page Landing: Visitors and links open directly on the Home Page -->
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-600 selection:text-white">
 
@@ -45,10 +35,10 @@
     <header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur-md px-3.5 sm:px-6 py-2.5 sm:py-3.5 sticky top-0 z-50 w-full">
         <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
             <!-- Left: Abrevia Brand Logo & Title -->
-            <div class="flex items-center space-x-2 min-w-0">
+            <a href="/" class="flex items-center space-x-2 min-w-0 hover:opacity-85 transition cursor-pointer" title="Abrevia Home">
                 <img src="/assets/logo.png?v=3" alt="Abrevia Logo" class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg shadow shrink-0">
                 <span class="text-base sm:text-xl font-extrabold tracking-tight text-white">Abrevia</span>
-            </div>
+            </a>
 
             <!-- Right: Share & Language Switcher (Clean, Uncluttered Top Bar) -->
             <div class="flex items-center space-x-2 shrink-0">
