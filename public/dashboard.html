@@ -431,7 +431,7 @@
                     <div class="flex items-center space-x-2 min-w-0">
                         <span class="text-sm">🏢</span>
                         <div class="truncate">
-                            <span class="text-slate-400 text-[10px] block" id="modalSenderBadgeLabel">Sending SMS as:</span>
+                            <span class="text-slate-400 text-[10px] block" id="modalSenderBadgeLabel">Sending message as:</span>
                             <span id="senderProfileQuickLabel" class="font-bold text-white text-xs truncate">Abrevia</span>
                         </div>
                     </div>
@@ -664,7 +664,7 @@
                         <span class="text-base">💬</span>
                         <div>
                             <span class="text-xs text-white font-bold block">WhatsApp Cloud API</span>
-                            <span class="text-[10px] text-slate-400 block">Point B native chat &bull; SMS Fallback</span>
+                            <span class="text-[10px] text-slate-400 block">Point B native chat &bull; Direct Message Fallback</span>
                         </div>
                     </div>
                     <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Active</span>
@@ -984,7 +984,7 @@
                 </div>
                 <div>
                     <h3 id="senderProfileModalTitle" class="text-sm font-bold text-white">Organization & Sender Profile</h3>
-                    <p id="senderProfileModalSubtitle" class="text-[11px] text-slate-400">Configure how your business appears in outbound SMS</p>
+                    <p id="senderProfileModalSubtitle" class="text-[11px] text-slate-400">Configure how your business appears in outbound messages</p>
                 </div>
             </div>
 
@@ -1000,28 +1000,28 @@
                 </div>
 
                 <div>
-                    <label id="profileModeLabel" class="block font-medium text-slate-300 mb-1.5">Outbound SMS Delivery Format</label>
+                    <label id="profileModeLabel" class="block font-medium text-slate-300 mb-1.5">Outbound Message Delivery Format</label>
                     <div class="space-y-2 bg-slate-900/60 border border-slate-800 p-3 rounded-xl">
                         <label class="flex items-start space-x-2.5 cursor-pointer">
                             <input type="radio" name="dispatchModeRadio" id="dispatchModeLink" value="link" checked onchange="updateSenderProfilePreview()" class="mt-0.5 text-brand-500 focus:ring-0">
                             <div>
                                 <span class="font-semibold text-white text-xs">Abrevia Link Notification (MessageBee Style)</span>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Dispatches SMS notification with secure Abrevia web link and carrier opt-out instruction.</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Dispatches message notification with secure Abrevia link and carrier opt-out instruction.</p>
                             </div>
                         </label>
                         <label class="flex items-start space-x-2.5 cursor-pointer pt-2 border-t border-slate-800">
                             <input type="radio" name="dispatchModeRadio" id="dispatchModeDirect" value="direct" onchange="updateSenderProfilePreview()" class="mt-0.5 text-brand-500 focus:ring-0">
                             <div>
-                                <span class="font-semibold text-white text-xs">Direct SMS Text</span>
+                                <span class="font-semibold text-white text-xs">Direct Message Text</span>
                                 <p class="text-[11px] text-slate-400 mt-0.5">Dispatches raw translated message text directly without web view link.</p>
                             </div>
                         </label>
                     </div>
                 </div>
 
-                <!-- Live SMS Preview Card -->
+                <!-- Live Message Preview Card -->
                 <div>
-                    <span class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Live SMS Inbox Preview:</span>
+                    <span class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Live Message Inbox Preview:</span>
                     <div class="bg-slate-900 border border-brand-500/30 rounded-xl p-3 text-xs font-mono text-slate-200 leading-relaxed shadow-inner">
                         <div id="liveSmsPreviewText" class="whitespace-pre-wrap">Tiene un mensaje de Abrevia.
 Abra su mensaje aquí: https://abrevia-beta.vercel.app/m.html?t=101
@@ -1124,7 +1124,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_15"></script>
+    <script src="app.js?v=20261029_16"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -1196,7 +1196,7 @@ Responda ALTO para no recibir más mensajes.</div>
                     </div>
                 </div>
 
-                <!-- 2. Optional Email & SMS Updates -->
+                <!-- 2. Optional Email & Mobile Updates -->
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
                     <div class="flex items-center space-x-2">
                         <span class="text-sm">📬</span>
@@ -1210,9 +1210,9 @@ Responda ALTO para no recibir más mensajes.</div>
                         <input type="email" id="wrapUpEmailInput" placeholder="name@company.com" class="w-full bg-slate-900 border border-slate-800 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white outline-none transition">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-medium text-slate-400 mb-1" id="wrapUpPhoneLabel">Phone Number for SMS Updates (Optional)</label>
+                        <label class="block text-[11px] font-medium text-slate-400 mb-1" id="wrapUpPhoneLabel">Phone Number for Mobile Updates (Optional)</label>
                         <input type="tel" id="wrapUpPhoneInput" placeholder="+1... or +52..." class="w-full bg-slate-900 border border-slate-800 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white outline-none transition">
-                        <p class="text-[10px] text-slate-500 mt-1" id="wrapUpOptOutNotice">Reply STOP anytime to cancel SMS updates.</p>
+                        <p class="text-[10px] text-slate-500 mt-1" id="wrapUpOptOutNotice">Reply STOP anytime to cancel message updates.</p>
                     </div>
                 </div>
             </div>

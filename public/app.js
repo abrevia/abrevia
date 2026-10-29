@@ -269,10 +269,10 @@ const I18N = {
         hitlBtnOff: 'OFF',
         senderProfileNavText: 'Profile',
         senderProfileModalTitle: 'Organization & Sender Profile',
-        senderProfileModalSubtitle: 'Configure how your business appears in outbound SMS notifications',
+        senderProfileModalSubtitle: 'Configure how your organization appears in outbound message notifications',
         profileOrgLabel: 'Organization / Business Name',
         profileUserLabel: 'User / Dispatcher Name',
-        profileModeLabel: 'Outbound SMS Delivery Format',
+        profileModeLabel: 'Outbound Message Delivery Format',
         liveInterpreterBtnLabel: 'Request Live Interpreter Now',
         liveInterpreterBtnShort: 'Interpreter',
         interpreterModalTitle: 'Request Live Interpreter Now',
@@ -323,8 +323,8 @@ const I18N = {
         wrapUpUpdatesDesc: 'We only send important product updates and carrier notices. No spam, ever.',
         wrapUpEmailLabel: 'Email Address (Optional)',
         wrapUpEmailPlaceholder: 'name@company.com',
-        wrapUpPhoneLabel: 'Phone Number for SMS Updates (Optional)',
-        wrapUpOptOutNotice: 'Reply STOP anytime to cancel SMS updates.',
+        wrapUpPhoneLabel: 'Phone Number for Mobile Updates (Optional)',
+        wrapUpOptOutNotice: 'Reply STOP anytime to cancel message updates.',
         wrapUpSaveBtnText: 'Save & Sign Out',
         wrapUpDirectSignOutBtn: 'Sign Out Without PIN',
         wrapUpCancelBtn: 'Stay in Dashboard',
@@ -452,10 +452,10 @@ const I18N = {
         hitlBtnOff: 'INACTIVO',
         senderProfileNavText: 'Perfil',
         senderProfileModalTitle: 'Perfil de Organización y Remitente',
-        senderProfileModalSubtitle: 'Configure cómo aparece su negocio en las notificaciones SMS salientes',
+        senderProfileModalSubtitle: 'Configure cómo aparece su organización en las notificaciones de mensajes salientes',
         profileOrgLabel: 'Nombre de la Organización / Empresa',
         profileUserLabel: 'Nombre del Usuario / Despachador',
-        profileModeLabel: 'Formato de Entrega de SMS Saliente',
+        profileModeLabel: 'Formato de Entrega de Mensajes Salientes',
         liveInterpreterBtnLabel: 'Solicitar Intérprete en Vivo',
         liveInterpreterBtnShort: 'Intérprete',
         interpreterModalTitle: 'Solicitar Intérprete en Vivo',
@@ -506,8 +506,8 @@ const I18N = {
         wrapUpUpdatesDesc: 'Solo enviamos actualizaciones importantes y avisos operativos de telefonía. Cero spam, siempre.',
         wrapUpEmailLabel: 'Correo Electrónico (Opcional)',
         wrapUpEmailPlaceholder: 'correo@empresa.com',
-        wrapUpPhoneLabel: 'Número de Teléfono para Avisos por SMS (Opcional)',
-        wrapUpOptOutNotice: 'Responda ALTO en cualquier momento para cancelar avisos por SMS.',
+        wrapUpPhoneLabel: 'Número de Teléfono para Avisos Móviles (Opcional)',
+        wrapUpOptOutNotice: 'Responda ALTO en cualquier momento para cancelar avisos.',
         wrapUpSaveBtnText: 'Guardar y Cerrar Sesión',
         wrapUpDirectSignOutBtn: 'Cerrar Sesión Sin PIN',
         wrapUpCancelBtn: 'Permanecer en el Panel',
@@ -1154,9 +1154,9 @@ function updateSenderProfilePreview() {
             : `Hello, confirming your service request.`;
     } else {
         if (dashboardMode === 'es') {
-            previewEl.textContent = `[${senderLabel} - Mensaje Bilingüe]:\n"Hola, nos comunicamos con usted para coordinar su solicitud."\n\nVer conversación o responder en línea:\n${sampleLink}\nO responda directamente a este SMS en español.\n\nResponda ALTO para cancelar.`;
+            previewEl.textContent = `[${senderLabel} - Mensaje Bilingüe]:\n"Hola, nos comunicamos con usted para coordinar su solicitud."\n\nVer conversación o responder en línea:\n${sampleLink}\nO responda directamente a este mensaje en español.\n\nResponda ALTO para cancelar.`;
         } else {
-            previewEl.textContent = `[${senderLabel}]:\n"Hello, we are contacting you regarding your request."\n\nOpen or reply online:\n${sampleLink}\nOr reply directly to this SMS.\n\nReply STOP to unsubscribe.`;
+            previewEl.textContent = `[${senderLabel}]:\n"Hello, we are contacting you regarding your request."\n\nOpen or reply online:\n${sampleLink}\nOr reply directly to this message.\n\nReply STOP to unsubscribe.`;
         }
     }
 }
@@ -1531,13 +1531,13 @@ function applyDashboardLocalization() {
     const spModalTitle = document.getElementById('senderProfileModalTitle');
     if (spModalTitle) spModalTitle.textContent = t.senderProfileModalTitle || 'Organization & Sender Profile';
     const spModalSubtitle = document.getElementById('senderProfileModalSubtitle');
-    if (spModalSubtitle) spModalSubtitle.textContent = t.senderProfileModalSubtitle || 'Configure how your business appears in outbound SMS';
+    if (spModalSubtitle) spModalSubtitle.textContent = t.senderProfileModalSubtitle || 'Configure how your organization appears in outbound messages';
     const pOrgLabel = document.getElementById('profileOrgLabel');
     if (pOrgLabel) pOrgLabel.textContent = t.profileOrgLabel || 'Organization / Business Name';
     const pUserLabel = document.getElementById('profileUserLabel');
     if (pUserLabel) pUserLabel.innerHTML = `${t.profileUserLabel || 'User / Dispatcher Name'} <span class="text-slate-500 text-[10px]">(Optional)</span>`;
     const pModeLabel = document.getElementById('profileModeLabel');
-    if (pModeLabel) pModeLabel.textContent = t.profileModeLabel || 'Outbound SMS Delivery Format';
+    if (pModeLabel) pModeLabel.textContent = t.profileModeLabel || 'Outbound Message Delivery Format';
     updateSenderProfileUI();
 
     // Live Interpreter Localization
@@ -1613,7 +1613,7 @@ function applyDashboardLocalization() {
     const wEmailInput = document.getElementById('wrapUpEmailInput');
     if (wEmailInput && t.wrapUpEmailPlaceholder) wEmailInput.placeholder = t.wrapUpEmailPlaceholder;
     const wPhoneLabel = document.getElementById('wrapUpPhoneLabel');
-    if (wPhoneLabel) wPhoneLabel.textContent = t.wrapUpPhoneLabel || 'Phone Number for SMS Updates (Optional)';
+    if (wPhoneLabel) wPhoneLabel.textContent = t.wrapUpPhoneLabel || 'Phone Number for Mobile Updates (Optional)';
     const wOptOut = document.getElementById('wrapUpOptOutNotice');
     if (wOptOut) wOptOut.textContent = t.wrapUpOptOutNotice || '';
     const wSaveBtn = document.getElementById('wrapUpSaveBtnText');
