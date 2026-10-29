@@ -17,6 +17,8 @@
 # 🇺🇸 English: Title VI Compliance Self-Assessment
 
 ### Executive Summary: Can Abrevia 100% Satisfy Title VI Requirements?
+> 🛡️ **Non-Liability Caveat & Agency Responsibility:** Title VI and Executive Order 13166 compliance remains the sole statutory responsibility of the federally assisted recipient agency. Abrevia provides the zero-download communications interface and bilingual audit mechanisms. Under no circumstances shall Abrevia, its developers, engineers, agents, employees, or representatives be held liable in any way for an agency's Language Access Plan (LAP), compliance findings, OCR audits, or third-party claims.
+
 
 **YES**, when deployed according to this compliance framework. 
 
@@ -104,6 +106,8 @@ Federally funded organizations deploying Abrevia satisfy all five core complianc
 # 🇲🇽 Español: Autoevaluación de Cumplimiento de Título VI
 
 ### Resumen Ejecutivo: ¿Puede Abrevia Garantizar el Cumplimiento al 100%?
+> 🛡️ **Cláusula de No Responsabilidad y Obligación Institucional:** El cumplimiento del Título VI y la Orden Ejecutiva 13166 es responsabilidad jurídica exclusiva de la entidad receptora de fondos federales. Abrevia proporciona el medio tecnológico sin descargas y las bitácoras bilingües de auditoría. Bajo ninguna circunstancia Abrevia, sus desarrolladores, ingenieros, agentes, empleados o representantes podrán ser considerados responsables de manera alguna por los planes de acceso lingüístico (LAP), dictámenes de la OCR o demandas de terceros interpuestas contra la entidad.
+
 
 **SÍ**, siempre que se implemente conforme a este marco operativo.
 

@@ -21,6 +21,9 @@ Abrevia provides zero-download SMS communication tools and immutable audit recor
 ### 4. Carrier Deliverability & Third-Party Telecommunications
 SMS delivery relies on underlying commercial cellular networks and gateway hardware. Message delivery times and receipt may be affected by carrier network congestion, recipient device availability, cellular signal coverage, or local telecommunications regulations.
 
+### 5. Complete Exoneration of Developers, Agents, Employees & Representatives
+Under no circumstances shall the software developers, computer programmers, system architects, founders, employees, directors, officers, agents, representatives, contractors, or affiliates of Abrevia or Servicios ADG be held liable in any way, under any jurisdiction or cause of action, for any damages, legal liabilities, fines, penalties, operational interruptions, lost revenues, translation inaccuracies, missed judicial deadlines, or carrier-level transmission failures. The technology is provided strictly on an "as-is" administrative basis. Each organization, deploying agency, and individual user assumes sole and exclusive legal and operational responsibility for communications sent, received, or relied upon through this platform.
+
 
 *For legal and compliance inquiries: 📧 [info@mvhlsp.site](mailto:info@mvhlsp.site) • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*
 
@@ -41,6 +44,9 @@ Abrevia proporciona herramientas técnicas sin descargas y bitácoras inmutables
 
 ### 4. Redes Celulares y Entrega de Mensajes
 La entrega de mensajes de texto SMS depende de las redes de telefonía celular y pasarelas de comunicación. La velocidad y confirmación de recepción pueden verse condicionadas por la cobertura de señal, congestión de antenas o políticas de los operadores telefónicos.
+
+### 5. Exoneración Total de Desarrolladores, Agentes, Empleados y Representantes
+Bajo ninguna circunstancia los desarrolladores de software, programadores, arquitectos de sistemas, fundadores, empleados, directivos, agentes, representantes, contratistas o afiliados de Abrevia o Servicios ADG podrán ser considerados responsables de manera alguna, en ninguna jurisdicción ni bajo ninguna acción legal, por daños, perjuicios, responsabilidades legales, multas, sanciones, interrupciones operativas, errores de traducción, pérdida de plazos judiciales o fallas en la transmisión celular. La tecnología se suministra estrictamente sobre una base administrativa "tal cual". Cada organismo, entidad usuaria o individuo asume la total y exclusiva responsabilidad legal y operativa sobre los mensajes enviados, recibidos o utilizados a través de esta plataforma.
 
 
 *Para consultas legales y regulatorias: 📧 **info@mvhlsp.site** • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*

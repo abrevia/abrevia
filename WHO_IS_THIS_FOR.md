@@ -136,6 +136,8 @@ Beyond federal Title VI compliance, Abrevia serves high-velocity commercial oper
 2. **📑 Auditable Bilingual Trails:** Immutable logs with timestamps, original source text, and translation outputs ready for federal civil rights audits.
 3. **🛡️ Human Oversight (HITL):** Built-in review buffers allowing operators to verify sensitive or legal messages before transmission, plus escalation to certified LSP human interpreters.
 
+> ⚖️ **Legal Notice & Non-Liability:** Abrevia provides communications technology and audit infrastructure. Deployment of Abrevia does not constitute legal representation; under no circumstances shall Abrevia, its developers, engineers, agents, employees, or representatives be held liable in any way for organizational compliance decisions, administrative actions, or legal disputes.
+
 
 *For institutional inquiries, corporate agreements, or implementation support: 📧 [info@mvhlsp.site](mailto:info@mvhlsp.site) • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*
 
@@ -266,6 +268,8 @@ Además del cumplimiento del Título VI, Abrevia potencia operaciones comerciale
 1. **📱 Cero Descargas para el Usuario:** Los beneficiarios y clientes jamás descargan una app ni crean cuentas. Se comunican por el SMS nativo de su teléfono móvil.
 2. **📑 Registros de Auditoría Inmutables:** Historiales completos con fecha, hora, texto original y traducción verificada, listos para auditorías federales de derechos civiles.
 3. **🛡️ Supervisión Humana (HITL):** Opción de revisión antes de enviar mensajes legales u operativos delicados, con escalamiento a intérpretes humanos certificados LSP.
+
+> ⚖️ **Nota Legal y Exoneración de Responsabilidad:** Abrevia proporciona tecnología de comunicaciones e infraestructura de auditoría. La implementación de Abrevia no constituye representación legal; bajo ninguna circunstancia Abrevia, sus desarrolladores, ingenieros, agentes, empleados o representantes podrán ser considerados responsables de manera alguna por decisiones de cumplimiento organizacional, procedimientos administrativos o disputas legales de la entidad.
 
 ---
 
