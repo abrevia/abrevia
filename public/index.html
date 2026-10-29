@@ -252,6 +252,12 @@
                             </a>
                         </li>
                         <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/TITLE_VI_SELF_ASSESSMENT.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>📋</span>
+                                <span id="footerLinkSelfAssessment">Title VI Self-Assessment</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#-english-who-is-abrevia-for" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkTitle6">
                                 Title VI & EO 13166 Mandates
                             </a>
@@ -411,6 +417,7 @@
                 footerShareBtnText: 'Share Abrevia',
                 footerColComplianceHeader: 'Compliance & Sectors',
                 footerLinkWhoIsThis: 'Who is this app for?',
+                footerLinkSelfAssessment: 'Title VI Self-Assessment',
                 footerLinkTitle6: 'Title VI & EO 13166 Mandates',
                 footerLinkSectors: '7 Major Federal Sectors',
                 footerColLegalHeader: 'Legal & Transparency',
@@ -508,6 +515,7 @@
                 footerShareBtnText: 'Compartir Abrevia',
                 footerColComplianceHeader: 'Cumplimiento y Sectores',
                 footerLinkWhoIsThis: '¿Para quién es esta app?',
+                footerLinkSelfAssessment: 'Autoevaluación de Título VI',
                 footerLinkTitle6: 'Mandatos de Título VI y OE 13166',
                 footerLinkSectors: '7 Sectores Federales Principales',
                 footerColLegalHeader: 'Legalidad y Transparencia',
@@ -678,6 +686,8 @@
             const ftCol1 = document.getElementById('footerColComplianceHeader');
             if (ftCol1 && c.footerColComplianceHeader) ftCol1.textContent = c.footerColComplianceHeader;
             const ftWho = document.getElementById('footerLinkWhoIsThis');
+            const ftSelf = document.getElementById('footerLinkSelfAssessment');
+            if (ftSelf && c.footerLinkSelfAssessment) ftSelf.textContent = c.footerLinkSelfAssessment;
             if (ftWho && c.footerLinkWhoIsThis) ftWho.textContent = c.footerLinkWhoIsThis;
             const ftT6 = document.getElementById('footerLinkTitle6');
             if (ftT6 && c.footerLinkTitle6) ftT6.textContent = c.footerLinkTitle6;

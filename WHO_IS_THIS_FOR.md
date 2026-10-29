@@ -7,6 +7,7 @@
 > **Quick Language Navigation / Navegación Rápida:**  
 > 🇺🇸 [**Read in English (Title VI Statutory Scope & Use Cases)**](#-english-who-is-abrevia-for)  
 > 🇲🇽 [**Leer en Español (Alcance Legal de Título VI y Casos de Uso)**](#-español-para-quién-es-abrevia)  
+> 📋 [**Official Title VI Compliance Self-Assessment (DOJ 4-Factor Analysis)**](TITLE_VI_SELF_ASSESSMENT.md)  
 
 ---
 

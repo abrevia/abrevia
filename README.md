@@ -6,6 +6,7 @@ Abrevia 1 is a "Zero-Download SaaS" bilingual (English/Spanish) customer support
 >
 > 🏛️ **Compliance, Legal & Sector Documentation:**  
 > * 🏛️ [**Who is this app for? / ¿Para quién es esta app? (Title VI & Sector Guide)**](WHO_IS_THIS_FOR.md)
+> * 📋 [**Title VI Compliance Self-Assessment & Audit Dossier**](TITLE_VI_SELF_ASSESSMENT.md)
 > * 📜 [**Terms of Service / Términos de Servicio**](TERMS_OF_SERVICE.md)
 > * 🛡️ [**Privacy Policy / Aviso de Privacidad**](PRIVACY_POLICY.md)
 > * ⚖️ [**Legal & Regulatory Disclaimers / Deslindes Legales**](DISCLAIMERS.md)
