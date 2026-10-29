@@ -3417,8 +3417,8 @@ async function dispatchTestSmsToSelf() {
         if (feedback) {
             feedback.className = 'text-[10px] mt-1 text-amber-400 font-medium block';
             feedback.textContent = isEs 
-                ? 'Por favor ingrese su número con código de país (+1... o +52...).'
-                : 'Please enter a valid phone number with country code (+1... or +52...).';
+                ? 'Por favor ingrese su número con código de país (ej. +52... o +1...).'
+                : 'Please enter a valid phone number with country code (e.g. +1... or +52...).';
             feedback.classList.remove('hidden');
         }
         return;
@@ -3434,36 +3434,51 @@ async function dispatchTestSmsToSelf() {
     }
 
     try {
+        const activeGw = (typeof getActiveSmsGateway === 'function') ? getActiveSmsGateway() : 'httpsms';
+        console.log('[TestSMS] Dispatching to:', phone, 'via gateway:', activeGw);
+
         const res = await fetch('/api/send-sms', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 to: phone,
                 body: 'Abrevia Live Test Notification / Notificación de Prueba de Abrevia',
-                provider: currentSmsGateway || 'httpsms',
+                provider: activeGw,
                 dispatchMode: 'link',
                 targetLang: isEs ? 'es' : 'en'
             })
         });
 
         const data = await res.json();
+        console.log('[TestSMS] Response data:', data);
+
         if (btn) btn.disabled = false;
         if (btnText) btnText.textContent = isEs ? 'Enviar SMS' : 'Send SMS';
 
         if (res.ok && data.success) {
-            feedback.className = 'text-[10px] mt-1 text-emerald-400 font-semibold block';
-            feedback.textContent = isEs 
-                ? `✅ ¡SMS enviado con éxito vía ${data.provider}! Revise los mensajes de su teléfono para abrir el enlace Abrevia.`
-                : `✅ SMS dispatched successfully via ${data.provider}! Check your phone text messages now to open the Abrevia link.`;
+            if (feedback) {
+                feedback.className = 'text-[10px] mt-1 text-emerald-400 font-semibold block';
+                feedback.textContent = isEs 
+                    ? `✅ ¡SMS despachado con éxito vía ${data.provider}! Revise los mensajes de texto de su teléfono.`
+                    : `✅ SMS dispatched successfully via ${data.provider}! Check your mobile text inbox now.`;
+                feedback.classList.remove('hidden');
+            }
         } else {
-            feedback.className = 'text-[10px] mt-1 text-red-400 font-medium block';
-            feedback.textContent = `⚠️ Error: ${data.error || 'Failed to dispatch SMS'}`;
+            if (feedback) {
+                feedback.className = 'text-[10px] mt-1 text-red-400 font-medium block';
+                feedback.textContent = `⚠️ Error: ${data.error || 'No se pudo enviar el SMS'}`;
+                feedback.classList.remove('hidden');
+            }
         }
     } catch (err) {
+        console.error('[TestSMS] Error:', err);
         if (btn) btn.disabled = false;
         if (btnText) btnText.textContent = isEs ? 'Enviar SMS' : 'Send SMS';
-        feedback.className = 'text-[10px] mt-1 text-red-400 font-medium block';
-        feedback.textContent = `⚠️ Error: ${err.message}`;
+        if (feedback) {
+            feedback.className = 'text-[10px] mt-1 text-red-400 font-medium block';
+            feedback.textContent = `⚠️ Error de red o script: ${err.message}`;
+            feedback.classList.remove('hidden');
+        }
     }
 }
 

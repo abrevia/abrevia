@@ -771,7 +771,7 @@
                         Enter your personal mobile number to receive a live SMS containing the Abrevia zero-download link.
                     </p>
                     <div class="flex items-center space-x-2">
-                        <input type="tel" id="testPhoneInput" placeholder="+1... or +52..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                        <input type="tel" id="testPhoneInput" onkeydown="if(event.key==='Enter'){event.preventDefault();dispatchTestSmsToSelf();}" placeholder="+1... or +52..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
                         <button type="button" id="sendTestSmsBtn" onclick="dispatchTestSmsToSelf()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition shrink-0 shadow">
                             <span id="sendTestSmsBtnText">Send SMS</span>
                         </button>
