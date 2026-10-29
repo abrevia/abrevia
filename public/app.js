@@ -1416,7 +1416,14 @@ function applyDashboardLocalization() {
 
     const dashWhoBtn = document.getElementById('dashWhoIsThisForText');
     if (dashWhoBtn && t.whoIsThisForBtn) dashWhoBtn.textContent = t.whoIsThisForBtn;
-    document.getElementById('signOutLink').textContent = t.signOut;
+    const soEl = document.getElementById('signOutLink');
+    const soBtnText = document.getElementById('signOutBtnText');
+    if (soBtnText) soBtnText.textContent = t.signOut;
+    else if (soEl) soEl.textContent = t.signOut;
+    const menuBtnText = document.getElementById('dashboardMenuBtnText');
+    if (menuBtnText) menuBtnText.textContent = (dashboardMode === 'es') ? 'Menú' : 'Menu';
+    const langSelTitle = document.getElementById('statusLangSelectorTitle');
+    if (langSelTitle) langSelTitle.textContent = (dashboardMode === 'es') ? 'Idioma de la Consola:' : 'Language Mode:';
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
     document.getElementById('refreshBtn').textContent = t.refresh;
     document.getElementById('newThreadBtnText').textContent = t.newThreadBtn;

@@ -33,49 +33,25 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans h-screen h-[100dvh] flex flex-col overflow-hidden selection:bg-brand-600 selection:text-white">
 
-    <!-- Top Navigation Header -->
-    <header class="bg-slate-950 border-b border-slate-800 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shrink-0">
+    <!-- Clean Distraction-Free Navigation Header -->
+    <header class="bg-slate-950 border-b border-slate-800 px-3 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between shrink-0">
         <!-- Logo & Title (Left) -->
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-2.5">
             <img src="/assets/logo.png?v=3" alt="Abrevia Logo" class="h-6 w-6 rounded-md">
-            <span id="headerConsoleTitle" class="text-xs text-slate-400 font-normal hidden sm:inline">Console Status</span>
-            <button id="consoleStatusBtn" type="button" onclick="showConsoleStatusModal()" class="inline-flex items-center space-x-1.5 px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition shadow-sm cursor-pointer" title="System Operational • Two-Way Asynchronous Communication & Real-Time Translating Technology">
+            <span class="font-bold text-xs sm:text-sm text-white tracking-tight">Abrevia</span>
+            <span class="text-slate-700">|</span>
+            <button id="consoleStatusBtn" type="button" onclick="showConsoleStatusModal()" class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition shadow-sm cursor-pointer" title="System Operational • Click to open Console & Controls">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span id="consoleStatusText">Active</span>
             </button>
         </div>
 
-        <!-- Center: Language Switcher (Compact Segmented Control) -->
-        <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
-            <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition" title="English Mode (Agent writes English &rarr; Recipient receives Spanish)">
-                EN
+        <!-- Clean Menu Trigger (Right) -->
+        <div class="flex items-center space-x-2 text-xs">
+            <button id="dashboardMenuBtn" type="button" onclick="showConsoleStatusModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-900 transition shadow-sm" title="Open Console Controls, Language & Billing">
+                <span>⚙️</span>
+                <span id="dashboardMenuBtnText">Menu</span>
             </button>
-            <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition" title="Modo Español (Agente escribe Español &rarr; Destinatario recibe Inglés)">
-                ES
-            </button>
-        </div>
-
-        <!-- Right: Trial Status, Billing & Sign Out -->
-        <div class="flex items-center space-x-2 sm:space-x-3 text-xs">
-            <!-- Organic Share Button -->
-            <button id="dashShareBtn" onclick="shareAbreviaApp()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm" title="Share Abrevia">
-                <span>↗</span>
-                <span id="dashShareBtnText" class="hidden sm:inline">Share</span>
-            </button>
-            <!-- Discreet Sound & Haptic Notification Toggle -->
-            <button id="soundToggleBtn" onclick="toggleSoundAlerts()" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 shadow-sm" title="Sound & Vibration Alerts (Discreet Beep)">
-                <span id="soundToggleIcon">🔔</span>
-                <span id="soundToggleLabel" class="hidden md:inline text-[10px]">Alerts</span>
-            </button>
-            <button id="billingBtn" onclick="openBillingModal()" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 font-normal">
-                <span>💳</span>
-                <span id="billingBtnText" class="hidden sm:inline">Billing</span>
-            </button>
-            <button id="installAppBtn" onclick="triggerPwaInstall()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 text-brand-300 border border-brand-500/30 transition shadow-sm" title="Add shortcut to desktop or home screen">
-                <span>📲</span>
-                <span id="installAppBtnText" class="hidden sm:inline">Add Shortcut</span>
-            </button>
-            <button id="signOutLink" onclick="openWrapUpModal()" class="text-slate-400 hover:text-white transition text-xs font-normal">Sign Out</button>
         </div>
     </header>
 
@@ -663,6 +639,43 @@
             <div class="flex items-center space-x-2.5 pb-3 border-b border-slate-800">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">Console Status: Active</h3>
+            </div>
+
+            <!-- Console Controls: Language Switcher -->
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950 border border-slate-800">
+                <span class="text-xs text-slate-300 font-medium" id="statusLangSelectorTitle">Language Mode:</span>
+                <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
+                    <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition" title="English Mode (Agent writes English &rarr; Recipient receives Spanish)">
+                        EN
+                    </button>
+                    <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition" title="Modo Español (Agente escribe Español &rarr; Destinatario recibe Inglés)">
+                        ES
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Utility Actions Grid -->
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <button id="soundToggleBtn" onclick="toggleSoundAlerts()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-300 hover:text-white flex items-center space-x-1.5 transition text-left">
+                    <span id="soundToggleIcon">🔔</span>
+                    <span id="soundToggleLabel" class="text-[11px] font-medium">Alerts</span>
+                </button>
+                <button id="billingBtn" onclick="openBillingModal()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-300 hover:text-white flex items-center space-x-1.5 transition text-left">
+                    <span>💳</span>
+                    <span id="billingBtnText" class="text-[11px] font-medium">Billing</span>
+                </button>
+                <button id="installAppBtn" onclick="triggerPwaInstall()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-300 hover:text-white flex items-center space-x-1.5 transition text-left">
+                    <span>📲</span>
+                    <span id="installAppBtnText" class="text-[11px] font-medium">Add Shortcut</span>
+                </button>
+                <button id="dashShareBtn" onclick="shareAbreviaApp()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-300 hover:text-white flex items-center space-x-1.5 transition text-left">
+                    <span class="text-brand-400">↗</span>
+                    <span id="dashShareBtnText" class="text-[11px] font-medium">Share</span>
+                </button>
+                <button id="signOutLink" onclick="openWrapUpModal()" type="button" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2 rounded-xl col-span-2 flex items-center justify-center space-x-1.5 transition font-semibold text-xs">
+                    <span>🚪</span>
+                    <span id="signOutBtnText">Sign Out</span>
+                </button>
             </div>
             <div class="space-y-3 text-xs text-slate-300">
                 <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60">
