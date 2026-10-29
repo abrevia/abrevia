@@ -2409,19 +2409,24 @@ async function handleSendPersonalWhatsApp() {
         let englishMessage = originalDraft;
 
         if (!spanishMessage && originalDraft) {
-            const transRes = await fetch('/api/translate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    text: originalDraft, 
-                    targetLang: t.targetLang || 'es' 
-                }),
-                signal: AbortSignal.timeout(8000)
-            });
-            if (transRes.ok) {
-                const transData = await transRes.json();
-                spanishMessage = transData.translated || originalDraft;
-            } else {
+            try {
+                const transRes = await fetch('/api/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        text: originalDraft, 
+                        targetLang: t.targetLang || 'es' 
+                    }),
+                    signal: AbortSignal.timeout(4000)
+                });
+                if (transRes.ok) {
+                    const transData = await transRes.json();
+                    spanishMessage = transData.translated || originalDraft;
+                } else {
+                    spanishMessage = originalDraft;
+                }
+            } catch (transErr) {
+                console.warn('Translation warning during WhatsApp dispatch (falling back to draft):', transErr);
                 spanishMessage = originalDraft;
             }
         } else if (!spanishMessage && !originalDraft && currentAttachment) {
@@ -2471,7 +2476,10 @@ async function handleSendPersonalWhatsApp() {
         }
 
         const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(spanishMessage);
-        window.open(waUrl, '_blank', 'noopener,noreferrer');
+        const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+            window.location.href = waUrl;
+        }
     } catch (err) {
         alert((dashboardMode === 'es' ? 'Error al preparar WhatsApp: ' : 'WhatsApp dispatch error: ') + err.message);
     } finally {
