@@ -48,16 +48,16 @@
     </header>
 
     <!-- Main Content Area (Easy & Minimal, Inspired by Abrevia Squircle) -->
-    <main class="max-w-3xl mx-auto w-full px-6 py-12 sm:py-16 flex-grow flex flex-col items-center justify-center text-center">
+    <main class="max-w-3xl mx-auto w-full px-6 py-8 sm:py-12 flex-grow flex flex-col items-center justify-center text-center">
         
         <!-- Clean, Bold, Minimal Headline -->
         <h1 id="heroTitle" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-2 leading-tight">
             Bilingual Asynchronous Communication Technology
         </h1>
         <div id="heroIndustries" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-3">
-            <span class="text-[11px] sm:text-xs font-semibold px-2.5 py-0.5 rounded-full bg-brand-500/15 text-brand-300 border border-brand-500/30">🚚 Logistics</span>
-            <span class="text-[11px] sm:text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">🛠️ Field Services</span>
-            <span class="text-[11px] sm:text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">⚡ Operations</span>
+            <span id="indLogistics" class="text-[11px] sm:text-xs font-semibold px-2.5 py-0.5 rounded-full bg-brand-500/15 text-brand-300 border border-brand-500/30">🚚 Logistics</span>
+            <span id="indField" class="text-[11px] sm:text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">🛠️ Field Services</span>
+            <span id="indOperations" class="text-[11px] sm:text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">⚡ Operations</span>
         </div>
         <h2 id="heroSubtitleEs" class="text-sm sm:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-brand-500 mb-3 leading-snug">
             Tecnología de Comunicación Asíncrona Bilingüe
@@ -69,7 +69,7 @@
         </p>
 
         <!-- Effortless Minimal Launchpad -->
-        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-7 max-w-md w-full shadow-2xl backdrop-blur-sm text-center mb-8">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 sm:p-7 max-w-md w-full shadow-2xl backdrop-blur-sm text-center mb-6 sm:mb-8">
             
             <!-- Language Mode Selector -->
             <div class="inline-flex p-1 bg-slate-950 border border-slate-800 rounded-xl mb-4 w-full">
@@ -95,53 +95,53 @@
             </button>
 
             <!-- Quiet Trust Notes -->
-            <div class="flex items-center justify-center space-x-3 mt-4 text-[11px] text-slate-500">
-                <span>🔒 Secure Operations</span>
-                <span>&bull;</span>
-                <span>📱 Zero App Downloads</span>
-                <span>&bull;</span>
-                <span class="text-brand-400 font-medium">✨ Start Free • No Credit Card Required</span>
+            <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 text-[11px] text-slate-500">
+                <span id="trustNote1">🔒 Secure Operations</span>
+                <span class="hidden sm:inline text-slate-600">&bull;</span>
+                <span id="trustNote2">📱 Zero App Downloads</span>
+                <span class="hidden sm:inline text-slate-600">&bull;</span>
+                <span id="trustNote3" class="text-brand-400 font-medium">✨ Start Free • No Credit Card Required</span>
             </div>
         </div>
 
         <!-- 3 Quiet Minimal Pillars (Row) -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl text-left mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl text-left mb-6 sm:mb-8">
             <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
                 <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
                     <span>🔒</span>
                     <span id="pillar1Title">Secure & Private</span>
                 </div>
                 <p id="pillar1Desc" class="text-[11px] text-slate-400 leading-normal">
-                    Administrative workspace with Human-In-The-Loop review before message delivery.
+                    Administrative workspace for operations with optional human-in-the-loop (HITL) review before delivery.
                 </p>
             </div>
             <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
                 <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
                     <span>⚡</span>
-                    <span id="pillar2Title">Real-Time AI</span>
+                    <span id="pillar2Title">Real-Time Relay</span>
                 </div>
                 <p id="pillar2Desc" class="text-[11px] text-slate-400 leading-normal">
-                    Instant sub-second bilingual English ⇄ Spanish translation.
+                    Instant bilingual English ⇄ Spanish translation and direct dispatch for operations on the move.
                 </p>
             </div>
             <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
                 <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
                     <span>📱</span>
-                    <span id="pillar3Title">Zero-Download Asynchronous Communication</span>
+                    <span id="pillar3Title">Zero-Download Technology</span>
                 </div>
                 <p id="pillar3Desc" class="text-[11px] text-slate-400 leading-normal">
-                    Drivers, tenants & clients text naturally from any mobile phone.
+                    Drivers, field technicians & clients text naturally from any mobile phone.
                 </p>
             </div>
         </div>
 
         <!-- Industry Pills (Minimal) -->
         <div class="flex flex-wrap items-center justify-center gap-2 text-[11px] text-slate-400">
-            <span class="text-slate-500">Built for:</span>
-            <span class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Logistics & Dispatch</span>
-            <span class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Property Management</span>
-            <span class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Field Services</span>
-            <span class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Customer Care</span>
+            <span id="builtForLabel" class="text-slate-500">Built for:</span>
+            <span id="builtFor1" class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Logistics & Dispatch</span>
+            <span id="builtFor2" class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Property Management</span>
+            <span id="builtFor3" class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Field Services</span>
+            <span id="builtFor4" class="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-lg">Customer Care</span>
         </div>
 
     </main>
@@ -149,7 +149,7 @@
     <!-- Footer with Sleek Neutral Administrative Note & HIPAA Learn More Link -->
     <footer class="border-t border-slate-800/80 bg-slate-950 py-8 px-6 text-center">
         <div class="max-w-4xl mx-auto space-y-4">
-            <p class="text-xs text-slate-500 font-medium">
+            <p id="footerCopyright" class="text-xs text-slate-500 font-medium">
                 &copy; 2026 Abrevia Inc. All rights reserved.
             </p>
 
@@ -197,7 +197,7 @@
                         </div>
                         <div class="mt-2 mb-3">
                             <span class="text-2xl sm:text-3xl font-extrabold text-white">$0</span>
-                            <span class="text-xs text-slate-500">/ forever</span>
+                            <span id="tier1Period" class="text-xs text-slate-500">/ forever</span>
                         </div>
                         <p id="tier1Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
                             Always free forever to remove language barriers for individuals, community members, and non-profits.
@@ -224,14 +224,14 @@
 
                 <!-- 2. Operations Pro (Monthly Subscription for Businesses & Orgs) -->
                 <div class="bg-slate-950 border-2 border-brand-500 rounded-2xl p-5 flex flex-col justify-between relative shadow-xl shadow-brand-500/10">
-                    <div class="absolute -top-3 right-4 bg-brand-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    <div id="tier2Badge" class="absolute -top-3 right-4 bg-brand-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                         Businesses & Orgs
                     </div>
                     <div>
                         <span id="tier2Name" class="text-xs font-bold text-brand-400 uppercase tracking-wider">Operations Pro</span>
                         <div class="mt-2 mb-3">
                             <span class="text-2xl sm:text-3xl font-extrabold text-white">$49</span>
-                            <span class="text-xs text-slate-400">/ month</span>
+                            <span id="tier2Period" class="text-xs text-slate-400">/ month</span>
                         </div>
                         <p id="tier2Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
                             Enterprise advantages for businesses, logistics, and organizations. We can even manage your Spanish intake for you.
@@ -265,8 +265,8 @@
                     <div>
                         <span id="tier3Name" class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Abrevia 2 Clinical</span>
                         <div class="mt-2 mb-3">
-                            <span class="text-2xl sm:text-3xl font-extrabold text-white">Custom</span>
-                            <span class="text-xs text-slate-500">/ HIPAA</span>
+                            <span id="tier3Price" class="text-2xl sm:text-3xl font-extrabold text-white">Custom</span>
+                            <span id="tier3Period" class="text-xs text-slate-500">/ HIPAA</span>
                         </div>
                         <p id="tier3Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
                             Engineered for covered healthcare entities, medical clinics, and interpreter teams.
@@ -325,7 +325,7 @@
 
             <div class="space-y-3 text-xs text-slate-300 leading-relaxed mb-6">
                 <p id="hipaaP1">
-                    <strong>Abrevia 1</strong> is strictly an administrative operations tool built for non-medical communication across logistics, property management, retail, and field services.
+                    <strong>Abrevia</strong> is strictly an administrative operations tool built for non-medical communication across logistics, property management, retail, and field services.
                 </p>
                 <p id="hipaaP2">
                     We are patiently engineering <strong>Abrevia 2</strong>, our clinical-grade edition designed specifically for covered healthcare organizations, clinics, and medical interpreter workflows.
@@ -356,32 +356,52 @@
                 heroTitle: 'Bilingual Asynchronous Communication Technology',
                 heroSubtitleBilingual: 'Tecnología de Comunicación Asíncrona Bilingüe',
                 heroSubtitle: 'Messages are 2-way translated and dispatched directly. No downloads, zero friction.',
+                indLogistics: '🚚 Logistics',
+                indField: '🛠️ Field Services',
+                indOperations: '⚡ Operations',
                 profileHint: 'You write in English &rarr; Recipient receives Spanish translation',
                 launchBtnText: 'Launch English Console',
-                pillar1Title: 'Secure & Instant',
-                pillar1Desc: 'Automated administrative translation & real-time message delivery in Abrevia 1.',
-                pillar2Title: 'Sub-Second AI',
-                pillar2Desc: 'Instant bilingual English ⇄ Spanish translation.',
-                pillar3Title: 'Zero-Download Asynchronous Communication',
-                pillar3Desc: 'Drivers, tenants & clients communicate naturally from any mobile phone.',
+                trustNote1: '🔒 Secure Operations',
+                trustNote2: '📱 Zero App Downloads',
+                trustNote3: '✨ Start Free • No Credit Card Required',
+                pillar1Title: 'Secure & Private',
+                pillar1Desc: 'Administrative workspace for operations with optional human-in-the-loop (HITL) review before delivery.',
+                pillar2Title: 'Real-Time Relay',
+                pillar2Desc: 'Instant bilingual English ⇄ Spanish translation and direct dispatch for operations on the move.',
+                pillar3Title: 'Zero-Download Technology',
+                pillar3Desc: 'Drivers, field technicians & clients text naturally from any mobile phone.',
+                builtForLabel: 'Built for:',
+                builtFor1: 'Logistics & Dispatch',
+                builtFor2: 'Property Management',
+                builtFor3: 'Field Services',
+                builtFor4: 'Customer Care',
+                footerCopyright: '&copy; 2026 Abrevia Inc. All rights reserved.',
+                footerNoticeTitle: 'Notice:',
+                footerNotice: 'Abrevia is strictly for administrative operations and is not designed for PHI processing. Learn more about Section 1557, HIPAA and our HIPAA-compliant app, available soon.',
+                footerLearnMore: 'Learn More',
                 navPricing: 'Pricing & Plans',
                 pricingModalTag: 'B2B SaaS Pricing',
                 pricingModalTitle: 'Simple, Transparent Relay Plans',
-                pricingModalSubtitle: 'Abrevia 1 provides instant automated translation. Upgrade to a paid tier to proofread translated messages before delivery.',
+                pricingModalSubtitle: 'Abrevia provides instant automated translation. Upgrade to a paid tier to proofread translated messages before delivery.',
                 tier1Name: 'Community & Non-Profit',
                 tier1Desc: 'Always free forever to remove language barriers for individuals, community members, and non-profits.',
+                tier1Period: '/ forever',
                 tier1F1: 'Up to 500 Messages / Month',
                 tier1F2: 'Zero Monthly Cost or Card Required',
                 tier1F3: 'Device Contact Sync & Address Book',
                 tier1Btn: 'Start Free Forever',
+                tier2Badge: 'Businesses & Orgs',
                 tier2Name: 'Operations Pro',
+                tier2Period: '/ month',
                 tier2Desc: 'Enterprise advantages for businesses, logistics, and organizations. We can even manage your Spanish intake for you.',
                 tier2F1: 'Unlimited Messages & Real-Time Relay',
-                tier2F2: 'Proofread Translated Messages',
+                tier2F2: 'Proofread Translated Messages (HITL)',
                 tier2F3: 'Full Device Contact Sync & Directory',
                 tier2F4: 'Managed Spanish Intake Available',
-                tier2Btn: 'Subscribe Monthly ($49/mo)',
+                tier2Btn: 'Start 30-Day Free Trial (No Card Required)',
                 tier3Name: 'Abrevia 2 Clinical',
+                tier3Price: 'Custom',
+                tier3Period: '/ HIPAA',
                 tier3Desc: 'Engineered for covered healthcare entities, medical clinics, and interpreter teams.',
                 tier3F1: 'Signed Healthcare BAA',
                 tier3F2: 'Automated PHI De-identification',
@@ -389,12 +409,9 @@
                 tier3Btn: 'View HIPAA Roadmap',
                 pricingSecure: 'Secured by Stripe • 256-bit SSL Encryption • PCI-DSS Compliant',
                 pricingClose: 'Back to Sign-In',
-                footerNoticeTitle: 'Notice:',
-                footerNotice: 'Abrevia is strictly for administrative operations and is not designed for PHI processing. Learn more about Section 1557, HIPAA and our HIPAA-compliant app, available soon.',
-                footerLearnMore: 'Learn More',
                 hipaaTitle: 'HIPAA & Healthcare Roadmap',
                 hipaaBadge: 'Abrevia 2 Preview',
-                hipaaP1: 'Abrevia 1 is strictly an administrative operations tool built for non-medical communication across logistics, property management, retail, and field services.',
+                hipaaP1: 'Abrevia is strictly an administrative operations tool built for non-medical communication across logistics, property management, retail, and field services.',
                 hipaaP2: 'We are patiently engineering Abrevia 2, our clinical-grade edition designed specifically for covered healthcare organizations, clinics, and medical interpreter workflows.',
                 hipaaUpcomingTitle: 'Upcoming Clinical Features in Abrevia 2:',
                 hipaaFeat1: 'Signed Business Associate Agreements (BAAs) with cloud and telecommunication providers.',
@@ -407,32 +424,52 @@
                 heroTitle: 'Tecnología de Comunicación Asíncrona Bilingüe',
                 heroSubtitleBilingual: 'Bilingual Asynchronous Communication Technology',
                 heroSubtitle: 'Los mensajes se traducen en 2 vías y se envían de forma directa. Sin descargas, cero fricción.',
-                profileHint: 'Usted escribe en español &rarr; El destinatario recibe traducción en inglés',
+                indLogistics: '🚚 Logística',
+                indField: '🛠️ Servicios en Campo',
+                indOperations: '⚡ Operaciones',
+                profileHint: 'Usted escribe en español &rarr; El destinatario recibe SMS en inglés',
                 launchBtnText: 'Abrir Consola en Español',
-                pillar1Title: 'Seguro e Instantáneo',
-                pillar1Desc: 'Traducción administrativa automatizada y entrega de mensajes en tiempo real en Abrevia 1.',
-                pillar2Title: 'IA en Milisegundos',
-                pillar2Desc: 'Traducción bilingüe instantánea y de baja latencia.',
-                pillar3Title: 'Comunicación Asíncrona Sin Descargas',
-                pillar3Desc: 'Clientes, inquilinos y transportistas se comunican de forma natural desde cualquier teléfono móvil.',
+                trustNote1: '🔒 Operaciones Seguras',
+                trustNote2: '📱 Sin Descarga de Apps',
+                trustNote3: '✨ Comience Gratis • Sin Tarjeta',
+                pillar1Title: 'Seguro y Privado',
+                pillar1Desc: 'Espacio administrativo para operaciones con revisión humana (HITL) opcional antes de enviar.',
+                pillar2Title: 'Relevo en Tiempo Real',
+                pillar2Desc: 'Traducción bilingüe instantánea y despacho directo para operaciones en movimiento.',
+                pillar3Title: 'Tecnología Sin Descargas',
+                pillar3Desc: 'Choferes, técnicos y clientes se comunican de forma natural por SMS tradicional.',
+                builtForLabel: 'Diseñado para:',
+                builtFor1: 'Logística y Despacho',
+                builtFor2: 'Administración Inmobiliaria',
+                builtFor3: 'Servicios en Campo',
+                builtFor4: 'Atención a Clientes',
+                footerCopyright: '&copy; 2026 Abrevia Inc. Todos los derechos reservados.',
+                footerNoticeTitle: 'Aviso:',
+                footerNotice: 'Abrevia es estrictamente para operaciones administrativas y no está diseñada para el procesamiento de PHI. Conozca más sobre la Sección 1557, HIPAA y nuestra app compatible, disponible pronto.',
+                footerLearnMore: 'Más Información',
                 navPricing: 'Planes y Tarifas',
                 pricingModalTag: 'Tarifas SaaS B2B',
                 pricingModalTitle: 'Planes Simples y Transparentes',
-                pricingModalSubtitle: 'Abrevia 1 ofrece traducción instantánea automática. Actualice a un plan de pago para revisar mensajes traducidos antes del envío.',
+                pricingModalSubtitle: 'Abrevia ofrece traducción instantánea automática. Actualice a un plan de pago para revisar mensajes traducidos antes del envío.',
                 tier1Name: 'Comunidad y ONGs (Gratis)',
                 tier1Desc: 'Siempre gratis para eliminar barreras del idioma en la comunidad y organizaciones sin fines de lucro.',
+                tier1Period: '/ para siempre',
                 tier1F1: 'Hasta 500 Mensajes / Mes',
                 tier1F2: 'Cero Costo Mensual y Sin Tarjeta',
                 tier1F3: 'Sincronización de Contactos y Directorio',
                 tier1Btn: 'Comenzar Gratis para Siempre',
+                tier2Badge: 'Empresas y Operaciones',
                 tier2Name: 'Operaciones Pro',
+                tier2Period: '/ mes',
                 tier2Desc: 'Ventajas empresariales para negocios y organizaciones. Incluso podemos gestionar la recepción de mensajes en español.',
                 tier2F1: 'Mensajes y Relevo Ilimitado en Tiempo Real',
-                tier2F2: 'Revisión de Mensajes Traducidos',
+                tier2F2: 'Revisión de Mensajes Traducidos (HITL)',
                 tier2F3: 'Sincronización Total de Contactos',
                 tier2F4: 'Gestión de Mensajes en Español Disponible',
-                tier2Btn: 'Suscripción Mensual ($49/mes)',
+                tier2Btn: 'Iniciar Prueba Gratis de 30 Días (Sin Tarjeta)',
                 tier3Name: 'Abrevia 2 Clínico',
+                tier3Price: 'A Medida',
+                tier3Period: '/ HIPAA',
                 tier3Desc: 'Diseñado para organizaciones de salud cubiertas, clínicas y equipos de intérpretes.',
                 tier3F1: 'Acuerdo BAA de Salud Firmado',
                 tier3F2: 'Desidentificación Automática de PHI',
@@ -440,12 +477,9 @@
                 tier3Btn: 'Ver Ruta de Cumplimiento HIPAA',
                 pricingSecure: 'Asegurado por Stripe • Cifrado SSL de 256 bits • Cumplimiento PCI-DSS',
                 pricingClose: 'Volver al Inicio',
-                footerNoticeTitle: 'Aviso:',
-                footerNotice: 'Abrevia es estrictamente para operaciones administrativas y no está diseñada para el procesamiento de PHI. Conozca más sobre la Sección 1557, HIPAA y nuestra app compatible, disponible pronto.',
-                footerLearnMore: 'Más Información',
                 hipaaTitle: 'Ruta de Cumplimiento HIPAA y Salud',
                 hipaaBadge: 'Vista Previa de Abrevia 2',
-                hipaaP1: 'Abrevia 1 es estrictamente una herramienta de operaciones administrativas diseñada para comunicación no médica (logística, bienes raíces, comercio y servicios en campo).',
+                hipaaP1: 'Abrevia es estrictamente una herramienta de operaciones administrativas diseñada para comunicación no médica (logística, bienes raíces, comercio y servicios en campo).',
                 hipaaP2: 'Estamos desarrollando pacientemente Abrevia 2, nuestra edición de grado clínico diseñada específicamente para entidades de salud e intérpretes médicos.',
                 hipaaUpcomingTitle: 'Próximas Funcionalidades Clínicas en Abrevia 2:',
                 hipaaFeat1: 'Acuerdos de Asociado Comercial (BAA) firmados con proveedores de nube y telecomunicaciones.',
@@ -494,10 +528,27 @@
             if (heroSubtitleEs && c.heroSubtitleBilingual) heroSubtitleEs.textContent = c.heroSubtitleBilingual;
             const heroSubtitle = document.getElementById('heroSubtitle');
             if (heroSubtitle) heroSubtitle.textContent = c.heroSubtitle;
+
+            // Industry Badges under Headline
+            const indLog = document.getElementById('indLogistics');
+            if (indLog) indLog.textContent = c.indLogistics;
+            const indFld = document.getElementById('indField');
+            if (indFld) indFld.textContent = c.indField;
+            const indOps = document.getElementById('indOperations');
+            if (indOps) indOps.textContent = c.indOperations;
+
             const profileHint = document.getElementById('profileHint');
             if (profileHint) profileHint.innerHTML = c.profileHint;
             const launchBtnText = document.getElementById('launchBtnText');
             if (launchBtnText) launchBtnText.textContent = c.launchBtnText;
+
+            // Trust Notes
+            const t1 = document.getElementById('trustNote1');
+            if (t1) t1.textContent = c.trustNote1;
+            const t2 = document.getElementById('trustNote2');
+            if (t2) t2.textContent = c.trustNote2;
+            const t3 = document.getElementById('trustNote3');
+            if (t3) t3.textContent = c.trustNote3;
 
             // Update Pillars
             const p1Title = document.getElementById('pillar1Title');
@@ -515,7 +566,21 @@
             const p3Desc = document.getElementById('pillar3Desc');
             if (p3Desc) p3Desc.textContent = c.pillar3Desc;
 
-            // Update Footer Notice & Learn More
+            // Built For Pills
+            const bfLabel = document.getElementById('builtForLabel');
+            if (bfLabel) bfLabel.textContent = c.builtForLabel;
+            const bf1 = document.getElementById('builtFor1');
+            if (bf1) bf1.textContent = c.builtFor1;
+            const bf2 = document.getElementById('builtFor2');
+            if (bf2) bf2.textContent = c.builtFor2;
+            const bf3 = document.getElementById('builtFor3');
+            if (bf3) bf3.textContent = c.builtFor3;
+            const bf4 = document.getElementById('builtFor4');
+            if (bf4) bf4.textContent = c.builtFor4;
+
+            // Footer Copyright & Notice
+            const ftCopy = document.getElementById('footerCopyright');
+            if (ftCopy) ftCopy.innerHTML = c.footerCopyright;
             document.getElementById('footerNoticeText').innerHTML = `<span class="font-semibold text-slate-300">${c.footerNoticeTitle}</span> ${c.footerNotice}`;
             document.getElementById('footerLearnMoreBtn').textContent = c.footerLearnMore;
 
@@ -538,18 +603,30 @@
             document.getElementById('pricingModalSubtitle').textContent = c.pricingModalSubtitle;
             document.getElementById('tier1Name').textContent = c.tier1Name;
             document.getElementById('tier1Desc').textContent = c.tier1Desc;
+            const t1Per = document.getElementById('tier1Period');
+            if (t1Per) t1Per.textContent = c.tier1Period;
             document.getElementById('tier1F1').textContent = c.tier1F1;
             document.getElementById('tier1F2').textContent = c.tier1F2;
             document.getElementById('tier1F3').textContent = c.tier1F3;
             document.getElementById('tier1Btn').textContent = c.tier1Btn;
+
+            const t2Bdg = document.getElementById('tier2Badge');
+            if (t2Bdg) t2Bdg.textContent = c.tier2Badge;
             document.getElementById('tier2Name').textContent = c.tier2Name;
+            const t2Per = document.getElementById('tier2Period');
+            if (t2Per) t2Per.textContent = c.tier2Period;
             document.getElementById('tier2Desc').textContent = c.tier2Desc;
             document.getElementById('tier2F1').textContent = c.tier2F1;
             document.getElementById('tier2F2').textContent = c.tier2F2;
             document.getElementById('tier2F3').textContent = c.tier2F3;
             document.getElementById('tier2F4').textContent = c.tier2F4;
             document.getElementById('tier2Btn').textContent = c.tier2Btn;
+
             document.getElementById('tier3Name').textContent = c.tier3Name;
+            const t3Prc = document.getElementById('tier3Price');
+            if (t3Prc) t3Prc.textContent = c.tier3Price;
+            const t3Per = document.getElementById('tier3Period');
+            if (t3Per) t3Per.textContent = c.tier3Period;
             document.getElementById('tier3Desc').textContent = c.tier3Desc;
             document.getElementById('tier3F1').textContent = c.tier3F1;
             document.getElementById('tier3F2').textContent = c.tier3F2;
