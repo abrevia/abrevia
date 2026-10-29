@@ -630,156 +630,133 @@
         </div>
     </div>
 
-    <!-- Console Status Modal -->
-    <div id="consoleStatusModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative">
-            <button type="button" onclick="closeConsoleStatusModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
-                &times;
-            </button>
-            <div class="flex items-center space-x-2.5 pb-3 border-b border-slate-800">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">Console Status: Active</h3>
-            </div>
-
-            <!-- Primary Dispatch Channel (WhatsApp Meta Cloud API + SMS Fallback) -->
-            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950 border border-slate-800">
+    <!-- Console Status & Controls Modal (Responsive 2-Column Desktop & Mobile Optimized) -->
+    <div id="consoleStatusModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[88vh] flex flex-col shadow-2xl relative overflow-hidden">
+            
+            <!-- Modal Header (Fixed) -->
+            <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
                 <div class="flex items-center space-x-2">
-                    <span class="text-base">💬</span>
-                    <div>
-                        <span class="text-xs text-white font-bold block">Outbound Channel: WhatsApp</span>
-                        <span class="text-[10px] text-slate-400 block">Recipient receives native WhatsApp &bull; SMS Fallback active</span>
-                    </div>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">Console Controls & System Status</h3>
                 </div>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Primary</span>
-            </div>
-
-            <!-- Quick Utility Actions Grid -->
-            <div class="grid grid-cols-2 gap-2 text-xs">
-                <button id="soundToggleBtn" onclick="toggleSoundAlerts()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-300 hover:text-white flex items-center space-x-1.5 transition text-left">
-                    <span id="soundToggleIcon">🔔</span>
-                    <span id="soundToggleLabel" class="text-[11px] font-medium">Alerts</span>
-                </button>
-                <button id="billingBtn" onclick="openBillingModal()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-300 hover:text-white flex items-center space-x-1.5 transition text-left">
-                    <span>💳</span>
-                    <span id="billingBtnText" class="text-[11px] font-medium">Billing</span>
-                </button>
-                <button id="installAppBtn" onclick="triggerPwaInstall()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-300 hover:text-white flex items-center space-x-1.5 transition text-left">
-                    <span>📲</span>
-                    <span id="installAppBtnText" class="text-[11px] font-medium">Add Shortcut</span>
-                </button>
-                <button id="dashShareBtn" onclick="shareAbreviaApp()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-300 hover:text-white flex items-center space-x-1.5 transition text-left">
-                    <span class="text-brand-400">↗</span>
-                    <span id="dashShareBtnText" class="text-[11px] font-medium">Share</span>
-                </button>
-                <button id="signOutLink" onclick="openWrapUpModal()" type="button" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2 rounded-xl col-span-2 flex items-center justify-center space-x-1.5 transition font-semibold text-xs">
-                    <span>🚪</span>
-                    <span id="signOutBtnText">Sign Out</span>
+                <button type="button" onclick="closeConsoleStatusModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition" title="Close">
+                    &times;
                 </button>
             </div>
-            <div class="space-y-3 text-xs text-slate-300">
-                <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60">
-                    <span class="text-slate-400">Two-Way Asynchronous Communication Relay</span>
-                    <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                        <span>Operational</span>
-                    </span>
-                </div>
-                <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60">
-                    <span class="text-slate-400">Two-Way Instant Translation</span>
-                    <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                        <span>Operational</span>
-                    </span>
-                </div>
-                <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60">
-                    <span class="text-slate-400">Bilingual Spell & Grammar</span>
-                    <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                        <span>Active</span>
-                    </span>
-                </div>
-                <div class="py-2.5 border-t border-slate-800/80">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-slate-300 font-semibold text-xs">Outbound SMS Gateway:</span>
-                        <span id="activeGatewayBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/40">httpSMS (Default)</span>
+
+            <!-- Modal Body (Scrollable & Responsive 2-Column Grid) -->
+            <div class="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs text-slate-300">
+                
+                <!-- Top 2-Column Layout -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    
+                    <!-- Left Column: Quick Actions & Account -->
+                    <div class="space-y-3">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Account & Utilities</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="billingBtn" onclick="openBillingModal()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2 transition text-left shadow-sm">
+                                <span class="text-sm">💳</span>
+                                <span id="billingBtnText" class="text-xs font-medium">Billing</span>
+                            </button>
+                            <button id="installAppBtn" onclick="triggerPwaInstall()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2 transition text-left shadow-sm">
+                                <span class="text-sm">📲</span>
+                                <span id="installAppBtnText" class="text-xs font-medium">Add Shortcut</span>
+                            </button>
+                            <button id="soundToggleBtn" onclick="toggleSoundAlerts()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2 transition text-left shadow-sm">
+                                <span id="soundToggleIcon" class="text-sm">🔔</span>
+                                <span id="soundToggleLabel" class="text-xs font-medium">Alerts</span>
+                            </button>
+                            <button id="dashShareBtn" onclick="shareAbreviaApp()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2 transition text-left shadow-sm">
+                                <span class="text-brand-400 text-sm">↗</span>
+                                <span id="dashShareBtnText" class="text-xs font-medium">Share</span>
+                            </button>
+                            <button id="signOutLink" onclick="openWrapUpModal()" type="button" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2 rounded-xl col-span-2 flex items-center justify-center space-x-1.5 transition font-semibold text-xs mt-1">
+                                <span>🚪</span>
+                                <span id="signOutBtnText">Sign Out</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 mt-2">
-                        <button type="button" onclick="setSmsGateway('httpsms')" id="gwBtnHttpsms" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition text-center bg-brand-600 text-white border-brand-500 shadow-sm">
-                            📱 httpSMS (Default)
-                        </button>
-                        <button type="button" onclick="setSmsGateway('textbee')" id="gwBtnTextbee" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition text-center bg-slate-800 text-slate-400 hover:text-white border-slate-700">
-                            🐝 TextBee (Test)
-                        </button>
+
+                    <!-- Right Column: Dispatch Channel & Architecture -->
+                    <div class="space-y-3">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Infrastructure & Compliance</span>
+                        
+                        <!-- Primary Dispatch Channel -->
+                        <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-lg">💬</span>
+                                <div>
+                                    <span class="text-xs text-white font-bold block">WhatsApp Cloud API</span>
+                                    <span class="text-[10px] text-slate-400 block">Point B native chat &bull; SMS Fallback</span>
+                                </div>
+                            </div>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Active</span>
+                        </div>
+
+                        <!-- Security & Compliance Compact Badges -->
+                        <div class="space-y-1.5 text-[11px]">
+                            <div class="flex items-center justify-between py-1 border-b border-slate-800/60">
+                                <span class="text-slate-400">Security Architecture</span>
+                                <button type="button" onclick="showEncryptionProofModal()" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1 transition cursor-pointer">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                    <span id="encStorageBadgeLabel">AES-256 KMS</span>
+                                    <span class="text-[9px]">&rarr;</span>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between py-1 border-b border-slate-800/60">
+                                <span class="text-slate-400">Compliance Scope</span>
+                                <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1 transition">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                    <span id="t6StatusLabel">Title VI & HIPAA BAA</span>
+                                    <span class="text-[9px]">&rarr;</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Compact Legal Pills -->
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" id="statusLinkWho" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                                🏛️ Sectors
+                            </a>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" id="statusLinkTerms" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                                📜 Terms
+                            </a>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" id="statusLinkPrivacy" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                                🛡️ Privacy
+                            </a>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" id="statusLinkDisclaimers" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                                ⚖️ Disclaimers
+                            </a>
+                            <a href="mailto:info@mvhlsp.site" id="statusLinkContact" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                                📧 info@mvhlsp.site
+                            </a>
+                        </div>
                     </div>
-                    <p class="text-[10px] text-slate-500 mt-1.5">Toggle between gateways to compare delivery speed and latency side-by-side.</p>
-                </div>
-                <div class="flex items-center justify-between py-1.5 border-t border-slate-800/60">
-                    <span class="text-slate-400" id="statusLblEncStorage">Encrypted Storage</span>
-                    <button type="button" onclick="showEncryptionProofModal()" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1.5 text-xs transition cursor-pointer" title="Click to view AES-256 cryptographic proof & security architecture">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                        <span id="encStorageBadgeLabel">Encrypted (AES-256)</span>
-                        <span class="text-[10px] text-emerald-400/80">&rarr;</span>
-                    </button>
-                </div>
-                <div class="flex items-center justify-between py-1.5 border-t border-slate-800/60">
-                    <span class="text-slate-400">Federal Title VI / LEP Compliance</span>
-                    <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1.5 text-[11px] transition">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                        <span id="t6StatusLabel">Title VI & EO 13166 Ready</span>
-                        <span>&rarr;</span>
-                    </a>
                 </div>
 
-                <!-- GitHub Legal & Compliance Quick Links -->
-                <div class="pt-2 border-t border-slate-800/80 space-y-1.5">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block" id="statusLegalHeader">Legal & Transparency (GitHub):</span>
-                    <div class="grid grid-cols-2 gap-1.5 text-[10px]">
-                        <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition">
-                            <span>🏛️</span>
-                            <span id="statusLinkWho">Who is this for?</span>
-                        </a>
-                        <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition">
-                            <span>📜</span>
-                            <span id="statusLinkTerms">Terms of Service</span>
-                        </a>
-                        <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition">
-                            <span>🛡️</span>
-                            <span id="statusLinkPrivacy">Privacy Policy</span>
-                        </a>
-                        <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition">
-                            <span>⚖️</span>
-                            <span id="statusLinkDisclaimers">Disclaimers</span>
-                        </a>
-                        <a href="mailto:info@mvhlsp.site" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition col-span-2">
-                            <span>📧</span>
-                            <span id="statusLinkContact">Contact: info@mvhlsp.site</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Interactive Test SMS to Self Tool -->
-                <div class="py-2.5 border-t border-slate-800/80 bg-slate-950/60 p-3 rounded-xl border border-slate-800/90 mt-2 space-y-2">
+                <!-- Bottom Section: Compact Live Test SMS Tool -->
+                <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 mt-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-white font-bold text-xs flex items-center space-x-1">
+                        <span class="text-white font-bold text-xs flex items-center space-x-1.5">
                             <span>📲</span>
-                            <span id="testSmsCardTitle">Send Test SMS to My Phone</span>
+                            <span id="testSmsCardTitle">Send Live Test Message</span>
                         </span>
-                        <span class="text-[9px] bg-brand-500/20 text-brand-300 font-bold px-1.5 py-0.5 rounded border border-brand-500/30 uppercase">Instant Test</span>
+                        <span class="text-[9px] bg-brand-500/20 text-brand-300 font-bold px-1.5 py-0.5 rounded border border-brand-500/30 uppercase">Test Tool</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 leading-relaxed" id="testSmsCardDesc">
-                        Enter your personal mobile number to receive a live SMS containing the Abrevia zero-download link.
-                    </p>
                     <div class="flex items-center space-x-2">
-                        <input type="tel" id="testPhoneInput" onkeydown="if(event.key==='Enter'){event.preventDefault();dispatchTestSmsToSelf();}" placeholder="+1... or +52..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
-                        <button type="button" id="sendTestSmsBtn" onclick="dispatchTestSmsToSelf()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition shrink-0 shadow">
-                            <span id="sendTestSmsBtnText">Send SMS</span>
+                        <input type="tel" id="testPhoneInput" onkeydown="if(event.key==='Enter'){event.preventDefault();dispatchTestSmsToSelf();}" placeholder="+1... or +52..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                        <button type="button" id="sendTestSmsBtn" onclick="dispatchTestSmsToSelf()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl transition shrink-0 shadow">
+                            <span id="sendTestSmsBtnText">Send Test</span>
                         </button>
                     </div>
                     <div id="testSmsFeedback" class="text-[10px] hidden font-medium"></div>
                 </div>
             </div>
-            <div class="pt-2">
-                <button onclick="closeConsoleStatusModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
+
+            <!-- Modal Footer (Fixed) -->
+            <div class="p-3 border-t border-slate-800 bg-slate-950/60 shrink-0 flex justify-end">
+                <button onclick="closeConsoleStatusModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-5 py-2 rounded-xl transition">
                     Close
                 </button>
             </div>
@@ -1081,7 +1058,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_03"></script>
+    <script src="app.js?v=20261029_04"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
