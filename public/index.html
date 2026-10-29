@@ -33,15 +33,11 @@
                 <span class="text-base sm:text-xl font-extrabold tracking-tight text-white">Abrevia</span>
             </div>
 
-            <!-- Right: Pricing Button & Language Switcher in one neat row -->
+            <!-- Right: Language Switcher -->
             <div class="flex items-center space-x-2 shrink-0">
-                <button onclick="openPricingModal()" class="text-xs text-slate-300 hover:text-white font-medium flex items-center space-x-1 transition bg-slate-900 border border-slate-800 hover:border-slate-700 px-2.5 py-1 rounded-lg shadow-sm">
-                    <span>💳</span>
-                    <span id="navPricingText" class="whitespace-nowrap">Plans</span>
-                </button>
                 <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
-                    <button id="langHeaderEn" onclick="selectLanguage('en')" class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition">EN</button>
-                    <button id="langHeaderEs" onclick="selectLanguage('es')" class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white transition">ES</button>
+                    <button id="langHeaderEn" onclick="selectLanguage('en')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition">EN</button>
+                    <button id="langHeaderEs" onclick="selectLanguage('es')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white transition">ES</button>
                 </div>
             </div>
         </div>
@@ -169,144 +165,7 @@
         </div>
     </footer>
 
-    <!-- Pricing & Plans Modal (Stripe Checkout) -->
-    <div id="pricingModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl text-left relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closePricingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-xl font-bold p-1">
-                &times;
-            </button>
-
-            <div class="mb-6">
-                <div class="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-brand-400 uppercase tracking-wider mb-1">
-                    <span>💳</span>
-                    <span id="pricingModalTag">B2B SaaS Pricing</span>
-                </div>
-                <h3 id="pricingModalTitle" class="text-xl sm:text-2xl font-extrabold text-white">Simple, Transparent Relay Plans</h3>
-                <p id="pricingModalSubtitle" class="text-xs text-slate-400 mt-1">Start with pay-as-you-go credits or upgrade to unlimited operations relay. Start free with no credit card required. Upgrade anytime or pay as you go securely via Stripe.</p>
-            </div>
-
-            <!-- Tiers Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                
-                <!-- 1. Free Forever (Community & Non-Profits) -->
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <span id="tier1Name" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Community & Non-Profit</span>
-                            <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.2 rounded-full border border-emerald-500/30">FREE FOREVER</span>
-                        </div>
-                        <div class="mt-2 mb-3">
-                            <span class="text-2xl sm:text-3xl font-extrabold text-white">$0</span>
-                            <span id="tier1Period" class="text-xs text-slate-500">/ forever</span>
-                        </div>
-                        <p id="tier1Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
-                            Always free forever to remove language barriers for individuals, community members, and non-profits.
-                        </p>
-                        <ul class="space-y-2 text-[11px] text-slate-300 mb-6">
-                            <li class="flex items-center space-x-2">
-                                <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier1F1">Up to 500 Messages / Month</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier1F2">Zero Monthly Cost or Card Required</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier1F3">Device Contact Sync & Address Book</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <button onclick="window.location.href='/dashboard.html'" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition shadow-sm">
-                        <span id="tier1Btn">Start Free Forever</span>
-                    </button>
-                </div>
-
-                <!-- 2. Operations Pro (Monthly Subscription for Businesses & Orgs) -->
-                <div class="bg-slate-950 border-2 border-brand-500 rounded-2xl p-5 flex flex-col justify-between relative shadow-xl shadow-brand-500/10">
-                    <div id="tier2Badge" class="absolute -top-3 right-4 bg-brand-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                        Businesses & Orgs
-                    </div>
-                    <div>
-                        <span id="tier2Name" class="text-xs font-bold text-brand-400 uppercase tracking-wider">Operations Pro</span>
-                        <div class="mt-2 mb-3">
-                            <span class="text-2xl sm:text-3xl font-extrabold text-white">$49</span>
-                            <span id="tier2Period" class="text-xs text-slate-400">/ month</span>
-                        </div>
-                        <p id="tier2Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
-                            Enterprise advantages for businesses, logistics, and organizations. We can even manage your Spanish intake for you.
-                        </p>
-                        <ul class="space-y-2 text-[11px] text-slate-300 mb-6">
-                            <li class="flex items-center space-x-2">
-                                <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier2F1">Unlimited Messages & Real-Time Relay</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier2F2">Proofread Translated Messages</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier2F3">Full Device Contact Sync & Directory</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <span class="text-emerald-400 font-bold">&#x2713;</span>
-                                <span id="tier2F4">Managed Spanish Intake Available</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <button onclick="startCheckout('pro')" class="w-full bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold py-2.5 rounded-xl transition shadow-lg shadow-brand-600/30">
-                        <span id="tier2Btn">Start 30-Day Free Trial (No Card Required)</span>
-                    </button>
-                </div>
-
-                <!-- 3. Abrevia 2 Clinical (Preview) -->
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition">
-                    <div>
-                        <span id="tier3Name" class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Abrevia 2 Clinical</span>
-                        <div class="mt-2 mb-3">
-                            <span id="tier3Price" class="text-2xl sm:text-3xl font-extrabold text-white">Custom</span>
-                            <span id="tier3Period" class="text-xs text-slate-500">/ HIPAA</span>
-                        </div>
-                        <p id="tier3Desc" class="text-[11px] text-slate-400 mb-4 leading-relaxed">
-                            Engineered for covered healthcare entities, medical clinics, and interpreter teams.
-                        </p>
-                        <ul class="space-y-2 text-[11px] text-slate-300 mb-6">
-                            <li class="flex items-center space-x-2">
-                                <span class="text-indigo-400 font-bold">&#x2713;</span>
-                                <span id="tier3F1">Signed Healthcare BAA</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <span class="text-indigo-400 font-bold">&#x2713;</span>
-                                <span id="tier3F2">Automated PHI De-identification</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <span class="text-indigo-400 font-bold">&#x2713;</span>
-                                <span id="tier3F3">Immutable HIPAA Audit Logs</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <button onclick="closePricingModal(); openHipaaModal();" class="w-full bg-slate-900 border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl transition">
-                        <span id="tier3Btn">View HIPAA Roadmap</span>
-                    </button>
-                </div>
-
-            </div>
-
-            <!-- Security & Guarantee Footer -->
-            <div class="border-t border-slate-800/80 pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
-                <div class="flex items-center space-x-2">
-                    <span>🔒</span>
-                    <span id="pricingSecureText">Secured by Stripe • 256-bit SSL Encryption • PCI-DSS Compliant</span>
-                </div>
-                <button onclick="closePricingModal()" class="text-slate-400 hover:text-white transition">
-                    <span id="pricingCloseBtn">Back to Sign-In</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- HIPAA & Abrevia 2 Roadmap Modal -->
+<!-- HIPAA & Abrevia 2 Roadmap Modal -->
     <div id="hipaaModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl text-left relative">
             <button onclick="closeHipaaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
@@ -596,100 +455,12 @@
             document.getElementById('hipaaFeat4').textContent = c.hipaaFeat4;
             document.getElementById('hipaaCloseBtn').textContent = c.hipaaClose;
 
-            // Update Pricing Modal
-            document.getElementById('navPricingText').textContent = c.navPricing;
-            document.getElementById('pricingModalTag').textContent = c.pricingModalTag;
-            document.getElementById('pricingModalTitle').textContent = c.pricingModalTitle;
-            document.getElementById('pricingModalSubtitle').textContent = c.pricingModalSubtitle;
-            document.getElementById('tier1Name').textContent = c.tier1Name;
-            document.getElementById('tier1Desc').textContent = c.tier1Desc;
-            const t1Per = document.getElementById('tier1Period');
-            if (t1Per) t1Per.textContent = c.tier1Period;
-            document.getElementById('tier1F1').textContent = c.tier1F1;
-            document.getElementById('tier1F2').textContent = c.tier1F2;
-            document.getElementById('tier1F3').textContent = c.tier1F3;
-            document.getElementById('tier1Btn').textContent = c.tier1Btn;
-
-            const t2Bdg = document.getElementById('tier2Badge');
-            if (t2Bdg) t2Bdg.textContent = c.tier2Badge;
-            document.getElementById('tier2Name').textContent = c.tier2Name;
-            const t2Per = document.getElementById('tier2Period');
-            if (t2Per) t2Per.textContent = c.tier2Period;
-            document.getElementById('tier2Desc').textContent = c.tier2Desc;
-            document.getElementById('tier2F1').textContent = c.tier2F1;
-            document.getElementById('tier2F2').textContent = c.tier2F2;
-            document.getElementById('tier2F3').textContent = c.tier2F3;
-            document.getElementById('tier2F4').textContent = c.tier2F4;
-            document.getElementById('tier2Btn').textContent = c.tier2Btn;
-
-            document.getElementById('tier3Name').textContent = c.tier3Name;
-            const t3Prc = document.getElementById('tier3Price');
-            if (t3Prc) t3Prc.textContent = c.tier3Price;
-            const t3Per = document.getElementById('tier3Period');
-            if (t3Per) t3Per.textContent = c.tier3Period;
-            document.getElementById('tier3Desc').textContent = c.tier3Desc;
-            document.getElementById('tier3F1').textContent = c.tier3F1;
-            document.getElementById('tier3F2').textContent = c.tier3F2;
-            document.getElementById('tier3F3').textContent = c.tier3F3;
-            document.getElementById('tier3Btn').textContent = c.tier3Btn;
-            document.getElementById('pricingSecureText').textContent = c.pricingSecure;
-            document.getElementById('pricingCloseBtn').textContent = c.pricingClose;
+            // Pricing removed from landing page (accessible only in user dashboard)
         }
 
         function handleEnterWorkspace(e) {
             e.preventDefault();
             window.location.href = `/dashboard.html?lang=${currentLang}`;
-        }
-
-        // Pricing Modal Handlers
-        function openPricingModal() {
-            document.getElementById('pricingModal').classList.remove('hidden');
-        }
-
-        function closePricingModal() {
-            document.getElementById('pricingModal').classList.add('hidden');
-        }
-
-        // Stripe Checkout Integration
-        async function startCheckout(plan) {
-            const btn = event?.currentTarget;
-            const originalText = btn ? btn.textContent : '';
-            if (btn) {
-                btn.disabled = true;
-                btn.textContent = currentLang === 'es' ? 'Conectando con Stripe...' : 'Connecting to Stripe...';
-            }
-
-            try {
-                const res = await fetch('/api/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        plan: plan,
-                        locale: 'en',
-                        customerEmail: document.getElementById('inputEmail')?.value || undefined,
-                        successUrl: window.location.origin + '/dashboard.html?billing=success',
-                        cancelUrl: window.location.origin + '/index.html?billing=canceled'
-                    })
-                });
-
-                const data = await res.json();
-                if (data.url) {
-                    window.location.href = data.url;
-                } else if (data.requiresKey) {
-                    alert(currentLang === 'es'
-                        ? 'Stripe Test Mode: Configure STRIPE_SECRET_KEY en las variables de entorno de Vercel para procesar pagos reales.'
-                        : 'Stripe Test Mode: Configure STRIPE_SECRET_KEY in Vercel environment variables to process live checkouts.');
-                } else {
-                    alert(data.error || 'Unable to initiate checkout session.');
-                }
-            } catch (err) {
-                alert('Stripe error: ' + err.message);
-            } finally {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.textContent = originalText;
-                }
-            }
         }
 
         // HIPAA Modal Handlers
