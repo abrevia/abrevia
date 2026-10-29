@@ -73,6 +73,10 @@
                         <span>🌙</span>
                         <span id="autoResponderNavText" class="hidden xl:inline text-[10px]">Auto-Reply</span>
                     </button>
+                    <button id="senderProfileNavBtn" onclick="openSenderProfileModal()" title="Organization & Sender Profile for Outbound SMS" class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center space-x-1">
+                        <span>🏢</span>
+                        <span id="senderProfileNavText" class="hidden xl:inline text-[10px]">Profile</span>
+                    </button>
                     <button id="contactsDirectoryBtn" onclick="openContactsModal()" title="View saved contacts" class="text-xs text-brand-400 hover:text-brand-300 font-medium flex items-center space-x-1 bg-brand-500/10 border border-brand-500/20 px-2.5 py-1 rounded-lg transition">
                         <span>👥</span>
                         <span id="contactsBtnText">Contacts</span>
@@ -210,6 +214,11 @@
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                     <span id="instantModeLabel" class="hidden sm:inline">Secure Instant Translation & Delivery</span><span class="sm:hidden text-emerald-400 font-semibold">Instant Mode</span>
                                 </span>
+                                <!-- Sender Profile Pill / Shortcut -->
+                                <button id="senderProfileQuickBtn" type="button" onclick="openSenderProfileModal()" class="text-[10px] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 bg-slate-900 px-2 py-0.5 rounded-lg transition flex items-center space-x-1 shadow-sm shrink-0" title="Configure Organization & Sender Name for outbound SMS">
+                                    <span>🏢</span>
+                                    <span id="senderProfileQuickLabel" class="truncate max-w-[120px]">Abrevia</span>
+                                </button>
                             </div>
 
                             <!-- Dedicated HITL Proofread Button -->
@@ -734,6 +743,80 @@
                     </button>
                     <button onclick="saveAutoResponderSettings()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition shadow-sm">
                         Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Organization & Sender Profile Modal -->
+    <div id="senderProfileModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button type="button" onclick="closeSenderProfileModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-base shadow-sm">
+                    🏢
+                </div>
+                <div>
+                    <h3 id="senderProfileModalTitle" class="text-sm font-bold text-white">Organization & Sender Profile</h3>
+                    <p id="senderProfileModalSubtitle" class="text-[11px] text-slate-400">Configure how your business appears in outbound SMS</p>
+                </div>
+            </div>
+
+            <div class="space-y-3.5 text-xs">
+                <div>
+                    <label id="profileOrgLabel" class="block font-medium text-slate-300 mb-1">Organization / Business Name</label>
+                    <input id="profileOrgInput" type="text" oninput="updateSenderProfilePreview()" placeholder="e.g. Acme Logistics, Bay Area Services" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                </div>
+
+                <div>
+                    <label id="profileUserLabel" class="block font-medium text-slate-300 mb-1">User / Dispatcher Name <span class="text-slate-500 text-[10px]">(Optional)</span></label>
+                    <input id="profileUserInput" type="text" oninput="updateSenderProfilePreview()" placeholder="e.g. Carlos, Dispatch, Support" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500 transition">
+                </div>
+
+                <div>
+                    <label id="profileModeLabel" class="block font-medium text-slate-300 mb-1.5">Outbound SMS Delivery Format</label>
+                    <div class="space-y-2 bg-slate-900/60 border border-slate-800 p-3 rounded-xl">
+                        <label class="flex items-start space-x-2.5 cursor-pointer">
+                            <input type="radio" name="dispatchModeRadio" id="dispatchModeLink" value="link" checked onchange="updateSenderProfilePreview()" class="mt-0.5 text-brand-500 focus:ring-0">
+                            <div>
+                                <span class="font-semibold text-white text-xs">Abrevia Link Notification (MessageBee Style)</span>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Dispatches SMS notification with secure Abrevia web link and carrier opt-out instruction.</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start space-x-2.5 cursor-pointer pt-2 border-t border-slate-800">
+                            <input type="radio" name="dispatchModeRadio" id="dispatchModeDirect" value="direct" onchange="updateSenderProfilePreview()" class="mt-0.5 text-brand-500 focus:ring-0">
+                            <div>
+                                <span class="font-semibold text-white text-xs">Direct SMS Text</span>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Dispatches raw translated message text directly without web view link.</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Live SMS Preview Card -->
+                <div>
+                    <span class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Live SMS Inbox Preview:</span>
+                    <div class="bg-slate-900 border border-brand-500/30 rounded-xl p-3 text-xs font-mono text-slate-200 leading-relaxed shadow-inner">
+                        <div id="liveSmsPreviewText" class="whitespace-pre-wrap">Tiene un mensaje de Abrevia.
+Abra su mensaje aquí: https://abrevia-beta.vercel.app/m.html?t=101
+
+Responda ALTO para no recibir más mensajes.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-800">
+                <span id="profileSavedIndicator" class="text-emerald-400 text-xs hidden">✓ Profile saved</span>
+                <div class="flex space-x-2 ml-auto">
+                    <button type="button" onclick="closeSenderProfileModal()" class="bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-semibold px-4 py-2 rounded-xl transition">
+                        Cancel
+                    </button>
+                    <button type="button" onclick="saveSenderProfile()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow">
+                        Save Profile
                     </button>
                 </div>
             </div>

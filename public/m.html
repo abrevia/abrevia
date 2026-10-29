@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrevia | Mensaje Seguro</title>
+    <link rel="icon" type="image/png" href="/assets/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#3B82F6',
+                            600: '#2D74C4',
+                            700: '#1D4ED8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-600 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="border-b border-slate-800 bg-slate-950/95 backdrop-blur-md px-4 py-3 sticky top-0 z-50 w-full">
+        <div class="max-w-lg mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+                <img src="/assets/logo.png?v=3" alt="Abrevia" class="w-7 h-7 rounded-lg shadow-sm">
+                <div>
+                    <div class="flex items-center space-x-1.5">
+                        <span class="text-sm font-extrabold tracking-tight text-white">Abrevia</span>
+                        <span class="text-[10px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-semibold px-1.5 py-0.2 rounded">✓ Verificado</span>
+                    </div>
+                    <p id="portalHeaderSubtitle" class="text-[10px] text-slate-400">Mensajería Asíncrona Segura</p>
+                </div>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
+                <button id="langEsBtn" onclick="setPortalLang('es')" class="px-2 py-0.5 rounded text-xs font-semibold bg-brand-600 text-white transition">ES</button>
+                <button id="langEnBtn" onclick="setPortalLang('en')" class="px-2 py-0.5 rounded text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white transition">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Message Container -->
+    <main class="max-w-lg mx-auto w-full px-4 py-4 sm:py-6 flex-grow flex flex-col justify-between">
+        
+        <!-- Organization / Sender Card -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 mb-4 shadow-xl">
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white font-bold text-base shadow">
+                    🏢
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center justify-between">
+                        <h2 id="orgSenderName" class="text-sm font-bold text-white truncate">Cargando remitente...</h2>
+                        <span id="optedOutBadge" class="hidden text-[10px] bg-red-500/15 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-semibold">🚫 Cancelado</span>
+                    </div>
+                    <p id="orgSubtitle" class="text-xs text-slate-400 truncate">Notificación directa a su teléfono móvil</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversation Messages Feed -->
+        <div id="messagesContainer" class="flex-grow space-y-3 mb-4 overflow-y-auto max-h-[55vh] pr-1">
+            <div id="loadingIndicator" class="text-center py-10 text-xs text-slate-400 flex flex-col items-center justify-center space-y-2">
+                <div class="animate-spin rounded-full h-6 w-6 border-2 border-brand-500 border-t-transparent"></div>
+                <span id="loadingText">Cargando mensaje...</span>
+            </div>
+        </div>
+
+        <!-- Opt-Out Notice Banner (Right Underneath, matching TCPA/10DLC requirements) -->
+        <div id="optOutBanner" class="bg-slate-900/60 border border-slate-800 rounded-xl p-3 mb-3 text-center">
+            <p id="optOutNoticeText" class="text-[11px] text-slate-400 mb-1.5 leading-relaxed">
+                ¿Ya no desea recibir mensajes de esta organización? Puede responder <strong class="text-slate-200">ALTO</strong> por SMS o darse de baja con un clic:
+            </p>
+            <button id="optOutBtn" onclick="handleOptOut()" class="text-[11px] text-red-400 hover:text-red-300 font-medium hover:underline inline-flex items-center space-x-1 transition">
+                <span>🚫</span>
+                <span id="optOutBtnText">Dejar de recibir mensajes (Cancelar suscripción)</span>
+            </button>
+        </div>
+
+        <!-- Opted Out State Banner -->
+        <div id="optedOutSuccessBanner" class="hidden bg-red-950/30 border border-red-500/30 rounded-xl p-3 mb-3 text-center">
+            <p class="text-xs text-red-300 font-semibold mb-0.5">✓ Suscripción cancelada exitosamente</p>
+            <p class="text-[11px] text-slate-400">No recibirá más mensajes SMS ni notificaciones de este servicio.</p>
+        </div>
+
+        <!-- Interactive Quick Reply Composer -->
+        <div id="replyArea" class="bg-slate-900 border border-slate-800 rounded-2xl p-2.5 sm:p-3 shadow-xl">
+            <form onsubmit="handleSendReply(event)" class="space-y-2">
+                <div class="flex items-end space-x-2">
+                    <textarea id="replyInput" rows="2" placeholder="Escriba su respuesta aquí..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition resize-none"></textarea>
+                    <button id="sendReplyBtn" type="submit" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs px-3.5 py-2.5 rounded-xl transition shadow flex items-center justify-center shrink-0">
+                        <span id="sendReplyBtnText">Enviar</span>
+                        <span class="ml-1">&rarr;</span>
+                    </button>
+                </div>
+                <div class="flex items-center justify-between text-[10px] text-slate-500 px-1">
+                    <span id="smsShorthandNote">📱 También puede responder directamente al SMS en su celular</span>
+                    <span id="charCount">0/500</span>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-3 px-4 text-center text-[10px] text-slate-500">
+        &copy; 2026 Abrevia Inc. • <span id="footerSecureText">Plataforma Segura de Relevo Asíncrono</span>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const ticketId = urlParams.get('t') || urlParams.get('id');
+        let portalLang = urlParams.get('lang') || 'es';
+        let currentMessages = [];
+        let contactData = null;
+        let isOptedOut = false;
+        let toggleOriginalMap = {}; // msgId -> boolean
+
+        const i18n = {
+            es: {
+                title: 'Abrevia | Mensaje Seguro',
+                headerSubtitle: 'Mensajería Asíncrona Segura',
+                loadingText: 'Cargando mensaje...',
+                verifiedBadge: '✓ Verificado',
+                defaultOrg: 'Organización / Empresa',
+                orgSubtitle: 'Notificación directa a su teléfono móvil',
+                optOutNotice: '¿Ya no desea recibir mensajes de esta organización? Puede responder <strong class="text-slate-200">ALTO</strong> por SMS o darse de baja con un clic:',
+                optOutBtn: 'Dejar de recibir mensajes (Cancelar suscripción)',
+                optOutConfirm: '¿Está seguro de que desea dejar de recibir mensajes de esta organización?',
+                optOutSuccessTitle: '✓ Suscripción cancelada exitosamente',
+                optOutSuccessDesc: 'No recibirá más mensajes SMS ni notificaciones de este servicio.',
+                placeholder: 'Escriba su respuesta aquí...',
+                sendBtn: 'Enviar',
+                sending: 'Enviando...',
+                smsHint: '📱 También puede responder directamente al SMS en su celular',
+                footerText: 'Plataforma Segura de Relevo Asíncrono',
+                viewOriginal: 'Ver original en inglés',
+                viewTranslation: 'Ver traducción en español',
+                youBadge: 'Usted',
+                senderBadge: 'Remitente',
+                attachmentLabel: '📎 Archivo adjunto:',
+                errorEmpty: 'Por favor escriba una respuesta antes de enviar.',
+                errorLoading: 'No se pudo cargar el mensaje. Es posible que el enlace haya expirado o ya no esté activo.',
+                timeJustNow: 'Justo ahora'
+            },
+            en: {
+                title: 'Abrevia | Secure Message',
+                headerSubtitle: 'Secure Asynchronous Messaging',
+                loadingText: 'Loading message...',
+                verifiedBadge: '✓ Verified',
+                defaultOrg: 'Organization / Business',
+                orgSubtitle: 'Direct notification to your mobile phone',
+                optOutNotice: 'No longer want to receive messages from this sender? Reply <strong class="text-slate-200">STOP</strong> via SMS or opt-out with 1 click:',
+                optOutBtn: 'Stop receiving messages (Unsubscribe)',
+                optOutConfirm: 'Are you sure you want to stop receiving messages from this organization?',
+                optOutSuccessTitle: '✓ Successfully unsubscribed',
+                optOutSuccessDesc: 'You will no longer receive SMS notifications from this service.',
+                placeholder: 'Type your reply here...',
+                sendBtn: 'Send',
+                sending: 'Sending...',
+                smsHint: '📱 You can also reply directly to the SMS on your phone',
+                footerText: 'Secure Asynchronous Relay Platform',
+                viewOriginal: 'View in Spanish',
+                viewTranslation: 'View in English',
+                youBadge: 'You',
+                senderBadge: 'Sender',
+                attachmentLabel: '📎 Attachment:',
+                errorEmpty: 'Please write a message before sending.',
+                errorLoading: 'Unable to load message. The link may have expired or is no longer active.',
+                timeJustNow: 'Just now'
+            }
+        };
+
+        function setPortalLang(lang) {
+            portalLang = lang;
+            const t = i18n[lang];
+
+            document.title = t.title;
+            document.getElementById('portalHeaderSubtitle').textContent = t.headerSubtitle;
+            document.getElementById('optOutNoticeText').innerHTML = t.optOutNotice;
+            document.getElementById('optOutBtnText').textContent = t.optOutBtn;
+            document.getElementById('replyInput').placeholder = t.placeholder;
+            document.getElementById('sendReplyBtnText').textContent = t.sendBtn;
+            document.getElementById('smsShorthandNote').textContent = t.smsHint;
+            document.getElementById('footerSecureText').textContent = t.footerText;
+
+            const btnEs = document.getElementById('langEsBtn');
+            const btnEn = document.getElementById('langEnBtn');
+            if (lang === 'es') {
+                btnEs.className = 'px-2 py-0.5 rounded text-xs font-semibold bg-brand-600 text-white transition';
+                btnEn.className = 'px-2 py-0.5 rounded text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white transition';
+            } else {
+                btnEn.className = 'px-2 py-0.5 rounded text-xs font-semibold bg-brand-600 text-white transition';
+                btnEs.className = 'px-2 py-0.5 rounded text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white transition';
+            }
+
+            renderMessages();
+        }
+
+        async function loadTicketData() {
+            if (!ticketId) {
+                document.getElementById('messagesContainer').innerHTML = `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-xs text-slate-400">
+                        <p class="text-amber-400 font-semibold mb-1">Enlace incompleto</p>
+                        <p>No se especificó un número de conversación válido.</p>
+                    </div>
+                `;
+                document.getElementById('replyArea').classList.add('hidden');
+                document.getElementById('optOutBanner').classList.add('hidden');
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/tickets?id=${encodeURIComponent(ticketId)}`);
+                if (!res.ok) throw new Error('Ticket not found');
+                const data = await res.json();
+
+                contactData = data.ticket?.contact || {};
+                isOptedOut = Boolean(contactData.opted_out);
+
+                // Organization & Sender Name
+                const orgEl = document.getElementById('orgSenderName');
+                if (contactData.company) {
+                    orgEl.textContent = contactData.company;
+                } else if (contactData.name) {
+                    orgEl.textContent = contactData.name;
+                } else {
+                    orgEl.textContent = i18n[portalLang].defaultOrg;
+                }
+
+                if (isOptedOut) {
+                    showOptedOutState();
+                }
+
+                currentMessages = data.messages || [];
+                renderMessages();
+            } catch (err) {
+                console.error('Error fetching ticket data:', err);
+                document.getElementById('messagesContainer').innerHTML = `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-xs text-slate-400">
+                        <p class="text-red-400 font-semibold mb-1">Error al cargar mensaje</p>
+                        <p>${i18n[portalLang].errorLoading}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('messagesContainer');
+            if (!currentMessages || currentMessages.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-xs text-slate-500">
+                        No hay mensajes registrados aún en esta conversación.
+                    </div>
+                `;
+                return;
+            }
+
+            const t = i18n[portalLang];
+            let html = '';
+
+            currentMessages.forEach(msg => {
+                const isAgent = (msg.sender === 'agent');
+                const isSystem = (msg.sender === 'system');
+
+                if (isSystem) {
+                    html += `
+                        <div class="text-center my-2">
+                            <span class="inline-block text-[11px] bg-slate-900/80 border border-slate-800 text-slate-400 px-3 py-1 rounded-full">
+                                ${portalLang === 'en' ? (msg.english_text || msg.spanish_text) : (msg.spanish_text || msg.english_text)}
+                            </span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Choose language text based on active portal language and user toggle
+                const isOriginalToggled = Boolean(toggleOriginalMap[msg.id]);
+                let primaryText = '';
+                let secondaryText = '';
+
+                if (portalLang === 'es') {
+                    primaryText = isOriginalToggled ? (msg.english_text || msg.spanish_text) : (msg.spanish_text || msg.english_text);
+                    secondaryText = isOriginalToggled ? (msg.spanish_text) : (msg.english_text);
+                } else {
+                    primaryText = isOriginalToggled ? (msg.spanish_text || msg.english_text) : (msg.english_text || msg.spanish_text);
+                    secondaryText = isOriginalToggled ? (msg.english_text) : (msg.spanish_text);
+                }
+
+                const hasAlternate = secondaryText && secondaryText.trim() !== primaryText.trim();
+                const timeStr = msg.created_at ? new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : t.timeJustNow;
+
+                // Attachment preview detection
+                const attachmentMatch = (primaryText || '').match(/(https?:\/\/[^\s]+)/);
+                const attachmentUrl = attachmentMatch ? attachmentMatch[1] : null;
+                const isImage = attachmentUrl && (/\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(attachmentUrl) || attachmentUrl.includes('/storage/v1/object/public/attachments/'));
+
+                let cleanText = primaryText ? primaryText.replace(attachmentUrl || '', '').replace(/📎 (Attachment|Adjunto):?/gi, '').trim() : '';
+
+                if (isAgent) {
+                    html += `
+                        <div class="flex flex-col items-start max-w-[92%] sm:max-w-[85%]">
+                            <div class="flex items-center space-x-1.5 mb-1 px-1">
+                                <span class="text-[10px] font-bold text-brand-400 uppercase tracking-wide">${t.senderBadge}</span>
+                                <span class="text-[10px] text-slate-500">• ${timeStr}</span>
+                            </div>
+                            <div class="bg-slate-900 border border-slate-800 text-slate-100 rounded-2xl rounded-tl-sm px-4 py-3 shadow-md w-full">
+                                ${cleanText ? `<p class="text-xs sm:text-[13px] leading-relaxed whitespace-pre-wrap">${escapeHtml(cleanText)}</p>` : ''}
+                                
+                                ${isImage ? `
+                                    <div class="mt-2.5 pt-2 border-t border-slate-800">
+                                        <a href="${escapeHtml(attachmentUrl)}" target="_blank" rel="noopener noreferrer">
+                                            <img src="${escapeHtml(attachmentUrl)}" alt="Adjunto" class="max-h-48 rounded-xl object-cover border border-slate-700/80 hover:opacity-90 transition">
+                                        </a>
+                                    </div>
+                                ` : ''}
+
+                                ${hasAlternate ? `
+                                    <div class="mt-2 pt-2 border-t border-slate-800/80 flex justify-end">
+                                        <button onclick="toggleOriginal('${msg.id}')" class="text-[10px] text-brand-400 hover:text-brand-300 font-medium transition">
+                                            ${isOriginalToggled ? (portalLang === 'es' ? 'Ver en español' : 'View in English') : (portalLang === 'es' ? 'Ver original en inglés' : 'View in Spanish')} &rarr;
+                                        </button>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="flex flex-col items-end ml-auto max-w-[92%] sm:max-w-[85%]">
+                            <div class="flex items-center space-x-1.5 mb-1 px-1">
+                                <span class="text-[10px] text-slate-500">${timeStr} •</span>
+                                <span class="text-[10px] font-bold text-slate-400">${t.youBadge}</span>
+                            </div>
+                            <div class="bg-brand-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-md w-full">
+                                <p class="text-xs sm:text-[13px] leading-relaxed whitespace-pre-wrap">${escapeHtml(cleanText || primaryText)}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function toggleOriginal(msgId) {
+            toggleOriginalMap[msgId] = !toggleOriginalMap[msgId];
+            renderMessages();
+        }
+
+        async function handleSendReply(e) {
+            e.preventDefault();
+            const input = document.getElementById('replyInput');
+            const message = input.value.trim();
+            const t = i18n[portalLang];
+
+            if (!message) {
+                alert(t.errorEmpty);
+                return;
+            }
+
+            const sendBtn = document.getElementById('sendReplyBtn');
+            const originalBtnHtml = sendBtn.innerHTML;
+            sendBtn.disabled = true;
+            sendBtn.textContent = t.sending;
+
+            try {
+                const res = await fetch('/api/reply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ticketId: ticketId,
+                        message: message
+                    })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Error sending reply');
+
+                input.value = '';
+                document.getElementById('charCount').textContent = '0/500';
+
+                if (data.optedOut) {
+                    showOptedOutState();
+                }
+
+                // Add to current messages and render
+                if (data.message) {
+                    currentMessages.push(data.message);
+                    renderMessages();
+                } else {
+                    await loadTicketData();
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = originalBtnHtml;
+            }
+        }
+
+        async function handleOptOut() {
+            const t = i18n[portalLang];
+            if (!confirm(t.optOutConfirm)) return;
+
+            const btn = document.getElementById('optOutBtn');
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/reply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ticketId: ticketId,
+                        action: 'optout'
+                    })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to opt-out');
+
+                showOptedOutState();
+            } catch (err) {
+                alert('Error: ' + err.message);
+                btn.disabled = false;
+            }
+        }
+
+        function showOptedOutState() {
+            isOptedOut = true;
+            document.getElementById('optedOutBadge').classList.remove('hidden');
+            document.getElementById('optOutBanner').classList.add('hidden');
+            document.getElementById('optedOutSuccessBanner').classList.remove('hidden');
+            document.getElementById('replyArea').classList.add('opacity-50', 'pointer-events-none');
+            const input = document.getElementById('replyInput');
+            if (input) input.placeholder = portalLang === 'es' ? 'Suscripción cancelada (Opted Out)' : 'Unsubscribed (Opted Out)';
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Character counter
+        document.getElementById('replyInput').addEventListener('input', function(e) {
+            document.getElementById('charCount').textContent = `${e.target.value.length}/500`;
+        });
+
+        // Initialize
+        setPortalLang(portalLang);
+        loadTicketData();
+
+        // Polling for real-time operator updates every 6 seconds
+        setInterval(async () => {
+            if (!ticketId || isOptedOut) return;
+            try {
+                const res = await fetch(`/api/tickets?id=${encodeURIComponent(ticketId)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.messages && data.messages.length !== currentMessages.length) {
+                        currentMessages = data.messages;
+                        renderMessages();
+                    }
+                }
+            } catch (e) {}
+        }, 6000);
+    </script>
+</body>
+</html>

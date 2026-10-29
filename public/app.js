@@ -95,7 +95,13 @@ const I18N = {
         scheduledBadge: (timeStr) => `⏱️ Scheduled for ${timeStr}`,
         hitlBtnLabel: 'Proofread (HITL)',
         hitlBtnOn: 'ON',
-        hitlBtnOff: 'OFF'
+        hitlBtnOff: 'OFF',
+        senderProfileNavText: 'Profile',
+        senderProfileModalTitle: 'Organization & Sender Profile',
+        senderProfileModalSubtitle: 'Configure how your business appears in outbound SMS notifications',
+        profileOrgLabel: 'Organization / Business Name',
+        profileUserLabel: 'User / Dispatcher Name',
+        profileModeLabel: 'Outbound SMS Delivery Format'
     },
     es: {
         consoleBadge: 'Estado de Consola',
@@ -185,7 +191,13 @@ const I18N = {
         scheduledBadge: (timeStr) => `⏱️ Programado para ${timeStr}`,
         hitlBtnLabel: 'Revisar (HITL)',
         hitlBtnOn: 'ACTIVO',
-        hitlBtnOff: 'INACTIVO'
+        hitlBtnOff: 'INACTIVO',
+        senderProfileNavText: 'Perfil',
+        senderProfileModalTitle: 'Perfil de Organización y Remitente',
+        senderProfileModalSubtitle: 'Configure cómo aparece su negocio en las notificaciones SMS salientes',
+        profileOrgLabel: 'Nombre de la Organización / Empresa',
+        profileUserLabel: 'Nombre del Usuario / Despachador',
+        profileModeLabel: 'Formato de Entrega de SMS Saliente'
     }
 };
 
@@ -540,7 +552,12 @@ async function dispatchScheduledMessageNow(schedId) {
                 mediaUrl: item.attachment?.uploadedUrl || null,
                 ticketId: item.ticketId,
                 englishText: englishText,
-                spanishText: spanishText
+                spanishText: spanishText,
+                provider: getActiveSmsGateway(),
+                orgName: getSenderOrgName(),
+                senderName: getSenderUserName(),
+                targetLang: isEnglishAgent ? 'es' : 'en',
+                dispatchMode: getDispatchMode()
             })
         });
         
@@ -649,6 +666,118 @@ function updateAutoResponderNavUI() {
     }
 }
 
+
+// ==========================================
+// Organization & Sender Profile Configuration
+// ==========================================
+function getSenderOrgName() {
+    return localStorage.getItem('abrevia_org_name') || '';
+}
+
+function getSenderUserName() {
+    return localStorage.getItem('abrevia_sender_name') || '';
+}
+
+function getDispatchMode() {
+    return localStorage.getItem('abrevia_dispatch_mode') || 'link';
+}
+
+function updateSenderProfileUI() {
+    const org = getSenderOrgName();
+    const user = getSenderUserName();
+    const labelEl = document.getElementById('senderProfileQuickLabel');
+    if (labelEl) {
+        if (org && user) {
+            labelEl.textContent = `${org} (${user})`;
+        } else if (org) {
+            labelEl.textContent = org;
+        } else if (user) {
+            labelEl.textContent = `${user} / Abrevia`;
+        } else {
+            labelEl.textContent = 'Abrevia';
+        }
+    }
+}
+
+function openSenderProfileModal() {
+    const orgInput = document.getElementById('profileOrgInput');
+    const userInput = document.getElementById('profileUserInput');
+    const linkRadio = document.getElementById('dispatchModeLink');
+    const directRadio = document.getElementById('dispatchModeDirect');
+    
+    if (orgInput) orgInput.value = getSenderOrgName();
+    if (userInput) userInput.value = getSenderUserName();
+    
+    const mode = getDispatchMode();
+    if (mode === 'direct') {
+        if (directRadio) directRadio.checked = true;
+    } else {
+        if (linkRadio) linkRadio.checked = true;
+    }
+    
+    updateSenderProfilePreview();
+    document.getElementById('senderProfileModal').classList.remove('hidden');
+}
+
+function closeSenderProfileModal() {
+    document.getElementById('senderProfileModal').classList.add('hidden');
+    const ind = document.getElementById('profileSavedIndicator');
+    if (ind) ind.classList.add('hidden');
+}
+
+function updateSenderProfilePreview() {
+    const org = document.getElementById('profileOrgInput')?.value.trim() || '';
+    const user = document.getElementById('profileUserInput')?.value.trim() || '';
+    const directChecked = document.getElementById('dispatchModeDirect')?.checked;
+    const previewEl = document.getElementById('liveSmsPreviewText');
+    if (!previewEl) return;
+
+    let senderLabel = '';
+    if (org && user) {
+        senderLabel = `${org} (${user})`;
+    } else if (org) {
+        senderLabel = org;
+    } else if (user) {
+        senderLabel = `${user} / Abrevia`;
+    } else {
+        senderLabel = 'Abrevia';
+    }
+
+    const host = window.location.host || 'abrevia-beta.vercel.app';
+    const proto = window.location.protocol.startsWith('http') ? window.location.protocol : 'https:';
+    const sampleLink = `${proto}//${host}/m.html?t=${currentTicket?.id || 101}`;
+
+    if (directChecked) {
+        previewEl.textContent = (dashboardMode === 'es')
+            ? `Hola, confirmamos su solicitud de servicio.`
+            : `Hello, confirming your service request.`;
+    } else {
+        if (dashboardMode === 'es') {
+            previewEl.textContent = `Tiene un mensaje de ${senderLabel}.\nAbra su mensaje aquí: ${sampleLink}\n\nResponda ALTO para no recibir más mensajes.`;
+        } else {
+            previewEl.textContent = `You have a message from ${senderLabel}.\nOpen your message here: ${sampleLink}\n\nReply STOP to unsubscribe.`;
+        }
+    }
+}
+
+function saveSenderProfile() {
+    const org = document.getElementById('profileOrgInput')?.value.trim() || '';
+    const user = document.getElementById('profileUserInput')?.value.trim() || '';
+    const directChecked = document.getElementById('dispatchModeDirect')?.checked;
+    
+    localStorage.setItem('abrevia_org_name', org);
+    localStorage.setItem('abrevia_sender_name', user);
+    localStorage.setItem('abrevia_dispatch_mode', directChecked ? 'direct' : 'link');
+
+    updateSenderProfileUI();
+
+    const ind = document.getElementById('profileSavedIndicator');
+    if (ind) {
+        ind.classList.remove('hidden');
+        setTimeout(() => ind.classList.add('hidden'), 2000);
+    }
+    setTimeout(closeSenderProfileModal, 400);
+}
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -838,6 +967,21 @@ function applyDashboardLocalization() {
     document.getElementById('modalPhoneLabel').innerHTML = `${t.modalPhoneLabel} <span class="text-red-400">*</span>`;
     document.getElementById('modalCancelBtn').textContent = t.modalCancel;
     document.getElementById('modalSubmitBtn').textContent = t.modalSubmit;
+
+    // Sender Profile Localization
+    const spNavText = document.getElementById('senderProfileNavText');
+    if (spNavText) spNavText.textContent = t.senderProfileNavText || 'Profile';
+    const spModalTitle = document.getElementById('senderProfileModalTitle');
+    if (spModalTitle) spModalTitle.textContent = t.senderProfileModalTitle || 'Organization & Sender Profile';
+    const spModalSubtitle = document.getElementById('senderProfileModalSubtitle');
+    if (spModalSubtitle) spModalSubtitle.textContent = t.senderProfileModalSubtitle || 'Configure how your business appears in outbound SMS';
+    const pOrgLabel = document.getElementById('profileOrgLabel');
+    if (pOrgLabel) pOrgLabel.textContent = t.profileOrgLabel || 'Organization / Business Name';
+    const pUserLabel = document.getElementById('profileUserLabel');
+    if (pUserLabel) pUserLabel.innerHTML = `${t.profileUserLabel || 'User / Dispatcher Name'} <span class="text-slate-500 text-[10px]">(Optional)</span>`;
+    const pModeLabel = document.getElementById('profileModeLabel');
+    if (pModeLabel) pModeLabel.textContent = t.profileModeLabel || 'Outbound SMS Delivery Format';
+    updateSenderProfileUI();
 }
 
 // Toggle Proofread Translated Message Mode (Human-In-The-Loop) — Paid Tier feature
@@ -1422,7 +1566,12 @@ async function handleTranslateAndSend() {
                     mediaUrl: mediaUrl,
                     ticketId: currentTicket.id,
                     englishText: englishText,
-                    spanishText: spanishText
+                    spanishText: spanishText,
+                    provider: getActiveSmsGateway(),
+                    orgName: getSenderOrgName(),
+                    senderName: getSenderUserName(),
+                    targetLang: (dashboardMode === 'en') ? 'es' : 'en',
+                    dispatchMode: getDispatchMode()
                 })
             });
 
@@ -1528,7 +1677,12 @@ async function confirmAndSend() {
                 mediaUrl: mediaUrl,
                 ticketId: currentTicket.id,
                 englishText: englishText,
-                spanishText: spanishText
+                spanishText: spanishText,
+                provider: getActiveSmsGateway(),
+                orgName: getSenderOrgName(),
+                senderName: getSenderUserName(),
+                targetLang: (dashboardMode === 'en') ? 'es' : 'en',
+                dispatchMode: getDispatchMode()
             })
         });
 

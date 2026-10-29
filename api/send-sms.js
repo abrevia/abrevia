@@ -4,7 +4,19 @@ import { encryptMessage } from '../lib/cipher.js';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
-  const { to, body, mediaUrl, ticketId, englishText, spanishText, provider: reqProvider } = req.body || {};
+  const { 
+    to, 
+    body, 
+    mediaUrl, 
+    ticketId, 
+    englishText, 
+    spanishText, 
+    provider: reqProvider,
+    orgName,
+    senderName,
+    targetLang = 'es',
+    dispatchMode = 'link' // 'link' (MessageBee notification with link) vs 'direct'
+  } = req.body || {};
 
   if (!to || !body) {
     return res.status(400).json({ error: 'Missing recipient phone number (to) or message body' });
@@ -15,6 +27,39 @@ export default async function handler(req, res) {
   const encryptionKey = process.env.HTTPSMS_ENCRYPTION_KEY;
   const textbeeApiKey = process.env.TEXTBEE_API_KEY || 'txb_5RMV0hqGHk6HUFNiWPnnXdcGBV9lwku9';
   const textbeeDeviceId = process.env.TEXTBEE_DEVICE_ID || '6ae2b0b6c1ee0a8dec389241';
+
+  // Construct Outbound SMS Text (Link Notification vs Direct SMS)
+  let smsContentToSend = body;
+  let messageLink = '';
+
+  if (dispatchMode === 'link') {
+    const host = req.headers['x-forwarded-host'] || req.headers.host || 'abrevia-beta.vercel.app';
+    const proto = req.headers['x-forwarded-proto'] || (host.includes('localhost') ? 'http' : 'https');
+    messageLink = ticketId ? `${proto}://${host}/m.html?t=${ticketId}` : `${proto}://${host}`;
+
+    let senderLabel = '';
+    const cleanOrg = orgName ? String(orgName).trim() : '';
+    const cleanUser = senderName ? String(senderName).trim() : '';
+
+    if (cleanOrg && cleanUser) {
+      senderLabel = `${cleanOrg} (${cleanUser})`;
+    } else if (cleanOrg) {
+      senderLabel = cleanOrg;
+    } else if (cleanUser) {
+      senderLabel = `${cleanUser} / Abrevia`;
+    } else {
+      senderLabel = 'Abrevia';
+    }
+
+    const lang = (targetLang || 'es').toLowerCase();
+    if (lang === 'en') {
+      smsContentToSend = `You have a message from ${senderLabel}.\nOpen your message here: ${messageLink}\n\nReply STOP to unsubscribe.`;
+    } else {
+      smsContentToSend = `Tiene un mensaje de ${senderLabel}.\nAbra su mensaje aquí: ${messageLink}\n\nResponda ALTO para no recibir más mensajes.`;
+    }
+  } else {
+    smsContentToSend = mediaUrl ? `${body}\n\n📎 Adjunto: ${mediaUrl}` : body;
+  }
 
   // Target provider: 'httpsms' (Default Production) vs 'textbee' (Testing Comparison)
   const selectedProvider = (reqProvider || req.query?.provider || process.env.SMS_PROVIDER || 'httpsms').toLowerCase();
@@ -29,10 +74,10 @@ export default async function handler(req, res) {
         throw new Error('httpSMS is not configured (missing HTTPSMS_API_KEY or HTTPSMS_PHONE_NUMBER)');
       }
       const isEncrypted = Boolean(encryptionKey && encryptionKey.trim().length > 0);
-      const contentToSend = isEncrypted ? encryptMessage(encryptionKey.trim(), body) : body;
+      const payloadText = isEncrypted ? encryptMessage(encryptionKey.trim(), smsContentToSend) : smsContentToSend;
 
       const requestPayload = {
-        content: contentToSend,
+        content: payloadText,
         from: fromPhone,
         to: to,
         attachments: mediaUrl ? [mediaUrl] : []
@@ -64,8 +109,6 @@ export default async function handler(req, res) {
         ? `https://api.textbee.dev/api/v1/gateway/devices/${textbeeDeviceId}/send-sms`
         : 'https://api.textbee.dev/api/v1/gateway/send-sms';
 
-      const outboundText = mediaUrl ? `${body}\n\n📎 Attachment: ${mediaUrl}` : body;
-
       const response = await fetch(textbeeUrl, {
         method: 'POST',
         headers: {
@@ -74,7 +117,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           recipients: [to],
-          message: outboundText
+          message: smsContentToSend
         })
       });
 
