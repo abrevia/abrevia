@@ -57,12 +57,7 @@
 
         <!-- Right: Trial Status, Billing & Sign Out -->
         <div class="flex items-center space-x-2 sm:space-x-3 text-xs">
-            <!-- Free Trial / Pro Tier Badge -->
-            <button id="trialPillBtn" onclick="openBillingModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-300 border border-brand-500/30 hover:bg-brand-500/25 transition shadow-sm" title="View Trial & Billing status">
-                <span>⭐</span>
-                <span id="trialPillText">Premium Trial: 30d left</span>
-            </button>
-                        <!-- Discreet Sound & Haptic Notification Toggle -->
+            <!-- Discreet Sound & Haptic Notification Toggle -->
             <button id="soundToggleBtn" onclick="toggleSoundAlerts()" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 shadow-sm" title="Sound & Vibration Alerts (Discreet Beep)">
                 <span id="soundToggleIcon">🔔</span>
                 <span id="soundToggleLabel" class="hidden md:inline text-[10px]">Alerts</span>
@@ -1017,6 +1012,25 @@ Responda ALTO para no recibir más mensajes.</div>
             <p id="wrapUpModalDesc" class="text-xs text-slate-300 leading-relaxed mb-4">
                 No email is required to use Abrevia. You can optionally set a 4-digit PIN to lock and quickly resume this workspace.
             </p>
+
+            <!-- Free Trial Countdown Card Upon Ending Session -->
+            <div id="wrapUpTrialCountdownCard" class="bg-gradient-to-br from-brand-950/70 via-slate-950 to-indigo-950/50 border border-brand-500/35 rounded-2xl p-4 mb-4 shadow-lg shadow-brand-500/5">
+                <div class="flex items-center justify-between mb-1.5">
+                    <div class="flex items-center space-x-2 min-w-0">
+                        <span class="text-sm">⭐</span>
+                        <span id="wrapUpTrialTitle" class="text-xs font-bold text-white truncate">30-Day Free Trial</span>
+                    </div>
+                    <span id="wrapUpTrialBadge" class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/40 shrink-0">
+                        30d left
+                    </span>
+                </div>
+                <p id="wrapUpTrialDesc" class="text-[11px] text-slate-300 leading-relaxed">
+                    30 days remaining in your free trial. Your conversations and Pro features are saved.
+                </p>
+                <div class="w-full bg-slate-900 rounded-full h-1.5 mt-2.5 overflow-hidden border border-slate-800">
+                    <div id="wrapUpTrialProgress" class="bg-gradient-to-r from-blue-500 via-indigo-500 to-brand-400 h-1.5 rounded-full transition-all duration-500" style="width: 100%;"></div>
+                </div>
+            </div>
 
             <div class="space-y-4">
                 <!-- 1. 4-Digit PIN Setup -->

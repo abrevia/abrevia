@@ -539,6 +539,63 @@ function requireProFeature(featureName) {
     return false;
 }
 
+function updateWrapUpTrialCountdown() {
+    const trial = getTrialInfo();
+    const titleEl = document.getElementById('wrapUpTrialTitle');
+    const badgeEl = document.getElementById('wrapUpTrialBadge');
+    const descEl = document.getElementById('wrapUpTrialDesc');
+    const progressEl = document.getElementById('wrapUpTrialProgress');
+    const cardEl = document.getElementById('wrapUpTrialCountdownCard');
+    const isEs = dashboardMode === 'es';
+
+    if (!cardEl) return;
+
+    if (trial.isPro) {
+        if (titleEl) titleEl.textContent = isEs ? 'Operaciones Pro Activo' : 'Operations Pro Active';
+        if (badgeEl) {
+            badgeEl.textContent = isEs ? 'PRO ACTIVO' : 'PRO ACTIVE';
+            badgeEl.className = 'text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0';
+        }
+        if (descEl) descEl.textContent = isEs 
+            ? 'Mensajes y relevo bilingüe ilimitado permanentemente activo.' 
+            : 'Unlimited bilingual relay and Pro features permanently active.';
+        if (progressEl) {
+            progressEl.style.width = '100%';
+            progressEl.className = 'bg-gradient-to-r from-emerald-500 to-teal-400 h-1.5 rounded-full transition-all duration-500';
+        }
+    } else if (trial.inTrial) {
+        const daysRemaining = trial.daysLeft;
+        const daysElapsed = Math.min(30, Math.max(1, 31 - daysRemaining));
+        const pct = Math.max(5, Math.round((daysRemaining / 30) * 100));
+
+        if (titleEl) titleEl.textContent = isEs ? 'Prueba Gratuita de 30 Días' : '30-Day Free Trial';
+        if (badgeEl) {
+            badgeEl.textContent = isEs ? `Quedan ${daysRemaining} días` : `${daysRemaining} days left`;
+            badgeEl.className = 'text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/40 shrink-0';
+        }
+        if (descEl) descEl.textContent = isEs
+            ? `Día ${daysElapsed} de 30. Quedan ${daysRemaining} días de prueba gratuita. Sus conversaciones y funciones Pro quedan guardadas.`
+            : `Day ${daysElapsed} of 30. ${daysRemaining} days remaining in your free trial. Your conversations and Pro features are saved.`;
+        if (progressEl) {
+            progressEl.style.width = `${pct}%`;
+            progressEl.className = 'bg-gradient-to-r from-blue-500 via-indigo-500 to-brand-400 h-1.5 rounded-full transition-all duration-500';
+        }
+    } else {
+        if (titleEl) titleEl.textContent = isEs ? 'Prueba Gratuita Concluida' : 'Free Trial Concluded';
+        if (badgeEl) {
+            badgeEl.textContent = isEs ? 'Concluida' : 'Ended';
+            badgeEl.className = 'text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0';
+        }
+        if (descEl) descEl.textContent = isEs
+            ? 'Su prueba de 30 días ha finalizado. Suscríbase a Operaciones Pro para mantener mensajes ilimitados y funciones de revisión previa.'
+            : 'Your 30-day trial has concluded. Upgrade to Operations Pro to keep unlimited messaging and proofread review.';
+        if (progressEl) {
+            progressEl.style.width = '0%';
+            progressEl.className = 'bg-slate-700 h-1.5 rounded-full transition-all duration-500';
+        }
+    }
+}
+
 function updateTrialUI() {
     const trial = getTrialInfo();
     const pillBtn = document.getElementById('trialPillBtn');
@@ -548,11 +605,23 @@ function updateTrialUI() {
     const billingTrialDays = document.getElementById('billingTrialDays');
     const t = I18N[dashboardMode];
     
-    if (!pillBtn || !pillText) return;
-    
+    // Always update session wrap up countdown card
+    updateWrapUpTrialCountdown();
+
+    if (pillBtn && pillText) {
+        if (trial.isPro) {
+            pillText.textContent = t.trialPillPro || 'Operations Pro';
+            pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 transition shadow-sm';
+        } else if (trial.inTrial) {
+            pillText.textContent = t.trialPill(trial.daysLeft);
+            pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-300 border border-brand-500/30 hover:bg-brand-500/25 transition shadow-sm';
+        } else {
+            pillText.textContent = t.trialPillExpired || 'Free Tier • Upgrade to Pro';
+            pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition shadow-sm';
+        }
+    }
+
     if (trial.isPro) {
-        pillText.textContent = t.trialPillPro || 'Operations Pro';
-        pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 transition shadow-sm';
         if (billingTrialBadge) {
             billingTrialBadge.textContent = 'PRO ACTIVE';
             billingTrialBadge.className = 'text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1.5 py-0.5 rounded-full border border-emerald-500/40';
@@ -565,8 +634,6 @@ function updateTrialUI() {
             billingTrialDays.className = 'text-xs font-mono font-bold text-emerald-300 shrink-0 ml-2';
         }
     } else if (trial.inTrial) {
-        pillText.textContent = t.trialPill(trial.daysLeft);
-        pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-300 border border-brand-500/30 hover:bg-brand-500/25 transition shadow-sm';
         if (billingTrialBadge) {
             billingTrialBadge.textContent = `${trial.daysLeft}D LEFT`;
             billingTrialBadge.className = 'text-[9px] bg-brand-500/20 text-brand-300 font-bold px-1.5 py-0.5 rounded-full border border-brand-500/40';
@@ -579,8 +646,6 @@ function updateTrialUI() {
             billingTrialDays.className = 'text-xs font-mono font-bold text-brand-300 shrink-0 ml-2';
         }
     } else {
-        pillText.textContent = t.trialPillExpired || 'Free Tier • Upgrade to Pro';
-        pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition shadow-sm';
         if (billingTrialBadge) {
             billingTrialBadge.textContent = 'EXPIRED';
             billingTrialBadge.className = 'text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1.5 py-0.5 rounded-full border border-amber-500/40';
@@ -649,6 +714,7 @@ function openTemplatesModal() {
     const modal = document.getElementById('templatesModal');
     if (modal) applyDashboardLocalization();
     applyDashboardLocalization();
+    updateWrapUpTrialCountdown();
     modal.classList.remove('hidden');
 }
 
@@ -726,6 +792,7 @@ function openScheduleModal() {
     
     const modal = document.getElementById('scheduleModal');
     if (modal) applyDashboardLocalization();
+    updateWrapUpTrialCountdown();
     modal.classList.remove('hidden');
 }
 
@@ -910,6 +977,7 @@ function openAutoResponderModal() {
     
     const modal = document.getElementById('autoResponderModal');
     if (modal) applyDashboardLocalization();
+    updateWrapUpTrialCountdown();
     modal.classList.remove('hidden');
 }
 
@@ -3135,6 +3203,7 @@ function openWrapUpModal() {
     if (phoneInput) phoneInput.value = localStorage.getItem('abrevia_sub_phone') || '';
 
     applyDashboardLocalization();
+    updateWrapUpTrialCountdown();
     modal.classList.remove('hidden');
     setTimeout(() => {
         document.getElementById('pinBox1')?.focus();
