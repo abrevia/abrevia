@@ -57,7 +57,11 @@
                 <span>💳</span>
                 <span id="billingBtnText" class="hidden sm:inline">Billing</span>
             </button>
-            <a id="signOutLink" href="/index.html" class="text-slate-400 hover:text-white transition hidden sm:inline">Sign Out</a>
+            <button id="installAppBtn" onclick="triggerPwaInstall()" class="hidden items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-brand-500/10 hover:bg-brand-500/20 text-brand-300 border border-brand-500/30 transition shadow-sm" title="Add shortcut to desktop or home screen">
+                <span>📲</span>
+                <span id="installAppBtnText" class="hidden sm:inline">Add Shortcut</span>
+            </button>
+            <button id="signOutLink" onclick="openWrapUpModal()" class="text-slate-400 hover:text-white transition text-xs font-normal">Sign Out</button>
         </div>
     </header>
 
@@ -963,5 +967,120 @@ Responda ALTO para no recibir más mensajes.</div>
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
     <script src="app.js"></script>
+
+    <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
+    <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl text-left relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeWrapUpModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-base shadow-sm">
+                    🔒
+                </div>
+                <div>
+                    <h3 id="wrapUpModalTitle" class="text-base font-bold text-white">Wrap Up Session</h3>
+                    <span id="wrapUpModalBadge" class="text-[10px] text-brand-400 font-semibold uppercase tracking-wider">Fast & Frictionless</span>
+                </div>
+            </div>
+
+            <p id="wrapUpModalDesc" class="text-xs text-slate-300 leading-relaxed mb-4">
+                No email is required to use Abrevia. You can optionally set a 4-digit PIN to lock and quickly resume this workspace.
+            </p>
+
+            <div class="space-y-4">
+                <!-- 1. 4-Digit PIN Setup -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                    <label class="block text-xs font-semibold text-white mb-1" id="wrapUpPinLabel">
+                        4-Digit Security PIN <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                    </label>
+                    <p class="text-[11px] text-slate-400 mb-3" id="wrapUpPinHelp">
+                        Set a 4-digit PIN so only you can unlock this workspace next time.
+                    </p>
+                    <div class="flex items-center justify-center space-x-3 my-2">
+                        <input type="password" maxlength="1" inputmode="numeric" id="pinBox1" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handlePinKey(event, 1)">
+                        <input type="password" maxlength="1" inputmode="numeric" id="pinBox2" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handlePinKey(event, 2)">
+                        <input type="password" maxlength="1" inputmode="numeric" id="pinBox3" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handlePinKey(event, 3)">
+                        <input type="password" maxlength="1" inputmode="numeric" id="pinBox4" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handlePinKey(event, 4)">
+                    </div>
+                </div>
+
+                <!-- 2. Optional Email & SMS Updates -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm">📬</span>
+                        <div class="text-xs font-semibold text-white" id="wrapUpUpdatesTitle">Stay in the Loop (Optional)</div>
+                    </div>
+                    <p class="text-[11px] text-slate-400" id="wrapUpUpdatesDesc">
+                        We only send important product updates and carrier notices. No spam, ever.
+                    </p>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-400 mb-1" id="wrapUpEmailLabel">Email Address (Optional)</label>
+                        <input type="email" id="wrapUpEmailInput" placeholder="name@company.com" class="w-full bg-slate-900 border border-slate-800 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-400 mb-1" id="wrapUpPhoneLabel">Phone Number for SMS Updates (Optional)</label>
+                        <input type="tel" id="wrapUpPhoneInput" placeholder="+1... or +52..." class="w-full bg-slate-900 border border-slate-800 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white outline-none transition">
+                        <p class="text-[10px] text-slate-500 mt-1" id="wrapUpOptOutNotice">Reply STOP anytime to cancel SMS updates.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-5 space-y-2">
+                <button type="button" onclick="confirmWrapUpSignOut()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs py-2.5 rounded-xl transition shadow-md">
+                    <span id="wrapUpSaveBtnText">Save & Sign Out</span>
+                </button>
+                <div class="flex items-center justify-between pt-1">
+                    <button type="button" onclick="signOutWithoutPin()" class="text-slate-400 hover:text-white text-xs transition">
+                        <span id="wrapUpDirectSignOutBtn">Sign Out Without PIN</span>
+                    </button>
+                    <button type="button" onclick="closeWrapUpModal()" class="text-slate-500 hover:text-slate-300 text-xs transition">
+                        <span id="wrapUpCancelBtn">Stay in Dashboard</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Desktop / Home Screen Shortcut Modal -->
+    <div id="installHelperModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl text-left relative">
+            <button onclick="closeInstallModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-lg shadow-sm">
+                    📲
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">Add Shortcut</h3>
+                    <span class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">1-Tap Instant Access</span>
+                </div>
+            </div>
+            <p class="text-xs text-slate-300 mb-4 leading-relaxed">
+                Add Abrevia directly to your computer desktop or phone home screen for instant zero-friction launch without typing URLs.
+            </p>
+            <div class="space-y-3 text-xs text-slate-400 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">1.</span>
+                    <span><strong>iPhone (Safari):</strong> Tap Share (<span class="text-white">⎋</span>) and select <strong>"Add to Home Screen"</strong> (<span class="text-white">➕</span>).</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">2.</span>
+                    <span><strong>Android (Chrome / Samsung):</strong> Tap menu (<span class="text-white">⋮</span>) and select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">3.</span>
+                    <span><strong>PC / Mac:</strong> Look for the <strong>Install</strong> icon (<span class="text-white">⊕</span>) in your browser address bar.</span>
+                </div>
+            </div>
+            <button onclick="closeInstallModal()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
+                Got it
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>

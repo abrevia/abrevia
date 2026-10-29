@@ -21,6 +21,23 @@
             }
         }
     </script>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Abrevia">
+    <link rel="apple-touch-icon" href="/assets/logo.png?v=3">
+    <script>
+        // ZERO FRICTION: By default, app opens directly on the user dashboard
+        (function checkAutoRedirect() {
+            const isSignedOut = localStorage.getItem('abrevia_signed_out') === 'true';
+            const params = new URLSearchParams(window.location.search);
+            if (!isSignedOut && !params.get('view')) {
+                const lang = localStorage.getItem('abrevia_agent_lang') || 'en';
+                window.location.replace('/dashboard.html?lang=' + lang);
+            }
+        })();
+    </script>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-600 selection:text-white">
 
@@ -84,11 +101,38 @@
                 You write in English &rarr; Recipient receives Spanish translation
             </p>
 
-            <!-- 1-Click Launch Button (Inspired by the Blue Squircle) -->
-            <button onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm group">
-                <span id="launchBtnText">Launch English Console</span>
-                <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
-            </button>
+
+            <!-- PIN Unlock Card (Shown when user signed out with a PIN) -->
+            <div id="pinUnlockCard" class="hidden w-full bg-slate-950 border border-brand-500/40 rounded-2xl p-5 sm:p-6 text-center shadow-xl shadow-brand-500/10 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-lg mx-auto mb-2">
+                    🔒
+                </div>
+                <h3 id="pinCardTitle" class="text-sm font-bold text-white mb-0.5">Workspace Locked</h3>
+                <p id="pinCardSubtitle" class="text-xs text-slate-400 mb-4">Enter your 4-digit PIN to open your conversations</p>
+                <div class="flex items-center justify-center space-x-2.5 mb-4">
+                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox1" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 1)">
+                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox2" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 2)">
+                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox3" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 3)">
+                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox4" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 4)">
+                </div>
+                <button type="button" onclick="attemptPinUnlock()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs py-2.5 rounded-xl transition shadow-md">
+                    <span id="pinUnlockBtnText">Unlock & Open Dashboard</span>
+                </button>
+                <div id="pinErrorMsg" class="text-xs text-red-400 font-medium mt-2 hidden">Incorrect PIN. Please try again.</div>
+                <div class="mt-3">
+                    <button type="button" onclick="resetPinAndEnter()" class="text-[11px] text-slate-500 hover:text-slate-300 transition">
+                        Forgot PIN? Reset & enter workspace
+                    </button>
+                </div>
+            </div>
+
+            <!-- Standard 1-Click Launch Button Container -->
+            <div id="launchContainer">
+                <button id="launchBtn" onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm group">
+                    <span id="launchBtnText">Launch English Console</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </button>
+            </div>
 
             <!-- Quiet Trust Notes -->
             <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 text-[11px] text-slate-500">
@@ -460,8 +504,83 @@
 
         function handleEnterWorkspace(e) {
             e.preventDefault();
+            localStorage.removeItem('abrevia_signed_out');
             window.location.href = `/dashboard.html?lang=${currentLang}`;
         }
+
+        // --- PIN Unlock Handlers ---
+        function checkPinStatus() {
+            const pin = localStorage.getItem('abrevia_pin');
+            const isSignedOut = localStorage.getItem('abrevia_signed_out') === 'true';
+            const pinCard = document.getElementById('pinUnlockCard');
+            const launchContainer = document.getElementById('launchContainer');
+
+            if (pin && isSignedOut) {
+                pinCard?.classList.remove('hidden');
+                launchContainer?.classList.add('hidden');
+                setTimeout(() => document.getElementById('unlockBox1')?.focus(), 150);
+            } else {
+                pinCard?.classList.add('hidden');
+                launchContainer?.classList.remove('hidden');
+            }
+        }
+
+        function handleUnlockPinKey(event, idx) {
+            const val = event.target.value;
+            if (event.key === 'Backspace') {
+                if (!val && idx > 1) {
+                    document.getElementById('unlockBox' + (idx - 1))?.focus();
+                }
+                return;
+            }
+            if (event.key === 'Enter') {
+                attemptPinUnlock();
+                return;
+            }
+            if (val && val.length >= 1 && idx < 4) {
+                document.getElementById('unlockBox' + (idx + 1))?.focus();
+            }
+            if (idx === 4 && val) {
+                attemptPinUnlock();
+            }
+        }
+
+        function attemptPinUnlock() {
+            const b1 = document.getElementById('unlockBox1')?.value || '';
+            const b2 = document.getElementById('unlockBox2')?.value || '';
+            const b3 = document.getElementById('unlockBox3')?.value || '';
+            const b4 = document.getElementById('unlockBox4')?.value || '';
+            const entered = (b1 + b2 + b3 + b4).trim();
+            const stored = localStorage.getItem('abrevia_pin');
+            const errorMsg = document.getElementById('pinErrorMsg');
+
+            if (entered === stored) {
+                localStorage.removeItem('abrevia_signed_out');
+                window.location.href = '/dashboard.html?lang=' + currentLang;
+            } else {
+                if (errorMsg) errorMsg.classList.remove('hidden');
+                for (let i = 1; i <= 4; i++) {
+                    const b = document.getElementById('unlockBox' + i);
+                    if (b) b.value = '';
+                }
+                document.getElementById('unlockBox1')?.focus();
+            }
+        }
+
+        function resetPinAndEnter() {
+            const msg = currentLang === 'es' 
+                ? '¿Desea restablecer su PIN y acceder a su espacio de trabajo?' 
+                : 'Would you like to reset your PIN and access your workspace?';
+            if (confirm(msg)) {
+                localStorage.removeItem('abrevia_pin');
+                localStorage.removeItem('abrevia_signed_out');
+                window.location.href = '/dashboard.html?lang=' + currentLang;
+            }
+        }
+
+        // Run PIN check on load
+        window.addEventListener('DOMContentLoaded', checkPinStatus);
+
 
         // HIPAA Modal Handlers
         function openHipaaModal() {

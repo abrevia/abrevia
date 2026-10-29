@@ -2789,3 +2789,132 @@ window.addEventListener('resize', () => {
         }
     }
 });
+
+
+// --- PWA Service Worker & Desktop / Mobile Shortcut ---
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.debug('SW reg failed:', err));
+    });
+}
+
+let deferredPwaPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPwaPrompt = e;
+    const btn = document.getElementById('installAppBtn');
+    if (btn) {
+        btn.classList.remove('hidden');
+        btn.classList.add('inline-flex');
+    }
+});
+
+function triggerPwaInstall() {
+    if (deferredPwaPrompt) {
+        deferredPwaPrompt.prompt();
+        deferredPwaPrompt.userChoice.then((choice) => {
+            if (choice.outcome === 'accepted') {
+                document.getElementById('installAppBtn')?.classList.add('hidden');
+            }
+            deferredPwaPrompt = null;
+        });
+    } else {
+        openInstallModal();
+    }
+}
+
+function openInstallModal() {
+    document.getElementById('installHelperModal')?.classList.remove('hidden');
+}
+
+function closeInstallModal() {
+    document.getElementById('installHelperModal')?.classList.add('hidden');
+}
+
+// --- Session Wrap Up & 4-Digit Security PIN ---
+function openWrapUpModal() {
+    const modal = document.getElementById('wrapUpModal');
+    if (!modal) return;
+    
+    // Pre-populate PIN if previously set
+    const currentPin = localStorage.getItem('abrevia_pin') || '';
+    for (let i = 1; i <= 4; i++) {
+        const box = document.getElementById('pinBox' + i);
+        if (box) box.value = currentPin[i - 1] || '';
+    }
+    
+    // Pre-populate email and phone if previously set
+    const emailInput = document.getElementById('wrapUpEmailInput');
+    if (emailInput) emailInput.value = localStorage.getItem('abrevia_sub_email') || '';
+    const phoneInput = document.getElementById('wrapUpPhoneInput');
+    if (phoneInput) phoneInput.value = localStorage.getItem('abrevia_sub_phone') || '';
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        document.getElementById('pinBox1')?.focus();
+    }, 100);
+}
+
+function closeWrapUpModal() {
+    document.getElementById('wrapUpModal')?.classList.add('hidden');
+}
+
+function handlePinKey(event, boxIdx) {
+    const val = event.target.value;
+    if (event.key === 'Backspace') {
+        if (!val && boxIdx > 1) {
+            document.getElementById('pinBox' + (boxIdx - 1))?.focus();
+        }
+        return;
+    }
+    if (event.key === 'Enter') {
+        confirmWrapUpSignOut();
+        return;
+    }
+    if (val && val.length >= 1 && boxIdx < 4) {
+        document.getElementById('pinBox' + (boxIdx + 1))?.focus();
+    }
+}
+
+async function confirmWrapUpSignOut() {
+    const b1 = document.getElementById('pinBox1')?.value || '';
+    const b2 = document.getElementById('pinBox2')?.value || '';
+    const b3 = document.getElementById('pinBox3')?.value || '';
+    const b4 = document.getElementById('pinBox4')?.value || '';
+    const pin = (b1 + b2 + b3 + b4).trim();
+
+    if (pin.length > 0 && pin.length < 4) {
+        alert(dashboardMode === 'es' ? 'Por favor ingrese un PIN completo de 4 dígitos o déjelo vacío.' : 'Please enter a complete 4-digit PIN or leave it empty.');
+        return;
+    }
+
+    if (pin.length === 4) {
+        localStorage.setItem('abrevia_pin', pin);
+    }
+
+    const email = document.getElementById('wrapUpEmailInput')?.value.trim() || '';
+    const phone = document.getElementById('wrapUpPhoneInput')?.value.trim() || '';
+
+    if (email || phone) {
+        if (email) localStorage.setItem('abrevia_sub_email', email);
+        if (phone) localStorage.setItem('abrevia_sub_phone', phone);
+        
+        try {
+            fetch('/api/subscribe-updates', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, phone, source: 'session_wrapup' })
+            }).catch(e => console.warn('Updates subscribe background fetch:', e));
+        } catch (e) {}
+    }
+
+    localStorage.setItem('abrevia_signed_out', 'true');
+    closeWrapUpModal();
+    window.location.href = '/index.html?view=signed_out';
+}
+
+function signOutWithoutPin() {
+    localStorage.setItem('abrevia_signed_out', 'true');
+    closeWrapUpModal();
+    window.location.href = '/index.html?view=signed_out';
+}
