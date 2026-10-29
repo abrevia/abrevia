@@ -4,9 +4,11 @@ Abrevia 1 is a "Zero-Download SaaS" bilingual (English/Spanish) customer support
 
 > **CRITICAL SCOPE:** Abrevia 1 is an administrative operations tool (tailored for Logistics, Property Management, Field Services, and Retail). It is strictly non-medical and non-HIPAA.
 >
-> 🏛️ **Title VI Federal Language Access Compliance & Sector Guide:**  
-> For in-depth analysis on Title VI of the Civil Rights Act of 1964, Executive Order 13166, the Civil Rights Restoration Act of 1987 "Institution-Wide" rule, and sector requirements (Education, Courts, Law Enforcement, Transit, HUD, Social Services, FEMA), see:  
-> 👉 [**Who is this app for? / ¿Para quién es esta app? (WHO_IS_THIS_FOR.md)**](WHO_IS_THIS_FOR.md)
+> 🏛️ **Compliance, Legal & Sector Documentation:**  
+> * 🏛️ [**Who is this app for? / ¿Para quién es esta app? (Title VI & Sector Guide)**](WHO_IS_THIS_FOR.md)
+> * 📜 [**Terms of Service / Términos de Servicio**](TERMS_OF_SERVICE.md)
+> * 🛡️ [**Privacy Policy / Aviso de Privacidad**](PRIVACY_POLICY.md)
+> * ⚖️ [**Legal & Regulatory Disclaimers / Deslindes Legales**](DISCLAIMERS.md)
 
 ---
 

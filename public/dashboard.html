@@ -57,11 +57,11 @@
 
         <!-- Right: Trial Status, Billing & Sign Out -->
         <div class="flex items-center space-x-2 sm:space-x-3 text-xs">
-            <!-- Who is this app for? GitHub Link -->
-            <a id="dashWhoIsThisForBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 shadow-sm" title="Who is this app for? Federal Title VI & Sector Use Cases">
-                <span>🏛️</span>
-                <span id="dashWhoIsThisForText" class="hidden md:inline">Who is this for?</span>
-            </a>
+            <!-- Organic Share Button -->
+            <button id="dashShareBtn" onclick="shareAbreviaApp()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm" title="Share Abrevia">
+                <span>↗</span>
+                <span id="dashShareBtnText" class="hidden sm:inline">Share</span>
+            </button>
             <!-- Discreet Sound & Haptic Notification Toggle -->
             <button id="soundToggleBtn" onclick="toggleSoundAlerts()" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 shadow-sm" title="Sound & Vibration Alerts (Discreet Beep)">
                 <span id="soundToggleIcon">🔔</span>
@@ -121,11 +121,21 @@
             </div>
 
             <!-- Start New Conversation Button (Sticky Bottom, Safe Area Padded) -->
-            <div class="p-3 border-t border-slate-800 bg-slate-950/95 shrink-0 sticky bottom-0 z-20 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-xl">
+            <div class="p-3 border-t border-slate-800 bg-slate-950/95 shrink-0 sticky bottom-0 z-20 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-xl space-y-2">
                 <button onclick="openNewTicketModal()" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 active:scale-[0.98] text-white text-xs font-semibold py-2.5 rounded-xl transition flex items-center justify-center space-x-2">
                     <span class="text-brand-400 font-bold text-sm">+</span>
                     <span id="newThreadBtnText">New Conversation</span>
                 </button>
+                <div class="flex items-center justify-between text-[10px] text-slate-500 px-1">
+                    <button type="button" onclick="showConsoleStatusModal()" class="hover:text-slate-300 transition flex items-center space-x-1" title="Legal, Terms, Privacy & Disclaimers">
+                        <span>⚖️</span>
+                        <span id="sidebarLegalBtnText">Terms & Privacy</span>
+                    </button>
+                    <button type="button" onclick="shareAbreviaApp()" class="hover:text-white text-brand-400 transition flex items-center space-x-1" title="Share Abrevia">
+                        <span>↗</span>
+                        <span id="sidebarShareBtnText">Share App</span>
+                    </button>
+                </div>
             </div>
         </aside>
 
@@ -692,6 +702,50 @@
                         <span>&rarr;</span>
                     </a>
                 </div>
+
+                <!-- GitHub Legal & Compliance Quick Links -->
+                <div class="pt-2 border-t border-slate-800/80 space-y-1.5">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block" id="statusLegalHeader">Legal & Transparency (GitHub):</span>
+                    <div class="grid grid-cols-2 gap-1.5 text-[10px]">
+                        <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition">
+                            <span>🏛️</span>
+                            <span id="statusLinkWho">Who is this for?</span>
+                        </a>
+                        <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition">
+                            <span>📜</span>
+                            <span id="statusLinkTerms">Terms of Service</span>
+                        </a>
+                        <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition">
+                            <span>🛡️</span>
+                            <span id="statusLinkPrivacy">Privacy Policy</span>
+                        </a>
+                        <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-1.5 rounded-lg text-slate-300 hover:text-white flex items-center space-x-1 transition">
+                            <span>⚖️</span>
+                            <span id="statusLinkDisclaimers">Disclaimers</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Interactive Test SMS to Self Tool -->
+                <div class="py-2.5 border-t border-slate-800/80 bg-slate-950/60 p-3 rounded-xl border border-slate-800/90 mt-2 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-white font-bold text-xs flex items-center space-x-1">
+                            <span>📲</span>
+                            <span id="testSmsCardTitle">Send Test SMS to My Phone</span>
+                        </span>
+                        <span class="text-[9px] bg-brand-500/20 text-brand-300 font-bold px-1.5 py-0.5 rounded border border-brand-500/30 uppercase">Instant Test</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 leading-relaxed" id="testSmsCardDesc">
+                        Enter your personal mobile number to receive a live SMS containing the Abrevia zero-download link.
+                    </p>
+                    <div class="flex items-center space-x-2">
+                        <input type="tel" id="testPhoneInput" placeholder="+1... or +52..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                        <button type="button" id="sendTestSmsBtn" onclick="dispatchTestSmsToSelf()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition shrink-0 shadow">
+                            <span id="sendTestSmsBtnText">Send SMS</span>
+                        </button>
+                    </div>
+                    <div id="testSmsFeedback" class="text-[10px] hidden font-medium"></div>
+                </div>
             </div>
             <div class="pt-2">
                 <button onclick="closeConsoleStatusModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
@@ -1038,6 +1092,19 @@ Responda ALTO para no recibir más mensajes.</div>
                 </div>
             </div>
 
+            <!-- Organic Share Card -->
+            <div class="bg-gradient-to-r from-brand-950/40 via-slate-950 to-indigo-950/30 border border-brand-500/30 rounded-2xl p-4 mb-4 text-center space-y-2 shadow-sm">
+                <div class="flex items-center justify-center space-x-2">
+                    <span class="text-base">🤝</span>
+                    <span class="text-xs font-bold text-white" id="wrapUpShareTitle">Share Abrevia with your Team</span>
+                </div>
+                <p class="text-[11px] text-slate-400 leading-relaxed" id="wrapUpShareDesc">Help colleagues and partners eliminate language barriers with zero downloads.</p>
+                <button type="button" onclick="shareAbreviaApp()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs py-2 px-4 rounded-xl transition shadow flex items-center justify-center space-x-1.5">
+                    <span>↗</span>
+                    <span id="wrapUpShareBtnText">Share Abrevia</span>
+                </button>
+            </div>
+
             <div class="space-y-4">
                 <!-- 1. 4-Digit PIN Setup -->
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4">
@@ -1088,6 +1155,17 @@ Responda ALTO para no recibir más mensajes.</div>
                     <button type="button" onclick="closeWrapUpModal()" class="text-slate-500 hover:text-slate-300 text-xs transition">
                         <span id="wrapUpCancelBtn">Stay in Dashboard</span>
                     </button>
+                </div>
+                
+                <!-- Quick Legal & Compliance Links at Very Bottom of Wrap Up -->
+                <div class="border-t border-slate-800/80 pt-3 mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] text-slate-500">
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition">Title VI & Use Cases</a>
+                    <span>•</span>
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition">Terms</a>
+                    <span>•</span>
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition">Privacy</a>
+                    <span>•</span>
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition">Disclaimers</a>
                 </div>
             </div>
         </div>

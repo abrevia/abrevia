@@ -50,12 +50,12 @@
                 <span class="text-base sm:text-xl font-extrabold tracking-tight text-white">Abrevia</span>
             </div>
 
-            <!-- Right: Shortcut & Language Switcher -->
+            <!-- Right: Share & Language Switcher (Clean, Uncluttered Top Bar) -->
             <div class="flex items-center space-x-2 shrink-0">
-                <a id="whoIsThisForHeaderBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition shadow-sm" title="Who is this app for? Federal Title VI & Sector Use Cases">
-                    <span>🏛️</span>
-                    <span id="whoIsThisForHeaderText">Who is this app for?</span>
-                </a>
+                <button id="indexShareBtn" onclick="shareAbreviaApp()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm" title="Share Abrevia">
+                    <span>↗</span>
+                    <span id="indexShareBtnText">Share</span>
+                </button>
                 <button id="indexInstallBtn" onclick="triggerIndexPwaInstall()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 border border-brand-500/30 transition shadow-sm" title="Add shortcut to desktop or home screen">
                     <span>📲</span>
                     <span id="indexInstallBtnText">Add Shortcut</span>
@@ -202,24 +202,114 @@
 
     </main>
 
-    <!-- Footer with Sleek Neutral Administrative Note & HIPAA Learn More Link -->
-    <footer class="border-t border-slate-800/80 bg-slate-950 py-8 px-6 text-center">
-        <div class="max-w-4xl mx-auto space-y-4">
-            <p id="footerCopyright" class="text-xs text-slate-500 font-medium">
-                &copy; 2026 Abrevia Inc. All rights reserved.
-            </p>
-
-            <!-- Sleek Neutral Administrative Notice Card -->
-            <div class="text-xs text-slate-400 bg-slate-900 border border-slate-800 rounded-xl p-4 inline-block text-left max-w-2xl shadow-sm">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <p id="footerNoticeText" class="leading-relaxed text-[11px] text-slate-400">
-                        <span id="footerNoticeTitle" class="font-semibold text-slate-300">Compliance & Title VI Notice:</span> 
-                        <span id="footerNoticeTextSpan">Abrevia empowers organizations to satisfy federal Title VI (Title 6) & Limited English Proficiency (LEP) language access mandates under EO 13166. Abrevia is strictly for administrative operations and is not designed for PHI processing.</span>
+        <!-- Comprehensive Legal, Title VI & Compliance Footer at Very Bottom -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-10 px-4 sm:px-6 text-slate-400">
+        <div class="max-w-5xl mx-auto space-y-8">
+            <!-- Top Row: Columns -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-xs text-left">
+                <!-- Col 1: Brand & Organic Share -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <img src="/assets/logo.png?v=3" alt="Abrevia" class="h-6 w-6 rounded-md">
+                        <span class="text-white font-bold text-sm tracking-tight">Abrevia</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed" id="footerBrandBio">
+                        Bilingual asynchronous communication technology. Messages are 2-way translated and dispatched directly with zero downloads.
                     </p>
-                    <a id="footerWhoIsThisForLink" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="shrink-0 text-brand-400 hover:text-brand-300 font-semibold text-xs transition inline-flex items-center space-x-1">
-                        <span id="footerLearnMoreBtn">Who is this app for?</span>
-                        <span>&rarr;</span>
-                    </a>
+                    <div>
+                        <button onclick="shareAbreviaApp()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm">
+                            <span>↗</span>
+                            <span id="footerShareBtnText">Share Abrevia</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Col 2: Compliance & Sectors (GitHub) -->
+                <div class="space-y-2.5">
+                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColComplianceHeader">Compliance & Sectors</div>
+                    <ul class="space-y-1.5 text-[11px]">
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>🏛️</span>
+                                <span id="footerLinkWhoIsThis">Who is this app for?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#-english-who-is-abrevia-for" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkTitle6">
+                                Title VI & EO 13166 Mandates
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#3-major-federally-bound-sectors--statutory-use-cases" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkSectors">
+                                7 Major Federal Sectors
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Legal & Transparency (GitHub) -->
+                <div class="space-y-2.5">
+                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColLegalHeader">Legal & Transparency</div>
+                    <ul class="space-y-1.5 text-[11px]">
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>📜</span>
+                                <span id="footerLinkTerms">Terms of Service</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>🛡️</span>
+                                <span id="footerLinkPrivacy">Privacy Policy</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>⚖️</span>
+                                <span id="footerLinkDisclaimers">Legal Disclaimers</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Platform & Utilities -->
+                <div class="space-y-2.5">
+                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColPlatformHeader">Platform & Utilities</div>
+                    <ul class="space-y-1.5 text-[11px]">
+                        <li>
+                            <button onclick="triggerIndexPwaInstall()" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>📲</span>
+                                <span id="footerLinkShortcut">Add Shortcut</span>
+                            </button>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-400">
+                                <span>🐙</span>
+                                <span>GitHub Repository</span>
+                            </a>
+                        </li>
+                        <li>
+                            <span class="text-emerald-400 text-[10px] font-semibold flex items-center space-x-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span id="footerStatusBadge">Platform Operational</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar: Administrative Disclaimer & Copyright -->
+            <div class="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 text-center sm:text-left">
+                <p id="footerCopyright">
+                    &copy; 2026 Abrevia Inc. All rights reserved.
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-2 text-[10px] text-slate-400">
+                    <span class="px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800" id="footerNonHipaaBadge">
+                        Administrative Tool • Strictly Non-HIPAA
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800" id="footerTitle6Badge">
+                        Title VI & EO 13166 Ready
+                    </span>
                 </div>
             </div>
         </div>
@@ -294,7 +384,22 @@
                 indLogistics: '🚚 Logistics',
                 indField: '🛠️ Field Services',
                 indOperations: '⚡ Operations',
-                whoIsThisForHeaderText: 'Who is this app for?',
+                                indexShareBtnText: 'Share',
+                footerBrandBio: 'Bilingual asynchronous communication technology. Messages are 2-way translated and dispatched directly with zero downloads.',
+                footerShareBtnText: 'Share Abrevia',
+                footerColComplianceHeader: 'Compliance & Sectors',
+                footerLinkWhoIsThis: 'Who is this app for?',
+                footerLinkTitle6: 'Title VI & EO 13166 Mandates',
+                footerLinkSectors: '7 Major Federal Sectors',
+                footerColLegalHeader: 'Legal & Transparency',
+                footerLinkTerms: 'Terms of Service',
+                footerLinkPrivacy: 'Privacy Policy',
+                footerLinkDisclaimers: 'Legal Disclaimers',
+                footerColPlatformHeader: 'Platform & Utilities',
+                footerLinkShortcut: 'Add Shortcut',
+                footerStatusBadge: 'Platform Operational',
+                footerNonHipaaBadge: 'Administrative Tool • Strictly Non-HIPAA',
+                footerTitle6Badge: 'Title VI & EO 13166 Ready',
                 whoIsThisForHeroText: 'Who is this app for? Federal Title VI & Use Cases →',
                 footerLearnMore: 'Who is this app for?',
                 indexInstallBtnText: 'Add Shortcut',
@@ -371,7 +476,22 @@
                 indLogistics: '🚚 Logística',
                 indField: '🛠️ Servicios en Campo',
                 indOperations: '⚡ Operaciones',
-                whoIsThisForHeaderText: '¿Para quién es esta app?',
+                                indexShareBtnText: 'Compartir',
+                footerBrandBio: 'Tecnología de comunicación asíncrona bilingüe. Los mensajes se traducen en 2 vías y se envían directamente sin descargas.',
+                footerShareBtnText: 'Compartir Abrevia',
+                footerColComplianceHeader: 'Cumplimiento y Sectores',
+                footerLinkWhoIsThis: '¿Para quién es esta app?',
+                footerLinkTitle6: 'Mandatos de Título VI y OE 13166',
+                footerLinkSectors: '7 Sectores Federales Principales',
+                footerColLegalHeader: 'Legalidad y Transparencia',
+                footerLinkTerms: 'Términos de Servicio',
+                footerLinkPrivacy: 'Aviso de Privacidad',
+                footerLinkDisclaimers: 'Deslindes Legales',
+                footerColPlatformHeader: 'Plataforma y Utilidades',
+                footerLinkShortcut: 'Agregar Atajo',
+                footerStatusBadge: 'Plataforma Operativa',
+                footerNonHipaaBadge: 'Herramienta Administrativa • No Médica',
+                footerTitle6Badge: 'Listo para Título VI y OE 13166',
                 whoIsThisForHeroText: '¿Para quién es esta app? Título VI y Casos de Uso →',
                 footerLearnMore: '¿Para quién es esta app?',
                 indexInstallBtnText: 'Agregar Atajo',
@@ -506,6 +626,40 @@
             if (pinReset && c.pinResetLinkText) pinReset.textContent = c.pinResetLinkText;
             const pinErr = document.getElementById('pinErrorMsg');
             if (pinErr && c.pinErrorMsg) pinErr.textContent = c.pinErrorMsg;
+
+                        // Share & Footer Localization
+            const idxShr = document.getElementById('indexShareBtnText');
+            if (idxShr && c.indexShareBtnText) idxShr.textContent = c.indexShareBtnText;
+            const ftBio = document.getElementById('footerBrandBio');
+            if (ftBio && c.footerBrandBio) ftBio.textContent = c.footerBrandBio;
+            const ftShr = document.getElementById('footerShareBtnText');
+            if (ftShr && c.footerShareBtnText) ftShr.textContent = c.footerShareBtnText;
+            const ftCol1 = document.getElementById('footerColComplianceHeader');
+            if (ftCol1 && c.footerColComplianceHeader) ftCol1.textContent = c.footerColComplianceHeader;
+            const ftWho = document.getElementById('footerLinkWhoIsThis');
+            if (ftWho && c.footerLinkWhoIsThis) ftWho.textContent = c.footerLinkWhoIsThis;
+            const ftT6 = document.getElementById('footerLinkTitle6');
+            if (ftT6 && c.footerLinkTitle6) ftT6.textContent = c.footerLinkTitle6;
+            const ftSec = document.getElementById('footerLinkSectors');
+            if (ftSec && c.footerLinkSectors) ftSec.textContent = c.footerLinkSectors;
+            const ftCol2 = document.getElementById('footerColLegalHeader');
+            if (ftCol2 && c.footerColLegalHeader) ftCol2.textContent = c.footerColLegalHeader;
+            const ftTrm = document.getElementById('footerLinkTerms');
+            if (ftTrm && c.footerLinkTerms) ftTrm.textContent = c.footerLinkTerms;
+            const ftPrv = document.getElementById('footerLinkPrivacy');
+            if (ftPrv && c.footerLinkPrivacy) ftPrv.textContent = c.footerLinkPrivacy;
+            const ftDsc = document.getElementById('footerLinkDisclaimers');
+            if (ftDsc && c.footerLinkDisclaimers) ftDsc.textContent = c.footerLinkDisclaimers;
+            const ftCol3 = document.getElementById('footerColPlatformHeader');
+            if (ftCol3 && c.footerColPlatformHeader) ftCol3.textContent = c.footerColPlatformHeader;
+            const ftSho = document.getElementById('footerLinkShortcut');
+            if (ftSho && c.footerLinkShortcut) ftSho.textContent = c.footerLinkShortcut;
+            const ftSts = document.getElementById('footerStatusBadge');
+            if (ftSts && c.footerStatusBadge) ftSts.textContent = c.footerStatusBadge;
+            const ftNhp = document.getElementById('footerNonHipaaBadge');
+            if (ftNhp && c.footerNonHipaaBadge) ftNhp.textContent = c.footerNonHipaaBadge;
+            const ftT6b = document.getElementById('footerTitle6Badge');
+            if (ftT6b && c.footerTitle6Badge) ftT6b.textContent = c.footerTitle6Badge;
 
             // Who is this app for Localization
             const whoHdr = document.getElementById('whoIsThisForHeaderText');
@@ -747,6 +901,35 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js').catch(() => {});
             });
+        }
+
+    
+        // --- Web Share API & Organic Growth Handler ---
+        async function shareAbreviaApp() {
+            const isEs = (typeof currentLang !== 'undefined' ? currentLang : 'en') === 'es';
+            const shareData = {
+                title: 'Abrevia',
+                text: isEs 
+                    ? 'Abrevia — Tecnología de comunicación bilingüe instantánea sin descargas para operaciones, empresas y comunidades.'
+                    : 'Abrevia — Instant two-way bilingual asynchronous communication technology with zero downloads for operations, organizations & communities.',
+                url: 'https://abrevia-beta.vercel.app'
+            };
+
+            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
+            }
+
+            try {
+                await navigator.clipboard.writeText('https://abrevia-beta.vercel.app');
+                alert(isEs ? '¡Enlace copiado al portapapeles! Listo para compartir.' : 'Link copied to clipboard! Ready to share.');
+            } catch (err) {
+                window.prompt(isEs ? 'Copie este enlace para compartir Abrevia:' : 'Copy this link to share Abrevia:', 'https://abrevia-beta.vercel.app');
+            }
         }
 
     </script>

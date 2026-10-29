@@ -165,6 +165,20 @@ const I18N = {
         consoleStatus: 'Active',
         billingBtn: 'Billing',
         whoIsThisForBtn: 'Who is this for?',
+        dashShareBtn: 'Share',
+        wrapUpShareTitle: 'Share Abrevia with your Team',
+        wrapUpShareDesc: 'Help colleagues and partners eliminate language barriers with zero downloads.',
+        wrapUpShareBtn: 'Share Abrevia',
+        sidebarLegalBtn: 'Terms & Privacy',
+        sidebarShareBtn: 'Share App',
+        statusLegalHeader: 'Legal & Transparency (GitHub):',
+        statusLinkWho: 'Who is this for?',
+        statusLinkTerms: 'Terms of Service',
+        statusLinkPrivacy: 'Privacy Policy',
+        statusLinkDisclaimers: 'Disclaimers',
+        testSmsCardTitle: 'Send Test SMS to My Phone',
+        testSmsCardDesc: 'Enter your personal mobile number to receive a live SMS containing the Abrevia zero-download link.',
+        sendTestSmsBtnText: 'Send SMS',
         signOut: 'Sign Out',
         sidebarTitle: 'Conversations',
         contactsBtn: 'Contacts',
@@ -333,6 +347,20 @@ const I18N = {
         consoleStatus: 'Activo',
         billingBtn: 'Facturación',
         whoIsThisForBtn: '¿Para quién es?',
+        dashShareBtn: 'Compartir',
+        wrapUpShareTitle: 'Comparta Abrevia con su Equipo',
+        wrapUpShareDesc: 'Ayude a colegas y socios a eliminar barreras de idioma sin descargas.',
+        wrapUpShareBtn: 'Compartir Abrevia',
+        sidebarLegalBtn: 'Términos y Privacidad',
+        sidebarShareBtn: 'Compartir App',
+        statusLegalHeader: 'Legalidad y Transparencia (GitHub):',
+        statusLinkWho: '¿Para quién es?',
+        statusLinkTerms: 'Términos de Servicio',
+        statusLinkPrivacy: 'Aviso de Privacidad',
+        statusLinkDisclaimers: 'Deslindes Legales',
+        testSmsCardTitle: 'Enviar SMS de Prueba a Mi Celular',
+        testSmsCardDesc: 'Ingrese su número celular para recibir un SMS en vivo con el enlace de Abrevia sin descargas.',
+        sendTestSmsBtnText: 'Enviar SMS',
         signOut: 'Cerrar Sesión',
         sidebarTitle: 'Conversaciones',
         contactsBtn: 'Contactos',
@@ -1352,6 +1380,36 @@ function applyDashboardLocalization() {
     if (consoleStatusTextEl) consoleStatusTextEl.textContent = t.consoleStatus;
     const billingBtnEl = document.getElementById('billingBtnText');
     if (billingBtnEl) billingBtnEl.textContent = t.billingBtn || 'Billing';
+        // Share & Test SMS Localization
+    const dShr = document.getElementById('dashShareBtnText');
+    if (dShr && t.dashShareBtn) dShr.textContent = t.dashShareBtn;
+    const wShrT = document.getElementById('wrapUpShareTitle');
+    if (wShrT && t.wrapUpShareTitle) wShrT.textContent = t.wrapUpShareTitle;
+    const wShrD = document.getElementById('wrapUpShareDesc');
+    if (wShrD && t.wrapUpShareDesc) wShrD.textContent = t.wrapUpShareDesc;
+    const wShrB = document.getElementById('wrapUpShareBtnText');
+    if (wShrB && t.wrapUpShareBtn) wShrB.textContent = t.wrapUpShareBtn;
+    const sLeg = document.getElementById('sidebarLegalBtnText');
+    if (sLeg && t.sidebarLegalBtn) sLeg.textContent = t.sidebarLegalBtn;
+    const sShr = document.getElementById('sidebarShareBtnText');
+    if (sShr && t.sidebarShareBtn) sShr.textContent = t.sidebarShareBtn;
+    const stLegH = document.getElementById('statusLegalHeader');
+    if (stLegH && t.statusLegalHeader) stLegH.textContent = t.statusLegalHeader;
+    const stWho = document.getElementById('statusLinkWho');
+    if (stWho && t.statusLinkWho) stWho.textContent = t.statusLinkWho;
+    const stTrm = document.getElementById('statusLinkTerms');
+    if (stTrm && t.statusLinkTerms) stTrm.textContent = t.statusLinkTerms;
+    const stPrv = document.getElementById('statusLinkPrivacy');
+    if (stPrv && t.statusLinkPrivacy) stPrv.textContent = t.statusLinkPrivacy;
+    const stDsc = document.getElementById('statusLinkDisclaimers');
+    if (stDsc && t.statusLinkDisclaimers) stDsc.textContent = t.statusLinkDisclaimers;
+    const tSmsT = document.getElementById('testSmsCardTitle');
+    if (tSmsT && t.testSmsCardTitle) tSmsT.textContent = t.testSmsCardTitle;
+    const tSmsD = document.getElementById('testSmsCardDesc');
+    if (tSmsD && t.testSmsCardDesc) tSmsD.textContent = t.testSmsCardDesc;
+    const tSmsB = document.getElementById('sendTestSmsBtnText');
+    if (tSmsB && t.sendTestSmsBtnText) tSmsB.textContent = t.sendTestSmsBtnText;
+
     const dashWhoBtn = document.getElementById('dashWhoIsThisForText');
     if (dashWhoBtn && t.whoIsThisForBtn) dashWhoBtn.textContent = t.whoIsThisForBtn;
     document.getElementById('signOutLink').textContent = t.signOut;
@@ -3306,3 +3364,94 @@ function dismissPwaBanner() {
 }
 
 window.addEventListener('DOMContentLoaded', initPwaBanner);
+
+
+// --- Organic Growth: Web Share API Handler ---
+async function shareAbreviaApp() {
+    const isEs = dashboardMode === 'es';
+    const shareData = {
+        title: 'Abrevia',
+        text: isEs 
+            ? 'Abrevia — Tecnología de comunicación bilingüe instantánea sin descargas para operaciones, empresas y comunidades.'
+            : 'Abrevia — Instant two-way bilingual asynchronous communication technology with zero downloads for operations, organizations & communities.',
+        url: 'https://abrevia-beta.vercel.app'
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        try {
+            await navigator.share(shareData);
+            return;
+        } catch (err) {
+            if (err.name === 'AbortError') return;
+        }
+    }
+
+    try {
+        await navigator.clipboard.writeText('https://abrevia-beta.vercel.app');
+        alert(isEs ? '¡Enlace copiado al portapapeles! Listo para compartir.' : 'Link copied to clipboard! Ready to share.');
+    } catch (err) {
+        window.prompt(isEs ? 'Copie este enlace para compartir Abrevia:' : 'Copy this link to share Abrevia:', 'https://abrevia-beta.vercel.app');
+    }
+}
+
+// --- Live Test SMS Dispatch to Self ---
+async function dispatchTestSmsToSelf() {
+    const phoneInput = document.getElementById('testPhoneInput');
+    const feedback = document.getElementById('testSmsFeedback');
+    const btn = document.getElementById('sendTestSmsBtn');
+    const btnText = document.getElementById('sendTestSmsBtnText');
+    const isEs = dashboardMode === 'es';
+
+    if (!phoneInput || !phoneInput.value.trim()) {
+        if (feedback) {
+            feedback.className = 'text-[10px] mt-1 text-amber-400 font-medium block';
+            feedback.textContent = isEs 
+                ? 'Por favor ingrese su número con código de país (+1... o +52...).'
+                : 'Please enter a valid phone number with country code (+1... or +52...).';
+            feedback.classList.remove('hidden');
+        }
+        return;
+    }
+
+    const phone = phoneInput.value.trim();
+    if (btn) btn.disabled = true;
+    if (btnText) btnText.textContent = isEs ? 'Enviando...' : 'Sending...';
+    if (feedback) {
+        feedback.className = 'text-[10px] mt-1 text-slate-400 block';
+        feedback.textContent = isEs ? 'Despachando SMS de prueba vía pasarela celular...' : 'Dispatching test SMS via cellular gateway...';
+        feedback.classList.remove('hidden');
+    }
+
+    try {
+        const res = await fetch('/api/send-sms', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                to: phone,
+                body: 'Abrevia Live Test Notification / Notificación de Prueba de Abrevia',
+                provider: currentSmsGateway || 'httpsms',
+                dispatchMode: 'link',
+                targetLang: isEs ? 'es' : 'en'
+            })
+        });
+
+        const data = await res.json();
+        if (btn) btn.disabled = false;
+        if (btnText) btnText.textContent = isEs ? 'Enviar SMS' : 'Send SMS';
+
+        if (res.ok && data.success) {
+            feedback.className = 'text-[10px] mt-1 text-emerald-400 font-semibold block';
+            feedback.textContent = isEs 
+                ? `✅ ¡SMS enviado con éxito vía ${data.provider}! Revise los mensajes de su teléfono para abrir el enlace Abrevia.`
+                : `✅ SMS dispatched successfully via ${data.provider}! Check your phone text messages now to open the Abrevia link.`;
+        } else {
+            feedback.className = 'text-[10px] mt-1 text-red-400 font-medium block';
+            feedback.textContent = `⚠️ Error: ${data.error || 'Failed to dispatch SMS'}`;
+        }
+    } catch (err) {
+        if (btn) btn.disabled = false;
+        if (btnText) btnText.textContent = isEs ? 'Enviar SMS' : 'Send SMS';
+        feedback.className = 'text-[10px] mt-1 text-red-400 font-medium block';
+        feedback.textContent = `⚠️ Error: ${err.message}`;
+    }
+}
