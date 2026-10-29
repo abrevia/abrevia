@@ -3455,3 +3455,61 @@ async function dispatchTestSmsToSelf() {
         feedback.textContent = `⚠️ Error: ${err.message}`;
     }
 }
+
+
+// --- AES-256 Proof Modal Handlers ---
+function showEncryptionProofModal() {
+    const modal = document.getElementById('encryptionProofModal');
+    if (modal) {
+        applyEncryptionProofLocalization();
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeEncryptionProofModal() {
+    const modal = document.getElementById('encryptionProofModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function applyEncryptionProofLocalization() {
+    const isEs = dashboardMode === 'es';
+    const title = document.getElementById('encModalTitle');
+    if (title) title.textContent = isEs ? 'Demostración Criptográfica: Cifrado AES-256' : 'Cryptographic Proof: AES-256 Encryption';
+    const sub = document.getElementById('encModalSubtitle');
+    if (sub) sub.textContent = isEs ? 'Cómo Abrevia verifica y garantiza la seguridad de datos cifrados' : 'How Abrevia verifies and guarantees encrypted data security';
+    
+    const l1T = document.getElementById('encL1Title');
+    if (l1T) l1T.innerHTML = isEs ? '<span>🗄️</span><span>1. Almacenamiento en Reposo (Base de Datos y Discos)</span>' : '<span>🗄️</span><span>1. Storage at Rest (Database & Disks)</span>';
+    const l1D = document.getElementById('encL1Desc');
+    if (l1D) l1D.innerHTML = isEs 
+        ? 'Todas las conversaciones, tickets y contactos de Abrevia se almacenan en PostgreSQL sobre AWS administrado por Supabase. Cada volumen de disco Amazon EBS subyacente está cifrado en reposo mediante <strong>el estándar de la industria XTS-AES-256</strong> mediante AWS Key Management Service (KMS).'
+        : 'All Abrevia conversation records, tickets, and contacts are stored in PostgreSQL on AWS managed by Supabase. Every underlying Amazon EBS block storage volume is encrypted at rest using <strong>industry-standard XTS-AES-256</strong> via AWS Key Management Service (KMS).';
+    const l1L = document.getElementById('encL1Link');
+    if (l1L) l1L.innerHTML = isEs ? '<span>Ver Cumplimiento de Seguridad y SOC 2 Tipo II de Supabase</span><span>&rarr;</span>' : '<span>View Supabase SOC 2 Type II & Security Compliance</span><span>&rarr;</span>';
+
+    const l2T = document.getElementById('encL2Title');
+    if (l2T) l2T.innerHTML = isEs ? '<span>🌐</span><span>2. Datos en Tránsito (Seguridad de Red)</span>' : '<span>🌐</span><span>2. Data in Transit (Network Security)</span>';
+    const l2D = document.getElementById('encL2Desc');
+    if (l2D) l2D.innerHTML = isEs 
+        ? 'Cada conexión entre su navegador, los servidores edge y la base de datos se ejecuta bajo HTTPS con <strong>cifrado TLS 1.3</strong> utilizando algoritmos modernos AES-GCM (ej. <code>TLS_AES_256_GCM_SHA384</code>). Puede verificarlo directamente en su navegador haciendo clic en el candado de la barra de direcciones.'
+        : 'Every connection between your browser, the serverless edge, and databases is enforced over HTTPS with <strong>TLS 1.3 encryption</strong> using modern AES-GCM ciphers (e.g. <code>TLS_AES_256_GCM_SHA384</code>). You can verify this independently in your browser by clicking the padlock icon in the address bar.';
+
+    const l3T = document.getElementById('encL3Title');
+    if (l3T) l3T.innerHTML = isEs ? '<span>📱</span><span>3. Cifrado de Pasarela Celular (E2EE)</span>' : '<span>📱</span><span>3. Cellular Gateway Cipher (E2EE)</span>';
+    const l3D = document.getElementById('encL3Desc');
+    if (l3D) l3D.innerHTML = isEs 
+        ? 'Abrevia incluye cifrado de código abierto AES-256 en <code>lib/cipher.js</code> con derivación de clave SHA-256 coincidente con la especificación Keystore de hardware de las pasarelas Android. Los paquetes salientes se cifran antes de salir del servidor.'
+        : 'Abrevia includes open-source AES-256 ciphering in <code>lib/cipher.js</code> with SHA-256 key derivation matching the hardware Keystore specification of Android cellular gateways. Outbound payloads are encrypted before leaving the server.';
+    const l3L = document.getElementById('encL3Link');
+    if (l3L) l3L.innerHTML = isEs ? '<span>Auditar código fuente de lib/cipher.js en GitHub</span><span>&rarr;</span>' : '<span>Inspect lib/cipher.js source code on GitHub</span><span>&rarr;</span>';
+
+    const l4T = document.getElementById('encL4Title');
+    if (l4T) l4T.textContent = isEs ? 'Cómo Puede Verificar Esto de Forma Independiente:' : 'How You Can Verify This Independently:';
+    const l4L = document.getElementById('encL4List');
+    if (l4L) l4L.innerHTML = isEs 
+        ? '<li>Inspeccione el cifrado TLS en su navegador: Barra de direcciones &rarr; Seguridad &rarr; Detalles del Certificado.</li><li>Audite el código fuente público en <a href="https://github.com/serviciosadg/abrevia" target="_blank" class="text-brand-400 underline">github.com/serviciosadg/abrevia</a>.</li><li>Consulte nuestro <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" class="text-brand-400 underline">Aviso de Privacidad</a> y <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" class="text-brand-400 underline">Términos de Servicio</a>.</li>'
+        : '<li>Inspect TLS cipher in browser: Address bar &rarr; Security &rarr; Certificate Details.</li><li>Audit the open-source backend code at <a href="https://github.com/serviciosadg/abrevia" target="_blank" class="text-brand-400 underline">github.com/serviciosadg/abrevia</a>.</li><li>Review our published <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" class="text-brand-400 underline">Privacy Policy</a> and <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" class="text-brand-400 underline">Terms of Service</a>.</li>';
+
+    const cls = document.getElementById('encCloseBtnText');
+    if (cls) cls.textContent = isEs ? 'Entendido' : 'Close Proof';
+}
