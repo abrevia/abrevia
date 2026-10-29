@@ -32,7 +32,7 @@ const I18N = {
         purgeBtn: 'Purge',
         purgeBtnTitle: 'End & Purge Thread',
         emptyFeedTitle: 'Select an active conversation to view and send bilingual messages',
-        emptyFeedSubtitle: 'Inbound asynchronous communication translated to English • Outbound replies translated & dispatched in real time',
+        emptyFeedSubtitle: 'Bilingual asynchronous communication technology for logistics, field services & operations. Messages are 2-way translated and dispatched directly—no downloads, zero friction.',
         noMessagesInThread: 'No messages yet in this thread.<br>Send an outbound message below to start.',
         inputLabel: 'Type reply in English (Agent):',
         inputPlaceholder: 'Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)...',
