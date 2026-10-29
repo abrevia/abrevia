@@ -3055,6 +3055,7 @@ function closeConsoleStatusModal() {
 }
 
 function openSettingsModal() {
+    if (typeof updateSettingsPinLabel === 'function') updateSettingsPinLabel();
     document.getElementById('settingsModal')?.classList.remove('hidden');
 }
 
@@ -3897,3 +3898,49 @@ window.openHipaaBaaModal = openHipaaBaaModal;
 window.closeHipaaBaaModal = closeHipaaBaaModal;
 window.switchHipaaTab = switchHipaaTab;
 window.generateAndDownloadBaaPdf = generateAndDownloadBaaPdf;
+
+
+// --- Simple Sign Out / Lock Session Handler ---
+function handleSignOutOrLock() {
+    try {
+        localStorage.setItem('abrevia_signed_out', 'true');
+    } catch (e) {
+        console.warn('Storage setItem error:', e);
+    }
+    window.location.replace('/index.html?view=signed_out');
+}
+
+function openPinConfigModal() {
+    const currentPin = localStorage.getItem('abrevia_pin') || '';
+    const newPin = prompt(
+        dashboardMode === 'es' 
+            ? 'Ingrese un PIN de 4 dígitos para bloquear su sesión (o déjelo vacío para quitar el PIN):' 
+            : 'Enter a 4-digit PIN to lock your session (or leave blank to remove PIN):',
+        currentPin
+    );
+    if (newPin === null) return;
+    const trimmed = newPin.trim();
+    if (trimmed === '') {
+        localStorage.removeItem('abrevia_pin');
+        updateSettingsPinLabel();
+        alert(dashboardMode === 'es' ? 'PIN removido.' : 'PIN removed.');
+    } else if (/^\d{4}$/.test(trimmed)) {
+        localStorage.setItem('abrevia_pin', trimmed);
+        updateSettingsPinLabel();
+        alert(dashboardMode === 'es' ? 'PIN de 4 dígitos guardado.' : '4-digit PIN saved successfully.');
+    } else {
+        alert(dashboardMode === 'es' ? 'El PIN debe ser exactamente de 4 números.' : 'PIN must be exactly 4 numeric digits.');
+    }
+}
+
+function updateSettingsPinLabel() {
+    const pin = localStorage.getItem('abrevia_pin');
+    const label = document.getElementById('setPinBtnLabel');
+    const status = document.getElementById('settingsPinStatus');
+    if (label) label.textContent = pin ? 'Change' : 'Set PIN';
+    if (status) status.textContent = pin ? 'Active (••••)' : 'No PIN configured';
+}
+
+window.handleSignOutOrLock = handleSignOutOrLock;
+window.openPinConfigModal = openPinConfigModal;
+window.updateSettingsPinLabel = updateSettingsPinLabel;

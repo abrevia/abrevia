@@ -24,8 +24,7 @@
     <script>
         (function checkDashboardAuth() {
             const isSignedOut = localStorage.getItem('abrevia_signed_out') === 'true';
-            const pin = localStorage.getItem('abrevia_pin');
-            if (isSignedOut && pin) {
+            if (isSignedOut) {
                 window.location.replace('/index.html?view=signed_out');
             }
         })();
@@ -41,8 +40,16 @@
             <span class="font-bold text-xs sm:text-sm text-white tracking-tight">Abrevia</span>
         </div>
 
-        <!-- Settings Trigger (Right) -->
+        <!-- Header Action Controls (Right) -->
         <div class="flex items-center space-x-2 text-xs">
+            <!-- Simple Sign Out / Lock Session Button (Header) -->
+            <button id="headerSignOutBtn" type="button" onclick="handleSignOutOrLock()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-red-300 border border-slate-800 hover:border-red-500/40 bg-slate-900 hover:bg-red-500/10 transition shadow-sm cursor-pointer" title="Sign Out & Lock Session">
+                <span class="text-xs">🚪</span>
+                <span id="headerSignOutBtnText" class="hidden sm:inline">Sign Out / Lock Session</span>
+                <span class="sm:hidden">Lock</span>
+            </button>
+
+            <!-- Settings Trigger -->
             <button id="settingsBtn" type="button" onclick="openSettingsModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-900 transition shadow-sm cursor-pointer" title="Settings & Preferences">
                 <span>⚙️</span>
                 <span id="dashboardMenuBtnText">Settings</span>
@@ -830,8 +837,22 @@
                 </div>
 
                 <!-- Section: Session Security -->
-                <div class="pt-2 border-t border-slate-800/60">
-                    <button id="signOutLink" onclick="openWrapUpModal()" type="button" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2.5 rounded-xl flex items-center justify-center space-x-2 transition font-semibold text-xs cursor-pointer">
+                <div class="pt-2 border-t border-slate-800/60 space-y-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Session Security &amp; Lockout</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-base">🔢</span>
+                            <div>
+                                <span class="text-white font-medium block">4-Digit Security PIN</span>
+                                <span class="text-[10px] text-slate-400 block" id="settingsPinStatus">Configure or change workspace PIN</span>
+                            </div>
+                        </div>
+                        <button id="setPinSettingsBtn" onclick="openPinConfigModal()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition cursor-pointer">
+                            <span id="setPinBtnLabel">Set PIN</span>
+                        </button>
+                    </div>
+
+                    <button id="signOutLink" onclick="handleSignOutOrLock()" type="button" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2.5 rounded-xl flex items-center justify-center space-x-2 transition font-semibold text-xs cursor-pointer">
                         <span>🚪</span>
                         <span id="signOutBtnText">Sign Out / Lock Session</span>
                     </button>
