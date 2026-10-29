@@ -294,7 +294,37 @@ const I18N = {
         billingPortalTitle: 'Stripe Customer Portal',
         billingPortalSub: 'View past invoices, update cards or cancel',
         billingPortalBtn: 'Manage →',
-        billingCloseBtn: 'Close'
+        billingCloseBtn: 'Close',
+        // Wrap Up & Security Modal
+        wrapUpModalTitle: 'Wrap Up Session',
+        wrapUpModalBadge: 'Fast & Frictionless',
+        wrapUpModalDesc: 'No email is required to use Abrevia. You can optionally set a 4-digit PIN to lock and quickly resume this workspace.',
+        wrapUpPinLabel: '4-Digit Security PIN',
+        wrapUpPinHelp: 'Set a 4-digit PIN so only you can unlock this workspace next time.',
+        wrapUpUpdatesTitle: 'Stay in the Loop (Optional)',
+        wrapUpUpdatesDesc: 'We only send important product updates and carrier notices. No spam, ever.',
+        wrapUpEmailLabel: 'Email Address (Optional)',
+        wrapUpEmailPlaceholder: 'name@company.com',
+        wrapUpPhoneLabel: 'Phone Number for SMS Updates (Optional)',
+        wrapUpOptOutNotice: 'Reply STOP anytime to cancel SMS updates.',
+        wrapUpSaveBtnText: 'Save & Sign Out',
+        wrapUpDirectSignOutBtn: 'Sign Out Without PIN',
+        wrapUpCancelBtn: 'Stay in Dashboard',
+        // Install Helper Modal & PWA Banner
+        installModalTitle: 'Add Shortcut',
+        installModalBadge: '1-Tap Instant Access',
+        installModalDesc: 'Add Abrevia directly to your computer desktop or phone home screen for instant zero-friction launch without typing URLs.',
+        installStepIos: '<strong>iPhone (Safari):</strong> Tap Share (<span class="text-white">⎋</span>) and select <strong>"Add to Home Screen"</strong> (<span class="text-white">➕</span>).',
+        installStepAndroid: '<strong>Android (Chrome / Samsung):</strong> Tap menu (<span class="text-white">⋮</span>) and select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.',
+        installStepDesktop: '<strong>PC / Mac:</strong> Look for the <strong>Install</strong> icon (<span class="text-white">⊕</span>) in your browser address bar.',
+        installCloseBtnText: 'Got it',
+        pwaBannerTitle: 'Add Shortcut',
+        pwaBannerSubtitle: '1-tap desktop & home screen access',
+        pwaBannerActionBtn: 'Add',
+        soundToggleLabel: 'Alerts',
+        // Speaker Framework (.a / .b)
+        threadSubtitle: (id) => `Conversation: ${id.slice(0, 8)}... • Relay: English Speaker (.a) ⇄ Spanish Speaker (.b)`,
+        inputLabel: 'Write response in English (.a) — dispatched in Spanish (.b):',
     },
     es: {
         consoleBadge: 'Estado de Consola',
@@ -430,7 +460,37 @@ const I18N = {
         billingPortalTitle: 'Portal de Clientes de Stripe',
         billingPortalSub: 'Ver facturas anteriores, actualizar tarjetas o cancelar',
         billingPortalBtn: 'Administrar →',
-        billingCloseBtn: 'Cerrar'
+        billingCloseBtn: 'Cerrar',
+        // Wrap Up & Security Modal (Finalizar Sesión)
+        wrapUpModalTitle: 'Finalizar Sesión',
+        wrapUpModalBadge: 'Rápido y Sin Fricción',
+        wrapUpModalDesc: 'No se requiere correo electrónico para usar Abrevia. Opcionalmente puede configurar un PIN de 4 dígitos para bloquear y reanudar rápidamente este espacio de trabajo.',
+        wrapUpPinLabel: 'PIN de Seguridad de 4 Dígitos',
+        wrapUpPinHelp: 'Configure un PIN de 4 dígitos para que solo usted pueda desbloquear este espacio de trabajo la próxima vez.',
+        wrapUpUpdatesTitle: 'Manténgase al Día (Opcional)',
+        wrapUpUpdatesDesc: 'Solo enviamos actualizaciones importantes y avisos operativos de telefonía. Cero spam, siempre.',
+        wrapUpEmailLabel: 'Correo Electrónico (Opcional)',
+        wrapUpEmailPlaceholder: 'correo@empresa.com',
+        wrapUpPhoneLabel: 'Número de Teléfono para Avisos por SMS (Opcional)',
+        wrapUpOptOutNotice: 'Responda ALTO en cualquier momento para cancelar avisos por SMS.',
+        wrapUpSaveBtnText: 'Guardar y Cerrar Sesión',
+        wrapUpDirectSignOutBtn: 'Cerrar Sesión Sin PIN',
+        wrapUpCancelBtn: 'Permanecer en el Panel',
+        // Install Helper Modal & PWA Banner
+        installModalTitle: 'Agregar Acceso Directo',
+        installModalBadge: 'Acceso Instantáneo en 1 Toque',
+        installModalDesc: 'Agregue Abrevia directamente al escritorio de su computadora o pantalla de inicio de su teléfono para iniciar al instante sin escribir URLs.',
+        installStepIos: '<strong>iPhone (Safari):</strong> Toque Compartir (<span class="text-white">⎋</span>) y seleccione <strong>"Agregar a Inicio"</strong> (<span class="text-white">➕</span>).',
+        installStepAndroid: '<strong>Android (Chrome / Samsung):</strong> Toque el menú (<span class="text-white">⋮</span>) y seleccione <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.',
+        installStepDesktop: '<strong>PC / Mac:</strong> Busque el icono de <strong>Instalar</strong> (<span class="text-white">⊕</span>) en la barra de direcciones de su navegador.',
+        installCloseBtnText: 'Entendido',
+        pwaBannerTitle: 'Agregar Acceso Directo',
+        pwaBannerSubtitle: 'Acceso en 1 toque en escritorio y pantalla de inicio',
+        pwaBannerActionBtn: 'Instalar',
+        soundToggleLabel: 'Alertas',
+        // Speaker Framework (.a / .b)
+        threadSubtitle: (id) => `Conversación: ${id.slice(0, 8)}... • Relevo: Hablante de Español (.b) ⇄ Hablante de Inglés (.a)`,
+        inputLabel: 'Escriba respuesta en Español (.b) — se enviará en Inglés (.a):',
     }
 };
 
@@ -585,7 +645,9 @@ function openTemplatesModal() {
     }
     renderTemplatesList();
     const modal = document.getElementById('templatesModal');
-    if (modal) modal.classList.remove('hidden');
+    if (modal) applyDashboardLocalization();
+    applyDashboardLocalization();
+    modal.classList.remove('hidden');
 }
 
 function closeTemplatesModal() {
@@ -661,7 +723,8 @@ function openScheduleModal() {
     }
     
     const modal = document.getElementById('scheduleModal');
-    if (modal) modal.classList.remove('hidden');
+    if (modal) applyDashboardLocalization();
+    modal.classList.remove('hidden');
 }
 
 function closeScheduleModal() {
@@ -844,7 +907,8 @@ function openAutoResponderModal() {
     if (indicator) indicator.classList.add('hidden');
     
     const modal = document.getElementById('autoResponderModal');
-    if (modal) modal.classList.remove('hidden');
+    if (modal) applyDashboardLocalization();
+    modal.classList.remove('hidden');
 }
 
 function closeAutoResponderModal() {
@@ -1383,6 +1447,65 @@ function applyDashboardLocalization() {
     if (p30S) p30S.textContent = t.pack30Sub || 'Everything in Pro • Never expires';
     const p30B = document.getElementById('pack30Badge');
     if (p30B) p30B.textContent = t.pack30Badge || 'BEST VALUE';
+
+    // Wrap Up Modal Localization (.a / .b adaptive)
+    const wTitle = document.getElementById('wrapUpModalTitle');
+    if (wTitle) wTitle.textContent = t.wrapUpModalTitle || 'Wrap Up Session';
+    const wBadge = document.getElementById('wrapUpModalBadge');
+    if (wBadge) wBadge.textContent = t.wrapUpModalBadge || 'Fast & Frictionless';
+    const wDesc = document.getElementById('wrapUpModalDesc');
+    if (wDesc) wDesc.textContent = t.wrapUpModalDesc || '';
+    const wPinLabel = document.getElementById('wrapUpPinLabel');
+    if (wPinLabel) wPinLabel.innerHTML = `${t.wrapUpPinLabel || '4-Digit Security PIN'} <span class="text-slate-500 text-[10px] font-normal">(${dashboardMode === 'es' ? 'Opcional' : 'Optional'})</span>`;
+    const wPinHelp = document.getElementById('wrapUpPinHelp');
+    if (wPinHelp) wPinHelp.textContent = t.wrapUpPinHelp || '';
+    const wUpdTitle = document.getElementById('wrapUpUpdatesTitle');
+    if (wUpdTitle) wUpdTitle.textContent = t.wrapUpUpdatesTitle || 'Stay in the Loop (Optional)';
+    const wUpdDesc = document.getElementById('wrapUpUpdatesDesc');
+    if (wUpdDesc) wUpdDesc.textContent = t.wrapUpUpdatesDesc || '';
+    const wEmailLabel = document.getElementById('wrapUpEmailLabel');
+    if (wEmailLabel) wEmailLabel.textContent = t.wrapUpEmailLabel || 'Email Address (Optional)';
+    const wEmailInput = document.getElementById('wrapUpEmailInput');
+    if (wEmailInput && t.wrapUpEmailPlaceholder) wEmailInput.placeholder = t.wrapUpEmailPlaceholder;
+    const wPhoneLabel = document.getElementById('wrapUpPhoneLabel');
+    if (wPhoneLabel) wPhoneLabel.textContent = t.wrapUpPhoneLabel || 'Phone Number for SMS Updates (Optional)';
+    const wOptOut = document.getElementById('wrapUpOptOutNotice');
+    if (wOptOut) wOptOut.textContent = t.wrapUpOptOutNotice || '';
+    const wSaveBtn = document.getElementById('wrapUpSaveBtnText');
+    if (wSaveBtn) wSaveBtn.textContent = t.wrapUpSaveBtnText || 'Save & Sign Out';
+    const wDirectBtn = document.getElementById('wrapUpDirectSignOutBtn');
+    if (wDirectBtn) wDirectBtn.textContent = t.wrapUpDirectSignOutBtn || 'Sign Out Without PIN';
+    const wCancelBtn = document.getElementById('wrapUpCancelBtn');
+    if (wCancelBtn) wCancelBtn.textContent = t.wrapUpCancelBtn || 'Stay in Dashboard';
+
+    // Install Helper Modal Localization
+    const instTitle = document.getElementById('installModalTitle');
+    if (instTitle) instTitle.textContent = t.installModalTitle || 'Add Shortcut';
+    const instBadge = document.getElementById('installModalBadge');
+    if (instBadge) instBadge.textContent = t.installModalBadge || '1-Tap Instant Access';
+    const instDesc = document.getElementById('installModalDesc');
+    if (instDesc) instDesc.textContent = t.installModalDesc || '';
+    const instIos = document.getElementById('installStepIos');
+    if (instIos && t.installStepIos) instIos.innerHTML = t.installStepIos;
+    const instAnd = document.getElementById('installStepAndroid');
+    if (instAnd && t.installStepAndroid) instAnd.innerHTML = t.installStepAndroid;
+    const instDesk = document.getElementById('installStepDesktop');
+    if (instDesk && t.installStepDesktop) instDesk.innerHTML = t.installStepDesktop;
+    const instClose = document.getElementById('installCloseBtnText');
+    if (instClose) instClose.textContent = t.installCloseBtnText || 'Got it';
+
+    // PWA Shortcut Banner Localization
+    const pwaTitle = document.getElementById('pwaBannerTitle');
+    if (pwaTitle) pwaTitle.textContent = t.pwaBannerTitle || 'Add Shortcut';
+    const pwaSub = document.getElementById('pwaBannerSubtitle');
+    if (pwaSub) pwaSub.textContent = t.pwaBannerSubtitle || '1-tap desktop & home screen access';
+    const pwaBtn = document.getElementById('pwaBannerActionBtn');
+    if (pwaBtn) pwaBtn.textContent = t.pwaBannerActionBtn || 'Add';
+
+    // Sound toggle label
+    const soundLbl = document.getElementById('soundToggleLabel');
+    if (soundLbl) soundLbl.textContent = t.soundToggleLabel || 'Alerts';
+
 }
 
 // Toggle Proofread Translated Message Mode (Human-In-The-Loop) — Paid Tier feature
@@ -3005,6 +3128,7 @@ function openWrapUpModal() {
     const phoneInput = document.getElementById('wrapUpPhoneInput');
     if (phoneInput) phoneInput.value = localStorage.getItem('abrevia_sub_phone') || '';
 
+    applyDashboardLocalization();
     modal.classList.remove('hidden');
     setTimeout(() => {
         document.getElementById('pinBox1')?.focus();

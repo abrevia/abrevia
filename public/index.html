@@ -121,7 +121,7 @@
                 <div id="pinErrorMsg" class="text-xs text-red-400 font-medium mt-2 hidden">Incorrect PIN. Please try again.</div>
                 <div class="mt-3">
                     <button type="button" onclick="resetPinAndEnter()" class="text-[11px] text-slate-500 hover:text-slate-300 transition">
-                        Forgot PIN? Reset & enter workspace
+                        <span id="pinResetLinkText">Forgot PIN? Reset & enter workspace</span>
                     </button>
                 </div>
             </div>
@@ -278,7 +278,12 @@
                 indLogistics: '🚚 Logistics',
                 indField: '🛠️ Field Services',
                 indOperations: '⚡ Operations',
-                profileHint: 'You write in English &rarr; Recipient receives Spanish translation',
+                                pinCardTitle: 'Workspace Locked',
+                pinCardSubtitle: 'Enter your 4-digit PIN to open your conversations',
+                pinUnlockBtnText: 'Unlock & Open Dashboard',
+                pinResetLinkText: 'Forgot PIN? Reset & enter workspace',
+                pinErrorMsg: 'Incorrect PIN. Please try again.',
+                profileHint: 'You write in English (.a) &rarr; Recipient receives Spanish translation (.b)',
                 launchBtnText: 'Launch English Console',
                 trustNote1: '🔒 Secure Operations',
                 trustNote2: '📱 Zero App Downloads',
@@ -346,7 +351,12 @@
                 indLogistics: '🚚 Logística',
                 indField: '🛠️ Servicios en Campo',
                 indOperations: '⚡ Operaciones',
-                profileHint: 'Usted escribe en español &rarr; El destinatario recibe SMS en inglés',
+                                pinCardTitle: 'Espacio de Trabajo Bloqueado',
+                pinCardSubtitle: 'Ingrese su PIN de 4 dígitos para abrir sus conversaciones',
+                pinUnlockBtnText: 'Desbloquear y Abrir Panel',
+                pinResetLinkText: '¿Olvidó su PIN? Restablecer e ingresar al espacio de trabajo',
+                pinErrorMsg: 'PIN incorrecto. Por favor intente de nuevo.',
+                profileHint: 'Usted escribe en Español (.b) &rarr; El destinatario recibe traducción en Inglés (.a)',
                 launchBtnText: 'Abrir Consola en Español',
                 trustNote1: '🔒 Operaciones Seguras',
                 trustNote2: '📱 Sin Descarga de Apps',
@@ -460,6 +470,19 @@
             if (profileHint) profileHint.innerHTML = c.profileHint;
             const launchBtnText = document.getElementById('launchBtnText');
             if (launchBtnText) launchBtnText.textContent = c.launchBtnText;
+
+            // PIN Card Localization
+            const pinTitle = document.getElementById('pinCardTitle');
+            if (pinTitle && c.pinCardTitle) pinTitle.textContent = c.pinCardTitle;
+            const pinSub = document.getElementById('pinCardSubtitle');
+            if (pinSub && c.pinCardSubtitle) pinSub.textContent = c.pinCardSubtitle;
+            const pinBtn = document.getElementById('pinUnlockBtnText');
+            if (pinBtn && c.pinUnlockBtnText) pinBtn.textContent = c.pinUnlockBtnText;
+            const pinReset = document.getElementById('pinResetLinkText');
+            if (pinReset && c.pinResetLinkText) pinReset.textContent = c.pinResetLinkText;
+            const pinErr = document.getElementById('pinErrorMsg');
+            if (pinErr && c.pinErrorMsg) pinErr.textContent = c.pinErrorMsg;
+
 
             // Trust Notes
             const t1 = document.getElementById('trustNote1');

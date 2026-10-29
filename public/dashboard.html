@@ -1084,29 +1084,27 @@ Responda ALTO para no recibir más mensajes.</div>
                     📲
                 </div>
                 <div>
-                    <h3 class="text-base font-bold text-white">Add Shortcut</h3>
-                    <span class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">1-Tap Instant Access</span>
+                    <h3 id="installModalTitle" class="text-base font-bold text-white">Add Shortcut</h3>
+                    <span id="installModalBadge" class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">1-Tap Instant Access</span>
                 </div>
             </div>
-            <p class="text-xs text-slate-300 mb-4 leading-relaxed">
-                Add Abrevia directly to your computer desktop or phone home screen for instant zero-friction launch without typing URLs.
-            </p>
+            <p id="installModalDesc" class="text-xs text-slate-300 mb-4 leading-relaxed">Add Abrevia directly to your computer desktop or phone home screen for instant zero-friction launch without typing URLs.</p>
             <div class="space-y-3 text-xs text-slate-400 bg-slate-950 p-4 rounded-2xl border border-slate-800">
                 <div class="flex items-start space-x-2">
                     <span class="text-brand-400 font-bold">1.</span>
-                    <span><strong>iPhone (Safari):</strong> Tap Share (<span class="text-white">⎋</span>) and select <strong>"Add to Home Screen"</strong> (<span class="text-white">➕</span>).</span>
+                    <span id="installStepIos"><strong>iPhone (Safari):</strong> Tap Share (<span class="text-white">⎋</span>) and select <strong>"Add to Home Screen"</strong> (<span class="text-white">➕</span>).</span>
                 </div>
                 <div class="flex items-start space-x-2">
                     <span class="text-brand-400 font-bold">2.</span>
-                    <span><strong>Android (Chrome / Samsung):</strong> Tap menu (<span class="text-white">⋮</span>) and select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</span>
+                    <span id="installStepAndroid"><strong>Android (Chrome / Samsung):</strong> Tap menu (<span class="text-white">⋮</span>) and select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</span>
                 </div>
                 <div class="flex items-start space-x-2">
                     <span class="text-brand-400 font-bold">3.</span>
-                    <span><strong>PC / Mac:</strong> Look for the <strong>Install</strong> icon (<span class="text-white">⊕</span>) in your browser address bar.</span>
+                    <span id="installStepDesktop"><strong>PC / Mac:</strong> Look for the <strong>Install</strong> icon (<span class="text-white">⊕</span>) in your browser address bar.</span>
                 </div>
             </div>
             <button onclick="closeInstallModal()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
-                Got it
+                <span id="installCloseBtnText">Got it</span>
             </button>
         </div>
     </div>
