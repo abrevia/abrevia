@@ -495,6 +495,20 @@
             <p id="modalSubtitle" class="text-xs text-slate-400 mb-4">Phone numbers are auto-saved as contacts. You can optionally add a name and details.</p>
             
             <form onsubmit="handleCreateTicket(event)" class="space-y-3.5">
+                <!-- Sender Identity Badge -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-2 min-w-0">
+                        <span class="text-sm">🏢</span>
+                        <div class="truncate">
+                            <span class="text-slate-400 text-[10px] block" id="modalSenderBadgeLabel">Sending SMS as:</span>
+                            <span id="senderProfileQuickLabel" class="font-bold text-white text-xs truncate">Abrevia</span>
+                        </div>
+                    </div>
+                    <button type="button" onclick="openSenderProfileModal()" class="text-brand-400 hover:text-brand-300 text-[10px] font-semibold underline shrink-0" id="modalEditSenderProfileBtn">
+                        Edit Sender Profile
+                    </button>
+                </div>
+
                 <div>
                     <label id="modalPhoneLabel" class="block text-xs font-medium text-slate-300 mb-1">
                         Phone Number <span class="text-red-400">*</span>

@@ -52,10 +52,14 @@ export default async function handler(req, res) {
     }
 
     const lang = (targetLang || 'es').toLowerCase();
+    const actualText = (lang === 'es' ? (spanishText || body) : (englishText || body)) || body || '';
+    const cleanMsg = actualText.trim();
+    const previewText = cleanMsg.length > 130 ? cleanMsg.slice(0, 127) + '...' : cleanMsg;
+
     if (lang === 'en') {
-      smsContentToSend = `You have a message from ${senderLabel}.\nOpen your message here: ${messageLink}\n\nReply STOP to unsubscribe.`;
+      smsContentToSend = `[${senderLabel}]:\n"${previewText}"\n\nOpen or reply online:\n${messageLink}\nOr reply directly to this SMS.\n\nReply STOP to unsubscribe.`;
     } else {
-      smsContentToSend = `Tiene un mensaje de ${senderLabel}.\nAbra su mensaje aquí: ${messageLink}\n\nResponda ALTO para no recibir más mensajes.`;
+      smsContentToSend = `[${senderLabel} - Mensaje Bilingüe]:\n"${previewText}"\n\nVer conversación o responder en línea:\n${messageLink}\nO responda directamente a este SMS en español.\n\nResponda ALTO para cancelar.`;
     }
   } else {
     smsContentToSend = mediaUrl ? `${body}\n\n📎 Adjunto: ${mediaUrl}` : body;

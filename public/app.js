@@ -1150,9 +1150,9 @@ function updateSenderProfilePreview() {
             : `Hello, confirming your service request.`;
     } else {
         if (dashboardMode === 'es') {
-            previewEl.textContent = `Tiene un mensaje de ${senderLabel}.\nAbra su mensaje aquí: ${sampleLink}\n\nResponda ALTO para no recibir más mensajes.`;
+            previewEl.textContent = `[${senderLabel} - Mensaje Bilingüe]:\n"Hola, nos comunicamos con usted para coordinar su solicitud."\n\nVer conversación o responder en línea:\n${sampleLink}\nO responda directamente a este SMS en español.\n\nResponda ALTO para cancelar.`;
         } else {
-            previewEl.textContent = `You have a message from ${senderLabel}.\nOpen your message here: ${sampleLink}\n\nReply STOP to unsubscribe.`;
+            previewEl.textContent = `[${senderLabel}]:\n"Hello, we are contacting you regarding your request."\n\nOpen or reply online:\n${sampleLink}\nOr reply directly to this SMS.\n\nReply STOP to unsubscribe.`;
         }
     }
 }
