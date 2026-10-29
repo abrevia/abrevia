@@ -131,19 +131,24 @@
 
             <!-- Standard 1-Click Launch Button Container -->
             <div id="launchContainer">
-                <button id="launchBtn" onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm group">
+                <button id="launchBtn" onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm sm:text-base group">
                     <span id="launchBtnText">Launch Operator Console</span>
                     <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </button>
             </div>
 
-            <!-- Quiet Trust Notes -->
-            <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 text-[11px] text-slate-500">
-                <span id="trustNote1">🔒 Secure Operations</span>
-                <span class="hidden sm:inline text-slate-600">&bull;</span>
-                <span id="trustNote2">📱 Zero App Downloads</span>
-                <span class="hidden sm:inline text-slate-600">&bull;</span>
-                <span id="trustNote3" class="text-brand-400 font-medium">✨ Start Free • No Credit Card Required</span>
+            <!-- Prominent Trust Notes & Frictionless Onboarding -->
+            <div class="mt-4 pt-1 space-y-2.5">
+                <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs sm:text-sm font-medium text-slate-300">
+                    <span id="trustNote1">🔒 Secure Operations</span>
+                    <span class="text-slate-600">&bull;</span>
+                    <span id="trustNote2">📱 Zero App Downloads</span>
+                </div>
+                <div>
+                    <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm font-semibold shadow-sm">
+                        <span id="trustNote3">✨ Start Free • No Credit Card Required</span>
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -429,7 +434,7 @@
                 pinResetLinkText: 'Forgot PIN? Reset & enter workspace',
                 pinErrorMsg: 'Incorrect PIN. Please try again.',
                 profileHint: 'You write in English (.a) &rarr; Recipient receives Spanish translation (.b)',
-                launchBtnText: 'Launch English Console',
+                launchBtnText: 'Launch Operator Console',
                 trustNote1: '🔒 Secure Operations',
                 trustNote2: '📱 Zero App Downloads',
                 trustNote3: '✨ Start Free • No Credit Card Required',
@@ -535,7 +540,7 @@
                 launchBtnText: 'Abrir Consola en Español',
                 trustNote1: '🔒 Operaciones Seguras',
                 trustNote2: '📱 Sin Descarga de Apps',
-                trustNote3: '✨ Comience Gratis • Sin Tarjeta',
+                trustNote3: '✨ Comience Gratis • Sin Tarjeta de Crédito',
                 pillar1Title: 'Seguro y Privado',
                 pillar1Desc: 'Espacio administrativo para operaciones con revisión humana (HITL) opcional antes de enviar.',
                 pillar2Title: 'Relevo en Tiempo Real',
