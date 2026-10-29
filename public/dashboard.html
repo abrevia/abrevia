@@ -28,7 +28,7 @@
     <header class="bg-slate-950 border-b border-slate-800 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shrink-0">
         <!-- Logo & Title (Left) -->
         <div class="flex items-center space-x-2">
-            <img src="/assets/logo.png" alt="Abrevia Logo" class="h-6 w-6 rounded-md">
+            <img src="/assets/logo.png?v=3" alt="Abrevia Logo" class="h-6 w-6 rounded-md">
             <span id="headerConsoleTitle" class="text-xs text-slate-400 font-normal hidden sm:inline">Console Status</span>
             <button id="consoleStatusBtn" type="button" onclick="showConsoleStatusModal()" class="inline-flex items-center space-x-1.5 px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition shadow-sm cursor-pointer" title="System Operational • Two-Way Asynchronous Communication & Real-Time Translating Technology">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -57,7 +57,7 @@
                 <span>💳</span>
                 <span id="billingBtnText" class="hidden sm:inline">Billing</span>
             </button>
-            <a id="signOutLink" href="/index.html" class="text-slate-400 hover:text-white transition">Sign Out</a>
+            <a id="signOutLink" href="/index.html" class="text-slate-400 hover:text-white transition hidden sm:inline">Sign Out</a>
         </div>
     </header>
 
@@ -131,7 +131,7 @@
                     <!-- Edit / View Contact Details Button -->
                     <button id="editContactBtn" onclick="openCurrentContactModal()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm shrink-0">
                         <span id="editContactBtnIcon">👤</span>
-                        <span id="editContactBtnText" class="inline">Contact Info</span>
+                        <span id="editContactBtnText" class="hidden sm:inline">Contact Info</span>
                     </button>
 
                     <!-- Deselect / Return to Neutral State (Desktop) -->
@@ -152,7 +152,7 @@
             <div id="chatFeed" class="flex-grow min-w-0 w-full overflow-y-auto overflow-x-hidden p-3.5 sm:p-6 space-y-4">
                 <div class="text-center py-12">
                     <div class="w-12 h-12 rounded-2xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-center mx-auto mb-3">
-                        <img src="/assets/logo.png" alt="" class="h-6 w-6 opacity-60">
+                        <img src="/assets/logo.png?v=3" alt="" class="h-6 w-6 opacity-60">
                     </div>
                     <p id="emptyFeedTitle" class="text-xs text-slate-400 font-medium">Select an active conversation to view and send bilingual messages</p>
                     <p id="emptyFeedSubtitle" class="text-[11px] text-slate-600 mt-1">Inbound asynchronous communication translated to English &bull; Outbound replies translated & dispatched in real time</p>
@@ -208,7 +208,7 @@
                             <div class="flex items-center space-x-2 min-w-0 truncate">
                                 <span class="inline-flex items-center space-x-1.5 text-emerald-400 font-medium shrink-0">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                    <span id="instantModeLabel">Secure Instant Translation & Delivery</span>
+                                    <span id="instantModeLabel" class="hidden sm:inline">Secure Instant Translation & Delivery</span><span class="sm:hidden text-emerald-400 font-semibold">Instant Mode</span>
                                 </span>
                             </div>
 
@@ -216,7 +216,7 @@
                             <div class="shrink-0 flex items-center space-x-2">
                                 <button id="hitlModeBtn" type="button" onclick="toggleHitlMode()" class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition border border-slate-700 bg-slate-900 text-slate-300 hover:text-white hover:border-slate-600 shadow-sm" title="Human-In-The-Loop: Review and edit translated message before sending">
                                     <span id="hitlBtnIcon">🛡️</span>
-                                    <span id="hitlBtnLabel">Proofread (HITL)</span>
+                                    <span id="hitlBtnLabel" class="hidden sm:inline">Proofread (HITL)</span><span class="sm:hidden">HITL</span>
                                     <span id="hitlBtnBadge" class="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">OFF</span>
                                 </button>
                             </div>

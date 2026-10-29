@@ -25,27 +25,24 @@
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-600 selection:text-white">
 
     <!-- Header Navigation -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md px-6 py-3.5 sticky top-0 z-50 w-full">
-        <div class="max-w-4xl mx-auto flex items-center justify-between gap-3">
-            <!-- Left: Pricing & Plans -->
-            <div class="flex items-center justify-start sm:min-w-[130px]">
-                <button onclick="openPricingModal()" class="text-xs text-slate-300 hover:text-white font-medium flex items-center space-x-1.5 transition bg-slate-900 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg shadow-sm">
+    <header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur-md px-3.5 sm:px-6 py-2.5 sm:py-3.5 sticky top-0 z-50 w-full">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+            <!-- Left: Abrevia Brand Logo & Title -->
+            <div class="flex items-center space-x-2 min-w-0">
+                <img src="/assets/logo.png?v=3" alt="Abrevia Logo" class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg shadow shrink-0">
+                <span class="text-base sm:text-xl font-extrabold tracking-tight text-white">Abrevia</span>
+            </div>
+
+            <!-- Right: Pricing Button & Language Switcher in one neat row -->
+            <div class="flex items-center space-x-2 shrink-0">
+                <button onclick="openPricingModal()" class="text-xs text-slate-300 hover:text-white font-medium flex items-center space-x-1 transition bg-slate-900 border border-slate-800 hover:border-slate-700 px-2.5 py-1 rounded-lg shadow-sm">
                     <span>💳</span>
-                    <span id="navPricingText">Pricing & Plans</span>
+                    <span id="navPricingText" class="whitespace-nowrap">Plans</span>
                 </button>
-            </div>
-
-            <!-- Center: Abrevia Brand (Centered) -->
-            <div class="flex items-center space-x-2.5 justify-center">
-                <img src="/assets/logo.png" alt="Abrevia Logo" class="h-8 w-8 rounded-lg shadow">
-                <span class="text-xl font-bold tracking-tight text-white">Abrevia</span>
-            </div>
-
-            <!-- Right: Operating Mode Switcher -->
-            <div class="flex items-center justify-end space-x-2 text-xs sm:min-w-[130px]">
-                <span class="text-slate-500 hidden md:inline">Mode:</span>
-                <button id="langHeaderEn" onclick="selectLanguage('en')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition">EN</button>
-                <button id="langHeaderEs" onclick="selectLanguage('es')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition">ES</button>
+                <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
+                    <button id="langHeaderEn" onclick="selectLanguage('en')" class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition">EN</button>
+                    <button id="langHeaderEs" onclick="selectLanguage('es')" class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white transition">ES</button>
+                </div>
             </div>
         </div>
     </header>
@@ -54,10 +51,10 @@
     <main class="max-w-3xl mx-auto w-full px-6 py-12 sm:py-16 flex-grow flex flex-col items-center justify-center text-center">
         
         <!-- Clean, Bold, Minimal Headline -->
-        <h1 id="heroTitle" class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-2">
+        <h1 id="heroTitle" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-2 leading-tight">
             Secure Instant Messaging Translator for Businesses, Organizations and Individuals
         </h1>
-        <h2 id="heroSubtitleEs" class="text-lg sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-brand-500 mb-4">
+        <h2 id="heroSubtitleEs" class="text-base sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-brand-500 mb-4 leading-snug">
             Traductor de Mensajería Instantánea Seguro para Negocios, Organizaciones y Particulares
         </h2>
 
