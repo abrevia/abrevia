@@ -4,55 +4,30 @@ import { encryptMessage } from '../lib/cipher.js';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
-  const { to, body, mediaUrl, ticketId, englishText, spanishText } = req.body || {};
+  const { to, body, mediaUrl, ticketId, englishText, spanishText, provider: reqProvider } = req.body || {};
 
   if (!to || !body) {
     return res.status(400).json({ error: 'Missing recipient phone number (to) or message body' });
   }
 
-  const textbeeApiKey = process.env.TEXTBEE_API_KEY || 'txb_5RMV0hqGHk6HUFNiWPnnXdcGBV9lwku9';
-  const textbeeDeviceId = process.env.TEXTBEE_DEVICE_ID || '6ae2b0b6c1ee0a8dec389241';
   const httpsmsApiKey = process.env.HTTPSMS_API_KEY;
   const fromPhone = process.env.HTTPSMS_PHONE_NUMBER;
   const encryptionKey = process.env.HTTPSMS_ENCRYPTION_KEY;
+  const textbeeApiKey = process.env.TEXTBEE_API_KEY || 'txb_5RMV0hqGHk6HUFNiWPnnXdcGBV9lwku9';
+  const textbeeDeviceId = process.env.TEXTBEE_DEVICE_ID || '6ae2b0b6c1ee0a8dec389241';
 
-  if (!textbeeApiKey && (!httpsmsApiKey || !fromPhone)) {
-    return res.status(500).json({ error: 'SMS Gateway (TextBee or httpSMS) is not configured' });
-  }
+  // Target provider: 'httpsms' (Default Production) vs 'textbee' (Testing Comparison)
+  const selectedProvider = (reqProvider || req.query?.provider || process.env.SMS_PROVIDER || 'httpsms').toLowerCase();
 
   try {
     let sendResult = null;
-    let provider = 'textbee';
+    let usedProvider = selectedProvider;
 
-    if (textbeeApiKey) {
-      // 1. Send via TextBee Android SIM Gateway
-      const textbeeUrl = textbeeDeviceId 
-        ? `https://api.textbee.dev/api/v1/gateway/devices/${textbeeDeviceId}/send-sms`
-        : 'https://api.textbee.dev/api/v1/gateway/send-sms';
-
-      const outboundText = mediaUrl ? `${body}\n\n📎 Attachment: ${mediaUrl}` : body;
-
-      const response = await fetch(textbeeUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': textbeeApiKey
-        },
-        body: JSON.stringify({
-          recipients: [to],
-          message: outboundText
-        })
-      });
-
-      if (!response.ok) {
-        const errText = await response.text();
-        console.error('TextBee Error response:', errText);
-        throw new Error(`TextBee returned status ${response.status}: ${errText}`);
+    // Helper: Send via httpSMS
+    const sendViaHttpSms = async () => {
+      if (!httpsmsApiKey || !fromPhone) {
+        throw new Error('httpSMS is not configured (missing HTTPSMS_API_KEY or HTTPSMS_PHONE_NUMBER)');
       }
-      sendResult = await response.json();
-    } else {
-      // 2. Fallback to httpSMS
-      provider = 'httpsms';
       const isEncrypted = Boolean(encryptionKey && encryptionKey.trim().length > 0);
       const contentToSend = isEncrypted ? encryptMessage(encryptionKey.trim(), body) : body;
 
@@ -75,10 +50,65 @@ export default async function handler(req, res) {
 
       if (!response.ok) {
         const errText = await response.text();
-        console.error('httpSMS Error response:', errText);
-        throw new Error(`httpSMS returned status ${response.status}: ${errText}`);
+        throw new Error(`httpSMS error ${response.status}: ${errText}`);
       }
-      sendResult = await response.json();
+      return await response.json();
+    };
+
+    // Helper: Send via TextBee
+    const sendViaTextBee = async () => {
+      if (!textbeeApiKey) {
+        throw new Error('TextBee is not configured (missing TEXTBEE_API_KEY)');
+      }
+      const textbeeUrl = textbeeDeviceId 
+        ? `https://api.textbee.dev/api/v1/gateway/devices/${textbeeDeviceId}/send-sms`
+        : 'https://api.textbee.dev/api/v1/gateway/send-sms';
+
+      const outboundText = mediaUrl ? `${body}\n\n📎 Attachment: ${mediaUrl}` : body;
+
+      const response = await fetch(textbeeUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': textbeeApiKey
+        },
+        body: JSON.stringify({
+          recipients: [to],
+          message: outboundText
+        })
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`TextBee error ${response.status}: ${errText}`);
+      }
+      return await response.json();
+    };
+
+    // Execute with target provider, with graceful fallback to comparison gateway if requested
+    if (selectedProvider === 'textbee') {
+      try {
+        sendResult = await sendViaTextBee();
+        usedProvider = 'textbee';
+      } catch (tbErr) {
+        console.warn('TextBee failed, attempting fallback to httpSMS:', tbErr.message);
+        sendResult = await sendViaHttpSms();
+        usedProvider = 'httpsms (fallback)';
+      }
+    } else {
+      // Default: httpSMS
+      try {
+        sendResult = await sendViaHttpSms();
+        usedProvider = 'httpsms';
+      } catch (httpErr) {
+        if (textbeeApiKey) {
+          console.warn('httpSMS failed, attempting fallback to TextBee:', httpErr.message);
+          sendResult = await sendViaTextBee();
+          usedProvider = 'textbee (fallback)';
+        } else {
+          throw httpErr;
+        }
+      }
     }
 
     // Save outbound message to Supabase if ticketId is present
@@ -111,7 +141,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ 
       success: true, 
-      provider: provider, 
+      provider: usedProvider, 
       details: sendResult, 
       message: savedMessage 
     });

@@ -2220,7 +2220,50 @@ function escapeHtml(text) {
 }
 
 // --- Console Status Modal ---
+
+// Gateway Comparison Switcher (httpSMS Default vs TextBee Test)
+function getActiveSmsGateway() {
+    return localStorage.getItem('abrevia_sms_gateway') || 'httpsms';
+}
+
+function setSmsGateway(gateway) {
+    localStorage.setItem('abrevia_sms_gateway', gateway);
+    updateGatewayUI();
+    const name = gateway === 'textbee' ? 'TextBee (Samsung SM-A037M)' : 'httpSMS (Default)';
+    alert(dashboardMode === 'es' 
+        ? `✓ Pasarela activa cambiada a: ${name}`
+        : `✓ Active SMS gateway set to: ${name}`);
+}
+
+function updateGatewayUI() {
+    const gw = getActiveSmsGateway();
+    const btnHttp = document.getElementById('gwBtnHttpsms');
+    const btnTb = document.getElementById('gwBtnTextbee');
+    const badge = document.getElementById('activeGatewayBadge');
+    
+    if (badge) {
+        if (gw === 'textbee') {
+            badge.textContent = 'TextBee (Test)';
+            badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        } else {
+            badge.textContent = 'httpSMS (Default)';
+            badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/40';
+        }
+    }
+    
+    if (btnHttp && btnTb) {
+        if (gw === 'textbee') {
+            btnTb.className = 'px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition text-center bg-amber-600 text-white border-amber-500 shadow-sm';
+            btnHttp.className = 'px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition text-center bg-slate-800 text-slate-400 hover:text-white border-slate-700';
+        } else {
+            btnHttp.className = 'px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition text-center bg-brand-600 text-white border-brand-500 shadow-sm';
+            btnTb.className = 'px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition text-center bg-slate-800 text-slate-400 hover:text-white border-slate-700';
+        }
+    }
+}
+
 function showConsoleStatusModal() {
+    updateGatewayUI();
     document.getElementById('consoleStatusModal')?.classList.remove('hidden');
 }
 

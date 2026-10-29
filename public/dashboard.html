@@ -567,7 +567,22 @@
                         <span>Active</span>
                     </span>
                 </div>
-                <div class="flex items-center justify-between py-1.5">
+                <div class="py-2.5 border-t border-slate-800/80">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-slate-300 font-semibold text-xs">Outbound SMS Gateway:</span>
+                        <span id="activeGatewayBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/40">httpSMS (Default)</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <button type="button" onclick="setSmsGateway('httpsms')" id="gwBtnHttpsms" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition text-center bg-brand-600 text-white border-brand-500 shadow-sm">
+                            📱 httpSMS (Default)
+                        </button>
+                        <button type="button" onclick="setSmsGateway('textbee')" id="gwBtnTextbee" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition text-center bg-slate-800 text-slate-400 hover:text-white border-slate-700">
+                            🐝 TextBee (Test)
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-slate-500 mt-1.5">Toggle between gateways to compare delivery speed and latency side-by-side.</p>
+                </div>
+                <div class="flex items-center justify-between py-1.5 border-t border-slate-800/60">
                     <span class="text-slate-400">Encrypted Storage</span>
                     <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
