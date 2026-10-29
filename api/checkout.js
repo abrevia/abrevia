@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     }
 
     const stripeKey = process.env.STRIPE_SECRET_KEY;
-    const paymentLinkPro = process.env.STRIPE_PAYMENT_LINK_PRO;
+    const paymentLinkPro = process.env.STRIPE_PAYMENT_LINK_PRO || 'https://buy.stripe.com/5kQ6oHe1Q8wlcAk7yA8Vi08';
     const { plan = 'pro', customerEmail, successUrl, cancelUrl } = req.body || {};
 
     const host = req.headers.host || 'abrevia-beta.vercel.app';
