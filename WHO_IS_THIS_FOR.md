@@ -17,6 +17,7 @@
 
 ---
 
+<a name="title-vi-overview"></a>
 ## 1. Statutory Clarification: Title VI is NOT a Healthcare Law
 
 A common misconception in regulatory compliance is confusing **Title VI** with healthcare-specific mandates such as **HIPAA** (Health Insurance Portability and Accountability Act) or **ACA Section 1557** (Affordable Care Act Non-Discrimination in Health Programs).
@@ -38,10 +39,12 @@ Under the landmark **Civil Rights Restoration Act of 1987 (CRRA)** (Pub. L. 100-
 
 ---
 
+<a name="title-vi-sectors"></a>
 ## 3. Major Federally Bound Sectors & Statutory Use Cases
 
 Abrevia provides turn-key, zero-download compliance architecture for the 7 major sectors federally mandated by Title VI:
 
+<a name="education"></a>
 ### 1. 🎓 Education (K–12 Public Schools, Colleges & Universities)
 * **Who it covers:** Public school districts, charter schools receiving federal funds, vocational schools, and virtually all colleges and universities (due to federal student financial aid, Pell Grants, and research grants).
 * **What language access requires:** Providing qualified interpreters for parent-teacher conferences, disciplinary hearings, and Individualized Education Program (IEP) meetings; translating vital school communications (report cards, enrollment forms, emergency alerts, safety guidelines) into parents' native languages.
@@ -52,6 +55,7 @@ Abrevia provides turn-key, zero-download compliance architecture for the 7 major
 
 ---
 
+<a name="courts"></a>
 ### 2. ⚖️ Courts & the Judicial System
 * **Who it covers:** State court systems, county municipal courts, administrative law tribunals, and public defender offices that receive Department of Justice (DOJ) grants.
 * **What language access requires:** Free, qualified court interpreters for criminal defendants, civil litigants, and witnesses; translated court paperwork, protective order petitions, and self-help desk resources.
@@ -61,6 +65,7 @@ Abrevia provides turn-key, zero-download compliance architecture for the 7 major
 
 ---
 
+<a name="police"></a>
 ### 3. 🚓 Law Enforcement & Corrections
 * **Who it covers:** State police agencies, county sheriff departments, municipal police forces, and state prison systems receiving federal funding (e.g., DOJ COPS grants, Edward Byrne JAG grants).
 * **What language access requires:** Field access to interpreters (via Over-the-Phone Interpretation) during 911 dispatch, routine traffic stops, arrests, and interrogations; ensuring Miranda warnings, booking forms, and inmate grievance procedures are provided in languages understood by detainees.
@@ -70,6 +75,7 @@ Abrevia provides turn-key, zero-download compliance architecture for the 7 major
 
 ---
 
+<a name="transit"></a>
 ### 4. 🚌 Transportation & Public Transit Authorities
 * **Who it covers:** City and regional bus/rail transit authorities, state Departments of Transportation (DOTs), and airport authorities receiving Federal Transit Administration (FTA) or Federal Highway Administration (FHWA) funding.
 * **What language access requires:** Route schedules, fare payment instructions, and safety/emergency signage translated into common local threshold languages; multilingual public comment periods and community town halls before transit lines or fares change.
@@ -79,6 +85,7 @@ Abrevia provides turn-key, zero-download compliance architecture for the 7 major
 
 ---
 
+<a name="housing"></a>
 ### 5. 🏠 Housing & Urban Development (HUD / Section 8)
 * **Who it covers:** Public housing authorities (PHAs), community development agencies, and private landlords accepting Section 8 housing vouchers or HUD subsidies.
 * **What language access requires:** Translating leases, eviction notices, tenant rules, and housing voucher application materials; multilingual grievance hearings and front-desk communication for public housing tenants.
@@ -88,6 +95,7 @@ Abrevia provides turn-key, zero-download compliance architecture for the 7 major
 
 ---
 
+<a name="social-services"></a>
 ### 6. 🏛️ Public Assistance, Social Services & Labor
 * **Who it covers:** State and county agencies administering federal benefit programs like SNAP (food stamps), TANF (welfare), WIC, unemployment insurance offices, and state workforce development/job centers.
 * **What language access requires:** Benefit applications, eligibility determination notices, and appeal filings must be available in non-English threshold languages spoken by substantial proportions of the service population.
@@ -97,6 +105,7 @@ Abrevia provides turn-key, zero-download compliance architecture for the 7 major
 
 ---
 
+<a name="emergency"></a>
 ### 7. 🚨 Emergency Management & Disaster Relief (FEMA)
 * **Who it covers:** State, county, and local emergency management agencies that receive FEMA funding.
 * **What language access requires:** Real-time evacuation orders, emergency shelter intake, and disaster recovery grant applications provided in primary local languages during hurricanes, floods, wildfires, or other declared emergencies.
@@ -106,11 +115,14 @@ Abrevia provides turn-key, zero-download compliance architecture for the 7 major
 
 ---
 
+<a name="operations"></a>
 ## 4. Commercial & Industrial Operational Use Cases
 
 Beyond federal Title VI compliance, Abrevia serves high-velocity commercial operations requiring frictionless English ⇄ Spanish communication:
 
+<a name="logistics"></a>
 * 🚚 **Logistics, Freight & Dispatch:** Coordinate gate access codes, loading dock assignments, detention updates, and delivery confirmations with Spanish-speaking drivers.
+<a name="field-services"></a>
 * 🛠️ **Field Services & Contractors:** Dispatch maintenance technicians, electricians, plumbers, and HVAC specialists with instant bilingual customer updates.
 * 🏢 **Property Management & Hospitality:** Streamline guest inquiries, service requests, and housekeeping coordination.
 * 📦 **Retail & Customer Operations:** Handle delivery inquiries, returns, and customer service over standard SMS.
@@ -133,6 +145,7 @@ Beyond federal Title VI compliance, Abrevia serves high-velocity commercial oper
 
 ---
 
+<a name="titulo-vi-resumen"></a>
 ## 1. Aclaración Legal: El Título VI NO es una Ley de Salud
 
 Una confusión común en el cumplimiento normativo es equiparar el **Título VI** con regulaciones exclusivas del sector salud como **HIPAA** (Ley de Portabilidad y Responsabilidad del Seguro Médico) o la **Sección 1557 de la Ley del Cuidado de Salud a Bajo Precio (ACA)**.
@@ -154,10 +167,12 @@ Bajo la histórica **Ley de Restauración de Derechos Civiles de 1987 (CRRA)** (
 
 ---
 
+<a name="sectores-titulo-vi"></a>
 ## 3. Sectores Principales Sujetos a Fondos Federales y Casos de Uso
 
 Abrevia proporciona una arquitectura de cumplimiento sin descargas para los 7 sectores principales regulados por el Título VI:
 
+<a name="educacion"></a>
 ### 1. 🎓 Educación (Escuelas Públicas K–12 y Universidades)
 * **A quién cubre:** Distritos escolares públicos, escuelas chárter receptoras de fondos federales, institutos vocacionales y prácticamente todas las universidades (debido a ayuda estudiantil federal, becas Pell y subvenciones de investigación).
 * **Requisito legal de Título VI:** Proveer intérpretes calificados para reuniones de padres y maestros, audiencias disciplinarias y reuniones de planes de educación individualizada (IEP); traducir comunicaciones escolares vitales (boletas, formularios de inscripción, alertas de emergencia y directrices de seguridad).
@@ -168,6 +183,7 @@ Abrevia proporciona una arquitectura de cumplimiento sin descargas para los 7 se
 
 ---
 
+<a name="tribunales"></a>
 ### 2. ⚖️ Tribunales y Sistema Judicial
 * **A quién cubre:** Tribunales estatales, cortes municipales de condado, tribunales de derecho administrativo y oficinas de defensores públicos receptoras de subvenciones del Departamento de Justicia (DOJ).
 * **Requisito legal de Título VI:** Intérpretes judiciales gratuitos y calificados para acusados penales, litigantes civiles y testigos; traducción de formularios judiciales, peticiones de órdenes de restricción y recursos de asistencia legal.
@@ -177,6 +193,7 @@ Abrevia proporciona una arquitectura de cumplimiento sin descargas para los 7 se
 
 ---
 
+<a name="seguridad-publica"></a>
 ### 3. 🚓 Fuerzas de Seguridad y Centros Penitenciarios
 * **A quién cubre:** Policías estatales, departamentos del sheriff del condado, policías municipales y sistemas carcelarios receptores de fondos federales (subvenciones DOJ COPS, Edward Byrne JAG).
 * **Requisito legal de Título VI:** Acceso a intérpretes en campo (vía interpretación telefónica OPI) en llamadas 911, paradas de tránsito, detenciones e interrogatorios; advertencias Miranda, actas de ingreso y procedimientos de quejas en el idioma del detenido.
@@ -186,6 +203,7 @@ Abrevia proporciona una arquitectura de cumplimiento sin descargas para los 7 se
 
 ---
 
+<a name="transito-transporte"></a>
 ### 4. 🚌 Transporte y Tránsito Público (DOTs)
 * **A quién cubre:** Autoridades de autobuses y trenes urbanos/regionales, Departamentos de Transporte estatales (DOTs) y autoridades aeroportuarias receptoras de fondos de la FTA o FHWA.
 * **Requisito legal de Título VI:** Horarios, instrucciones de pago de tarifas y señalización de emergencia traducidos a los idiomas habituales de la comunidad; consultas públicas y asambleas multilingües previas a cambios en tarifas o rutas.
@@ -195,6 +213,7 @@ Abrevia proporciona una arquitectura de cumplimiento sin descargas para los 7 se
 
 ---
 
+<a name="vivienda-hud"></a>
 ### 5. 🏠 Vivienda y Desarrollo Urbano (HUD / Sección 8)
 * **A quién cubre:** Autoridades de vivienda pública (PHA), agencias de desarrollo comunitario y propietarios privados que aceptan vales de vivienda de la Sección 8 o subsidios de HUD.
 * **Requisito legal de Título VI:** Traducción de contratos de arrendamiento, avisos de desalojo, reglamentos de convivencia y solicitudes de vales; audiencias de quejas y atención al inquilino en su idioma.
@@ -204,6 +223,7 @@ Abrevia proporciona una arquitectura de cumplimiento sin descargas para los 7 se
 
 ---
 
+<a name="asistencia-social"></a>
 ### 6. 🏛️ Asistencia Pública, Servicios Sociales y Trabajo
 * **A quién cubre:** Agencias estatales y del condado que gestionan programas de beneficios federales como SNAP (estampillas de comida), TANF, WIC, oficinas de desempleo y centros de empleo y capacitación laboral.
 * **Requisito legal de Título VI:** Formularios de solicitud, notificaciones de elegibilidad y trámites de apelación disponibles en idiomas hablados por porcentajes significativos de la población beneficiaria.
@@ -213,6 +233,7 @@ Abrevia proporciona una arquitectura de cumplimiento sin descargas para los 7 se
 
 ---
 
+<a name="emergencias-fema"></a>
 ### 7. 🚨 Gestión de Emergencias y Protección Civil (FEMA)
 * **A quién cubre:** Agencias estatales, condales y municipales de manejo de emergencias receptoras de fondos de FEMA.
 * **Requisito legal de Título VI:** Órdenes de evacuación en tiempo real, registro en albergues de emergencia y solicitudes de asistencia por desastre en los idiomas primarios de la zona afectada durante desastres declarados.
@@ -222,11 +243,14 @@ Abrevia proporciona una arquitectura de cumplimiento sin descargas para los 7 se
 
 ---
 
+<a name="operaciones"></a>
 ## 4. Casos de Uso Comerciales y Operativos
 
 Además del cumplimiento del Título VI, Abrevia potencia operaciones comerciales que demandan comunicación ágil y precisa en inglés y español:
 
+<a name="logistica"></a>
 * 🚚 **Logística, Fletes y Transporte:** Coordinación de códigos de acceso a casetas, muelles de carga, tiempos de espera y confirmación de entrega con conductores hispanohablantes.
+<a name="servicios-campo"></a>
 * 🛠️ **Servicios en Campo y Mantenimiento:** Despacho de técnicos de mantenimiento, electricistas y plomeros con comunicación en tiempo real con el cliente.
 * 🏢 **Administración Inmobiliaria y Hospitalidad:** Atención ágil de quejas de huéspedes, solicitudes de mantenimiento y coordinación con personal operativo.
 * 📦 **Comercio Minorista y Despacho:** Consultas sobre pedidos, devoluciones y soporte por mensaje de texto convencional.
