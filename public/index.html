@@ -230,9 +230,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.lep.gov" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-400" id="footerLinkLepGov" title="Official Federal Interagency Language Access Portal (DOJ / Civil Rights Division)">
-                                <span>🌐</span>
-                                <span>Federal LEP.gov Access Portal</span>
+                            <a href="https://www.justice.gov/crt/fcs" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-400" id="footerLinkDojFcs" title="U.S. Department of Justice Civil Rights Division - Federal Coordination and Compliance Section (Title VI & Language Access Enforcement)">
+                                <span>🏛️</span>
+                                <span id="footerLinkDojFcsText">DOJ Title VI Coordination (FCS)</span>
                             </a>
                         </li>
                         <li>
@@ -405,6 +405,7 @@
                 footerLinkWhoIsThis: 'Who is this app for?',
                 footerLinkSelfAssessment: 'Title VI Self-Assessment',
                 footerLinkHipaaTrainingText: 'Free HIPAA Training & Certificate (PDF)',
+                footerLinkDojFcsText: 'DOJ Title VI Coordination (FCS)',
                 hipaaCourseDisclaimer: '* Independent 3rd-party resource; Abrevia has no affiliation. Provided solely to facilitate meaningful compliance information.',
                 footerLinkInterpretersGuideText: 'Working with Interpreters & LEP Guide',
                 footerLinkTitle6: 'Title VI & EO 13166 Mandates',
@@ -507,6 +508,7 @@
                 footerLinkWhoIsThis: '¿Para quién es esta app?',
                 footerLinkSelfAssessment: 'Autoevaluación de Título VI',
                 footerLinkHipaaTrainingText: 'Capacitación y Certificado HIPAA Gratis (PDF)',
+                footerLinkDojFcsText: 'Coordinación de Título VI del DOJ (FCS)',
                 hipaaCourseDisclaimer: '* Recurso independiente de terceros; Abrevia no tiene afiliación. Facilitado únicamente para brindar información necesaria de cumplimiento.',
                 footerLinkInterpretersGuideText: 'Guía: Trabajo con Intérpretes y Personas LEP',
                 footerLinkTitle6: 'Mandatos de Título VI y OE 13166',
@@ -689,6 +691,8 @@
             if (ftHipaaDisc && c.hipaaCourseDisclaimer) ftHipaaDisc.textContent = c.hipaaCourseDisclaimer;
             const ftInterp = document.getElementById('footerLinkInterpretersGuideText');
             if (ftInterp && c.footerLinkInterpretersGuideText) ftInterp.textContent = c.footerLinkInterpretersGuideText;
+            const ftDoj = document.getElementById('footerLinkDojFcsText');
+            if (ftDoj && c.footerLinkDojFcsText) ftDoj.textContent = c.footerLinkDojFcsText;
             if (ftWho && c.footerLinkWhoIsThis) ftWho.textContent = c.footerLinkWhoIsThis;
             const ftT6 = document.getElementById('footerLinkTitle6');
             if (ftT6 && c.footerLinkTitle6) ftT6.textContent = c.footerLinkTitle6;
@@ -788,20 +792,32 @@
             // Footer Copyright & Notice
             const ftCopy = document.getElementById('footerCopyright');
             if (ftCopy) ftCopy.innerHTML = c.footerCopyright;
-            document.getElementById('footerNoticeText').innerHTML = `<span class="font-semibold text-slate-300">${c.footerNoticeTitle}</span> ${c.footerNotice}`;
-            document.getElementById('footerLearnMoreBtn').textContent = c.footerLearnMore;
+            const ftNotice = document.getElementById('footerNoticeText');
+            if (ftNotice) ftNotice.innerHTML = `<span class="font-semibold text-slate-300">${c.footerNoticeTitle}</span> ${c.footerNotice}`;
+            const ftLearnBtn = document.getElementById('footerLearnMoreBtn');
+            if (ftLearnBtn) ftLearnBtn.textContent = c.footerLearnMore;
 
-            // Update Modal Content
-            document.getElementById('hipaaModalTitle').textContent = c.hipaaTitle;
-            document.getElementById('hipaaModalBadge').textContent = c.hipaaBadge;
-            document.getElementById('hipaaP1').innerHTML = c.hipaaP1;
-            document.getElementById('hipaaP2').innerHTML = c.hipaaP2;
-            document.getElementById('hipaaUpcomingTitle').textContent = c.hipaaUpcomingTitle;
-            document.getElementById('hipaaFeat1').textContent = c.hipaaFeat1;
-            document.getElementById('hipaaFeat2').textContent = c.hipaaFeat2;
-            document.getElementById('hipaaFeat3').textContent = c.hipaaFeat3;
-            document.getElementById('hipaaFeat4').textContent = c.hipaaFeat4;
-            document.getElementById('hipaaCloseBtn').textContent = c.hipaaClose;
+            // Update Modal Content (if present)
+            const hTitle = document.getElementById('hipaaModalTitle');
+            if (hTitle && c.hipaaTitle) hTitle.textContent = c.hipaaTitle;
+            const hBadge = document.getElementById('hipaaModalBadge');
+            if (hBadge && c.hipaaBadge) hBadge.textContent = c.hipaaBadge;
+            const hP1 = document.getElementById('hipaaP1');
+            if (hP1 && c.hipaaP1) hP1.innerHTML = c.hipaaP1;
+            const hP2 = document.getElementById('hipaaP2');
+            if (hP2 && c.hipaaP2) hP2.innerHTML = c.hipaaP2;
+            const hUpcoming = document.getElementById('hipaaUpcomingTitle');
+            if (hUpcoming && c.hipaaUpcomingTitle) hUpcoming.textContent = c.hipaaUpcomingTitle;
+            const hF1 = document.getElementById('hipaaFeat1');
+            if (hF1 && c.hipaaFeat1) hF1.textContent = c.hipaaFeat1;
+            const hF2 = document.getElementById('hipaaFeat2');
+            if (hF2 && c.hipaaFeat2) hF2.textContent = c.hipaaFeat2;
+            const hF3 = document.getElementById('hipaaFeat3');
+            if (hF3 && c.hipaaFeat3) hF3.textContent = c.hipaaFeat3;
+            const hF4 = document.getElementById('hipaaFeat4');
+            if (hF4 && c.hipaaFeat4) hF4.textContent = c.hipaaFeat4;
+            const hClose = document.getElementById('hipaaCloseBtn');
+            if (hClose && c.hipaaClose) hClose.textContent = c.hipaaClose;
 
             // Pricing removed from landing page (accessible only in user dashboard)
         }

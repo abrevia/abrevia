@@ -61,18 +61,18 @@ Relying on ad-hoc translation, bilingual staff pulled from unrelated duties, or 
 
 The following resources are 100% free, public-domain, or federally accredited educational materials for staff training, onboarding, and compliance portfolios:
 
-### 1. Federal Interagency Language Access Portal (LEP.gov)
-* **Website:** [https://www.lep.gov](https://www.lep.gov)
-* **Host:** U.S. Department of Justice (DOJ) Civil Rights Division.
-* **Resources:** Comprehensive clearinghouse for federal agency Language Access Plans, Title VI statutory guides, demographic language data, and multi-agency compliance toolkits.
-
-### 2. DOJ Civil Rights Division: Tips for Working with an Interpreter
-* **Website:** [https://www.justice.gov/crt/fcs/tips-working-interpreter](https://www.justice.gov/crt/fcs/tips-working-interpreter)
+### 1. U.S. Department of Justice Civil Rights Division (FCS)
+* **Website:** [https://www.justice.gov/crt/fcs](https://www.justice.gov/crt/fcs)
 * **Host:** Federal Coordination and Compliance Section (FCS).
-* **Resources:** Step-by-step job aid for attorneys, intake specialists, law enforcement, and federal recipients on managing interpreted interviews.
+* **Statutory Role:** Central coordinator for federal Title VI language access enforcement across all federal agencies. *(Note on EO 14224: While legacy interagency portal lep.gov operations were placed under administrative review, active statutory Title VI enforcement and LEP mandates remain fully governed by the DOJ Civil Rights Division and HHS OCR).*
+
+### 2. DOJ Civil Rights Division: Guidance & Publications of Major Interest
+* **Website:** [https://www.justice.gov/crt/fcs/fcs-publications-major-interest](https://www.justice.gov/crt/fcs/fcs-publications-major-interest)
+* **Host:** Federal Coordination and Compliance Section (FCS).
+* **Resources:** Comprehensive federal coordination library, Title VI legal manual, enforcement standards, and technical assistance on choosing and managing qualified language access providers.
 
 ### 3. HHS Think Cultural Health (Office of Minority Health)
-* **Website:** [https://www.thinkculturalhealth.hhs.gov](https://www.thinkculturalhealth.hhs.gov)
+* **Website:** [https://thinkculturalhealth.hhs.gov](https://thinkculturalhealth.hhs.gov)
 * **Host:** U.S. Department of Health and Human Services (HHS).
 * **Resources:** Free accredited online e-learning programs on Culturally and Linguistically Appropriate Services (CLAS). Includes free courses on **"Improving Communication with LEP Patients"** with free Continuing Education (CE) credits and downloadable certificates.
 
@@ -80,9 +80,10 @@ The following resources are 100% free, public-domain, or federally accredited ed
 * **Website:** [https://www.hipaatraining.us](https://www.hipaatraining.us)
 * **Resources:** 100% free 30-minute online course on HIPAA Privacy, Security, and Breach Notification rules for personnel handling PHI, featuring an instant downloadable annual Certificate of Completion.
 
-### 5. U.S. Census Bureau "I Speak" Cards
-* **Website:** [https://www.lep.gov/sites/default/files/media/document/2020-02/Census-LanguageCards.pdf](https://www.lep.gov/sites/default/files/media/document/2020-02/Census-LanguageCards.pdf)
-* **Resources:** Downloadable multi-language identification flashcards allowing clients to point to their native language upon initial contact.
+### 5. Title VI Legal Manual & Federal Directives
+* **Website:** [https://www.justice.gov/crt/fcs/TitleVI](https://www.justice.gov/crt/fcs/TitleVI)
+* **Host:** U.S. Department of Justice Civil Rights Division.
+* **Resources:** Complete statutory framework, legal standards, and federal administrative obligations under Title VI of the Civil Rights Act of 1964.
 
 ---
 
@@ -109,7 +110,8 @@ Abrevia proporciona la interfaz tecnológica sin descargas para relevo bilingüe
 
 ## 3. Directorio de Recursos Federales Gratuitos
 
-* **Portal Federal Interagencial de Acceso Lingüístico:** [LEP.gov](https://www.lep.gov)
-* **Guía de Trabajo con Intérpretes del Departamento de Justicia (DOJ):** [DOJ FCS Tips for Working with an Interpreter](https://www.justice.gov/crt/fcs/tips-working-interpreter)
-* **Educación y Certificados CLAS del HHS:** [HHS Think Cultural Health](https://www.thinkculturalhealth.hhs.gov)
+* **Coordinación de Título VI del Departamento de Justicia (DOJ):** [DOJ FCS Title VI Coordination](https://www.justice.gov/crt/fcs)
+* **Publicaciones y Guías Federales del Departamento de Justicia (DOJ):** [DOJ FCS Publications of Major Interest](https://www.justice.gov/crt/fcs/fcs-publications-major-interest)
+* **Marco Legal y Manual de Título VI del DOJ:** [DOJ FCS Title VI Legal Manual](https://www.justice.gov/crt/fcs/TitleVI)
+* **Educación y Certificados CLAS del HHS:** [HHS Think Cultural Health](https://thinkculturalhealth.hhs.gov)
 * **Capacitación y Certificado Anual Gratuito de HIPAA:** [HIPAA Training US](https://www.hipaatraining.us)
