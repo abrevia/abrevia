@@ -54,20 +54,17 @@ This checklist provides a structured, step-by-step testing protocol to validate 
 
 ---
 
-## 3. Human-In-The-Loop (HITL) Proofread Mode
+## 3. On-Demand Certified Live Human Interpreter Gateway (LSP)
 
-- [ ] **3.1. Enable HITL Mode**
-  - **Action:** Click `[ 🛡️ Proofread (HITL) OFF ]` on the bottom control bar.
-  - **Verification:** Badge flips to `[ 🛡️ Proofread (HITL) ON ]` with an active highlight.
-- [ ] **3.2. Pre-Send Review Interception**
-  - **Action:** Type an English message and hit `Send ↵`.
-  - **Verification:** The message is **not** immediately dispatched. Instead, the `#hitlContainer` editable review box pops up displaying the translated Spanish text.
-- [ ] **3.3. Manual Operator Polish & Approval**
-  - **Action:** Edit a word or phrase in the Spanish review box and click `Confirm & Send`.
-  - **Verification:** The edited version is transmitted to Point B; the audit log reflects human verification.
-- [ ] **3.4. Cancel HITL Buffer**
-  - **Action:** Click `Cancel` in the review buffer.
-  - **Verification:** Dispatch is aborted; draft remains safe in the composer.
+- [ ] **3.1. Open Live Interpreter Dispatch Modal**
+  - **Action:** Click `[ 🎧 Request Live Interpreter Now ]` in the composer control bar.
+  - **Verification:** The certified LSP human interpreter dispatch modal opens immediately.
+- [ ] **3.2. Select Modality & Urgency Level**
+  - **Action:** Select language pair (English ⇄ Spanish), modality (Over-the-Phone Interpretation - OPI or Video Remote Interpretation - VRI), and priority level (Standard or Urgent/Emergency).
+  - **Verification:** Cost estimate / billing tier reflects active partner pricing without unexpected surcharges.
+- [ ] **3.3. Request Dispatch & Audit Logging**
+  - **Action:** Click `Request Interpreter Now`.
+  - **Verification:** A system dispatch audit note appears in the live conversation thread confirming the certified interpreter request was logged and routed to our accredited LSP partner network.
 
 ---
 

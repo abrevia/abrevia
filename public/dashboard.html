@@ -239,13 +239,6 @@
                                     <span id="liveInterpreterBtnLabel" class="hidden sm:inline">Request Live Interpreter Now</span><span class="sm:hidden">Interpreter</span>
                                     <span id="liveInterpreterBtnBadge" class="hidden text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-500/50 animate-pulse">REQ</span>
                                 </button>
-
-                                <!-- Dedicated HITL Proofread Button -->
-                                <button id="hitlModeBtn" type="button" onclick="toggleHitlMode()" class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition border border-slate-700 bg-slate-900 text-slate-300 hover:text-white hover:border-slate-600 shadow-sm" title="Human-In-The-Loop: Review and edit translated message before sending">
-                                    <span id="hitlBtnIcon">🛡️</span>
-                                    <span id="hitlBtnLabel" class="hidden sm:inline">Proofread (HITL)</span><span class="sm:hidden">HITL</span>
-                                    <span id="hitlBtnBadge" class="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">OFF</span>
-                                </button>
                             </div>
                         </div>
 
@@ -275,38 +268,7 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- 2. HITL Review Box (Outbound Message Preview & Edit) -->
-                    <div id="hitlContainer" class="hidden bg-slate-900/90 border border-brand-500/40 rounded-xl p-3.5 space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span id="hitlTitle" class="text-xs font-semibold text-brand-400 flex items-center space-x-1">
-                                <span>&#x2713;</span>
-                                <span id="hitlTitleText">Human-In-The-Loop Review (Spanish message to be sent):</span>
-                            </span>
-                            <span id="hitlSubtitle" class="text-[10px] text-slate-400">Edit text freely before sending</span>
-                        </div>
-
-                        <!-- HITL Attachment Alert if file is queued -->
-                        <div id="hitlAttachmentNotice" class="hidden flex items-center space-x-2 text-xs text-blue-300 bg-blue-500/10 border border-blue-500/20 px-3 py-1.5 rounded-lg">
-                            <span>📎</span>
-                            <span id="hitlAttachmentLabel">MMS Attachment queued:</span>
-                            <span id="hitlAttachmentFileName" class="font-bold underline"></span>
-                        </div>
-
-                        <textarea id="target-review-box" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition"></textarea>
-                        
-                        <div class="flex justify-end space-x-2">
-                            <button id="cancelHitlBtn" onclick="cancelHITL()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-lg transition">
-                                Cancel
-                            </button>
-                            <button id="send-btn" onclick="confirmAndSend()" title="Press Enter to Send Message" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition flex items-center space-x-1.5">
-                                <span id="sendBtnText">Send Message</span>
-                                <span class="text-xs font-bold">↵</span>
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
+</div>
             </div>
 
         </main>
@@ -340,7 +302,7 @@
                         <span>⭐ 30-Day Free Premium Trial</span>
                         <span id="billingTrialBadge" class="text-[9px] bg-brand-500/20 text-brand-300 font-bold px-1.5 py-0.2 rounded-full border border-brand-500/40">ACTIVE</span>
                     </div>
-                    <div id="billingTrialSub" class="text-[11px] text-brand-200/80 mt-0.5">Full access to Proofread (HITL), Templates, Scheduling & Relay.</div>
+                    <div id="billingTrialSub" class="text-[11px] text-brand-200/80 mt-0.5">Full access to Live Interpreter dispatch, Templates, Scheduling & Relay.</div>
                 </div>
                 <span id="billingTrialDays" class="text-xs font-mono font-bold text-brand-300 shrink-0 ml-2">30d left</span>
             </div>
@@ -365,7 +327,7 @@
                             <span>Operations Pro</span>
                             <span class="text-[9px] bg-brand-600 text-white font-bold px-1.5 py-0.2 rounded-full">BUSINESS & ORGS</span>
                         </div>
-                        <div class="text-[11px] text-slate-400">$49/month • Unlimited relay, proofreading & managed intake options</div>
+                        <div class="text-[11px] text-slate-400">$49/month • Unlimited relay, translation & certified interpreter access</div>
                     </div>
                     <button onclick="triggerCheckout('pro')" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
                         Subscribe
@@ -1194,7 +1156,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_13"></script>
+    <script src="app.js?v=20261029_14"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
