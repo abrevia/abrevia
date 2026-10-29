@@ -164,6 +164,7 @@ const I18N = {
         consoleBadge: 'Console Status',
         consoleStatus: 'Active',
         billingBtn: 'Billing',
+        whoIsThisForBtn: 'Who is this for?',
         signOut: 'Sign Out',
         sidebarTitle: 'Conversations',
         contactsBtn: 'Contacts',
@@ -331,6 +332,7 @@ const I18N = {
         consoleBadge: 'Estado de Consola',
         consoleStatus: 'Activo',
         billingBtn: 'Facturación',
+        whoIsThisForBtn: '¿Para quién es?',
         signOut: 'Cerrar Sesión',
         sidebarTitle: 'Conversaciones',
         contactsBtn: 'Contactos',
@@ -1350,6 +1352,8 @@ function applyDashboardLocalization() {
     if (consoleStatusTextEl) consoleStatusTextEl.textContent = t.consoleStatus;
     const billingBtnEl = document.getElementById('billingBtnText');
     if (billingBtnEl) billingBtnEl.textContent = t.billingBtn || 'Billing';
+    const dashWhoBtn = document.getElementById('dashWhoIsThisForText');
+    if (dashWhoBtn && t.whoIsThisForBtn) dashWhoBtn.textContent = t.whoIsThisForBtn;
     document.getElementById('signOutLink').textContent = t.signOut;
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
     document.getElementById('refreshBtn').textContent = t.refresh;

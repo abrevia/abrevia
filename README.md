@@ -3,6 +3,10 @@
 Abrevia 1 is a "Zero-Download SaaS" bilingual (English/Spanish) customer support relay. Agents type in English from a web operations dashboard, text is instantly translated to Spanish via Google Gemini 1.5 Flash with Human-In-The-Loop (HITL) review, and delivered directly to the customer via SMS using httpSMS (physical Android gateway). When the customer replies in Spanish via SMS, it is translated back to English and displayed live in the agent's feed.
 
 > **CRITICAL SCOPE:** Abrevia 1 is an administrative operations tool (tailored for Logistics, Property Management, Field Services, and Retail). It is strictly non-medical and non-HIPAA.
+>
+> 🏛️ **Title VI Federal Language Access Compliance & Sector Guide:**  
+> For in-depth analysis on Title VI of the Civil Rights Act of 1964, Executive Order 13166, the Civil Rights Restoration Act of 1987 "Institution-Wide" rule, and sector requirements (Education, Courts, Law Enforcement, Transit, HUD, Social Services, FEMA), see:  
+> 👉 [**Who is this app for? / ¿Para quién es esta app? (WHO_IS_THIS_FOR.md)**](WHO_IS_THIS_FOR.md)
 
 ---
 

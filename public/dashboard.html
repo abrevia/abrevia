@@ -57,6 +57,11 @@
 
         <!-- Right: Trial Status, Billing & Sign Out -->
         <div class="flex items-center space-x-2 sm:space-x-3 text-xs">
+            <!-- Who is this app for? GitHub Link -->
+            <a id="dashWhoIsThisForBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 shadow-sm" title="Who is this app for? Federal Title VI & Sector Use Cases">
+                <span>🏛️</span>
+                <span id="dashWhoIsThisForText" class="hidden md:inline">Who is this for?</span>
+            </a>
             <!-- Discreet Sound & Haptic Notification Toggle -->
             <button id="soundToggleBtn" onclick="toggleSoundAlerts()" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 shadow-sm" title="Sound & Vibration Alerts (Discreet Beep)">
                 <span id="soundToggleIcon">🔔</span>
@@ -681,10 +686,11 @@
                 </div>
                 <div class="flex items-center justify-between py-1.5 border-t border-slate-800/60">
                     <span class="text-slate-400">Federal Title VI / LEP Compliance</span>
-                    <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1.5 text-[11px] transition">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                        <span>Title VI & EO 13166 Ready</span>
-                    </span>
+                        <span id="t6StatusLabel">Title VI & EO 13166 Ready</span>
+                        <span>&rarr;</span>
+                    </a>
                 </div>
             </div>
             <div class="pt-2">

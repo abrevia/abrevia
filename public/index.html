@@ -52,6 +52,10 @@
 
             <!-- Right: Shortcut & Language Switcher -->
             <div class="flex items-center space-x-2 shrink-0">
+                <a id="whoIsThisForHeaderBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition shadow-sm" title="Who is this app for? Federal Title VI & Sector Use Cases">
+                    <span>🏛️</span>
+                    <span id="whoIsThisForHeaderText">Who is this app for?</span>
+                </a>
                 <button id="indexInstallBtn" onclick="triggerIndexPwaInstall()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 border border-brand-500/30 transition shadow-sm" title="Add shortcut to desktop or home screen">
                     <span>📲</span>
                     <span id="indexInstallBtnText">Add Shortcut</span>
@@ -81,9 +85,17 @@
         </h2>
 
         <!-- Crisp Minimal Subtitle -->
-        <p id="heroSubtitle" class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-6 leading-relaxed">
+        <p id="heroSubtitle" class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-4 leading-relaxed">
             Messages are 2-way translated and dispatched directly. No downloads, zero friction.
         </p>
+
+        <!-- Who is this app for? Link to GitHub Guide -->
+        <div class="mb-6">
+            <a id="whoIsThisForHeroBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition shadow-sm hover:scale-[1.02]">
+                <span>🏛️</span>
+                <span id="whoIsThisForHeroText">Who is this app for? Federal Title VI & Use Cases &rarr;</span>
+            </a>
+        </div>
 
         <!-- Effortless Minimal Launchpad -->
         <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 sm:p-7 max-w-md w-full shadow-2xl backdrop-blur-sm text-center mb-6 sm:mb-8">
@@ -204,10 +216,10 @@
                         <span id="footerNoticeTitle" class="font-semibold text-slate-300">Compliance & Title VI Notice:</span> 
                         <span id="footerNoticeTextSpan">Abrevia empowers organizations to satisfy federal Title VI (Title 6) & Limited English Proficiency (LEP) language access mandates under EO 13166. Abrevia is strictly for administrative operations and is not designed for PHI processing.</span>
                     </p>
-                    <button onclick="openHipaaModal()" class="shrink-0 text-brand-400 hover:text-brand-300 font-semibold text-xs transition inline-flex items-center space-x-1">
-                        <span id="footerLearnMoreBtn">Learn More</span>
+                    <a id="footerWhoIsThisForLink" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="shrink-0 text-brand-400 hover:text-brand-300 font-semibold text-xs transition inline-flex items-center space-x-1">
+                        <span id="footerLearnMoreBtn">Who is this app for?</span>
                         <span>&rarr;</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -282,6 +294,10 @@
                 indLogistics: '🚚 Logistics',
                 indField: '🛠️ Field Services',
                 indOperations: '⚡ Operations',
+                whoIsThisForHeaderText: 'Who is this app for?',
+                whoIsThisForHeroText: 'Who is this app for? Federal Title VI & Use Cases →',
+                footerLearnMore: 'Who is this app for?',
+                indexInstallBtnText: 'Add Shortcut',
                                 pinCardTitle: 'Workspace Locked',
                 pinCardSubtitle: 'Enter your 4-digit PIN to open your conversations',
                 pinUnlockBtnText: 'Unlock & Open Dashboard',
@@ -355,6 +371,10 @@
                 indLogistics: '🚚 Logística',
                 indField: '🛠️ Servicios en Campo',
                 indOperations: '⚡ Operaciones',
+                whoIsThisForHeaderText: '¿Para quién es esta app?',
+                whoIsThisForHeroText: '¿Para quién es esta app? Título VI y Casos de Uso →',
+                footerLearnMore: '¿Para quién es esta app?',
+                indexInstallBtnText: 'Agregar Atajo',
                                 pinCardTitle: 'Espacio de Trabajo Bloqueado',
                 pinCardSubtitle: 'Ingrese su PIN de 4 dígitos para abrir sus conversaciones',
                 pinUnlockBtnText: 'Desbloquear y Abrir Panel',
@@ -486,6 +506,14 @@
             if (pinReset && c.pinResetLinkText) pinReset.textContent = c.pinResetLinkText;
             const pinErr = document.getElementById('pinErrorMsg');
             if (pinErr && c.pinErrorMsg) pinErr.textContent = c.pinErrorMsg;
+
+            // Who is this app for Localization
+            const whoHdr = document.getElementById('whoIsThisForHeaderText');
+            if (whoHdr && c.whoIsThisForHeaderText) whoHdr.textContent = c.whoIsThisForHeaderText;
+            const whoHero = document.getElementById('whoIsThisForHeroText');
+            if (whoHero && c.whoIsThisForHeroText) whoHero.textContent = c.whoIsThisForHeroText;
+            const ftLearn = document.getElementById('footerLearnMoreBtn');
+            if (ftLearn && c.footerLearnMore) ftLearn.textContent = c.footerLearnMore;
 
             // Shortcut Localization
             const idxInstBtn = document.getElementById('indexInstallBtnText');
