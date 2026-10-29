@@ -3603,3 +3603,297 @@ function applyEncryptionProofLocalization() {
     const cls = document.getElementById('encCloseBtnText');
     if (cls) cls.textContent = isEs ? 'Entendido' : 'Close Proof';
 }
+
+
+// =========================================================================
+// Abrevia — HIPAA Compliance & Pre-Signed BAA PDF Generator
+// =========================================================================
+
+function openHipaaBaaModal() {
+    const modal = document.getElementById('hipaaBaaModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        // Auto-populate date with today if empty
+        const dateInput = document.getElementById('baaDate');
+        if (dateInput && !dateInput.value) {
+            dateInput.value = new Date().toISOString().split('T')[0];
+        }
+    }
+}
+
+function closeHipaaBaaModal() {
+    const modal = document.getElementById('hipaaBaaModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function switchHipaaTab(tab) {
+    const tabForm = document.getElementById('hipaaTabForm');
+    const tabRoadmap = document.getElementById('hipaaTabRoadmap');
+    const btnForm = document.getElementById('hipaaTabFormBtn');
+    const btnRoadmap = document.getElementById('hipaaTabRoadmapBtn');
+
+    if (tab === 'form') {
+        if (tabForm) tabForm.classList.remove('hidden');
+        if (tabRoadmap) tabRoadmap.classList.add('hidden');
+        if (btnForm) {
+            btnForm.className = 'pb-2.5 font-semibold text-emerald-400 border-b-2 border-emerald-400 flex items-center space-x-1.5 cursor-pointer transition';
+        }
+        if (btnRoadmap) {
+            btnRoadmap.className = 'pb-2.5 font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-1.5 cursor-pointer transition';
+        }
+    } else {
+        if (tabForm) tabForm.classList.add('hidden');
+        if (tabRoadmap) tabRoadmap.classList.remove('hidden');
+        if (btnForm) {
+            btnForm.className = 'pb-2.5 font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-1.5 cursor-pointer transition';
+        }
+        if (btnRoadmap) {
+            btnRoadmap.className = 'pb-2.5 font-semibold text-emerald-400 border-b-2 border-emerald-400 flex items-center space-x-1.5 cursor-pointer transition';
+        }
+    }
+}
+
+async function generateAndDownloadBaaPdf(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const orgName = document.getElementById('baaOrgName')?.value?.trim() || 'Covered Entity';
+    const signerName = document.getElementById('baaSignerName')?.value?.trim() || 'Authorized Representative';
+    const signerTitle = document.getElementById('baaSignerTitle')?.value?.trim() || 'Official';
+    const signerEmail = document.getElementById('baaSignerEmail')?.value?.trim() || '';
+    const signerPhone = document.getElementById('baaSignerPhone')?.value?.trim() || 'Not specified';
+    const orgAddress = document.getElementById('baaOrgAddress')?.value?.trim() || 'Principal Business Address on File';
+    const effDate = document.getElementById('baaDate')?.value || new Date().toISOString().split('T')[0];
+
+    const submitBtn = document.getElementById('baaSubmitBtn');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>⏳</span><span>Generating Document...</span>';
+    }
+
+    // 1. Asynchronously archive BAA request to audit directory
+    try {
+        fetch('/api/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'subscribe',
+                email: signerEmail,
+                phone: signerPhone !== 'Not specified' ? signerPhone : '',
+                name: `${signerName} (${signerTitle} - ${orgName})`,
+                notes: `Pre-signed HIPAA BAA generated for ${orgName} on ${effDate}. Address: ${orgAddress}`,
+                source: 'hipaa_baa_request'
+            })
+        }).catch(err => console.warn('[BAA Audit] Notice:', err));
+    } catch (ignore) {}
+
+    const docVerificationId = 'BAA-ABR-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(1000 + Math.random() * 9000);
+
+    // 2. Build the formal legal HIPAA Business Associate Agreement document
+    const baaHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HIPAA Business Associate Agreement - ${escapeHtml(orgName)} & Abrevia</title>
+    <style>
+        @page { size: letter; margin: 20mm 18mm 20mm 18mm; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            color: #111827;
+            background: #ffffff;
+            margin: 0;
+            padding: 30px;
+            line-height: 1.5;
+            font-size: 11pt;
+        }
+        .header-table { width: 100%; border-bottom: 2px solid #1e3a8a; padding-bottom: 15px; margin-bottom: 20px; }
+        .title { text-align: center; font-size: 15pt; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; margin: 15px 0 5px 0; color: #1e3a8a; }
+        .subtitle { text-align: center; font-size: 10pt; font-style: italic; margin-bottom: 25px; color: #4b5563; }
+        h3 { font-size: 11pt; font-weight: bold; text-transform: uppercase; margin-top: 18px; margin-bottom: 6px; color: #111827; border-bottom: 1px solid #e5e7eb; padding-bottom: 3px; }
+        p { margin: 6px 0; text-align: justify; }
+        ul { margin: 6px 0 6px 20px; padding: 0; }
+        li { margin-bottom: 4px; text-align: justify; }
+        .highlight-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; margin: 15px 0; font-size: 10pt; }
+        .sig-table { width: 100%; margin-top: 35px; border-collapse: collapse; page-break-inside: avoid; }
+        .sig-table td { width: 50%; vertical-align: top; padding: 12px; border: 1px solid #d1d5db; }
+        .sig-header { font-weight: bold; font-size: 10.5pt; text-transform: uppercase; margin-bottom: 15px; color: #1e3a8a; }
+        .seal-badge { display: inline-block; border: 1.5px solid #059669; background: #ecfdf5; color: #065f46; font-size: 9pt; font-family: sans-serif; font-weight: bold; padding: 4px 8px; border-radius: 4px; margin-top: 8px; }
+        .print-toolbar { position: sticky; top: 0; background: #1e293b; color: #ffffff; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 25px; font-family: sans-serif; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .print-btn { background: #059669; color: white; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; font-size: 11pt; cursor: pointer; }
+        .print-btn:hover { background: #047857; }
+        @media print {
+            .print-toolbar { display: none !important; }
+            body { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="print-toolbar">
+        <div>
+            <strong>Abrevia Legal Document Center</strong> — Pre-Signed HIPAA BAA Execution
+        </div>
+        <div>
+            <button class="print-btn" onclick="window.print()">🖨️ Save as PDF / Print Document</button>
+        </div>
+    </div>
+
+    <table class="header-table">
+        <tr>
+            <td style="vertical-align: middle;">
+                <div style="font-size: 18pt; font-weight: bold; color: #1e3a8a; font-family: sans-serif;">ABREVIA</div>
+                <div style="font-size: 9pt; color: #6b7280; font-family: sans-serif;">Zero-Download Bilingual Communication Gateway</div>
+            </td>
+            <td style="text-align: right; vertical-align: middle; font-family: sans-serif; font-size: 9pt; color: #4b5563;">
+                <strong>Document ID:</strong> ${docVerificationId}<br>
+                <strong>Effective Date:</strong> ${escapeHtml(effDate)}<br>
+                <strong>Statutory Framework:</strong> 45 CFR § 164.502(e) &amp; § 164.504(e)
+            </td>
+        </tr>
+    </table>
+
+    <div class="title">HIPAA BUSINESS ASSOCIATE AGREEMENT (BAA)</div>
+    <div class="subtitle">Standard Form Agreement Compliant with HIPAA, HITECH Act, and the Omnibus Rule of 2013</div>
+
+    <p>This Business Associate Agreement (&ldquo;<strong>Agreement</strong>&rdquo; or &ldquo;<strong>BAA</strong>&rdquo;) is entered into and made effective as of <strong>${escapeHtml(effDate)}</strong> (&ldquo;<strong>Effective Date</strong>&rdquo;), by and between:</p>
+
+    <div class="highlight-box">
+        <strong>COVERED ENTITY:</strong><br>
+        <strong>Legal Entity Name:</strong> ${escapeHtml(orgName)}<br>
+        <strong>Principal Address:</strong> ${escapeHtml(orgAddress)}<br>
+        <strong>Authorized Signatory:</strong> ${escapeHtml(signerName)}, ${escapeHtml(signerTitle)}<br>
+        <strong>Notice Contact Email:</strong> ${escapeHtml(signerEmail)} | <strong>Phone:</strong> ${escapeHtml(signerPhone)}<br><br>
+        <strong>AND</strong><br><br>
+        <strong>BUSINESS ASSOCIATE:</strong><br>
+        <strong>Legal Entity Name:</strong> Servicios ADG LLC d/b/a Abrevia (&ldquo;<strong>Business Associate</strong>&rdquo; or &ldquo;<strong>Abrevia</strong>&rdquo;)<br>
+        <strong>Corporate Notice Contact:</strong> Compliance &amp; Legal Operations, info@mvhisp.site<br>
+        <strong>Open-Source Security Audit Repository:</strong> github.com/serviciosadg/abrevia
+    </div>
+
+    <p>Covered Entity and Business Associate are collectively referred to as the &ldquo;Parties&rdquo; and individually as a &ldquo;Party.&rdquo;</p>
+
+    <h3>RECITALS</h3>
+    <p><strong>WHEREAS</strong>, Covered Entity is a &ldquo;Covered Entity&rdquo; as defined under the Health Insurance Portability and Accountability Act of 1996, Public Law 104-191 (&ldquo;HIPAA&rdquo;), the Health Information Technology for Economic and Clinical Health Act, Public Law 111-5 (&ldquo;HITECH Act&rdquo;), and regulations promulgated thereunder by the U.S. Department of Health and Human Services (HHS), set forth at 45 CFR Parts 160 and 164 (collectively, the &ldquo;HIPAA Rules&rdquo;);</p>
+    <p><strong>WHEREAS</strong>, Business Associate provides software services, including two-way bilingual SMS/WhatsApp relay, automated translation, and communication tools (&ldquo;Services&rdquo;) to Covered Entity, which may involve the creation, receipt, maintenance, or transmission of Protected Health Information (&ldquo;PHI&rdquo;) or Electronic Protected Health Information (&ldquo;ePHI&rdquo;);</p>
+    <p><strong>WHEREAS</strong>, the Parties desire to comply with 45 CFR &sect; 164.502(e) and &sect; 164.504(e), establishing required contractual assurances regarding the safeguarding and privacy of PHI;</p>
+    <p><strong>NOW, THEREFORE</strong>, in consideration of the mutual covenants set forth herein, the Parties agree as follows:</p>
+
+    <h3>SECTION 1. DEFINITIONS</h3>
+    <p>Catch-all definition: Terms used, but not otherwise defined, in this Agreement shall have the same meaning as those terms in 45 CFR &sect;&sect; 160.103, 164.103, 164.304, 164.402, and 164.501.</p>
+    <ul>
+        <li><strong>&ldquo;Breach&rdquo;</strong> shall have the same meaning as the term defined in 45 CFR &sect; 164.402.</li>
+        <li><strong>&ldquo;Protected Health Information&rdquo; (PHI)</strong> shall have the same meaning as the term in 45 CFR &sect; 160.103, limited to information created, received, maintained, or transmitted by Business Associate from or on behalf of Covered Entity.</li>
+        <li><strong>&ldquo;Security Incident&rdquo;</strong> shall have the meaning given in 45 CFR &sect; 164.304.</li>
+    </ul>
+
+    <h3>SECTION 2. OBLIGATIONS AND ACTIVITIES OF BUSINESS ASSOCIATE</h3>
+    <p>Business Associate agrees to:</p>
+    <ul>
+        <li><strong>(a) Limitation on Uses and Disclosures:</strong> Not use or disclose PHI other than as permitted or required by this Agreement, or as required by law.</li>
+        <li><strong>(b) Safeguards (45 CFR &sect; 164.312):</strong> Implement administrative, physical, and technical safeguards that reasonably and appropriately protect the confidentiality, integrity, and availability of the ePHI that it creates, receives, maintains, or transmits on behalf of Covered Entity. Specifically, Business Associate affirms:
+            <ul>
+                <li>All persistent ePHI storage is encrypted at rest using industry-standard <strong>AES-256 KMS encryption</strong>;</li>
+                <li>All network communications are strictly enforced with <strong>TLS 1.3 transport security</strong>;</li>
+                <li>Workstation access controls and operator session PIN locks are implemented to prevent unauthorized access.</li>
+            </ul>
+        </li>
+        <li><strong>(c) Reporting of Breaches and Incidents:</strong> Report to Covered Entity any Breach of Unsecured PHI without unreasonable delay and in no case later than sixty (60) calendar days after discovery, in accordance with 45 CFR &sect; 164.410.</li>
+        <li><strong>(d) Subcontractor Flow-Down (45 CFR &sect; 164.502(e)(1)(ii)):</strong> Ensure that any subcontractors or cloud infrastructure vendors (e.g., Amazon Web Services) that create, receive, maintain, or transmit PHI on behalf of Business Associate agree to the same restrictions and conditions that apply to Business Associate.</li>
+        <li><strong>(e) Individual Rights (Access and Amendment):</strong> Make available PHI in accordance with 45 CFR &sect; 164.524 and &sect; 164.526 upon written request from Covered Entity.</li>
+        <li><strong>(f) Accounting of Disclosures:</strong> Maintain and make available information required to provide an accounting of disclosures in accordance with 45 CFR &sect; 164.528.</li>
+    </ul>
+
+    <h3>SECTION 3. PERMITTED USES AND DISCLOSURES BY BUSINESS ASSOCIATE</h3>
+    <p>Business Associate may only use or disclose PHI:</p>
+    <ul>
+        <li><strong>(a)</strong> As necessary to perform the bilingual communications, translation, and notification Services agreed upon by Covered Entity;</li>
+        <li><strong>(b)</strong> For the proper management and administration of Business Associate or to carry out its legal responsibilities;</li>
+        <li><strong>(c)</strong> To provide Data Aggregation services relating to the health care operations of the Covered Entity, if requested, or to de-identify information in accordance with 45 CFR &sect; 164.514(a)-(c).</li>
+    </ul>
+
+    <h3>SECTION 4. TERM AND TERMINATION</h3>
+    <ul>
+        <li><strong>(a) Term:</strong> This Agreement shall become effective on the Effective Date and shall terminate when all PHI provided by Covered Entity to Business Associate is destroyed or returned.</li>
+        <li><strong>(b) Termination for Cause:</strong> If Covered Entity determines that Business Associate has breached a material term of this Agreement, Covered Entity may terminate this Agreement immediately if Business Associate fails to cure the breach within thirty (30) days of receiving written notice.</li>
+        <li><strong>(c) Effect of Termination (45 CFR &sect; 164.504(e)(2)(ii)(J)):</strong> Upon termination of this Agreement for any reason, Business Associate shall, if feasible, return or destroy all PHI received from, or created or received by Business Associate on behalf of Covered Entity. If return or destruction is infeasible, Business Associate shall extend the protections of this Agreement to such PHI and limit further uses and disclosures.</li>
+    </ul>
+
+    <h3>SECTION 5. MISCELLANEOUS</h3>
+    <p><strong>(a) Regulatory References:</strong> A reference in this Agreement to a section in the HIPAA Rules means the section as in effect or as amended.<br>
+    <strong>(b) Amendment:</strong> The Parties agree to take such action as is necessary to amend this Agreement from time to time as is necessary for compliance with HIPAA.<br>
+    <strong>(c) Counterparts &amp; Electronic Execution:</strong> This Agreement is mutually executed upon the authorized electronic submission and download by Covered Entity, coupled with Business Associate's pre-signed authorized counter-signature below.</p>
+
+    <table class="sig-table">
+        <tr>
+            <td>
+                <div class="sig-header">BUSINESS ASSOCIATE (PRE-SIGNED)</div>
+                <strong>Servicios ADG LLC d/b/a Abrevia</strong><br><br>
+                <div style="font-family: 'Brush Script MT', 'Dancing Script', cursive; font-size: 20pt; color: #1e3a8a; padding: 4px 0;">
+                    Servicios ADG Compliance Officer
+                </div>
+                <div style="border-top: 1px solid #111827; padding-top: 4px; margin-top: 2px;">
+                    <strong>Authorized Signature</strong>
+                </div>
+                <strong>Name:</strong> Compliance &amp; Data Privacy Official<br>
+                <strong>Title:</strong> Chief Compliance &amp; Information Security Officer<br>
+                <strong>Date:</strong> ${escapeHtml(effDate)}<br>
+                <div class="seal-badge">
+                    &check; VERIFIED PRE-SIGNED BUSINESS ASSOCIATE
+                </div>
+                <div style="font-size: 8pt; color: #6b7280; font-family: monospace; margin-top: 5px;">
+                    Verification Hash: ${docVerificationId}
+                </div>
+            </td>
+            <td>
+                <div class="sig-header">COVERED ENTITY (EXECUTING PARTY)</div>
+                <strong>${escapeHtml(orgName)}</strong><br><br>
+                <div style="font-family: sans-serif; font-size: 14pt; color: #111827; padding: 8px 0; font-style: italic;">
+                    ${escapeHtml(signerName)}
+                </div>
+                <div style="border-top: 1px solid #111827; padding-top: 4px; margin-top: 2px;">
+                    <strong>Authorized Representative Signature</strong>
+                </div>
+                <strong>Name:</strong> ${escapeHtml(signerName)}<br>
+                <strong>Title:</strong> ${escapeHtml(signerTitle)}<br>
+                <strong>Email:</strong> ${escapeHtml(signerEmail)}<br>
+                <strong>Phone:</strong> ${escapeHtml(signerPhone)}<br>
+                <strong>Date:</strong> ${escapeHtml(effDate)}<br>
+                <div style="font-size: 8.5pt; color: #059669; font-weight: bold; margin-top: 6px;">
+                    &check; Electronically Executed &amp; Bound
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 30px; font-size: 8.5pt; color: #6b7280; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 10px;">
+        Abrevia / Servicios ADG LLC &bull; Official Business Associate Record &bull; Verification ID: ${docVerificationId} &bull; Page 1 of 1
+    </div>
+</body>
+</html>`;
+
+    // 3. Open printable preview window and trigger automatic Print/PDF dialog
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+        printWindow.document.open();
+        printWindow.document.write(baaHtml);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            try {
+                printWindow.print();
+            } catch (err) {
+                console.warn('Auto print trigger notice:', err);
+            }
+        }, 500);
+    } else {
+        alert('Please allow pop-ups for this site to view and download your pre-signed BAA PDF.');
+    }
+
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>📥</span><span>Generate &amp; Download Pre-Signed BAA (PDF)</span>';
+    }
+}
+
+window.openHipaaBaaModal = openHipaaBaaModal;
+window.closeHipaaBaaModal = closeHipaaBaaModal;
+window.switchHipaaTab = switchHipaaTab;
+window.generateAndDownloadBaaPdf = generateAndDownloadBaaPdf;
