@@ -31,7 +31,7 @@
         })();
     </script>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans h-screen flex flex-col overflow-hidden selection:bg-brand-600 selection:text-white">
+<body class="bg-slate-900 text-slate-100 font-sans h-screen h-[100dvh] flex flex-col overflow-hidden selection:bg-brand-600 selection:text-white">
 
     <!-- Top Navigation Header -->
     <header class="bg-slate-950 border-b border-slate-800 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shrink-0">
@@ -99,17 +99,25 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Top Pinned Action: Start New Conversation (Instant Access, Zero Scrolling Needed) -->
+            <div class="p-2.5 sm:p-3 border-b border-slate-800/80 bg-slate-950/95 shrink-0">
+                <button onclick="openNewTicketModal()" class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-brand-600/25">
+                    <span class="text-base font-extrabold leading-none">+</span>
+                    <span id="topNewThreadBtnText">New Conversation</span>
+                </button>
+            </div>
             
             <!-- Ticket Queue List -->
-            <div id="ticketList" class="flex-grow overflow-y-auto p-3 space-y-2">
+            <div id="ticketList" class="flex-grow overflow-y-auto overscroll-contain p-3 space-y-2 min-h-0">
                 <div class="text-center py-8 text-xs text-slate-500">
                     Loading conversations...
                 </div>
             </div>
 
-            <!-- Start New Conversation Button -->
-            <div class="p-3 border-t border-slate-800 bg-slate-950/40">
-                <button onclick="openNewTicketModal()" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition flex items-center justify-center space-x-2">
+            <!-- Start New Conversation Button (Sticky Bottom, Safe Area Padded) -->
+            <div class="p-3 border-t border-slate-800 bg-slate-950/95 shrink-0 sticky bottom-0 z-20 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-xl">
+                <button onclick="openNewTicketModal()" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 active:scale-[0.98] text-white text-xs font-semibold py-2.5 rounded-xl transition flex items-center justify-center space-x-2">
                     <span class="text-brand-400 font-bold text-sm">+</span>
                     <span id="newThreadBtnText">New Conversation</span>
                 </button>
@@ -636,7 +644,7 @@
                     </span>
                 </div>
                 <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60">
-                    <span class="text-slate-400">Instant AI Translation</span>
+                    <span class="text-slate-400">Two-Way Instant Translation</span>
                     <span class="text-emerald-400 font-semibold flex items-center space-x-1.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                         <span>Operational</span>
@@ -1100,7 +1108,7 @@ Responda ALTO para no recibir más mensajes.</div>
 
 
     <!-- Proactive Desktop & Mobile Shortcut Banner -->
-    <div id="pwaPromptBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm bg-slate-900 border border-brand-500/40 rounded-2xl p-4 shadow-2xl z-40 flex items-center justify-between gap-3 backdrop-blur-md hidden">
+    <div id="pwaPromptBanner" class="fixed bottom-16 sm:bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm bg-slate-900 border border-brand-500/40 rounded-2xl p-4 shadow-2xl z-40 flex items-center justify-between gap-3 backdrop-blur-md hidden">
         <div class="flex items-center space-x-3 min-w-0">
             <div class="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-300 text-lg shrink-0">
                 📲

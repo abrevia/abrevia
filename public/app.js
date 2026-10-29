@@ -160,7 +160,7 @@ const I18N = {
         loadingQueues: 'Cargando conversaciones...',
         noTickets: 'No hay conversaciones activas.<br>Haga clic en "Nueva Conversación" abajo.',
         newThreadBtn: 'Nueva Conversación',
-        mobileBackBtn: 'Hilos',
+        mobileBackBtn: 'Conversaciones',
         closeThreadBtn: 'Cerrar',
         selectConversation: 'Selecciona una conversación',
         selectSubtitle: 'Elige una conversación de la barra lateral o inicia una nueva conversación',
@@ -1067,6 +1067,8 @@ function applyDashboardLocalization() {
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
     document.getElementById('refreshBtn').textContent = t.refresh;
     document.getElementById('newThreadBtnText').textContent = t.newThreadBtn;
+    const topNewBtn = document.getElementById('topNewThreadBtnText');
+    if (topNewBtn) topNewBtn.textContent = t.newThreadBtn;
     const mobileBackBtnTextEl = document.getElementById('mobileBackBtnText');
     if (mobileBackBtnTextEl) mobileBackBtnTextEl.textContent = t.mobileBackBtn;
     const closeThreadBtnTextEl = document.getElementById('closeThreadBtnText');
