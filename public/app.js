@@ -1423,7 +1423,7 @@ function applyDashboardLocalization() {
     if (soBtnText) soBtnText.textContent = t.signOut;
     else if (soEl) soEl.textContent = t.signOut;
     const menuBtnText = document.getElementById('dashboardMenuBtnText');
-    if (menuBtnText) menuBtnText.textContent = (dashboardMode === 'es') ? 'Menú' : 'Menu';
+    if (menuBtnText) menuBtnText.textContent = 'Settings';
     const langSelTitle = document.getElementById('statusLangSelectorTitle');
     if (langSelTitle) langSelTitle.textContent = (dashboardMode === 'es') ? 'Idioma de la Consola:' : 'Language Mode:';
     document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
@@ -3053,6 +3053,19 @@ function showConsoleStatusModal() {
 function closeConsoleStatusModal() {
     document.getElementById('consoleStatusModal')?.classList.add('hidden');
 }
+
+function openSettingsModal() {
+    document.getElementById('settingsModal')?.classList.remove('hidden');
+}
+
+function closeSettingsModal() {
+    document.getElementById('settingsModal')?.classList.add('hidden');
+}
+
+window.showConsoleStatusModal = showConsoleStatusModal;
+window.closeConsoleStatusModal = closeConsoleStatusModal;
+window.openSettingsModal = openSettingsModal;
+window.closeSettingsModal = closeSettingsModal;
 
 // --- Stripe Billing Integration ---
 function openBillingModal() {

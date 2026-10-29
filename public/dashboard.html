@@ -42,15 +42,15 @@
             <span class="text-slate-700">|</span>
             <button id="consoleStatusBtn" type="button" onclick="showConsoleStatusModal()" class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition shadow-sm cursor-pointer" title="System Operational • Click to open Console & Controls">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span id="consoleStatusText">Active</span>
+                <span id="consoleStatusText">Operational</span>
             </button>
         </div>
 
-        <!-- Clean Menu Trigger (Right) -->
+        <!-- Settings Trigger (Right) -->
         <div class="flex items-center space-x-2 text-xs">
-            <button id="dashboardMenuBtn" type="button" onclick="showConsoleStatusModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-900 transition shadow-sm" title="Open Console Controls, Language & Billing">
+            <button id="settingsBtn" type="button" onclick="openSettingsModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-900 transition shadow-sm cursor-pointer" title="Settings & Preferences">
                 <span>⚙️</span>
-                <span id="dashboardMenuBtnText">Menu</span>
+                <span id="dashboardMenuBtnText">Settings</span>
             </button>
         </div>
     </header>
@@ -630,155 +630,205 @@
         </div>
     </div>
 
-    <!-- Console Status & Controls Modal (Responsive 2-Column Desktop & Mobile Optimized) -->
+    <!-- Dedicated System Status & Infrastructure Modal -->
     <div id="consoleStatusModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[88vh] flex flex-col shadow-2xl relative overflow-hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full flex flex-col shadow-2xl relative overflow-hidden">
             
-            <!-- Modal Header (Fixed) -->
+            <!-- Modal Header -->
             <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
                 <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">Console Controls & System Status</h3>
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">System Status & Infrastructure</h3>
                 </div>
                 <button type="button" onclick="closeConsoleStatusModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition" title="Close">
                     &times;
                 </button>
             </div>
 
-            <!-- Modal Body (Scrollable & Responsive 2-Column Grid) -->
-            <div class="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs text-slate-300">
-                
-                <!-- Top 2-Column Layout -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    
-                    <!-- Left Column: Quick Actions & Account -->
-                    <div class="space-y-3">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Account & Utilities</span>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button id="billingBtn" onclick="openBillingModal()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2 transition text-left shadow-sm">
-                                <span class="text-sm">💳</span>
-                                <span id="billingBtnText" class="text-xs font-medium">Billing</span>
-                            </button>
-                            <button id="installAppBtn" onclick="triggerPwaInstall()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2 transition text-left shadow-sm">
-                                <span class="text-sm">📲</span>
-                                <span id="installAppBtnText" class="text-xs font-medium">Add Shortcut</span>
-                            </button>
-                            <button id="soundToggleBtn" onclick="toggleSoundAlerts()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2 transition text-left shadow-sm">
-                                <span id="soundToggleIcon" class="text-sm">🔔</span>
-                                <span id="soundToggleLabel" class="text-xs font-medium">Alerts</span>
-                            </button>
-                            <button id="dashShareBtn" onclick="shareAbreviaApp()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2 transition text-left shadow-sm">
-                                <span class="text-brand-400 text-sm">↗</span>
-                                <span id="dashShareBtnText" class="text-xs font-medium">Share</span>
-                            </button>
-                            <button id="signOutLink" onclick="openWrapUpModal()" type="button" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2 rounded-xl col-span-2 flex items-center justify-center space-x-1.5 transition font-semibold text-xs mt-1">
-                                <span>🚪</span>
-                                <span id="signOutBtnText">Sign Out</span>
-                            </button>
+            <!-- Modal Body -->
+            <div class="p-4 sm:p-5 space-y-3.5 text-xs text-slate-300">
+                <!-- Primary Dispatch Channel -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Primary Dispatch Channel</span>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="text-lg">💬</span>
+                            <div>
+                                <span class="text-xs text-white font-bold block">WhatsApp Cloud API</span>
+                                <span class="text-[10px] text-slate-400 block">Point B native chat &bull; SMS Fallback</span>
+                            </div>
+                        </div>
+                        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Active</span>
+                    </div>
+                </div>
+
+                <!-- Operational Telemetry Breakdown -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Relay & Intelligence Engines</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 text-[11px]">
+                        <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
+                            <span class="text-slate-400">Two-Way Asynchronous Relay</span>
+                            <span class="text-emerald-400 font-medium flex items-center space-x-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>Operational</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
+                            <span class="text-slate-400">Two-Way Translation (AWS HIPAA BAA)</span>
+                            <span class="text-emerald-400 font-medium flex items-center space-x-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>Operational</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-400">Bilingual Spell & Grammar</span>
+                            <span class="text-emerald-400 font-medium flex items-center space-x-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>Active</span>
+                            </span>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Right Column: Dispatch Channel & Architecture -->
-                    <div class="space-y-3">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Infrastructure & Compliance</span>
-                        
-                        <!-- Primary Dispatch Channel -->
-                        <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-lg">💬</span>
-                                <div>
-                                    <span class="text-xs text-white font-bold block">WhatsApp Cloud API</span>
-                                    <span class="text-[10px] text-slate-400 block">Point B native chat &bull; SMS Fallback</span>
-                                </div>
-                            </div>
-                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Active</span>
+                <!-- Security & Compliance -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Security & Compliance</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 text-[11px]">
+                        <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
+                            <span class="text-slate-400">Security Architecture</span>
+                            <button type="button" onclick="showEncryptionProofModal()" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1 transition cursor-pointer">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span id="encStorageBadgeLabel">AES-256 KMS</span>
+                                <span class="text-[9px]">&rarr;</span>
+                            </button>
                         </div>
-
-                        <!-- All Systems Operational Accordion Dropdown -->
-                        <details class="group bg-slate-950 border border-slate-800 rounded-xl overflow-hidden transition">
-                            <summary class="flex items-center justify-between p-2.5 cursor-pointer list-none select-none hover:bg-slate-900/60 transition">
-                                <div class="flex items-center space-x-2">
-                                    <span class="relative flex h-2 w-2">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                                    </span>
-                                    <span class="text-xs font-semibold text-white">All Systems Operational</span>
-                                </div>
-                                <div class="flex items-center space-x-1 text-[10px] text-emerald-400 font-medium">
-                                    <span>Status: Operational</span>
-                                    <span class="text-slate-500 group-open:rotate-180 transition-transform">▼</span>
-                                </div>
-                            </summary>
-                            <div class="p-2.5 pt-1 border-t border-slate-800/60 bg-slate-900/40 space-y-1 text-[11px] text-slate-300">
-                                <div class="flex items-center justify-between py-1 border-b border-slate-800/40">
-                                    <span class="text-slate-400">Two-Way Asynchronous Communication Relay</span>
-                                    <span class="text-emerald-400 font-medium flex items-center space-x-1">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                        <span>Operational</span>
-                                    </span>
-                                </div>
-                                <div class="flex items-center justify-between py-1 border-b border-slate-800/40">
-                                    <span class="text-slate-400">Two-Way Instant Translation</span>
-                                    <span class="text-emerald-400 font-medium flex items-center space-x-1">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                        <span>Operational</span>
-                                    </span>
-                                </div>
-                                <div class="flex items-center justify-between py-1">
-                                    <span class="text-slate-400">Bilingual Spell & Grammar</span>
-                                    <span class="text-emerald-400 font-medium flex items-center space-x-1">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                        <span>Active</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </details>
-
-                        <!-- Security & Compliance Compact Badges -->
-                        <div class="space-y-1.5 text-[11px]">
-                            <div class="flex items-center justify-between py-1 border-b border-slate-800/60">
-                                <span class="text-slate-400">Security Architecture</span>
-                                <button type="button" onclick="showEncryptionProofModal()" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1 transition cursor-pointer">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                    <span id="encStorageBadgeLabel">AES-256 KMS</span>
-                                    <span class="text-[9px]">&rarr;</span>
-                                </button>
-                            </div>
-                            <div class="flex items-center justify-between py-1 border-b border-slate-800/60">
-                                <span class="text-slate-400">Compliance Scope</span>
-                                <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1 transition">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                    <span id="t6StatusLabel">Title VI & HIPAA BAA</span>
-                                    <span class="text-[9px]">&rarr;</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Compact Legal Pills -->
-                        <div class="flex flex-wrap gap-1.5 pt-1">
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" id="statusLinkWho" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
-                                🏛️ Sectors
-                            </a>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" id="statusLinkTerms" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
-                                📜 Terms
-                            </a>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" id="statusLinkPrivacy" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
-                                🛡️ Privacy
-                            </a>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" id="statusLinkDisclaimers" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
-                                ⚖️ Disclaimers
-                            </a>
-                            <a href="mailto:info@mvhlsp.site" id="statusLinkContact" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
-                                📧 info@mvhlsp.site
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-400">Compliance Scope</span>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1 transition">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span id="t6StatusLabel">Title VI & HIPAA BAA</span>
+                                <span class="text-[9px]">&rarr;</span>
                             </a>
                         </div>
                     </div>
                 </div>
+
+                <!-- Compact Legal Links -->
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" id="statusLinkWho" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                        🏛️ Sectors
+                    </a>
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" id="statusLinkTerms" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                        📜 Terms
+                    </a>
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" id="statusLinkPrivacy" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                        🛡️ Privacy
+                    </a>
+                    <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" id="statusLinkDisclaimers" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                        ⚖️ Disclaimers
+                    </a>
+                    <a href="mailto:info@mvhlsp.site" id="statusLinkContact" class="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">
+                        📧 info@mvhlsp.site
+                    </a>
+                </div>
             </div>
 
-            <!-- Modal Footer (Fixed) -->
+            <!-- Modal Footer -->
             <div class="p-3 border-t border-slate-800 bg-slate-950/60 shrink-0 flex justify-end">
                 <button onclick="closeConsoleStatusModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-5 py-2 rounded-xl transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dedicated Settings & Preferences Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full flex flex-col shadow-2xl relative overflow-hidden">
+            
+            <!-- Modal Header -->
+            <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
+                <div class="flex items-center space-x-2">
+                    <span class="text-base">⚙️</span>
+                    <h3 id="settingsModalTitle" class="text-sm font-bold text-white">Settings & Preferences</h3>
+                </div>
+                <button type="button" onclick="closeSettingsModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition" title="Close">
+                    &times;
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-4 sm:p-5 space-y-3.5 text-xs text-slate-300">
+                <!-- Section: Preferences -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Operator Preferences</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span id="soundToggleIcon" class="text-base">🔔</span>
+                            <div>
+                                <span class="text-white font-medium block">Sound Notifications</span>
+                                <span class="text-[10px] text-slate-400 block">Audio chime when constituent replies</span>
+                            </div>
+                        </div>
+                        <button id="soundToggleBtn" onclick="toggleSoundAlerts()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition">
+                            <span id="soundToggleLabel">Alerts</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section: Subscription & Billing -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Subscription & Billing</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-base">💳</span>
+                            <div>
+                                <span class="text-white font-medium block">Billing & Plan</span>
+                                <span class="text-[10px] text-slate-400 block">Manage subscription, card & invoices</span>
+                            </div>
+                        </div>
+                        <button id="billingBtn" onclick="openBillingModal()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition">
+                            <span id="billingBtnText">Billing</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section: Application & Shortcuts -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Application & Shortcuts</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="installAppBtn" onclick="triggerPwaInstall()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2.5 transition text-left shadow-sm">
+                            <span class="text-base">📲</span>
+                            <div>
+                                <span id="installAppBtnText" class="text-xs font-semibold block text-white">Add Shortcut</span>
+                                <span class="text-[9px] text-slate-400 block">Desktop & Mobile PWA</span>
+                            </div>
+                        </button>
+                        <button id="dashShareBtn" onclick="shareAbreviaApp()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2.5 transition text-left shadow-sm">
+                            <span class="text-brand-400 text-base">↗</span>
+                            <div>
+                                <span id="dashShareBtnText" class="text-xs font-semibold block text-white">Share App</span>
+                                <span class="text-[9px] text-slate-400 block">Copy Operator Link</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section: Session Security -->
+                <div class="pt-2 border-t border-slate-800/60">
+                    <button id="signOutLink" onclick="openWrapUpModal()" type="button" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2.5 rounded-xl flex items-center justify-center space-x-2 transition font-semibold text-xs">
+                        <span>🚪</span>
+                        <span id="signOutBtnText">Sign Out / Lock Session</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3 border-t border-slate-800 bg-slate-950/60 shrink-0 flex justify-end">
+                <button onclick="closeSettingsModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-5 py-2 rounded-xl transition">
                     Close
                 </button>
             </div>
@@ -1080,7 +1130,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_07"></script>
+    <script src="app.js?v=20261029_08"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
