@@ -8,6 +8,8 @@ let originalDocumentTitle = document.title || 'Abrevia Console';
 let unreadMessageCount = 0;
 let lastSeenTicketMsgCounts = {};
 let knownTicketIds = null;
+let currentSmsGateway = localStorage.getItem('abrevia_sms_gateway') || 'httpsms';
+window.currentSmsGateway = currentSmsGateway;
 
 function getAudioContext() {
     if (!audioCtx) {
@@ -3054,6 +3056,8 @@ function getActiveSmsGateway() {
 
 function setSmsGateway(gateway) {
     localStorage.setItem('abrevia_sms_gateway', gateway);
+    currentSmsGateway = gateway;
+    window.currentSmsGateway = gateway;
     updateGatewayUI();
     const name = gateway === 'textbee' ? 'TextBee (Samsung SM-A037M)' : 'httpSMS (Default)';
     alert(dashboardMode === 'es' 
