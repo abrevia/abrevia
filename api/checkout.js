@@ -31,12 +31,48 @@ export default async function handler(req, res) {
     }
 
     const stripeKey = process.env.STRIPE_SECRET_KEY;
-    const { plan = 'pro', customerEmail, successUrl, cancelUrl, locale = 'en' } = req.body || {};
+    const { plan = 'pro', customerEmail, successUrl, cancelUrl, locale = 'en', customerId, returnUrl, action } = req.body || {};
 
     const host = req.headers.host || 'abrevia-beta.vercel.app';
     const protocol = host.includes('localhost') ? 'http' : 'https';
     const defaultSuccessUrl = `${protocol}://${host}/dashboard.html?billing=success`;
     const defaultCancelUrl = `${protocol}://${host}/dashboard.html?billing=canceled`;
+
+    // Stripe Customer Portal Handler (integrated from customer-portal.js)
+    if (action === 'portal' || customerId || req.url?.includes('customer-portal')) {
+        if (!stripeKey) {
+            return res.status(400).json({ error: 'STRIPE_SECRET_KEY not configured in environment variables.' });
+        }
+        if (!customerId) {
+            return res.status(400).json({
+                error: 'Stripe Customer ID is required to open the Customer Portal. Subscribe first via checkout.'
+            });
+        }
+        const defaultReturnUrl = `${protocol}://${host}/dashboard.html`;
+        try {
+            const portalBody = new URLSearchParams();
+            portalBody.append('customer', customerId);
+            portalBody.append('return_url', returnUrl || defaultReturnUrl);
+
+            const portalRes = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${stripeKey}`,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: portalBody.toString()
+            });
+
+            const portalData = await portalRes.json();
+            if (portalData.error) {
+                return res.status(400).json({ error: portalData.error.message });
+            }
+            return res.status(200).json({ url: portalData.url });
+        } catch (portalErr) {
+            console.error('Stripe Portal Error:', portalErr.message);
+            return res.status(500).json({ error: portalErr.message });
+        }
+    }
 
     // Direct fallback if user provided a Stripe Payment Link
     if (plan === 'payment_link' && PACK_PAYMENT_LINKS.pro) {

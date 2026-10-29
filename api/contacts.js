@@ -1,6 +1,14 @@
 import { getAllContacts, saveContact, saveContactsBatch, deleteContact, normalizePhone } from '../lib/contacts.js';
+import { supabase } from '../lib/supabase.js';
 
 export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
   if (req.method === 'GET') {
     try {
       const { phone } = req.query || {};
@@ -24,7 +32,85 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const { batch, phone, name, company, email, notes, opted_out } = req.body || {};
+      const { batch, phone, name, company, email, notes, opted_out, source, action } = req.body || {};
+
+      // Handle subscribe updates (integrated from subscribe-updates.js)
+      if (action === 'subscribe' || source || req.url?.includes('subscribe')) {
+        if (!email && !phone) {
+          return res.status(400).json({ error: 'Please provide at least an email or a phone number.' });
+        }
+
+        const subscriberRecord = {
+          id: 'sub_' + Date.now(),
+          email: email ? email.trim().toLowerCase() : null,
+          phone: phone ? phone.trim() : null,
+          name: name ? name.trim() : null,
+          source: source || 'operator_ui',
+          createdAt: new Date().toISOString()
+        };
+
+        try {
+          if (supabase) {
+            if (phone) {
+              try {
+                await saveContact({
+                  phone: phone.trim(),
+                  name: name || 'Operator Updates Subscriber',
+                  notes: `Subscribed for updates via ${source || 'operator_ui'} at ${new Date().toISOString()}`
+                });
+              } catch (contactErr) {
+                console.warn('Could not auto-save to contacts:', contactErr.message);
+              }
+            }
+
+            let subscribers = [];
+            try {
+              const { data: fileData, error: downloadErr } = await supabase.storage
+                .from('attachments')
+                .download('system/subscribers.json');
+
+              if (!downloadErr && fileData) {
+                const text = await fileData.text();
+                subscribers = text ? JSON.parse(text) : [];
+              }
+            } catch (dlErr) {
+              subscribers = [];
+            }
+
+            const existingIdx = subscribers.findIndex(s => 
+              (email && s.email === subscriberRecord.email) ||
+              (phone && s.phone === subscriberRecord.phone)
+            );
+
+            if (existingIdx >= 0) {
+              subscribers[existingIdx] = { ...subscribers[existingIdx], ...subscriberRecord, updatedAt: new Date().toISOString() };
+            } else {
+              subscribers.push(subscriberRecord);
+            }
+
+            const uploadBuffer = Buffer.from(JSON.stringify(subscribers, null, 2), 'utf-8');
+            await supabase.storage
+              .from('attachments')
+              .upload('system/subscribers.json', uploadBuffer, {
+                contentType: 'application/json',
+                upsert: true
+              });
+          }
+
+          return res.status(200).json({
+            success: true,
+            message: 'Subscription saved successfully.',
+            subscriber: subscriberRecord
+          });
+        } catch (err) {
+          console.error('Subscribe updates error:', err.message);
+          return res.status(200).json({
+            success: true,
+            cached: true,
+            message: 'Subscription recorded.'
+          });
+        }
+      }
 
       if (batch && Array.isArray(batch)) {
         const saved = await saveContactsBatch(batch);

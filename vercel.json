@@ -8,6 +8,22 @@
     {
       "source": "/dashboard",
       "destination": "/dashboard.html"
+    },
+    {
+      "source": "/api/customer-portal",
+      "destination": "/api/checkout"
+    },
+    {
+      "source": "/api/purge",
+      "destination": "/api/tickets"
+    },
+    {
+      "source": "/api/reply",
+      "destination": "/api/tickets"
+    },
+    {
+      "source": "/api/subscribe-updates",
+      "destination": "/api/contacts"
     }
   ],
   "headers": [
