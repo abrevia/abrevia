@@ -76,7 +76,7 @@ const I18N = {
         customerTranslated: 'Translated into English:',
         customerOriginal: 'Original Inbound Message from Recipient (Spanish):',
         viewAttachment: 'View Attached File',
-        trialPill: (days) => `Free Trial: ${days}d left`,
+        trialPill: (days) => `Premium Trial: ${days}d left`,
         trialPillExpired: 'Free Tier • Upgrade to Pro',
         trialPillPro: 'Operations Pro',
         templatesBtn: 'Templates',
@@ -166,7 +166,7 @@ const I18N = {
         customerTranslated: 'Traducido al Español:',
         customerOriginal: 'Mensaje Original Entrante del Destinatario (Inglés):',
         viewAttachment: 'Ver Archivo Adjunto',
-        trialPill: (days) => `Prueba Gratis: ${days}d`,
+        trialPill: (days) => `Prueba Premium: ${days}d`,
         trialPillExpired: 'Plan Gratis • Mejorar a Pro',
         trialPillPro: 'Operaciones Pro',
         templatesBtn: 'Plantillas',
@@ -203,7 +203,7 @@ function getTrialInfo() {
     }
     
     const startTime = parseInt(trialStart, 10) || Date.now();
-    const trialDurationMs = 14 * 24 * 60 * 60 * 1000;
+    const trialDurationMs = 30 * 24 * 60 * 60 * 1000;
     const elapsed = Date.now() - startTime;
     const remainingMs = trialDurationMs - elapsed;
     
@@ -222,8 +222,8 @@ function requireProFeature(featureName) {
     }
     
     const msg = dashboardMode === 'es'
-        ? `La función "${featureName}" forma parte de Operaciones Pro.\n\nSu prueba gratuita de 14 días ha finalizado. Actualice a Operaciones Pro ($49/mes) para desbloquear esta función y mensajes ilimitados.`
-        : `The "${featureName}" feature is part of Operations Pro.\n\nYour 14-day free trial has concluded. Upgrade to Operations Pro ($49/mo) to unlock this feature and unlimited messaging.`;
+        ? `La función "${featureName}" forma parte de Operaciones Pro.\n\nSu prueba gratuita de 30 días ha finalizado. Actualice a Operaciones Pro ($49/mes) para desbloquear esta función y mensajes ilimitados.`
+        : `The "${featureName}" feature is part of Operations Pro.\n\nYour 30-day free trial has concluded. Upgrade to Operations Pro ($49/mo) to unlock this feature and unlimited messaging.`;
         
     const proceed = confirm(msg + (dashboardMode === 'es' ? '\n\n¿Desea ver las opciones de Facturación ahora?' : '\n\nWould you like to view Billing options now?'));
     if (proceed) {
@@ -265,7 +265,7 @@ function updateTrialUI() {
             billingTrialBadge.className = 'text-[9px] bg-brand-500/20 text-brand-300 font-bold px-1.5 py-0.5 rounded-full border border-brand-500/40';
         }
         if (billingTrialSub) {
-            billingTrialSub.textContent = dashboardMode === 'es' ? `${trial.daysLeft} días restantes con acceso completo a todas las funciones premium.` : `${trial.daysLeft} days remaining with full access to all premium features.`;
+            billingTrialSub.textContent = dashboardMode === 'es' ? `Prueba Premium de 30 Días • Mejore cuando desee o pague por uso seguro con Stripe` : `30-Day Free Premium Trial • Upgrade anytime or pay as you go securely via Stripe`;
         }
         if (billingTrialDays) {
             billingTrialDays.textContent = `${trial.daysLeft}d left`;

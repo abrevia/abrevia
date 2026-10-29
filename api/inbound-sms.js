@@ -8,15 +8,16 @@ export default async function handler(req, res) {
   }
 
   const payload = req.body || {};
+  const isTextBee = payload.webhookEvent === 'MESSAGE_RECEIVED' || Boolean(payload.smsId);
   const eventType = req.headers['x-event-type'] || payload.event_type || payload.type;
   
-  // Accept message.phone.received or allow if not specified in simulation
-  if (eventType && eventType !== 'message.phone.received') {
-    return res.status(200).json({ ignored: true, reason: 'Event type not message.phone.received' });
+  // Accept message.phone.received, TextBee MESSAGE_RECEIVED, or allow if simulation
+  if (eventType && eventType !== 'message.phone.received' && !isTextBee) {
+    return res.status(200).json({ ignored: true, reason: 'Event type not message.phone.received or TextBee MESSAGE_RECEIVED' });
   }
 
-  const customerPhone = payload.data?.contact || payload.data?.from || payload.data?.phone_number;
-  let inboundContent = payload.data?.content || payload.data?.message || payload.data?.text;
+  const customerPhone = payload.sender || payload.from || payload.senderPhoneNumber || payload.data?.contact || payload.data?.from || payload.data?.phone_number;
+  let inboundContent = payload.message || payload.content || payload.data?.content || payload.data?.message || payload.data?.text;
 
   if (!customerPhone || !inboundContent) {
     console.warn('Inbound SMS missing contact or content:', payload);
