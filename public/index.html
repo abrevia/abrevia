@@ -209,12 +209,6 @@
                     <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColComplianceHeader">Compliance & Sectors</div>
                     <ul class="space-y-1.5 text-[11px]">
                         <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
-                                <span>🏛️</span>
-                                <span id="footerLinkWhoIsThis">Who is this app for?</span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="https://github.com/serviciosadg/abrevia/blob/main/TITLE_VI_SELF_ASSESSMENT.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
                                 <span>📋</span>
                                 <span id="footerLinkSelfAssessment">Title VI Self-Assessment</span>
@@ -225,6 +219,9 @@
                                 <span>🎓</span>
                                 <span id="footerLinkHipaaTrainingText">Free HIPAA Training &amp; Certificate (PDF)</span>
                             </a>
+                            <span class="block text-[10px] text-slate-500 leading-tight pl-5 pt-0.5" id="hipaaCourseDisclaimer">
+                                * Independent 3rd-party resource; Abrevia has no affiliation. Provided solely to facilitate meaningful compliance information.
+                            </span>
                         </li>
                         <li>
                             <a href="https://github.com/serviciosadg/abrevia/blob/main/WORKING_WITH_INTERPRETERS.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300" id="footerLinkInterpretersGuide" title="Practical guide and free federal training resources for communicating with LEP individuals and working with interpreters">
@@ -239,11 +236,6 @@
                             </a>
                         </li>
                         <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#-english-who-is-abrevia-for" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkTitle6">
-                                Title VI & EO 13166 Mandates
-                            </a>
-                        </li>
-                        <li>
                             <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#3-major-federally-bound-sectors--statutory-use-cases" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkSectors">
                                 7 Major Federal Sectors
                             </a>
@@ -255,6 +247,12 @@
                 <div class="space-y-2.5">
                     <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColLegalHeader">Legal & Transparency</div>
                     <ul class="space-y-1.5 text-[11px]">
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#-english-who-is-abrevia-for" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300" id="footerLinkTitle6">
+                                <span>⚖️</span>
+                                <span id="footerLinkTitle6Text">Title VI &amp; EO 13166 Mandates</span>
+                            </a>
+                        </li>
                         <li>
                             <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
                                 <span>📜</span>
@@ -407,6 +405,7 @@
                 footerLinkWhoIsThis: 'Who is this app for?',
                 footerLinkSelfAssessment: 'Title VI Self-Assessment',
                 footerLinkHipaaTrainingText: 'Free HIPAA Training & Certificate (PDF)',
+                hipaaCourseDisclaimer: '* Independent 3rd-party resource; Abrevia has no affiliation. Provided solely to facilitate meaningful compliance information.',
                 footerLinkInterpretersGuideText: 'Working with Interpreters & LEP Guide',
                 footerLinkTitle6: 'Title VI & EO 13166 Mandates',
                 footerLinkSectors: '7 Major Federal Sectors',
@@ -508,6 +507,7 @@
                 footerLinkWhoIsThis: '¿Para quién es esta app?',
                 footerLinkSelfAssessment: 'Autoevaluación de Título VI',
                 footerLinkHipaaTrainingText: 'Capacitación y Certificado HIPAA Gratis (PDF)',
+                hipaaCourseDisclaimer: '* Recurso independiente de terceros; Abrevia no tiene afiliación. Facilitado únicamente para brindar información necesaria de cumplimiento.',
                 footerLinkInterpretersGuideText: 'Guía: Trabajo con Intérpretes y Personas LEP',
                 footerLinkTitle6: 'Mandatos de Título VI y OE 13166',
                 footerLinkSectors: '7 Sectores Federales Principales',
@@ -685,6 +685,8 @@
             if (ftSelf && c.footerLinkSelfAssessment) ftSelf.textContent = c.footerLinkSelfAssessment;
             const ftHipaa = document.getElementById('footerLinkHipaaTrainingText');
             if (ftHipaa && c.footerLinkHipaaTrainingText) ftHipaa.textContent = c.footerLinkHipaaTrainingText;
+            const ftHipaaDisc = document.getElementById('hipaaCourseDisclaimer');
+            if (ftHipaaDisc && c.hipaaCourseDisclaimer) ftHipaaDisc.textContent = c.hipaaCourseDisclaimer;
             const ftInterp = document.getElementById('footerLinkInterpretersGuideText');
             if (ftInterp && c.footerLinkInterpretersGuideText) ftInterp.textContent = c.footerLinkInterpretersGuideText;
             if (ftWho && c.footerLinkWhoIsThis) ftWho.textContent = c.footerLinkWhoIsThis;
