@@ -197,8 +197,8 @@
             <div class="text-xs text-slate-400 bg-slate-900 border border-slate-800 rounded-xl p-4 inline-block text-left max-w-2xl shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <p id="footerNoticeText" class="leading-relaxed text-[11px] text-slate-400">
-                        <span id="footerNoticeTitle" class="font-semibold text-slate-300">Notice:</span> 
-                        Abrevia is strictly for administrative operations and is not designed for PHI processing. Learn more about Section 1557, HIPAA and our HIPAA-compliant app, available soon.
+                        <span id="footerNoticeTitle" class="font-semibold text-slate-300">Compliance & Title VI Notice:</span> 
+                        <span id="footerNoticeTextSpan">Abrevia empowers organizations to satisfy federal Title VI (Title 6) & Limited English Proficiency (LEP) language access mandates under EO 13166. Abrevia is strictly for administrative operations and is not designed for PHI processing.</span>
                     </p>
                     <button onclick="openHipaaModal()" class="shrink-0 text-brand-400 hover:text-brand-300 font-semibold text-xs transition inline-flex items-center space-x-1">
                         <span id="footerLearnMoreBtn">Learn More</span>
@@ -226,16 +226,32 @@
                 </div>
             </div>
 
-            <div class="space-y-3 text-xs text-slate-300 leading-relaxed mb-6">
-                <p id="hipaaP1">
-                    <strong>Abrevia</strong> is strictly an administrative operations tool built for non-medical communication across logistics, property management, retail, and field services.
-                </p>
-                <p id="hipaaP2">
-                    We are patiently engineering <strong>Abrevia 2</strong>, our clinical-grade edition designed specifically for covered healthcare organizations, clinics, and medical interpreter workflows.
-                </p>
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed mb-6">
+                <!-- Title VI & LEP Language Access Compliance Banner -->
+                <div class="bg-brand-950/40 border border-brand-500/40 rounded-xl p-4 space-y-2">
+                    <div class="flex items-center space-x-2 text-brand-300 font-bold text-xs">
+                        <span>🏛️</span>
+                        <span id="title6Heading">Title VI (Title 6) & LEP Language Access Compliance</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-relaxed" id="title6Desc">
+                        Under <strong>Title VI of the Civil Rights Act of 1964</strong> (42 U.S.C. § 2000d) and <strong>Executive Order 13166</strong>, all recipients of federal funding (transportation, logistics, housing authorities, municipal contractors, and public agencies) are legally mandated to provide <em>meaningful language access</em> to Limited English Proficient (LEP) individuals.
+                    </p>
+                    <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-400 pt-1">
+                        <li id="title6Point1"><strong>Zero-Download Access:</strong> LEP recipients text naturally or use frictionless mobile links with no app downloads required.</li>
+                        <li id="title6Point2"><strong>Auditable Compliance Trails:</strong> Immutable timestamped bilingual logs demonstrate active compliance under federal review.</li>
+                        <li id="title6Point3"><strong>Human Oversight:</strong> Pre-send proofreading (HITL) and certified live LSP interpreters for critical operational notices.</li>
+                    </ul>
+                </div>
+
+                <!-- Administrative vs Clinical Distinction -->
+                <div>
+                    <p id="hipaaP1" class="text-[11px] text-slate-400">
+                        <strong>Abrevia</strong> is strictly an administrative operations tool built for non-medical communication across logistics, property management, retail, and field services.
+                    </p>
+                </div>
                 
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2 text-[11px] text-slate-400 mt-2">
-                    <div id="hipaaUpcomingTitle" class="font-semibold text-slate-200">Upcoming Clinical Features in Abrevia 2:</div>
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2 text-[11px] text-slate-400">
+                    <div id="hipaaUpcomingTitle" class="font-semibold text-slate-200">Abrevia 2 Clinical Roadmap (ACA Section 1557 & HIPAA):</div>
                     <ul class="list-disc list-inside space-y-1 text-slate-400">
                         <li id="hipaaFeat1">Signed Business Associate Agreements (BAAs) with cloud and telecommunication providers.</li>
                         <li id="hipaaFeat2">Automated PHI sanitization and de-identification pre-translation.</li>
