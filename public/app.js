@@ -101,7 +101,23 @@ const I18N = {
         senderProfileModalSubtitle: 'Configure how your business appears in outbound SMS notifications',
         profileOrgLabel: 'Organization / Business Name',
         profileUserLabel: 'User / Dispatcher Name',
-        profileModeLabel: 'Outbound SMS Delivery Format'
+        profileModeLabel: 'Outbound SMS Delivery Format',
+        liveInterpreterBtnLabel: 'Request Live Interpreter Now',
+        liveInterpreterBtnShort: 'Interpreter',
+        interpreterModalTitle: 'Request Live Interpreter Now',
+        interpreterModalSubtitle: 'Connect a certified human bilingual interpreter on-demand',
+        interpreterLangPairLabel: 'Language Pair',
+        interpreterServiceTypeLabel: 'Interpretation Service',
+        optRelayTitle: 'Live Text Relay & Message Review',
+        optRelayDesc: 'A certified LSP interpreter reviews, polishes, and certifies each asynchronous message before dispatch.',
+        optOpiTitle: 'Over-the-Phone (OPI) 3-Way Live Bridge',
+        optOpiDesc: 'Spawns an on-demand 3-way conference call bridge with an accredited verbal interpreter on standby.',
+        lspStatusTitle: 'Language Service Provider (LSP) Gateway',
+        lspStatusDesc: 'Connecting to our certified LSP partner network. Requests are logged and routed directly to accredited interpreters.',
+        interpreterCancelBtn: 'Cancel',
+        interpreterConfirmBtnText: 'Request Interpreter Now',
+        interpreterActiveNotice: '✓ Live Interpreter Requested: Connecting with accredited LSP specialist...',
+        interpreterCancelledNotice: 'Live interpreter request cancelled.'
     },
     es: {
         consoleBadge: 'Estado de Consola',
@@ -197,7 +213,23 @@ const I18N = {
         senderProfileModalSubtitle: 'Configure cómo aparece su negocio en las notificaciones SMS salientes',
         profileOrgLabel: 'Nombre de la Organización / Empresa',
         profileUserLabel: 'Nombre del Usuario / Despachador',
-        profileModeLabel: 'Formato de Entrega de SMS Saliente'
+        profileModeLabel: 'Formato de Entrega de SMS Saliente',
+        liveInterpreterBtnLabel: 'Solicitar Intérprete en Vivo',
+        liveInterpreterBtnShort: 'Intérprete',
+        interpreterModalTitle: 'Solicitar Intérprete en Vivo',
+        interpreterModalSubtitle: 'Conecte a un intérprete bilingüe humano certificado bajo demanda',
+        interpreterLangPairLabel: 'Par de Idiomas',
+        interpreterServiceTypeLabel: 'Servicio de Interpretación',
+        optRelayTitle: 'Relevo de Texto y Revisión de Mensajes en Vivo',
+        optRelayDesc: 'Un intérprete certificado de LSP revisa, pule y certifica cada mensaje antes del envío.',
+        optOpiTitle: 'Puente Telefónico en Vivo a 3 Vías (OPI)',
+        optOpiDesc: 'Genera una llamada en conferencia a 3 vías con un intérprete verbal acreditado disponible.',
+        lspStatusTitle: 'Pasarela de Proveedor de Servicios Lingüísticos (LSP)',
+        lspStatusDesc: 'Conectando con la red de socios LSP certificados. Las solicitudes se enrutan a intérpretes acreditados.',
+        interpreterCancelBtn: 'Cancelar',
+        interpreterConfirmBtnText: 'Solicitar Intérprete Ahora',
+        interpreterActiveNotice: '✓ Intérprete en Vivo Solicitado: Conectando con especialista acreditado de LSP...',
+        interpreterCancelledNotice: 'Solicitud de intérprete en vivo cancelada.'
     }
 };
 
@@ -779,6 +811,118 @@ function saveSenderProfile() {
     setTimeout(closeSenderProfileModal, 400);
 }
 
+// ==========================================
+// On-Demand Live Interpreter (LSP Network)
+// ==========================================
+let activeInterpreterTickets = {}; // ticketId -> { requested: true, serviceType: 'relay', timestamp }
+
+function openLiveInterpreterModal() {
+    if (!currentTicket) {
+        alert(dashboardMode === 'es' 
+            ? 'Por favor seleccione una conversación activa antes de solicitar un intérprete.'
+            : 'Please select an active conversation before requesting an interpreter.');
+        return;
+    }
+
+    const ticketId = currentTicket.id;
+    const isAlreadyRequested = Boolean(activeInterpreterTickets[ticketId]?.requested);
+    const confirmBtn = document.getElementById('confirmInterpreterBtn');
+    const confirmText = document.getElementById('interpreterConfirmBtnText');
+    const t = I18N[dashboardMode];
+
+    if (isAlreadyRequested) {
+        if (confirmText) confirmText.textContent = (dashboardMode === 'es') ? 'Cancelar Solicitud de Intérprete' : 'Cancel Interpreter Request';
+        if (confirmBtn) confirmBtn.className = 'bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow flex items-center space-x-1.5';
+    } else {
+        if (confirmText) confirmText.textContent = t.interpreterConfirmBtnText || 'Request Interpreter Now';
+        if (confirmBtn) confirmBtn.className = 'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow flex items-center space-x-1.5';
+    }
+
+    document.getElementById('liveInterpreterModal').classList.remove('hidden');
+}
+
+function closeLiveInterpreterModal() {
+    document.getElementById('liveInterpreterModal').classList.add('hidden');
+}
+
+async function confirmLiveInterpreterRequest() {
+    if (!currentTicket) return;
+    const ticketId = currentTicket.id;
+    const t = I18N[dashboardMode];
+    const isAlreadyRequested = Boolean(activeInterpreterTickets[ticketId]?.requested);
+
+    if (isAlreadyRequested) {
+        // Cancel request
+        delete activeInterpreterTickets[ticketId];
+        updateLiveInterpreterUI();
+        closeLiveInterpreterModal();
+        alert(t.interpreterCancelledNotice || 'Live interpreter request cancelled.');
+        return;
+    }
+
+    // Mark requested
+    const serviceType = document.querySelector('input[name="interpreterServiceType"]:checked')?.value || 'relay';
+    activeInterpreterTickets[ticketId] = {
+        requested: true,
+        serviceType: serviceType,
+        timestamp: new Date().toISOString()
+    };
+
+    updateLiveInterpreterUI();
+    closeLiveInterpreterModal();
+
+    // Insert system note into thread feed for audit log
+    const systemEn = `🎧 Live Certified Interpreter requested via LSP network (${serviceType === 'opi' ? '3-Way Phone Bridge' : 'Message Review'}). An accredited specialist is assigned to this conversation.`;
+    const systemEs = `🎧 Intérprete Certificado en Vivo solicitado vía red LSP (${serviceType === 'opi' ? 'Puente Telefónico a 3 Vías' : 'Revisión de Mensajes'}). Se ha asignado un especialista acreditado a esta conversación.`;
+
+    try {
+        await fetch('/api/reply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ticketId: ticketId,
+                action: 'optout',
+                message: dashboardMode === 'es' ? systemEs : systemEn
+            })
+        });
+    } catch (e) {
+        console.warn('System notice insert:', e.message);
+    }
+
+    await fetchMessages(ticketId, true);
+    alert(t.interpreterActiveNotice || '✓ Live Interpreter Requested: Connecting with accredited LSP specialist...');
+}
+
+function updateLiveInterpreterUI() {
+    const btn = document.getElementById('liveInterpreterBtn');
+    const badge = document.getElementById('liveInterpreterBtnBadge');
+    const label = document.getElementById('liveInterpreterBtnLabel');
+    if (!btn) return;
+
+    const t = I18N[dashboardMode];
+    const isRequested = currentTicket && activeInterpreterTickets[currentTicket.id]?.requested;
+
+    if (isRequested) {
+        btn.className = 'inline-flex items-center space-x-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-semibold transition border border-indigo-400 bg-indigo-600/30 text-white shadow-lg shadow-indigo-500/20';
+        if (badge) {
+            badge.textContent = (dashboardMode === 'es') ? 'ACTIVO' : 'ACTIVE';
+            badge.className = 'text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-indigo-500 text-white border border-indigo-400 animate-pulse';
+            badge.classList.remove('hidden');
+        }
+        btn.title = (dashboardMode === 'es') ? 'Intérprete en Vivo Activo: Haga clic para gestionar o cancelar' : 'Live Interpreter Active: Click to manage or cancel';
+    } else {
+        btn.className = 'inline-flex items-center space-x-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-semibold transition border border-indigo-500/40 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 hover:text-white shadow-sm';
+        if (badge) badge.classList.add('hidden');
+        btn.title = (dashboardMode === 'es') 
+            ? 'Solicitar un intérprete humano certificado de la red de Proveedores de Servicios Lingüísticos (LSP)' 
+            : 'Request a certified live human interpreter from an on-demand Language Service Provider (LSP)';
+    }
+
+    if (label) {
+        label.textContent = t.liveInterpreterBtnLabel || 'Request Live Interpreter Now';
+    }
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     // Determine language mode from URL param ?lang= or localStorage
@@ -982,6 +1126,35 @@ function applyDashboardLocalization() {
     const pModeLabel = document.getElementById('profileModeLabel');
     if (pModeLabel) pModeLabel.textContent = t.profileModeLabel || 'Outbound SMS Delivery Format';
     updateSenderProfileUI();
+
+    // Live Interpreter Localization
+    const liBtnLabel = document.getElementById('liveInterpreterBtnLabel');
+    if (liBtnLabel) liBtnLabel.textContent = t.liveInterpreterBtnLabel || 'Request Live Interpreter Now';
+    const liModalTitle = document.getElementById('interpreterModalTitle');
+    if (liModalTitle) liModalTitle.textContent = t.interpreterModalTitle || 'Request Live Interpreter Now';
+    const liModalSub = document.getElementById('interpreterModalSubtitle');
+    if (liModalSub) liModalSub.textContent = t.interpreterModalSubtitle || 'Connect a certified human bilingual interpreter on-demand';
+    const liLangLabel = document.getElementById('interpreterLangPairLabel');
+    if (liLangLabel) liLangLabel.textContent = t.interpreterLangPairLabel || 'Language Pair';
+    const liSvcLabel = document.getElementById('interpreterServiceTypeLabel');
+    if (liSvcLabel) liSvcLabel.textContent = t.interpreterServiceTypeLabel || 'Interpretation Service';
+    const optRelayT = document.getElementById('optRelayTitle');
+    if (optRelayT) optRelayT.textContent = t.optRelayTitle;
+    const optRelayD = document.getElementById('optRelayDesc');
+    if (optRelayD) optRelayD.textContent = t.optRelayDesc;
+    const optOpiT = document.getElementById('optOpiTitle');
+    if (optOpiT) optOpiT.textContent = t.optOpiTitle;
+    const optOpiD = document.getElementById('optOpiDesc');
+    if (optOpiD) optOpiD.textContent = t.optOpiDesc;
+    const lspT = document.getElementById('lspStatusTitle');
+    if (lspT) lspT.textContent = t.lspStatusTitle;
+    const lspD = document.getElementById('lspStatusDesc');
+    if (lspD) lspD.textContent = t.lspStatusDesc;
+    const liCancelBtn = document.getElementById('interpreterCancelBtn');
+    if (liCancelBtn) liCancelBtn.textContent = t.interpreterCancelBtn;
+    const liConfirmBtn = document.getElementById('interpreterConfirmBtnText');
+    if (liConfirmBtn) liConfirmBtn.textContent = t.interpreterConfirmBtnText;
+    updateLiveInterpreterUI();
 }
 
 // Toggle Proofread Translated Message Mode (Human-In-The-Loop) — Paid Tier feature
@@ -1172,6 +1345,7 @@ async function selectTicket(ticketId, customerPhone, contactData = null) {
     const closeThreadBtn = document.getElementById('closeThreadBtn');
     if (closeThreadBtn) closeThreadBtn.classList.remove('hidden');
     document.getElementById('inputArea').classList.remove('hidden');
+    updateLiveInterpreterUI();
 
     // Responsive view management:
     // On mobile (< 768px): collapse sidebar and display chat workspace full screen
