@@ -111,9 +111,17 @@ export default async function handler(req, res) {
       }
 
       if (ticketId) {
-        // Auto-save sender as contact if not already saved
+        // Auto-save sender as contact and handle carrier compliance opt-out / opt-in
         try {
-          await saveContact({ phone: customerPhone });
+          const upper = inboundContent.trim().toUpperCase();
+          const isOptOut = /^(STOP|ALTO|CANCEL|BAJA|UNSUBSCRIBE|QUIT|END)$/i.test(upper);
+          const isOptIn = /^(START|UNSTOP|REANUDAR|INICIAR)$/i.test(upper);
+          
+          const contactUpdate = { phone: customerPhone };
+          if (isOptOut) contactUpdate.opted_out = true;
+          if (isOptIn) contactUpdate.opted_out = false;
+
+          await saveContact(contactUpdate);
         } catch (cErr) {
           console.warn('Inbound SMS auto-save contact error:', cErr.message);
         }

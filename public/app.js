@@ -75,7 +75,27 @@ const I18N = {
         agentOriginalDraft: 'Original Agent Draft (English):',
         customerTranslated: 'Translated into English:',
         customerOriginal: 'Original Inbound Message from Recipient (Spanish):',
-        viewAttachment: 'View Attached File'
+        viewAttachment: 'View Attached File',
+        trialPill: (days) => `Free Trial: ${days}d left`,
+        trialPillExpired: 'Free Tier • Upgrade to Pro',
+        trialPillPro: 'Operations Pro',
+        templatesBtn: 'Templates',
+        templatesModalTitle: 'Quick Response Templates',
+        templatesModalSubtitle: 'Click any pre-verified operational snippet to insert it into your composer.',
+        scheduleBtnTitle: 'Schedule message for delayed delivery',
+        scheduleModalTitle: 'Schedule Message Dispatch',
+        scheduleModalSubtitle: 'Select a future time to automatically deliver this message to the recipient.',
+        autoResponderBtn: 'Auto-Reply',
+        autoRespModalTitle: 'After-Hours Auto-Responder',
+        autoRespModalSubtitle: 'Automatically send a verified bilingual message when an inbound text arrives outside operational hours.',
+        optOutBadge: '🚫 Opted Out (STOP)',
+        optOutBanner: 'Recipient has opted out of automated messaging (STOP). Messaging is paused.',
+        deliveredReceipt: 'Delivered',
+        sentReceipt: 'Sent',
+        scheduledBadge: (timeStr) => `⏱️ Scheduled for ${timeStr}`,
+        hitlBtnLabel: 'Proofread (HITL)',
+        hitlBtnOn: 'ON',
+        hitlBtnOff: 'OFF'
     },
     es: {
         consoleBadge: 'Estado de Consola',
@@ -145,9 +165,490 @@ const I18N = {
         agentOriginalDraft: 'Borrador Original del Agente (Español):',
         customerTranslated: 'Traducido al Español:',
         customerOriginal: 'Mensaje Original Entrante del Destinatario (Inglés):',
-        viewAttachment: 'Ver Archivo Adjunto'
+        viewAttachment: 'Ver Archivo Adjunto',
+        trialPill: (days) => `Prueba Gratis: ${days}d`,
+        trialPillExpired: 'Plan Gratis • Mejorar a Pro',
+        trialPillPro: 'Operaciones Pro',
+        templatesBtn: 'Plantillas',
+        templatesModalTitle: 'Plantillas de Respuesta Rápida',
+        templatesModalSubtitle: 'Haga clic en cualquier plantilla operativa pre-verificada para insertarla en su redacción.',
+        scheduleBtnTitle: 'Programar mensaje para entrega diferida',
+        scheduleModalTitle: 'Programar Envío de Mensaje',
+        scheduleModalSubtitle: 'Seleccione un horario futuro para entregar automáticamente este mensaje al destinatario.',
+        autoResponderBtn: 'Auto-Respuesta',
+        autoRespModalTitle: 'Respuesta Automática Fuera de Horario',
+        autoRespModalSubtitle: 'Envía automáticamente un mensaje bilingüe verificado cuando llega un texto fuera del horario operativo.',
+        optOutBadge: '🚫 Desuscrito (ALTO)',
+        optOutBanner: 'El destinatario se ha desuscrito de los mensajes (ALTO). Comunicación en pausa.',
+        deliveredReceipt: 'Entregado',
+        sentReceipt: 'Enviado',
+        scheduledBadge: (timeStr) => `⏱️ Programado para ${timeStr}`,
+        hitlBtnLabel: 'Revisar (HITL)',
+        hitlBtnOn: 'ACTIVO',
+        hitlBtnOff: 'INACTIVO'
     }
 };
+
+// 14-Day Free Trial & Feature Gating
+function getTrialInfo() {
+    const isPaid = localStorage.getItem('abrevia_tier') === 'paid' || localStorage.getItem('abrevia_tier') === 'pro' || localStorage.getItem('abrevia_tier') === 'premium';
+    if (isPaid) {
+        return { isPro: true, inTrial: false, daysLeft: 0, trialExpired: false };
+    }
+    
+    let trialStart = localStorage.getItem('abrevia_trial_start');
+    if (!trialStart) {
+        trialStart = String(Date.now());
+        localStorage.setItem('abrevia_trial_start', trialStart);
+    }
+    
+    const startTime = parseInt(trialStart, 10) || Date.now();
+    const trialDurationMs = 14 * 24 * 60 * 60 * 1000;
+    const elapsed = Date.now() - startTime;
+    const remainingMs = trialDurationMs - elapsed;
+    
+    if (remainingMs > 0) {
+        const daysLeft = Math.max(1, Math.ceil(remainingMs / (24 * 60 * 60 * 1000)));
+        return { isPro: false, inTrial: true, daysLeft: daysLeft, trialExpired: false };
+    } else {
+        return { isPro: false, inTrial: false, daysLeft: 0, trialExpired: true };
+    }
+}
+
+function requireProFeature(featureName) {
+    const trial = getTrialInfo();
+    if (trial.isPro || trial.inTrial) {
+        return true;
+    }
+    
+    const msg = dashboardMode === 'es'
+        ? `La función "${featureName}" forma parte de Operaciones Pro.\n\nSu prueba gratuita de 14 días ha finalizado. Actualice a Operaciones Pro ($49/mes) para desbloquear esta función y mensajes ilimitados.`
+        : `The "${featureName}" feature is part of Operations Pro.\n\nYour 14-day free trial has concluded. Upgrade to Operations Pro ($49/mo) to unlock this feature and unlimited messaging.`;
+        
+    const proceed = confirm(msg + (dashboardMode === 'es' ? '\n\n¿Desea ver las opciones de Facturación ahora?' : '\n\nWould you like to view Billing options now?'));
+    if (proceed) {
+        openBillingModal();
+    }
+    return false;
+}
+
+function updateTrialUI() {
+    const trial = getTrialInfo();
+    const pillBtn = document.getElementById('trialPillBtn');
+    const pillText = document.getElementById('trialPillText');
+    const billingTrialBadge = document.getElementById('billingTrialBadge');
+    const billingTrialSub = document.getElementById('billingTrialSub');
+    const billingTrialDays = document.getElementById('billingTrialDays');
+    const t = I18N[dashboardMode];
+    
+    if (!pillBtn || !pillText) return;
+    
+    if (trial.isPro) {
+        pillText.textContent = t.trialPillPro || 'Operations Pro';
+        pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 transition shadow-sm';
+        if (billingTrialBadge) {
+            billingTrialBadge.textContent = 'PRO ACTIVE';
+            billingTrialBadge.className = 'text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1.5 py-0.5 rounded-full border border-emerald-500/40';
+        }
+        if (billingTrialSub) {
+            billingTrialSub.textContent = dashboardMode === 'es' ? 'Plan Operaciones Pro activo con todas las funciones desbloqueadas.' : 'Operations Pro plan active with all features unlocked.';
+        }
+        if (billingTrialDays) {
+            billingTrialDays.textContent = 'PRO';
+            billingTrialDays.className = 'text-xs font-mono font-bold text-emerald-300 shrink-0 ml-2';
+        }
+    } else if (trial.inTrial) {
+        pillText.textContent = t.trialPill(trial.daysLeft);
+        pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-300 border border-brand-500/30 hover:bg-brand-500/25 transition shadow-sm';
+        if (billingTrialBadge) {
+            billingTrialBadge.textContent = `${trial.daysLeft}D LEFT`;
+            billingTrialBadge.className = 'text-[9px] bg-brand-500/20 text-brand-300 font-bold px-1.5 py-0.5 rounded-full border border-brand-500/40';
+        }
+        if (billingTrialSub) {
+            billingTrialSub.textContent = dashboardMode === 'es' ? `${trial.daysLeft} días restantes con acceso completo a todas las funciones premium.` : `${trial.daysLeft} days remaining with full access to all premium features.`;
+        }
+        if (billingTrialDays) {
+            billingTrialDays.textContent = `${trial.daysLeft}d left`;
+            billingTrialDays.className = 'text-xs font-mono font-bold text-brand-300 shrink-0 ml-2';
+        }
+    } else {
+        pillText.textContent = t.trialPillExpired || 'Free Tier • Upgrade to Pro';
+        pillBtn.className = 'inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition shadow-sm';
+        if (billingTrialBadge) {
+            billingTrialBadge.textContent = 'EXPIRED';
+            billingTrialBadge.className = 'text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1.5 py-0.5 rounded-full border border-amber-500/40';
+        }
+        if (billingTrialSub) {
+            billingTrialSub.textContent = dashboardMode === 'es' ? 'Prueba concluida. En plan gratuito básico (hasta 500 msgs/mes).' : 'Trial concluded. On basic free tier (up to 500 msgs/mo).';
+        }
+        if (billingTrialDays) {
+            billingTrialDays.textContent = '0d';
+            billingTrialDays.className = 'text-xs font-mono font-bold text-amber-400 shrink-0 ml-2';
+        }
+    }
+}
+
+// Pre-verified Bilingual Operational Snippets (Macros)
+const QUICK_TEMPLATES = [
+    {
+        id: 'delivery_en_route',
+        title_en: '🚚 Delivery En Route',
+        title_es: '🚚 Entrega en Camino',
+        text_en: 'Hello! Our driver is currently en route to your location. Estimated arrival is within 30-45 minutes.',
+        text_es: '¡Hola! Nuestro conductor está en camino a su ubicación. La llegada estimada es de 30 a 45 minutos.'
+    },
+    {
+        id: 'confirm_address',
+        title_en: '📍 Confirm Address & Gate Code',
+        title_es: '📍 Confirmar Dirección y Código',
+        text_en: 'Could you please verify your exact street address and any gate code or apartment unit number for our driver?',
+        text_es: '¿Podría verificar su dirección exacta y cualquier código de acceso o número de departamento para nuestro conductor?'
+    },
+    {
+        id: 'appointment_reminder',
+        title_en: '📅 Appointment Reminder',
+        title_es: '📅 Recordatorio de Cita',
+        text_en: 'Friendly reminder of your upcoming service appointment scheduled for tomorrow. Please reply to this text to confirm.',
+        text_es: 'Recordatorio de su próxima cita de servicio programada para mañana. Por favor responda a este mensaje para confirmar.'
+    },
+    {
+        id: 'ready_pickup',
+        title_en: '📦 Ready for Pickup',
+        title_es: '📦 Listo para Recoger',
+        text_en: 'Your order is ready for pickup at our facility. Please bring a photo ID and reference your order number.',
+        text_es: 'Su pedido está listo para ser recogido en nuestras instalaciones. Por favor traiga una identificación oficial y su número de pedido.'
+    },
+    {
+        id: 'photo_request',
+        title_en: '📸 Photo Request',
+        title_es: '📸 Solicitar Fotografía',
+        text_en: 'To assist you faster, could you please reply to this text with a quick photo of the item or issue?',
+        text_es: 'Para ayudarle más rápido, ¿podría responder a este mensaje con una foto rápida del artículo o problema?'
+    },
+    {
+        id: 'operational_delay',
+        title_en: '⏱️ Operational Delay Notice',
+        title_es: '⏱️ Aviso de Demora Operativa',
+        text_en: 'We are experiencing a slight operational delay in your area. Our crew will arrive as soon as possible. Thank you for your patience!',
+        text_es: 'Estamos experimentando una ligera demora operativa en su área. Nuestro equipo llegará lo antes posible. ¡Agradecemos su paciencia!'
+    }
+];
+
+function openTemplatesModal() {
+    if (!requireProFeature(dashboardMode === 'es' ? 'Plantillas de Respuesta Rápida' : 'Quick Response Templates')) {
+        return;
+    }
+    renderTemplatesList();
+    const modal = document.getElementById('templatesModal');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeTemplatesModal() {
+    const modal = document.getElementById('templatesModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function renderTemplatesList() {
+    const container = document.getElementById('templatesListContainer');
+    if (!container) return;
+    const isEs = dashboardMode === 'es';
+    
+    container.innerHTML = QUICK_TEMPLATES.map(tpl => {
+        const title = isEs ? tpl.title_es : tpl.title_en;
+        const text = isEs ? tpl.text_es : tpl.text_en;
+        return `
+            <div onclick="insertTemplate('${tpl.id}')" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-brand-500/50 p-3 rounded-xl cursor-pointer transition group">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-bold text-white group-hover:text-brand-300 transition">${escapeHtml(title)}</span>
+                    <span class="text-[10px] text-brand-400 font-semibold opacity-80 group-hover:opacity-100">${isEs ? 'Insertar ↵' : 'Insert ↵'}</span>
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed italic">"${escapeHtml(text)}"</p>
+            </div>
+        `;
+    }).join('');
+}
+
+function insertTemplate(tplId) {
+    const tpl = QUICK_TEMPLATES.find(t => t.id === tplId);
+    if (!tpl) return;
+    const isEs = dashboardMode === 'es';
+    const textToInsert = isEs ? tpl.text_es : tpl.text_en;
+    
+    const inputEl = document.getElementById('agent-input');
+    if (inputEl) {
+        inputEl.value = textToInsert;
+        inputEl.focus();
+    }
+    closeTemplatesModal();
+}
+
+// Scheduled / Delayed Dispatch Logic
+function getScheduledMessages() {
+    try {
+        return JSON.parse(localStorage.getItem('abrevia_scheduled_messages') || '[]');
+    } catch {
+        return [];
+    }
+}
+
+function saveScheduledMessages(list) {
+    localStorage.setItem('abrevia_scheduled_messages', JSON.stringify(list));
+}
+
+function openScheduleModal() {
+    if (!requireProFeature(dashboardMode === 'es' ? 'Programación de Mensajes' : 'Scheduled Message Dispatch')) {
+        return;
+    }
+    const inputEl = document.getElementById('agent-input');
+    const draftText = inputEl?.value.trim();
+    if (!draftText && !currentAttachment) {
+        alert(dashboardMode === 'es' 
+            ? 'Por favor redacte un mensaje en el campo de texto antes de programar su envío.' 
+            : 'Please draft a message in the composer before scheduling delivery.');
+        return;
+    }
+    
+    const customInput = document.getElementById('customScheduleInput');
+    if (customInput) {
+        const d = new Date(Date.now() + 60 * 60 * 1000);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        customInput.value = d.toISOString().slice(0, 16);
+    }
+    
+    const modal = document.getElementById('scheduleModal');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeScheduleModal() {
+    const modal = document.getElementById('scheduleModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function applySchedulePreset(preset) {
+    let targetTime;
+    const now = new Date();
+    
+    if (typeof preset === 'number') {
+        targetTime = Date.now() + preset * 60 * 1000;
+    } else if (preset === 'tomorrow-morning') {
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 8, 0, 0);
+        targetTime = tomorrow.getTime();
+    } else if (preset === 'tomorrow-afternoon') {
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 13, 0, 0);
+        targetTime = tomorrow.getTime();
+    } else {
+        targetTime = Date.now() + 60 * 60 * 1000;
+    }
+    
+    commitSchedule(targetTime);
+}
+
+function applyCustomSchedule() {
+    const customInput = document.getElementById('customScheduleInput');
+    if (!customInput || !customInput.value) {
+        alert(dashboardMode === 'es' ? 'Por favor elija una fecha y hora válida.' : 'Please select a valid date and time.');
+        return;
+    }
+    const targetTime = new Date(customInput.value).getTime();
+    if (isNaN(targetTime) || targetTime <= Date.now()) {
+        alert(dashboardMode === 'es' ? 'La hora de entrega programada debe ser en el futuro.' : 'Scheduled delivery time must be in the future.');
+        return;
+    }
+    commitSchedule(targetTime);
+}
+
+function commitSchedule(scheduledTime) {
+    if (!currentTicket) return;
+    const inputEl = document.getElementById('agent-input');
+    const draftText = inputEl?.value.trim() || '';
+    
+    const scheduledItem = {
+        id: 'sched_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+        ticketId: currentTicket.id,
+        customerPhone: currentTicket.customer_phone,
+        agentDraft: draftText,
+        scheduledTime: scheduledTime,
+        attachment: currentAttachment ? { ...currentAttachment, file: null } : null,
+        createdAt: Date.now(),
+        dashboardMode: dashboardMode
+    };
+    
+    const list = getScheduledMessages();
+    list.push(scheduledItem);
+    saveScheduledMessages(list);
+    
+    if (inputEl) inputEl.value = '';
+    removeAttachment();
+    closeScheduleModal();
+    
+    fetchMessages(currentTicket.id, true);
+    
+    const timeFormatted = new Date(scheduledTime).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    alert(dashboardMode === 'es' 
+        ? `✓ Mensaje programado con éxito para: ${timeFormatted}` 
+        : `✓ Message successfully scheduled for: ${timeFormatted}`);
+}
+
+function cancelScheduledMessage(schedId) {
+    let list = getScheduledMessages();
+    list = list.filter(item => item.id !== schedId);
+    saveScheduledMessages(list);
+    if (currentTicket) {
+        fetchMessages(currentTicket.id, false);
+    }
+}
+
+async function dispatchScheduledMessageNow(schedId) {
+    let list = getScheduledMessages();
+    const item = list.find(s => s.id === schedId);
+    if (!item) return;
+    
+    list = list.filter(s => s.id !== schedId);
+    saveScheduledMessages(list);
+    
+    try {
+        let translatedText = item.agentDraft;
+        let polishedDraft = item.agentDraft;
+        
+        if (item.agentDraft) {
+            const transRes = await fetch('/api/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    text: item.agentDraft,
+                    targetLang: (item.dashboardMode === 'es') ? 'English' : 'Spanish'
+                })
+            });
+            const data = await transRes.json();
+            if (transRes.ok && data.translated) {
+                translatedText = data.translated;
+                if (data.correctedDraft) polishedDraft = data.correctedDraft;
+            }
+        }
+        
+        const isEnglishAgent = (item.dashboardMode !== 'es');
+        const englishText = isEnglishAgent ? (polishedDraft || '') : (translatedText || '');
+        const spanishText = isEnglishAgent ? (translatedText || '') : (polishedDraft || '');
+        const smsBody = isEnglishAgent ? translatedText : polishedDraft;
+        
+        await fetch('/api/send-sms', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                to: item.customerPhone,
+                body: smsBody,
+                mediaUrl: item.attachment?.uploadedUrl || null,
+                ticketId: item.ticketId,
+                englishText: englishText,
+                spanishText: spanishText
+            })
+        });
+        
+        if (currentTicket && currentTicket.id === item.ticketId) {
+            await fetchMessages(currentTicket.id, true);
+        }
+    } catch (err) {
+        console.error('Failed to dispatch scheduled message:', err);
+    }
+}
+
+async function checkScheduledMessages() {
+    const list = getScheduledMessages();
+    if (!list.length) return;
+    const now = Date.now();
+    const due = list.filter(item => item.scheduledTime <= now);
+    for (const item of due) {
+        await dispatchScheduledMessageNow(item.id);
+    }
+}
+
+// After-Hours Bilingual Auto-Responder
+function getAutoResponderSettings() {
+    const defaultSettings = {
+        enabled: false,
+        messageEs: 'Gracias por contactarnos. Nuestro equipo se encuentra fuera de horario de atención en este momento. Hemos recibido su mensaje y le responderemos a la primera hora hábil.',
+        messageEn: 'Thank you for contacting us. Our team is currently outside operational hours. We have received your message and will respond as soon as business hours resume.'
+    };
+    try {
+        const stored = localStorage.getItem('abrevia_auto_responder_config');
+        return stored ? { ...defaultSettings, ...JSON.parse(stored) } : defaultSettings;
+    } catch {
+        return defaultSettings;
+    }
+}
+
+function openAutoResponderModal() {
+    if (!requireProFeature(dashboardMode === 'es' ? 'Respuesta Automática Fuera de Horario' : 'After-Hours Auto-Responder')) {
+        return;
+    }
+    const settings = getAutoResponderSettings();
+    const toggle = document.getElementById('autoResponderToggle');
+    const msgEs = document.getElementById('autoResponderMsgEs');
+    const msgEn = document.getElementById('autoResponderMsgEn');
+    
+    if (toggle) toggle.checked = Boolean(settings.enabled);
+    if (msgEs) msgEs.value = settings.messageEs;
+    if (msgEn) msgEn.value = settings.messageEn;
+    
+    const indicator = document.getElementById('autoRespSavedIndicator');
+    if (indicator) indicator.classList.add('hidden');
+    
+    const modal = document.getElementById('autoResponderModal');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeAutoResponderModal() {
+    const modal = document.getElementById('autoResponderModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function toggleAutoResponderState(checked) {
+    const settings = getAutoResponderSettings();
+    settings.enabled = Boolean(checked);
+    localStorage.setItem('abrevia_auto_responder_config', JSON.stringify(settings));
+    updateAutoResponderNavUI();
+}
+
+function saveAutoResponderSettings() {
+    const toggle = document.getElementById('autoResponderToggle');
+    const msgEs = document.getElementById('autoResponderMsgEs');
+    const msgEn = document.getElementById('autoResponderMsgEn');
+    
+    const settings = {
+        enabled: toggle ? toggle.checked : false,
+        messageEs: msgEs?.value.trim() || '',
+        messageEn: msgEn?.value.trim() || ''
+    };
+    
+    localStorage.setItem('abrevia_auto_responder_config', JSON.stringify(settings));
+    updateAutoResponderNavUI();
+    
+    const indicator = document.getElementById('autoRespSavedIndicator');
+    if (indicator) {
+        indicator.classList.remove('hidden');
+        setTimeout(() => indicator.classList.add('hidden'), 2000);
+    }
+    setTimeout(closeAutoResponderModal, 500);
+}
+
+function updateAutoResponderNavUI() {
+    const settings = getAutoResponderSettings();
+    const btn = document.getElementById('autoResponderNavBtn');
+    const textEl = document.getElementById('autoResponderNavText');
+    const t = I18N[dashboardMode];
+    
+    if (textEl) textEl.textContent = t.autoResponderBtn || 'Auto-Reply';
+    if (!btn) return;
+    
+    if (settings.enabled) {
+        btn.className = 'text-xs text-amber-300 px-2 py-1 rounded-lg border border-amber-500/40 bg-amber-500/10 transition flex items-center space-x-1 shadow-sm';
+        btn.title = dashboardMode === 'es' ? 'Auto-Respuesta Activa (Fuera de horario)' : 'Auto-Responder Active (After hours)';
+    } else {
+        btn.className = 'text-xs text-slate-400 hover:text-amber-300 px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center space-x-1';
+        btn.title = dashboardMode === 'es' ? 'Configurar Auto-Respuesta Fuera de Horario' : 'Configure After-Hours Auto-Responder';
+    }
+}
+
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -164,6 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load contacts from cache and background fetch
     loadContactsFromLocalStorage();
     fetchContacts();
+    checkScheduledMessages();
 
     applyDashboardLocalization();
     refreshTickets();
@@ -202,6 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentTicket) {
             fetchMessages(currentTicket.id, false);
         }
+        checkScheduledMessages();
     }, 5000);
 });
 
@@ -278,6 +781,23 @@ function applyDashboardLocalization() {
     const grammarBadgeEl = document.getElementById('grammarBadge');
     if (grammarBadgeEl) grammarBadgeEl.textContent = t.grammarBadge;
     updateHitlToggleUI();
+    updateTrialUI();
+    updateAutoResponderNavUI();
+
+    const templatesBtnEl = document.getElementById('templatesBtn');
+    if (templatesBtnEl) templatesBtnEl.title = t.templatesBtn;
+    const scheduleBtnEl = document.getElementById('scheduleBtn');
+    if (scheduleBtnEl) scheduleBtnEl.title = t.scheduleBtnTitle;
+
+    const tplTitle = document.getElementById('templatesModalTitle');
+    if (tplTitle) tplTitle.textContent = t.templatesModalTitle;
+    const tplSub = document.getElementById('templatesModalSubtitle');
+    if (tplSub) tplSub.textContent = t.templatesModalSubtitle;
+
+    const schedTitle = document.getElementById('scheduleModalTitle');
+    if (schedTitle) schedTitle.textContent = t.scheduleModalTitle;
+    const schedSub = document.getElementById('scheduleModalSubtitle');
+    if (schedSub) schedSub.textContent = t.scheduleModalSubtitle;
 
     // HITL
     document.getElementById('hitlTitleText').textContent = t.hitlTitle;
@@ -322,15 +842,10 @@ function applyDashboardLocalization() {
 
 // Toggle Proofread Translated Message Mode (Human-In-The-Loop) — Paid Tier feature
 function toggleHitlMode() {
-    const isPaid = localStorage.getItem('abrevia_tier') === 'paid' || localStorage.getItem('abrevia_tier') === 'pro' || localStorage.getItem('abrevia_tier') === 'premium';
-    if (!isPaid && !hitlModeEnabled) {
-        const wantsUpgrade = confirm(dashboardMode === 'es'
-            ? 'La opción de revisar el mensaje traducido antes de enviarlo está disponible al actualizar a un plan de pago ($49/mes Operaciones Pro).\n\n¿Desea ver los planes en Facturación para actualizar?'
-            : 'Proofreading translated messages before sending is available when you upgrade to a paid tier ($49/mo Operations Pro).\n\nWould you like to explore upgrade plans in Billing?');
-        if (wantsUpgrade) {
-            openBillingModal();
+    if (!hitlModeEnabled) {
+        if (!requireProFeature(dashboardMode === 'es' ? 'Revisión Previa (HITL)' : 'Proofread (HITL)')) {
+            return;
         }
-        return;
     }
 
     hitlModeEnabled = !hitlModeEnabled;
@@ -341,17 +856,35 @@ function toggleHitlMode() {
 }
 
 function updateHitlToggleUI() {
+    const t = I18N[dashboardMode];
+    
+    // Dedicated composer HITL button
+    const hitlModeBtn = document.getElementById('hitlModeBtn');
+    const hitlBtnBadge = document.getElementById('hitlBtnBadge');
+    const hitlBtnLabel = document.getElementById('hitlBtnLabel');
+    if (hitlBtnLabel) hitlBtnLabel.textContent = t.hitlBtnLabel || 'Proofread (HITL)';
+    if (hitlModeBtn && hitlBtnBadge) {
+        if (hitlModeEnabled) {
+            hitlModeBtn.className = 'inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition border border-emerald-500/50 bg-emerald-500/15 text-emerald-300 shadow-sm';
+            hitlBtnBadge.textContent = t.hitlBtnOn || 'ON';
+            hitlBtnBadge.className = 'text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-200 border border-emerald-500/50';
+        } else {
+            hitlModeBtn.className = 'inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition border border-slate-700 bg-slate-900 text-slate-400 hover:text-white hover:border-slate-600 shadow-sm';
+            hitlBtnBadge.textContent = t.hitlBtnOff || 'OFF';
+            hitlBtnBadge.className = 'text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700';
+        }
+    }
+
     const toggleBtn = document.getElementById('toggleHitlBtn');
     const hitlToggleText = document.getElementById('hitlToggleText');
-    const t = I18N[dashboardMode];
-    if (!toggleBtn || !hitlToggleText) return;
-
-    if (hitlModeEnabled) {
-        toggleBtn.className = 'inline-flex items-center space-x-1 text-emerald-300 font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30';
-        hitlToggleText.textContent = t.hitlToggleActive;
-    } else {
-        toggleBtn.className = 'inline-flex items-center space-x-1 text-slate-400 hover:text-brand-300 transition px-2 py-0.5 rounded-md hover:bg-slate-900 border border-transparent hover:border-slate-800';
-        hitlToggleText.textContent = t.hitlTogglePremium;
+    if (toggleBtn && hitlToggleText) {
+        if (hitlModeEnabled) {
+            toggleBtn.className = 'inline-flex items-center space-x-1 text-emerald-300 font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30';
+            hitlToggleText.textContent = t.hitlToggleActive;
+        } else {
+            toggleBtn.className = 'inline-flex items-center space-x-1 text-slate-400 hover:text-brand-300 transition px-2 py-0.5 rounded-md hover:bg-slate-900 border border-transparent hover:border-slate-800';
+            hitlToggleText.textContent = t.hitlTogglePremium;
+        }
     }
 }
 
@@ -577,6 +1110,45 @@ function updateHeaderWithContact(customerPhone, contact = null) {
             editContactBtn.title = t.addContactBtn;
         }
     }
+
+    // Opt-Out Compliance (STOP/ALTO) handling
+    const optOutBadge = document.getElementById('optOutHeaderBadge');
+    const optOutBanner = document.getElementById('optOutAlertBanner');
+    const agentInput = document.getElementById('agent-input');
+    const translateBtn = document.getElementById('translate-btn');
+    const templatesBtn = document.getElementById('templatesBtn');
+    const scheduleBtn = document.getElementById('scheduleBtn');
+
+    if (c && c.opted_out) {
+        if (optOutBadge) {
+            optOutBadge.textContent = t.optOutBadge || '🚫 Opted Out (STOP)';
+            optOutBadge.classList.remove('hidden');
+        }
+        if (optOutBanner) {
+            const bannerText = document.getElementById('optOutAlertText');
+            if (bannerText) bannerText.textContent = t.optOutBanner || 'Recipient has opted out of automated messaging (STOP). Messaging is paused.';
+            optOutBanner.classList.remove('hidden');
+        }
+        if (agentInput) {
+            agentInput.disabled = true;
+            agentInput.placeholder = dashboardMode === 'es' 
+                ? 'Mensajería en pausa - Destinatario envió ALTO' 
+                : 'Messaging paused - Recipient opted out via STOP';
+        }
+        if (translateBtn) translateBtn.disabled = true;
+        if (templatesBtn) templatesBtn.disabled = true;
+        if (scheduleBtn) scheduleBtn.disabled = true;
+    } else {
+        if (optOutBadge) optOutBadge.classList.add('hidden');
+        if (optOutBanner) optOutBanner.classList.add('hidden');
+        if (agentInput) {
+            agentInput.disabled = false;
+            agentInput.placeholder = t.inputPlaceholder;
+        }
+        if (translateBtn) translateBtn.disabled = false;
+        if (templatesBtn) templatesBtn.disabled = false;
+        if (scheduleBtn) scheduleBtn.disabled = false;
+    }
 }
 
 // Fetch messages for active ticket
@@ -678,6 +1250,10 @@ function renderChatFeed(messages, scrollToBottom = false) {
                             <div class="whitespace-pre-wrap break-words [overflow-wrap:anywhere]">${formatMessageContent(bottomText)}</div>
                         </div>
                         ${attachmentHtml}
+                        <div class="flex items-center justify-end space-x-1 text-[10px] text-blue-200/90 pt-1 border-t border-blue-400/20 font-medium">
+                            <span>✓✓</span>
+                            <span>${t.deliveredReceipt || 'Delivered'}</span>
+                        </div>
                     </div>
                 </div>
             `;
@@ -707,6 +1283,32 @@ function renderChatFeed(messages, scrollToBottom = false) {
             `;
         }
     }).join('');
+
+    // Append pending scheduled messages for active ticket
+    if (currentTicket) {
+        const scheduledList = getScheduledMessages().filter(s => s.ticketId === currentTicket.id);
+        if (scheduledList.length > 0) {
+            const scheduledCards = scheduledList.map(s => {
+                const timeStr = new Date(s.scheduledTime).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                return `
+                    <div class="flex flex-col items-end space-y-1 max-w-xl sm:max-w-2xl ml-auto min-w-0 w-full opacity-95">
+                        <span class="text-[10px] text-amber-400 font-semibold mr-1">${t.scheduledBadge(timeStr)}</span>
+                        <div class="bg-slate-900 border border-amber-500/40 rounded-2xl rounded-tr-sm p-3.5 shadow-md text-xs text-slate-200 max-w-full space-y-2">
+                            <div class="text-amber-300 font-bold text-[10px] uppercase tracking-wider flex items-center justify-between border-b border-amber-500/20 pb-1.5 gap-4">
+                                <span>${dashboardMode === 'es' ? 'En cola para entrega diferida' : 'Queued for Delayed Dispatch'}</span>
+                                <div class="flex space-x-2">
+                                    <button onclick="dispatchScheduledMessageNow('${s.id}')" class="text-brand-400 hover:text-brand-300 font-semibold underline text-[10px]">${dashboardMode === 'es' ? 'Enviar Ahora' : 'Send Now'}</button>
+                                    <button onclick="cancelScheduledMessage('${s.id}')" class="text-red-400 hover:text-red-300 font-semibold underline text-[10px]">${dashboardMode === 'es' ? 'Cancelar' : 'Cancel'}</button>
+                                </div>
+                            </div>
+                            <div class="italic text-slate-300 whitespace-pre-wrap">${escapeHtml(s.agentDraft)}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            feed.innerHTML += scheduledCards;
+        }
+    }
 
     if (scrollToBottom) {
         feed.scrollTop = feed.scrollHeight;

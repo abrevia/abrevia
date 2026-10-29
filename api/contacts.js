@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const { batch, phone, name, company, email, notes } = req.body || {};
+      const { batch, phone, name, company, email, notes, opted_out } = req.body || {};
 
       if (batch && Array.isArray(batch)) {
         const saved = await saveContactsBatch(batch);
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Phone number is required' });
       }
 
-      const contact = await saveContact({ phone, name, company, email, notes });
+      const contact = await saveContact({ phone, name, company, email, notes, opted_out });
       return res.status(200).json({ success: true, contact });
     } catch (err) {
       console.error('Error saving contact:', err);

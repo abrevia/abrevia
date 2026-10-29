@@ -46,8 +46,13 @@
             </button>
         </div>
 
-        <!-- Right: Billing & Sign Out -->
-        <div class="flex items-center space-x-2.5 sm:space-x-4 text-xs">
+        <!-- Right: Trial Status, Billing & Sign Out -->
+        <div class="flex items-center space-x-2 sm:space-x-3 text-xs">
+            <!-- Free Trial / Pro Tier Badge -->
+            <button id="trialPillBtn" onclick="openBillingModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-brand-500/15 text-brand-300 border border-brand-500/30 hover:bg-brand-500/25 transition shadow-sm" title="View Trial & Billing status">
+                <span>⭐</span>
+                <span id="trialPillText">Free Trial: 14d left</span>
+            </button>
             <button id="billingBtn" onclick="openBillingModal()" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 font-normal">
                 <span>💳</span>
                 <span id="billingBtnText" class="hidden sm:inline">Billing</span>
@@ -64,6 +69,10 @@
             <div class="p-3.5 border-b border-slate-800 flex justify-between items-center">
                 <h2 id="sidebarTitle" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Conversations</h2>
                 <div class="flex items-center space-x-1.5">
+                    <button id="autoResponderNavBtn" onclick="openAutoResponderModal()" title="Bilingual After-Hours Auto-Responder" class="text-xs text-slate-400 hover:text-amber-300 px-2 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center space-x-1">
+                        <span>🌙</span>
+                        <span id="autoResponderNavText" class="hidden xl:inline text-[10px]">Auto-Reply</span>
+                    </button>
                     <button id="contactsDirectoryBtn" onclick="openContactsModal()" title="View saved contacts" class="text-xs text-brand-400 hover:text-brand-300 font-medium flex items-center space-x-1 bg-brand-500/10 border border-brand-500/20 px-2.5 py-1 rounded-lg transition">
                         <span>👥</span>
                         <span id="contactsBtnText">Contacts</span>
@@ -108,6 +117,7 @@
                         <div class="flex items-center space-x-2 min-w-0">
                             <h2 id="activeCustomerTitle" class="font-bold text-sm sm:text-base text-white truncate tracking-tight">Select a conversation</h2>
                             <span id="activeContactCompany" class="hidden text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md border border-slate-700 font-medium truncate shrink-0"></span>
+                            <span id="optOutHeaderBadge" class="hidden text-[10px] bg-red-500/15 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-md font-bold shrink-0">🚫 Opted Out (STOP)</span>
                         </div>
                         <div class="flex items-center space-x-1.5 text-xs text-slate-400 min-w-0 truncate">
                             <p id="activeSubtitle" class="truncate text-[11px] sm:text-xs">Choose a ticket from the sidebar or start a new thread</p>
@@ -153,9 +163,18 @@
             <div id="inputArea" class="bg-slate-950 border-t border-slate-800 p-3 sm:p-4 shrink-0 hidden">
                 <div class="max-w-4xl mx-auto space-y-2.5 sm:space-y-3">
                     
-                    <!-- 1. Agent Input with Attachment Paperclip -->
+                    <!-- 1. Agent Input with Attachment Paperclip, Templates & Scheduling -->
                     <div>
-                        <div class="flex items-center space-x-2">
+                        <!-- Opt-Out Compliance Banner (shown if recipient sent STOP) -->
+                        <div id="optOutAlertBanner" class="hidden mb-2 bg-red-950/60 border border-red-500/40 text-red-200 text-xs px-3.5 py-2 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-base">🚫</span>
+                                <span id="optOutAlertText" class="font-medium">Recipient has opted out of automated messaging (STOP). Inbound communication paused.</span>
+                            </div>
+                            <span class="text-[10px] text-red-400 font-mono">10DLC Compliant</span>
+                        </div>
+
+                        <div class="flex items-center space-x-1.5 sm:space-x-2">
                             <!-- Paperclip Attachment Button -->
                             <button id="attachBtn" type="button" onclick="triggerFileInput()" title="Attach file, photo or document" class="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-brand-500 text-slate-400 hover:text-white transition shrink-0 flex items-center justify-center">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -164,24 +183,41 @@
                             </button>
                             <input type="file" id="fileInput" onchange="handleFileSelected(event)" class="hidden" accept="image/*,.pdf,.doc,.docx,.txt">
 
+                            <!-- Bilingual Quick Templates Button (⚡ Templates) -->
+                            <button id="templatesBtn" type="button" onclick="openTemplatesModal()" title="Bilingual Quick Response Templates (Macros)" class="px-2.5 py-2 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-brand-500 text-slate-300 hover:text-brand-300 transition shrink-0 flex items-center space-x-1 font-semibold text-xs shadow-sm">
+                                <span class="text-brand-400 font-bold">⚡</span>
+                                <span id="templatesBtnText" class="hidden sm:inline">Templates</span>
+                            </button>
+
                             <input id="agent-input" type="text" placeholder="Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)..." class="flex-grow min-w-0 bg-slate-900 border border-slate-700 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-500 transition">
-                            <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send Message" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5">
+
+                            <!-- Scheduled Dispatch Button (⏱️) -->
+                            <button id="scheduleBtn" type="button" onclick="openScheduleModal()" title="Schedule message for delayed delivery" class="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-amber-500 text-slate-400 hover:text-amber-300 transition shrink-0 flex items-center justify-center shadow-sm">
+                                <span class="text-xs sm:text-sm">⏱️</span>
+                            </button>
+
+                            <!-- Send / Translate Button -->
+                            <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send Message" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5 shadow-md shadow-brand-500/20">
                                 <span id="translateBtnText">Send</span>
                                 <span class="text-xs font-bold">↵</span>
                             </button>
                         </div>
 
-                        <!-- Status & Proofread Toggle Bar -->
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] px-1 mt-2 text-slate-400 gap-1.5">
-                            <div class="flex items-center space-x-2">
-                                <span class="inline-flex items-center space-x-1.5 text-emerald-400 font-medium">
+                        <!-- Status & Prominent Dedicated HITL Button Bar -->
+                        <div class="flex items-center justify-between text-[11px] px-1 mt-2.5 text-slate-400 gap-2">
+                            <div class="flex items-center space-x-2 min-w-0 truncate">
+                                <span class="inline-flex items-center space-x-1.5 text-emerald-400 font-medium shrink-0">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                    <span id="instantModeLabel">Secure Instant Translation & Message Delivery</span>
+                                    <span id="instantModeLabel">Secure Instant Translation & Delivery</span>
                                 </span>
                             </div>
-                            <div>
-                                <button id="toggleHitlBtn" type="button" onclick="toggleHitlMode()" class="inline-flex items-center text-slate-400 hover:text-brand-300 transition px-2 py-0.5 rounded-md hover:bg-slate-900 border border-transparent hover:border-slate-800 whitespace-nowrap" title="Proofread translated message before sending">
-                                    <span id="hitlToggleText">Proofread translated message</span>
+
+                            <!-- Dedicated HITL Proofread Button -->
+                            <div class="shrink-0 flex items-center space-x-2">
+                                <button id="hitlModeBtn" type="button" onclick="toggleHitlMode()" class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition border border-slate-700 bg-slate-900 text-slate-300 hover:text-white hover:border-slate-600 shadow-sm" title="Human-In-The-Loop: Review and edit translated message before sending">
+                                    <span id="hitlBtnIcon">🛡️</span>
+                                    <span id="hitlBtnLabel">Proofread (HITL)</span>
+                                    <span id="hitlBtnBadge" class="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">OFF</span>
                                 </button>
                             </div>
                         </div>
@@ -266,9 +302,21 @@
                 </div>
             </div>
 
-            <p id="billingModalDesc" class="text-xs text-slate-300 leading-relaxed mb-5">
-                Manage your billing, reload message credits, or subscribe to unlimited bilingual asynchronous communication relay via Stripe.
+            <p id="billingModalDesc" class="text-xs text-slate-300 leading-relaxed mb-4">
+                Manage your billing, explore your trial status, or subscribe to unlimited bilingual asynchronous communication relay via Stripe.
             </p>
+
+            <!-- 14-Day Free Trial Status Card -->
+            <div id="billingModalTrialBanner" class="bg-brand-950/40 border border-brand-500/40 rounded-xl p-3.5 mb-3 flex items-center justify-between">
+                <div>
+                    <div class="text-xs font-bold text-white flex items-center space-x-1.5">
+                        <span>⭐ 14-Day Full Access Free Trial</span>
+                        <span id="billingTrialBadge" class="text-[9px] bg-brand-500/20 text-brand-300 font-bold px-1.5 py-0.2 rounded-full border border-brand-500/40">ACTIVE</span>
+                    </div>
+                    <div id="billingTrialSub" class="text-[11px] text-brand-200/80 mt-0.5">Full access to Proofread (HITL), Templates, Scheduling & Relay.</div>
+                </div>
+                <span id="billingTrialDays" class="text-xs font-mono font-bold text-brand-300 shrink-0 ml-2">14d left</span>
+            </div>
 
             <div class="space-y-3 mb-6">
                 <!-- Free Forever Community & Non-Profit Plan -->
@@ -531,6 +579,148 @@
                 <button onclick="closeConsoleStatusModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
                     Close
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bilingual Quick Response Templates Modal (Macros) -->
+    <div id="templatesModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl flex flex-col max-h-[85vh] relative text-left">
+            <button type="button" onclick="closeTemplatesModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-2.5 mb-1">
+                <span class="text-xl">⚡</span>
+                <h3 id="templatesModalTitle" class="text-base font-bold text-white">Quick Response Templates</h3>
+            </div>
+            <p id="templatesModalSubtitle" class="text-xs text-slate-400 mb-4">Click any pre-verified operational snippet to insert it into your composer.</p>
+
+            <div id="templatesListContainer" class="flex-grow overflow-y-auto space-y-2.5 pr-1">
+                <!-- Dynamically populated based on active language -->
+            </div>
+
+            <div class="border-t border-slate-800 pt-3 mt-4 flex justify-between items-center text-xs">
+                <span class="text-slate-500 text-[11px]">💡 Automatically formatted for high delivery speed</span>
+                <button onclick="closeTemplatesModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-lg transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scheduled / Delayed Dispatch Modal -->
+    <div id="scheduleModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl text-left relative">
+            <button type="button" onclick="closeScheduleModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-2.5 mb-1">
+                <span class="text-xl">⏱️</span>
+                <h3 id="scheduleModalTitle" class="text-base font-bold text-white">Schedule Message Dispatch</h3>
+            </div>
+            <p id="scheduleModalSubtitle" class="text-xs text-slate-400 mb-4">Select a future time to automatically deliver this message to the recipient.</p>
+
+            <div class="space-y-2 mb-4">
+                <button type="button" onclick="applySchedulePreset(30)" class="w-full text-left bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-brand-500/40 p-3 rounded-xl transition flex justify-between items-center">
+                    <div>
+                        <div class="text-xs font-semibold text-white">⏱️ In 30 Minutes</div>
+                        <div id="schedPreset30Text" class="text-[11px] text-slate-400">Quick operational follow-up</div>
+                    </div>
+                    <span class="text-xs text-brand-400 font-bold">&rarr;</span>
+                </button>
+                <button type="button" onclick="applySchedulePreset(60)" class="w-full text-left bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-brand-500/40 p-3 rounded-xl transition flex justify-between items-center">
+                    <div>
+                        <div class="text-xs font-semibold text-white">⏱️ In 1 Hour</div>
+                        <div id="schedPreset60Text" class="text-[11px] text-slate-400">Scheduled status check</div>
+                    </div>
+                    <span class="text-xs text-brand-400 font-bold">&rarr;</span>
+                </button>
+                <button type="button" onclick="applySchedulePreset('tomorrow-morning')" class="w-full text-left bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-brand-500/40 p-3 rounded-xl transition flex justify-between items-center">
+                    <div>
+                        <div class="text-xs font-semibold text-white">🌅 Tomorrow at 8:00 AM</div>
+                        <div id="schedPresetMornText" class="text-[11px] text-slate-400">Morning arrival notification</div>
+                    </div>
+                    <span class="text-xs text-brand-400 font-bold">&rarr;</span>
+                </button>
+                <button type="button" onclick="applySchedulePreset('tomorrow-afternoon')" class="w-full text-left bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-brand-500/40 p-3 rounded-xl transition flex justify-between items-center">
+                    <div>
+                        <div class="text-xs font-semibold text-white">☀️ Tomorrow at 1:00 PM</div>
+                        <div id="schedPresetAftText" class="text-[11px] text-slate-400">Afternoon service shift</div>
+                    </div>
+                    <span class="text-xs text-brand-400 font-bold">&rarr;</span>
+                </button>
+            </div>
+
+            <div class="border-t border-slate-800 pt-3">
+                <label id="schedCustomLabel" class="block text-xs font-medium text-slate-300 mb-1.5">Custom Date & Time:</label>
+                <div class="flex items-center space-x-2 mb-4">
+                    <input type="datetime-local" id="customScheduleInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+                    <button type="button" onclick="applyCustomSchedule()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shrink-0">
+                        Schedule
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeScheduleModal()" class="text-xs text-slate-400 hover:text-white transition">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bilingual After-Hours Auto-Responder Modal -->
+    <div id="autoResponderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl text-left relative">
+            <button type="button" onclick="closeAutoResponderModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-2.5 mb-1">
+                <span class="text-xl">🌙</span>
+                <h3 id="autoRespModalTitle" class="text-base font-bold text-white">After-Hours Auto-Responder</h3>
+            </div>
+            <p id="autoRespModalSubtitle" class="text-xs text-slate-400 mb-4">Automatically send a verified bilingual message when an inbound text arrives outside operational hours.</p>
+
+            <div class="space-y-4 mb-5">
+                <!-- Toggle Switch -->
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-white" id="autoRespToggleLabel">Auto-Responder Active</div>
+                        <div class="text-[11px] text-slate-400" id="autoRespToggleDesc">Replies to all incoming messages automatically</div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="autoResponderToggle" onchange="toggleAutoResponderState(this.checked)" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
+                    </label>
+                </div>
+
+                <!-- Automated Message in Spanish (sent to customer) -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" id="autoRespMsgLabelEs">
+                        Spanish Message (Sent to Recipient):
+                    </label>
+                    <textarea id="autoResponderMsgEs" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-brand-500 transition leading-relaxed"></textarea>
+                </div>
+
+                <!-- Automated Message in English (for agent records) -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" id="autoRespMsgLabelEn">
+                        English Translation (Console Reference):
+                    </label>
+                    <textarea id="autoResponderMsgEn" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-brand-500 transition leading-relaxed"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center border-t border-slate-800 pt-3">
+                <span id="autoRespSavedIndicator" class="text-emerald-400 text-xs hidden">✓ Settings saved</span>
+                <div class="flex space-x-2 ml-auto">
+                    <button onclick="closeAutoResponderModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-lg transition">
+                        Cancel
+                    </button>
+                    <button onclick="saveAutoResponderSettings()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition shadow-sm">
+                        Save Settings
+                    </button>
+                </div>
             </div>
         </div>
     </div>
