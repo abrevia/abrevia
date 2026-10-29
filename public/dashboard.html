@@ -224,11 +224,6 @@
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                     <span id="instantModeLabel">Secure</span>
                                 </span>
-                                <!-- Sender Profile Pill / Shortcut -->
-                                <button id="senderProfileQuickBtn" type="button" onclick="openSenderProfileModal()" class="text-[10px] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 bg-slate-900 px-2 py-0.5 rounded-lg transition flex items-center space-x-1 shadow-sm shrink-0" title="Configure Organization & Sender Name for outbound SMS">
-                                    <span>🏢</span>
-                                    <span id="senderProfileQuickLabel" class="truncate max-w-[120px]">Abrevia</span>
-                                </button>
                             </div>
 
                             <!-- Action Buttons Bar: Live Interpreter & HITL Proofread -->
@@ -737,124 +732,97 @@
                     <span class="text-base">⚙️</span>
                     <h3 id="settingsModalTitle" class="text-sm font-bold text-white">Settings & Preferences</h3>
                 </div>
-                <button type="button" onclick="closeSettingsModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition" title="Close">
+                <button type="button" onclick="closeSettingsModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition cursor-pointer" title="Close">
                     &times;
                 </button>
             </div>
 
             <!-- Modal Body -->
-            <div class="p-4 sm:p-5 space-y-3 text-xs text-slate-300">
-                <!-- Status Banner: All Systems Operational with pulsing beacon -->
-                <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <span class="relative flex h-2.5 w-2.5">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                        </span>
-                        <span class="text-xs font-bold text-white">All Systems Operational</span>
-                    </div>
-                    <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Status: Operational</span>
-                </div>
-
-                <!-- Unified Status Monitor Section: Relay, Translation, Spellcheck, Encryption & Title VI -->
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 text-[11px]">
-                    <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
-                        <span class="text-slate-400">Two-Way Asynchronous Communication Relay</span>
-                        <span class="text-emerald-400 font-medium flex items-center space-x-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                            <span>Operational</span>
-                        </span>
-                    </div>
-                    <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
-                        <span class="text-slate-400">Two-Way Instant Translation</span>
-                        <span class="text-emerald-400 font-medium flex items-center space-x-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                            <span>Operational</span>
-                        </span>
-                    </div>
-                    <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
-                        <span class="text-slate-400">Bilingual Spell & Grammar</span>
-                        <span class="text-emerald-400 font-medium flex items-center space-x-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                            <span>Active</span>
-                        </span>
-                    </div>
-                    <div class="flex items-center justify-between pb-1.5 border-b border-slate-800/60">
-                        <span class="text-slate-400">Encrypted Storage</span>
-                        <button type="button" onclick="showEncryptionProofModal()" class="text-emerald-400 hover:text-emerald-300 font-medium flex items-center space-x-1 transition cursor-pointer">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                            <span id="encStorageBadgeLabel">Encrypted (AES-256)</span>
-                            <span class="text-[9px] text-slate-500">&rarr;</span>
-                        </button>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-slate-400">Federal Title VI / LEP Compliance</span>
-                        <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 font-medium flex items-center space-x-1 transition">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                            <span id="t6StatusLabel">Title VI & HIPAA Ready</span>
-                            <span class="text-[9px] text-slate-500">&rarr;</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Primary Dispatch Channel -->
-                <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-                    <div class="flex items-center space-x-2.5">
-                        <span class="text-base">💬</span>
-                        <div>
-                            <span class="text-xs text-white font-bold block">WhatsApp Cloud API</span>
-                            <span class="text-[10px] text-slate-400 block">Point B native chat &bull; SMS Fallback</span>
-                        </div>
-                    </div>
-                    <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Active</span>
-                </div>
-
-                <!-- Live Diagnostics Ping & Handshake Test -->
-                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-sm">⚡</span>
+            <div class="p-4 sm:p-5 space-y-3.5 text-xs text-slate-300">
+                <!-- Section: Organization & Sender Profile -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Organization & Sender Profile</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-base">🏢</span>
                             <div>
-                                <span class="text-xs font-bold text-white block">Instant Diagnostics Ping</span>
-                                <span class="text-[10px] text-slate-400 block">Send live ping &amp; verify return handshake</span>
+                                <span class="text-white font-medium block">Sender Identity</span>
+                                <span class="text-[10px] text-slate-400 block">Configure organization name &amp; outbound signature</span>
                             </div>
                         </div>
-                        <button id="runPingBtn" type="button" onclick="runDiagnosticPingTest()" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs px-3.5 py-1.5 rounded-xl transition shadow flex items-center space-x-1.5 cursor-pointer shrink-0">
-                            <span>⚡</span>
-                            <span id="runPingBtnText">Instant Test</span>
+                        <button id="senderProfileSettingsBtn" onclick="openSenderProfileModal()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition cursor-pointer">
+                            <span id="senderProfileQuickLabel">Abrevia</span>
                         </button>
                     </div>
+                </div>
 
-                    <!-- Progress Bar & Status Text -->
-                    <div id="pingProgressContainer" class="hidden space-y-1.5 pt-1">
-                        <div class="w-full bg-slate-900 border border-slate-800 rounded-full h-2 overflow-hidden p-0.5">
-                            <div id="pingProgressBar" class="bg-gradient-to-r from-brand-500 to-emerald-400 h-full rounded-full transition-all duration-300 w-0"></div>
+                <!-- Section: Operator Preferences -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Operator Preferences</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span id="soundToggleIcon" class="text-base">🔔</span>
+                            <div>
+                                <span class="text-white font-medium block">Sound Notifications</span>
+                                <span class="text-[10px] text-slate-400 block">Audio chime when constituent replies</span>
+                            </div>
                         </div>
-                        <div class="flex items-center justify-between text-[10px]">
-                            <span id="pingStatusText" class="text-slate-400 font-medium">Sending telemetry ping...</span>
-                            <span id="pingPercentText" class="text-emerald-400 font-mono font-bold">0%</span>
-                        </div>
+                        <button id="soundToggleBtn" onclick="toggleSoundAlerts()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition cursor-pointer">
+                            <span id="soundToggleLabel">Alerts</span>
+                        </button>
                     </div>
+                </div>
 
-                    <!-- Returned Handshake Badge / Telemetry Box -->
-                    <div id="pingHandshakeResult" class="hidden p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 space-y-1.5">
-                        <div class="flex items-center justify-between font-bold text-xs text-white">
-                            <span class="flex items-center space-x-1.5 text-emerald-400">
-                                <span>✅</span>
-                                <span>Live Handshake Verified</span>
-                            </span>
-                            <span id="pingLatencyBadge" class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full text-[10px] font-mono border border-emerald-500/40">-- ms</span>
+                <!-- Section: Subscription & Billing -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Subscription & Billing</span>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-base">💳</span>
+                            <div>
+                                <span class="text-white font-medium block">Billing & Plan</span>
+                                <span class="text-[10px] text-slate-400 block">Manage subscription, card & invoices</span>
+                            </div>
                         </div>
-                        <div id="pingDetailsBox" class="text-[10px] text-slate-300 space-y-0.5 pt-1 border-t border-emerald-500/20">
-                            <!-- Populated with live handshake services -->
-                        </div>
+                        <button id="billingBtn" onclick="openBillingModal()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition cursor-pointer">
+                            <span id="billingBtnText">Billing</span>
+                        </button>
                     </div>
+                </div>
+
+                <!-- Section: Application & Shortcuts -->
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Application & Shortcuts</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="installAppBtn" onclick="triggerPwaInstall()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2.5 transition text-left shadow-sm cursor-pointer">
+                            <span class="text-base">📲</span>
+                            <div>
+                                <span id="installAppBtnText" class="text-xs font-semibold block text-white">Add Shortcut</span>
+                                <span class="text-[9px] text-slate-400 block">Desktop & Mobile PWA</span>
+                            </div>
+                        </button>
+                        <button id="dashShareBtn" onclick="shareAbreviaApp()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2.5 transition text-left shadow-sm cursor-pointer">
+                            <span class="text-brand-400 text-base">↗</span>
+                            <div>
+                                <span id="dashShareBtnText" class="text-xs font-semibold block text-white">Share App</span>
+                                <span class="text-[9px] text-slate-400 block">Copy Operator Link</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section: Session Security -->
+                <div class="pt-2 border-t border-slate-800/60">
+                    <button id="signOutLink" onclick="openWrapUpModal()" type="button" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2.5 rounded-xl flex items-center justify-center space-x-2 transition font-semibold text-xs cursor-pointer">
+                        <span>🚪</span>
+                        <span id="signOutBtnText">Sign Out / Lock Session</span>
+                    </button>
                 </div>
             </div>
 
             <!-- Modal Footer -->
             <div class="p-3 border-t border-slate-800 bg-slate-950/60 shrink-0 flex justify-end">
-                <button onclick="closeSettingsModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-5 py-2 rounded-xl transition">
+                <button onclick="closeSettingsModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-5 py-2 rounded-xl transition cursor-pointer">
                     Close
                 </button>
             </div>
@@ -1156,7 +1124,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_14"></script>
+    <script src="app.js?v=20261029_15"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
