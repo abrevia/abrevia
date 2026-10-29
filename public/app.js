@@ -1,3 +1,156 @@
+
+// ============================================================================
+// --- Discreet Audio & Haptic Notification Engine ---
+// ============================================================================
+let audioCtx = null;
+let soundAlertsEnabled = localStorage.getItem('abrevia_sound_alerts') !== 'false';
+let originalDocumentTitle = document.title || 'Abrevia Console';
+let unreadMessageCount = 0;
+let lastSeenTicketMsgCounts = {};
+let knownTicketIds = null;
+
+function getAudioContext() {
+    if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+            audioCtx = new AudioContextClass();
+        }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    return audioCtx;
+}
+
+// Warm, discreet two-tone harmonic chime (D5: 587.33Hz -> A5: 880.00Hz, harmonic fifth)
+function playDiscreetChime() {
+    if (!soundAlertsEnabled) return;
+    try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        // Tone 1: D5 (587.33 Hz)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(587.33, now);
+        gain1.gain.setValueAtTime(0.001, now);
+        gain1.gain.exponentialRampToValueAtTime(0.12, now + 0.02);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.12);
+
+        // Tone 2: A5 (880.00 Hz)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(880.00, now + 0.08);
+        gain2.gain.setValueAtTime(0.001, now + 0.08);
+        gain2.gain.exponentialRampToValueAtTime(0.15, now + 0.10);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.08);
+        osc2.stop(now + 0.32);
+    } catch (e) {
+        console.debug('Audio chime playback restricted or unsupported:', e);
+    }
+}
+
+// Subtle double-tap haptic vibration for mobile phones & supported devices
+function triggerDiscreetVibration() {
+    try {
+        if ('vibrate' in navigator) {
+            navigator.vibrate([40, 50, 40]);
+        }
+    } catch (e) {
+        console.debug('Vibration unsupported:', e);
+    }
+}
+
+// System OS / PWA notification
+function triggerSystemNotification(title, body, url = '/dashboard.html') {
+    try {
+        if ('Notification' in window && Notification.permission === 'granted' && document.hidden) {
+            const options = {
+                body: body,
+                icon: '/assets/logo.png?v=3',
+                badge: '/assets/logo.png?v=3',
+                vibrate: [40, 50, 40],
+                tag: 'abrevia-msg-' + Date.now(),
+                data: { url: url }
+            };
+
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification(title, options);
+                }).catch(() => {
+                    new Notification(title, options);
+                });
+            } else {
+                new Notification(title, options);
+            }
+        }
+    } catch (e) {
+        console.debug('Notification error:', e);
+    }
+}
+
+// Master incoming alert trigger
+function notifyInboundMessage(title, snippet) {
+    playDiscreetChime();
+    triggerDiscreetVibration();
+    triggerSystemNotification(title, snippet);
+
+    if (document.hidden) {
+        unreadMessageCount++;
+        document.title = `(${unreadMessageCount}) 💬 Abrevia | ${dashboardMode === 'es' ? 'Nuevo Mensaje' : 'New Message'}`;
+    }
+}
+
+// Toggle sound alerts with instant sample
+function toggleSoundAlerts() {
+    soundAlertsEnabled = !soundAlertsEnabled;
+    localStorage.setItem('abrevia_sound_alerts', soundAlertsEnabled ? 'true' : 'false');
+    updateSoundAlertsUI();
+    if (soundAlertsEnabled) {
+        playDiscreetChime();
+        triggerDiscreetVibration();
+    }
+}
+
+function updateSoundAlertsUI() {
+    const icon = document.getElementById('soundToggleIcon');
+    const btn = document.getElementById('soundToggleBtn');
+    if (icon) {
+        icon.textContent = soundAlertsEnabled ? '🔔' : '🔕';
+    }
+    if (btn) {
+        btn.title = soundAlertsEnabled 
+            ? (dashboardMode === 'es' ? 'Alertas sonoras y vibración activadas (clic para silenciar)' : 'Sound & vibration alerts active (click to mute)')
+            : (dashboardMode === 'es' ? 'Alertas silenciadas (clic para activar sonido y vibración)' : 'Alerts muted (click to enable sound and vibration)');
+    }
+}
+
+// Reset unread title on window focus
+window.addEventListener('focus', () => {
+    unreadMessageCount = 0;
+    document.title = originalDocumentTitle;
+});
+
+// Unlock audio on first user gesture & proactively request notification permission
+['click', 'touchstart', 'keydown'].forEach(evt => {
+    window.addEventListener(evt, () => {
+        getAudioContext();
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission().catch(() => {});
+        }
+    }, { once: true, passive: true });
+});
+
 // Abrevia 1 — Operations Workspace Frontend Logic
 let currentTicket = null;
 let pollInterval = null;
@@ -1105,6 +1258,7 @@ function applyDashboardLocalization() {
     if (grammarBadgeEl) grammarBadgeEl.textContent = t.grammarBadge;
     updateHitlToggleUI();
     updateTrialUI();
+    updateSoundAlertsUI();
     updateAutoResponderNavUI();
 
     const templatesBtnEl = document.getElementById('templatesBtn');

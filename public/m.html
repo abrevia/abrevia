@@ -39,7 +39,11 @@
             </div>
 
             <!-- Language Switcher -->
-            <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
+            <div class="flex items-center space-x-2">
+                <button id="portalSoundBtn" onclick="togglePortalSound()" class="p-1 rounded-md text-slate-400 hover:text-white transition text-xs" title="Sound alerts">
+                    <span id="portalSoundIcon">🔔</span>
+                </button>
+                <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
                 <button id="langEsBtn" onclick="setPortalLang('es')" class="px-2 py-0.5 rounded text-xs font-semibold bg-brand-600 text-white transition">ES</button>
                 <button id="langEnBtn" onclick="setPortalLang('en')" class="px-2 py-0.5 rounded text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white transition">EN</button>
             </div>
@@ -463,6 +467,140 @@
         setPortalLang(portalLang);
         loadTicketData();
 
+        
+        // --- Discreet Audio & Haptic Notification for Recipient ---
+        let portalAudioCtx = null;
+        let portalSoundEnabled = localStorage.getItem('abrevia_portal_sound') !== 'false';
+        let originalPortalTitle = document.title;
+        let unreadCount = 0;
+        let lastMsgCount = null;
+
+        function getPortalAudioContext() {
+            if (!portalAudioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    portalAudioCtx = new AudioContextClass();
+                }
+            }
+            if (portalAudioCtx && portalAudioCtx.state === 'suspended') {
+                portalAudioCtx.resume();
+            }
+            return portalAudioCtx;
+        }
+
+        function playPortalChime() {
+            if (!portalSoundEnabled) return;
+            try {
+                const ctx = getPortalAudioContext();
+                if (!ctx) return;
+                const now = ctx.currentTime;
+
+                // Tone 1: D5 (587.33 Hz)
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(587.33, now);
+                gain1.gain.setValueAtTime(0.001, now);
+                gain1.gain.exponentialRampToValueAtTime(0.12, now + 0.02);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.12);
+
+                // Tone 2: A5 (880.00 Hz) - harmonic fifth above
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(880.00, now + 0.08);
+                gain2.gain.setValueAtTime(0.001, now + 0.08);
+                gain2.gain.exponentialRampToValueAtTime(0.15, now + 0.10);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start(now + 0.08);
+                osc2.stop(now + 0.32);
+            } catch (e) {
+                console.debug('Portal chime restricted:', e);
+            }
+        }
+
+        function triggerPortalVibration() {
+            try {
+                if ('vibrate' in navigator) {
+                    navigator.vibrate([40, 50, 40]);
+                }
+            } catch (e) {
+                console.debug('Vibration unsupported:', e);
+            }
+        }
+
+        function triggerPortalNotification(title, body) {
+            try {
+                if ('Notification' in window && Notification.permission === 'granted' && document.hidden) {
+                    const options = {
+                        body: body,
+                        icon: '/assets/logo.png?v=3',
+                        badge: '/assets/logo.png?v=3',
+                        vibrate: [40, 50, 40],
+                        tag: 'abrevia-portal-' + Date.now()
+                    };
+                    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                        navigator.serviceWorker.ready.then(reg => reg.showNotification(title, options)).catch(() => new Notification(title, options));
+                    } else {
+                        new Notification(title, options);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function notifyRecipientIncoming(snippet) {
+            playPortalChime();
+            triggerPortalVibration();
+            const senderTitle = document.getElementById('orgSenderName')?.textContent || 'Abrevia';
+            triggerPortalNotification(senderTitle, snippet);
+
+            if (document.hidden) {
+                unreadCount++;
+                document.title = `(${unreadCount}) 💬 Abrevia | ${portalLang === 'es' ? 'Nuevo Mensaje' : 'New Message'}`;
+            }
+        }
+
+        function togglePortalSound() {
+            portalSoundEnabled = !portalSoundEnabled;
+            localStorage.setItem('abrevia_portal_sound', portalSoundEnabled ? 'true' : 'false');
+            updatePortalSoundUI();
+            if (portalSoundEnabled) {
+                playPortalChime();
+                triggerPortalVibration();
+            }
+        }
+
+        function updatePortalSoundUI() {
+            const icon = document.getElementById('portalSoundIcon');
+            if (icon) icon.textContent = portalSoundEnabled ? '🔔' : '🔕';
+        }
+        updatePortalSoundUI();
+
+        window.addEventListener('focus', () => {
+            unreadCount = 0;
+            document.title = originalPortalTitle;
+        });
+
+        ['click', 'touchstart', 'keydown'].forEach(evt => {
+            window.addEventListener(evt, () => {
+                getPortalAudioContext();
+                if ('Notification' in window && Notification.permission === 'default') {
+                    Notification.requestPermission().catch(() => {});
+                }
+            }, { once: true, passive: true });
+        });
+
+        // Register ServiceWorker for PWA shortcuts & background alerts
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
+
         // Polling for real-time operator updates every 6 seconds
         setInterval(async () => {
             if (!ticketId || isOptedOut) return;
@@ -470,13 +608,23 @@
                 const res = await fetch(`/api/tickets?id=${encodeURIComponent(ticketId)}`);
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.messages && data.messages.length !== currentMessages.length) {
-                        currentMessages = data.messages;
-                        renderMessages();
+                    if (data.messages) {
+                        const newCount = data.messages.length;
+                        if (lastMsgCount === null) {
+                            lastMsgCount = newCount;
+                        } else if (newCount > lastMsgCount) {
+                            const latest = data.messages[newCount - 1];
+                            currentMessages = data.messages;
+                            renderMessages();
+                            if (latest && latest.sender === 'agent') {
+                                notifyRecipientIncoming(latest.content || '');
+                            }
+                            lastMsgCount = newCount;
+                        }
                     }
                 }
             } catch (e) {}
-        }, 6000);
+        }, 5000);
     </script>
 </body>
 </html>
