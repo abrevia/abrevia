@@ -2918,3 +2918,28 @@ function signOutWithoutPin() {
     closeWrapUpModal();
     window.location.href = '/index.html?view=signed_out';
 }
+
+
+function initPwaBanner() {
+    const isDismissed = localStorage.getItem('abrevia_pwa_dismissed') === 'true';
+    if (!isDismissed) {
+        setTimeout(() => {
+            const banner = document.getElementById('pwaPromptBanner');
+            if (banner) {
+                banner.classList.remove('hidden');
+                banner.classList.add('flex');
+            }
+        }, 1500);
+    }
+}
+
+function dismissPwaBanner() {
+    localStorage.setItem('abrevia_pwa_dismissed', 'true');
+    const banner = document.getElementById('pwaPromptBanner');
+    if (banner) {
+        banner.classList.add('hidden');
+        banner.classList.remove('flex');
+    }
+}
+
+window.addEventListener('DOMContentLoaded', initPwaBanner);

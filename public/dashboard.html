@@ -21,6 +21,15 @@
             }
         }
     </script>
+    <script>
+        (function checkDashboardAuth() {
+            const isSignedOut = localStorage.getItem('abrevia_signed_out') === 'true';
+            const pin = localStorage.getItem('abrevia_pin');
+            if (isSignedOut && pin) {
+                window.location.replace('/index.html?view=signed_out');
+            }
+        })();
+    </script>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans h-screen flex flex-col overflow-hidden selection:bg-brand-600 selection:text-white">
 
@@ -1078,6 +1087,28 @@ Responda ALTO para no recibir más mensajes.</div>
             </div>
             <button onclick="closeInstallModal()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
                 Got it
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Proactive Desktop & Mobile Shortcut Banner -->
+    <div id="pwaPromptBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm bg-slate-900 border border-brand-500/40 rounded-2xl p-4 shadow-2xl z-40 flex items-center justify-between gap-3 backdrop-blur-md hidden">
+        <div class="flex items-center space-x-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-300 text-lg shrink-0">
+                📲
+            </div>
+            <div class="min-w-0">
+                <div class="text-xs font-bold text-white truncate" id="pwaBannerTitle">Add Shortcut</div>
+                <div class="text-[11px] text-slate-400 truncate" id="pwaBannerSubtitle">1-tap desktop & home screen access</div>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 shrink-0">
+            <button onclick="triggerPwaInstall()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow-sm" id="pwaBannerActionBtn">
+                Add
+            </button>
+            <button onclick="dismissPwaBanner()" class="text-slate-500 hover:text-slate-300 text-sm px-1.5 font-bold transition">
+                &times;
             </button>
         </div>
     </div>
