@@ -694,6 +694,46 @@
                             <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Active</span>
                         </div>
 
+                        <!-- All Systems Operational Accordion Dropdown -->
+                        <details class="group bg-slate-950 border border-slate-800 rounded-xl overflow-hidden transition">
+                            <summary class="flex items-center justify-between p-2.5 cursor-pointer list-none select-none hover:bg-slate-900/60 transition">
+                                <div class="flex items-center space-x-2">
+                                    <span class="relative flex h-2 w-2">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                    </span>
+                                    <span class="text-xs font-semibold text-white">All Systems Operational</span>
+                                </div>
+                                <div class="flex items-center space-x-1 text-[10px] text-emerald-400 font-medium">
+                                    <span>Status: Operational</span>
+                                    <span class="text-slate-500 group-open:rotate-180 transition-transform">▼</span>
+                                </div>
+                            </summary>
+                            <div class="p-2.5 pt-1 border-t border-slate-800/60 bg-slate-900/40 space-y-1 text-[11px] text-slate-300">
+                                <div class="flex items-center justify-between py-1 border-b border-slate-800/40">
+                                    <span class="text-slate-400">Two-Way Asynchronous Communication Relay</span>
+                                    <span class="text-emerald-400 font-medium flex items-center space-x-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                        <span>Operational</span>
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between py-1 border-b border-slate-800/40">
+                                    <span class="text-slate-400">Two-Way Instant Translation</span>
+                                    <span class="text-emerald-400 font-medium flex items-center space-x-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                        <span>Operational</span>
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between py-1">
+                                    <span class="text-slate-400">Bilingual Spell & Grammar</span>
+                                    <span class="text-emerald-400 font-medium flex items-center space-x-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                        <span>Active</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </details>
+
                         <!-- Security & Compliance Compact Badges -->
                         <div class="space-y-1.5 text-[11px]">
                             <div class="flex items-center justify-between py-1 border-b border-slate-800/60">
@@ -1058,7 +1098,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_05"></script>
+    <script src="app.js?v=20261029_06"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
