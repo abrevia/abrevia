@@ -1,14 +1,14 @@
 # Guide: Working with Interpreters & Communicating with LEP Constituents
-### Guía Oficial: Cómo Trabajar con Intérpretes y Comunicarse Eficazmente con Personas con Dominio Limitado del Inglés (LEP)
+### Guía: Cómo Trabajar con Intérpretes (English) / Cómo Comunicarse a Través de un Intérprete (Español)
 
 > **Regulatory Framework:** Title VI of the Civil Rights Act of 1964 (42 U.S.C. § 2000d), Executive Order 13166, Section 1557 of the Affordable Care Act (45 CFR Part 92), National CLAS Standards (HHS).  
-> **Target Audience:** Healthcare practitioners, intake coordinators, dispatchers, property managers, school administrators, and legal/field operations staff.
+> **Target Audience:** Healthcare practitioners, intake coordinators, dispatchers, property managers, school administrators, and legal/field operations staff (English) & Limited English Proficient (LEP) constituents and Spanish-speaking community members (Español).
 
 ---
 
 > **Quick Language Navigation / Navegación Rápida:**  
-> 🇺🇸 [**English: Operational Guide & Best Practices**](#-english-working-with-interpreters--communicating-with-lep-individuals)  
-> 🇲🇽 [**Español: Guía Operativa y Mejores Prácticas**](#-español-cómo-trabajar-con-intérpretes-y-comunicarse-con-personas-lep)
+> 🇺🇸 [**English: Operational Guide & Best Practices (For Staff & Providers)**](#-english-working-with-interpreters--communicating-with-lep-individuals)  
+> 🇲🇽 [**Español: Cómo Comunicarse a Través de un Intérprete (Para el Usuario / Persona LEP)**](#-español-cómo-comunicarse-a-través-de-un-intérprete)
 
 ---
 
@@ -87,31 +87,55 @@ The following resources are 100% free, public-domain, or federally accredited ed
 
 ---
 
-<a name="-español-cómo-trabajar-con-intérpretes-y-comunicarse-con-personas-lep"></a>
-# 🇲🇽 Español: Cómo Trabajar con Intérpretes y Comunicarse con Personas LEP
+<a name="-español-cómo-comunicarse-a-través-de-un-intérprete"></a>
+# 🇲🇽 Español: Cómo Comunicarse a Través de un Intérprete
+### Guía de Derechos y Protocolo de Comunicación para Personas Hispanohablantes (Usuarios LEP)
 
-## 1. Estándar Regulatorio Federal
+## 1. Sus Derechos Federales de Acceso Lingüístico
 
-Bajo el **Título VI de la Ley de Derechos Civiles de 1964**, la **Orden Ejecutiva 13166** y la **Sección 1557 de la Ley de Cuidado de Salud a Bajo Precio (ACA)**, no proporcionar acceso lingüístico oportuno y significativo a personas con Dominio Limitado del Inglés (LEP) constituye discriminación ilegal por origen nacional.
+Si usted habla español y tiene un dominio limitado del inglés (LEP, por sus siglas en inglés), **las leyes federales de los Estados Unidos protegen su derecho a recibir atención y servicios en su idioma sin costo alguno**.
 
-Abrevia proporciona la interfaz tecnológica sin descargas para relevo bilingüe por WhatsApp y mensajería de texto, además de un enlace directo con intérpretes humanos certificados bajo demanda (OPI/VRI).
-
----
-
-## 2. Protocolo de Comunicación Eficaz
-
-1. **Hable en primera persona:** Diríjase siempre al usuario, no al intérprete (*"¿En qué podemos ayudarle hoy?"* en lugar de *"Pregúntele en qué le ayudo"*).
-2. **Haga pausas cortas:** Formule una o dos oraciones y pause para permitir que la interpretación sea exacta y fluida.
-3. **Use lenguaje sencillo:** Evite modismos, tecnicismos o jerga que dificulte la traducción.
-4. **Todo se interpreta:** El código de ética profesional obliga al intérprete a traducir absolutamente todo lo que se dice en la sala o en la llamada.
-5. **Nunca utilice a menores de edad o familiares:** Para trámites médicos, legales, contractuales o de vivienda, el uso de menores de edad como intérpretes está estrictamente prohibido por normas federales de derechos civiles.
+Bajo el **Título VI de la Ley de Derechos Civiles de 1964**, la **Orden Ejecutiva 13166** y la **Sección 1557 de la Ley de Cuidado de Salud a Bajo Precio (ACA)**, toda institución u organización que recibe fondos o asistencia federal (hospitales, clínicas, tribunales, departamentos de policía, autoridades de vivienda HUD, escuelas públicas y contratistas municipales) tiene la obligación legal de proporcionarle:
+1. **Intérpretes calificados y gratuitos:** Usted **no** tiene que pagar por el servicio de interpretación ni traer a su propio intérprete.
+2. **Protección a menores y familiares:** Ninguna entidad pública o centro médico puede obligarlo a usted a usar a sus hijos menores de edad, amigos o familiares como intérpretes.
+3. **Comunicación sin barreras técnicas:** Abrevia permite que las instituciones y empresas se comuniquen con usted directamente a su teléfono celular (vía WhatsApp o mensaje de texto SMS) en español, sin que usted tenga que descargar ninguna aplicación, y con acceso a intérpretes certificados en llamadas o citas cuando sea necesario.
 
 ---
 
-## 3. Directorio de Recursos Federales Gratuitos
+## 2. Protocolo para Comunicarse Eficazmente a Través de un Intérprete
 
-* **Coordinación de Título VI del Departamento de Justicia (DOJ):** [DOJ FCS Title VI Coordination](https://www.justice.gov/crt/fcs)
-* **Publicaciones y Guías Federales del Departamento de Justicia (DOJ):** [DOJ FCS Publications of Major Interest](https://www.justice.gov/crt/fcs/fcs-publications-major-interest)
-* **Marco Legal y Manual de Título VI del DOJ:** [DOJ FCS Title VI Legal Manual](https://www.justice.gov/crt/fcs/TitleVI)
-* **Educación y Certificados CLAS del HHS:** [HHS Think Cultural Health](https://thinkculturalhealth.hhs.gov)
-* **Capacitación y Certificado Anual Gratuito de HIPAA:** [HIPAA Training US](https://www.hipaatraining.us)
+Cuando esté frente a un médico, oficial, administrador o funcionario con un intérprete (en persona o por teléfono/video), siga estas recomendaciones prácticas:
+
+1. **Solicite un intérprete desde el primer momento:** Al iniciar una llamada o llegar a una oficina, indique con confianza: *"Spanish interpreter, please"* (o muestre una tarjeta de identificación lingüística). Tiene derecho a que se lo proporcionen antes de responder preguntas importantes.
+2. **Hable directamente con el profesional o funcionario:** Mire y diríjase a la persona que le está atendiendo (médico, enfermero, oficial, trabajador social), no al intérprete. Hable en primera persona (*"Siento dolor de cabeza"* o *"Vengo a renovar mi contrato"*, en lugar de *"Dígale a él que me duele"*).
+3. **Hable en oraciones cortas y haga pausas:** Exprese una o dos oraciones y haga una pausa breve. Esto permite que el intérprete traslade su mensaje de forma exacta y sin omitir detalles cruciales.
+4. **Recuerde que todo lo que usted diga se interpretará:** Los intérpretes profesionales se rigen por un código estricto de ética que les obliga a traducir **absolutamente todo** lo que se exprese en la conversación o en la sala. Evite hacer comentarios privados al margen con el intérprete, ya que este deberá traducirlos al funcionario.
+5. **El intérprete es neutral y confidencial:** El intérprete no puede dar su opinión personal, ni aconsejarle qué decisión tomar, ni alterar sus palabras. Además, por normas federales de privacidad (como HIPAA), toda su información médica y personal se mantiene en estricta reserva.
+6. **Pida que le aclaren cualquier término que no entienda:** Si el funcionario o el intérprete utiliza tecnicismos, palabras difíciles o conceptos que no le quedan claros, deténgalos y diga: *"No comprendí esa palabra, ¿podrían explicármela de otra manera?"*. Nunca se quede con dudas por temor o vergüenza.
+7. **No permita que sus hijos menores traduzcan:** Traducir diagnósticos médicos, acuerdos legales o temas financieros puede causar gran estrés a un menor y errores graves en su atención. Exija siempre un intérprete calificado provisto por la institución.
+8. **Mensajería directa en su celular con Abrevia:** Si la organización le envía avisos a través de Abrevia, usted recibirá los mensajes traducidos al español directamente en su WhatsApp o SMS. Puede contestar de forma normal en español; el sistema traducirá automáticamente su respuesta para el personal en inglés.
+
+---
+
+### Tabla Resumen: Qué Hacer y Qué Evitar al Usar un Intérprete
+
+| Qué Hacer (Buenas Prácticas) | Qué Evitar |
+| :--- | :--- |
+| **Solicite siempre un intérprete calificado y gratuito** al llegar o llamar. | **Nunca acepte que sus hijos menores de edad o familiares traduzcan** por usted. |
+| **Diríjase directamente al profesional** (*"Tengo esta duda..."*). | **No hable con el intérprete en tercera persona** (*"Dígale a él que..."*). |
+| **Haga pausas breves** después de una o dos oraciones. | **No hable en párrafos muy largos** sin permitir que el intérprete intervenga. |
+| **Pida aclaración inmediata** si una palabra o instrucción no es clara. | **No se quede con dudas** por pena o temor a incomodar al personal. |
+| **Confíe en la confidencialidad y neutralidad** del intérprete profesional. | **No le pida consejos personales u opiniones privadas** al intérprete. |
+
+---
+
+## 3. Directorio de Recursos Federales y Protección de sus Derechos
+
+Si alguna entidad sujeta a normativas federales le niega el servicio en su idioma o no le proporciona un intérprete calificado, usted tiene derecho a presentar una queja o consultar estos recursos oficiales:
+
+* **Coordinación de Título VI del Departamento de Justicia (DOJ FCS):** Portal federal central para la protección del acceso lingüístico y presentación de quejas por discriminación de origen nacional: [DOJ FCS Title VI Coordination](https://www.justice.gov/crt/fcs).
+* **Guías y Publicaciones de Acceso Lingüístico del DOJ:** Información legal y directrices sobre el derecho a intérpretes calificados: [DOJ FCS Publications of Major Interest](https://www.justice.gov/crt/fcs/fcs-publications-major-interest).
+* **Manual Legal de Título VI del DOJ:** Marco normativo sobre las obligaciones federales de idioma: [DOJ FCS Title VI Legal Manual](https://www.justice.gov/crt/fcs/TitleVI).
+* **Oficina de Derechos Civiles del HHS (Salud y Servicios Humanos):** Presentación de quejas si un hospital, clínica o programa de salud le niega un intérprete: [HHS Office for Civil Rights](https://www.hhs.gov/civil-rights).
+* **Educación y Salud Culturalmente Apropiada (HHS):** Programas de atención y comunicación en salud: [HHS Think Cultural Health](https://thinkculturalhealth.hhs.gov).
+* **Capacitación sobre Privacidad y Protección de Datos (HIPAA):** Curso informativo sobre cómo las entidades deben proteger su información confidencial: [HIPAA Training US](https://www.hipaatraining.us).
