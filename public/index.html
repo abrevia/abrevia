@@ -189,9 +189,9 @@
 
         <!-- Comprehensive Legal, Title VI & Compliance Footer at Very Bottom -->
     <footer class="border-t border-slate-800/80 bg-slate-950 py-10 px-4 sm:px-6 text-slate-400">
-        <div class="max-w-5xl mx-auto space-y-8">
+        <div class="max-w-6xl mx-auto space-y-8">
             <!-- Top Row: Columns -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-xs text-left">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-7 text-xs text-left">
                 <!-- Col 1: Brand & Organic Share -->
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2">
@@ -218,15 +218,6 @@
                                 <span>📋</span>
                                 <span id="footerLinkSelfAssessment">Title VI Self-Assessment</span>
                             </a>
-                        </li>
-                        <li>
-                            <a href="https://www.hipaatraining.us/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-300 transition flex items-center space-x-1 text-emerald-400 font-medium" id="footerLinkHipaaTraining" title="Free online HIPAA training course with annual downloadable PDF certificate for personnel handling PHI">
-                                <span>🎓</span>
-                                <span id="footerLinkHipaaTrainingText">Free HIPAA Training &amp; Certificate (PDF)</span>
-                            </a>
-                            <span class="block text-[10px] text-slate-500 leading-tight pl-5 pt-0.5" id="hipaaCourseDisclaimer">
-                                * Independent 3rd-party resource; Abrevia has no affiliation. Provided solely to facilitate meaningful compliance information.
-                            </span>
                         </li>
                         <li>
                             <a href="https://github.com/serviciosadg/abrevia/blob/main/WORKING_WITH_INTERPRETERS.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300" id="footerLinkInterpretersGuide" title="Practical guide and free federal training resources for communicating with LEP individuals and working with interpreters">
@@ -285,7 +276,29 @@
                     </ul>
                 </div>
 
-                <!-- Col 4: Platform & Utilities -->
+                <!-- Col 4: HIPAA & Workforce Training (Independent Resources) -->
+                <div class="space-y-2.5">
+                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColHipaaHeader">HIPAA &amp; Training</div>
+                    <ul class="space-y-2 text-[11px]">
+                        <li>
+                            <a href="https://www.hipaatraining.us/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-300 transition flex items-center space-x-1 text-emerald-400 font-medium" id="footerLinkHipaaTraining" title="Free online HIPAA training course with annual downloadable PDF certificate for personnel handling PHI">
+                                <span>🎓</span>
+                                <span id="footerLinkHipaaTrainingText">Free HIPAA Training &amp; Certificate (PDF)</span>
+                            </a>
+                            <span class="block text-[10px] text-slate-500 leading-tight pt-1" id="hipaaCourseDisclaimer">
+                                * Independent 3rd-party resource; Abrevia has no affiliation. Provided solely to facilitate meaningful compliance information.
+                            </span>
+                        </li>
+                        <li>
+                            <a href="https://thinkculturalhealth.hhs.gov" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-400" id="footerLinkHhsClas" title="HHS Think Cultural Health - Accredited cultural & linguistic competency e-learning programs">
+                                <span>🩺</span>
+                                <span id="footerLinkHhsClasText">HHS CLAS Training &amp; CE Credits</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 5: Platform & Utilities -->
                 <div class="space-y-2.5">
                     <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColPlatformHeader">Platform & Utilities</div>
                     <ul class="space-y-1.5 text-[11px]">
@@ -420,6 +433,8 @@
                 footerLinkPrivacy: 'Privacy Policy',
                 footerLinkDisclaimers: 'Legal Disclaimers',
                 footerLinkContact: 'Contact: info@mvhlsp.site',
+                footerColHipaaHeader: 'HIPAA & Training',
+                footerLinkHhsClasText: 'HHS CLAS Training & CE Credits',
                 footerColPlatformHeader: 'Platform & Utilities',
                 footerLinkShortcut: 'Add Shortcut',
                 footerStatusBadge: 'Platform Operational',
@@ -523,10 +538,12 @@
                 footerLinkPrivacy: 'Aviso de Privacidad',
                 footerLinkDisclaimers: 'Deslindes Legales',
                 footerLinkContact: 'Contacto: info@mvhlsp.site',
+                footerColHipaaHeader: 'HIPAA y Capacitación',
+                footerLinkHhsClasText: 'Capacitación CLAS del HHS y Créditos CE',
                 footerColPlatformHeader: 'Plataforma y Utilidades',
                 footerLinkShortcut: 'Agregar Atajo',
                 footerStatusBadge: 'Plataforma Operativa',
-                footerNonHipaaBadge: 'Herramienta Administrativa • No Médica',
+                footerNonHipaaBadge: '🛡️ Herramienta de Comunicación Compatible con HIPAA',
                 footerTitle6Badge: 'Listo para Título VI y OE 13166',
                 whoIsThisForHeroText: '¿Para quién es esta app? Título VI y Casos de Uso →',
                 footerLearnMore: '¿Para quién es esta app?',
@@ -713,6 +730,10 @@
             const ftCnt = document.getElementById('footerLinkContact');
             if (ftCnt && c.footerLinkContact) ftCnt.textContent = c.footerLinkContact;
             if (ftDsc && c.footerLinkDisclaimers) ftDsc.textContent = c.footerLinkDisclaimers;
+            const ftColH = document.getElementById('footerColHipaaHeader');
+            if (ftColH && c.footerColHipaaHeader) ftColH.textContent = c.footerColHipaaHeader;
+            const ftHhs = document.getElementById('footerLinkHhsClasText');
+            if (ftHhs && c.footerLinkHhsClasText) ftHhs.textContent = c.footerLinkHhsClasText;
             const ftCol3 = document.getElementById('footerColPlatformHeader');
             if (ftCol3 && c.footerColPlatformHeader) ftCol3.textContent = c.footerColPlatformHeader;
             const ftSho = document.getElementById('footerLinkShortcut');
