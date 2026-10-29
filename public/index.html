@@ -227,6 +227,18 @@
                             </a>
                         </li>
                         <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WORKING_WITH_INTERPRETERS.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300" id="footerLinkInterpretersGuide" title="Practical guide and free federal training resources for communicating with LEP individuals and working with interpreters">
+                                <span>🗣️</span>
+                                <span id="footerLinkInterpretersGuideText">Working with Interpreters &amp; LEP Guide</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.lep.gov" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-400" id="footerLinkLepGov" title="Official Federal Interagency Language Access Portal (DOJ / Civil Rights Division)">
+                                <span>🌐</span>
+                                <span>Federal LEP.gov Access Portal</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#-english-who-is-abrevia-for" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkTitle6">
                                 Title VI & EO 13166 Mandates
                             </a>
@@ -395,6 +407,7 @@
                 footerLinkWhoIsThis: 'Who is this app for?',
                 footerLinkSelfAssessment: 'Title VI Self-Assessment',
                 footerLinkHipaaTrainingText: 'Free HIPAA Training & Certificate (PDF)',
+                footerLinkInterpretersGuideText: 'Working with Interpreters & LEP Guide',
                 footerLinkTitle6: 'Title VI & EO 13166 Mandates',
                 footerLinkSectors: '7 Major Federal Sectors',
                 footerColLegalHeader: 'Legal & Transparency',
@@ -495,6 +508,7 @@
                 footerLinkWhoIsThis: '¿Para quién es esta app?',
                 footerLinkSelfAssessment: 'Autoevaluación de Título VI',
                 footerLinkHipaaTrainingText: 'Capacitación y Certificado HIPAA Gratis (PDF)',
+                footerLinkInterpretersGuideText: 'Guía: Trabajo con Intérpretes y Personas LEP',
                 footerLinkTitle6: 'Mandatos de Título VI y OE 13166',
                 footerLinkSectors: '7 Sectores Federales Principales',
                 footerColLegalHeader: 'Legalidad y Transparencia',
@@ -671,6 +685,8 @@
             if (ftSelf && c.footerLinkSelfAssessment) ftSelf.textContent = c.footerLinkSelfAssessment;
             const ftHipaa = document.getElementById('footerLinkHipaaTrainingText');
             if (ftHipaa && c.footerLinkHipaaTrainingText) ftHipaa.textContent = c.footerLinkHipaaTrainingText;
+            const ftInterp = document.getElementById('footerLinkInterpretersGuideText');
+            if (ftInterp && c.footerLinkInterpretersGuideText) ftInterp.textContent = c.footerLinkInterpretersGuideText;
             if (ftWho && c.footerLinkWhoIsThis) ftWho.textContent = c.footerLinkWhoIsThis;
             const ftT6 = document.getElementById('footerLinkTitle6');
             if (ftT6 && c.footerLinkTitle6) ftT6.textContent = c.footerLinkTitle6;
