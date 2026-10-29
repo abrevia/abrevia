@@ -16,7 +16,7 @@ Agents type in English or Spanish from a web operations dashboard, text is insta
 > * 📜 [**Terms of Service / Términos de Servicio**](TERMS_OF_SERVICE.md)
 > * 🛡️ [**Privacy Policy / Aviso de Privacidad**](PRIVACY_POLICY.md)
 > * ⚖️ [**Legal Disclaimers / Deslindes Legales**](DISCLAIMERS.md)
-> * 🔒 *Scope Notice: Abrevia is strictly an administrative operations tool and is non-medical / non-HIPAA.*
+> * 🛡️ *HIPAA & Title VI Scope: Abrevia supports healthcare and enterprise communications with pre-signed Business Associate Agreements (BAAs), AES-256 KMS hardware encryption at rest, and Title VI compliance.*
 
 ---
 

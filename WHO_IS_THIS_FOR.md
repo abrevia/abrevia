@@ -23,7 +23,7 @@
 
 A common misconception in regulatory compliance is confusing **Title VI** with healthcare-specific mandates such as **HIPAA** (Health Insurance Portability and Accountability Act) or **ACA Section 1557** (Affordable Care Act Non-Discrimination in Health Programs).
 
-* **HIPAA & ACA Section 1557** apply specifically to covered healthcare entities, health plans, clearinghouses, and clinical providers handling Protected Health Information (PHI). Abrevia is an administrative tool and is strictly non-medical / non-HIPAA.
+* **HIPAA & ACA Section 1557** apply specifically to covered healthcare entities, health plans, clearinghouses, and clinical providers handling Protected Health Information (PHI). Abrevia supports Covered Entities and healthcare providers with pre-signed HIPAA Business Associate Agreements (BAAs) and technical safeguards under 45 CFR § 164.504(e).
 * **Title VI of the Civil Rights Act of 1964 (42 U.S.C. § 2000d)** and **Executive Order 13166** (*"Improving Access to Services for Persons with Limited English Proficiency"*), by contrast, apply broadly to **any organization, program, agency, municipality, or entity that receives federal financial assistance**.
 
 > **The Federal Rule:** If an entity receives federal grants, loans, subsidies, tax-exempt municipal bonds, or contracts, it is **legally bound** to provide meaningful language access (interpreters and translation of vital materials) to **Limited English Proficient (LEP)** individuals. Failing to do so constitutes national origin discrimination under federal civil rights law.

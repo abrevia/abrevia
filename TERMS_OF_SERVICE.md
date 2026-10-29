@@ -20,8 +20,8 @@ Abrevia is a bilingual asynchronous communication technology and relay platform 
 
 ---
 
-### 2. Strictly Administrative & Non-Clinical Scope (Non-HIPAA)
-* **Non-Medical Use:** Abrevia is strictly an administrative and operational communication platform tailored for logistics, property management, field services, customer care, education, municipal, and Title VI language access compliance.
+### 2. HIPAA Compliance & Business Associate Framework
+* **HIPAA Compliance:** Abrevia provides HIPAA-compliant communication and translation safeguards under 45 CFR § 164.502(e) and § 164.504(e). Covered Entities can execute and download a standard pre-signed Business Associate Agreement (BAA) directly within the application menu. All persistent data is encrypted with AES-256 KMS hardware keys, and transmissions are secured via TLS 1.3.
 * **No PHI:** Abrevia is **NOT** a covered entity or business associate under the Health Insurance Portability and Accountability Act of 1996 (HIPAA). You agree **not** to transmit, ingest, or process Protected Health Information (PHI) or sensitive medical records through the Service.
 
 ---
