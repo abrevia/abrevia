@@ -665,6 +665,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         plan: plan,
+                        locale: 'en',
                         customerEmail: document.getElementById('inputEmail')?.value || undefined,
                         successUrl: window.location.origin + '/dashboard.html?billing=success',
                         cancelUrl: window.location.origin + '/index.html?billing=canceled'

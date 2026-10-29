@@ -304,7 +304,7 @@
 
     <!-- Billing & Subscription Modal (Stripe) -->
     <div id="billingModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl text-left relative">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl text-left relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeBillingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg font-bold p-1">
                 &times;
             </button>
@@ -362,14 +362,66 @@
                     </button>
                 </div>
 
-                <!-- Top Up Credits Option -->
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex items-center justify-between hover:border-slate-700 transition">
+                <!-- Pay-As-You-Go Message Packs Header -->
+                <div class="pt-2 pb-1 flex items-center justify-between">
+                    <span id="packsSectionTitle" class="text-xs font-bold text-slate-300 uppercase tracking-wider">Pay-As-You-Go Message Packs</span>
+                    <span id="packsSectionBadge" class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-semibold">Never Expires</span>
+                </div>
+
+                <!-- 100 Messages ($5 USD) -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between hover:border-slate-700 transition">
                     <div>
-                        <div class="text-xs font-semibold text-white">500 Message Pack</div>
-                        <div class="text-[11px] text-slate-400">$20 one-time • Real-time AI translation</div>
+                        <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                            <span id="pack5Title">100 Messages</span>
+                            <span class="text-[9px] bg-slate-800 text-slate-300 font-bold px-1.5 py-0.2 rounded">$5 USD</span>
+                        </div>
+                        <div id="pack5Sub" class="text-[11px] text-slate-400">Everything in Pro • Never expires</div>
                     </div>
-                    <button onclick="triggerCheckout('credits')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
-                        Top Up
+                    <button onclick="triggerCheckout('pack_5')" class="bg-slate-800 hover:bg-brand-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
+                        <span id="pack5BtnText">$5 USD</span>
+                    </button>
+                </div>
+
+                <!-- 250 Messages ($10 USD) -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between hover:border-slate-700 transition">
+                    <div>
+                        <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                            <span id="pack10Title">250 Messages</span>
+                            <span class="text-[9px] bg-slate-800 text-slate-300 font-bold px-1.5 py-0.2 rounded">$10 USD</span>
+                        </div>
+                        <div id="pack10Sub" class="text-[11px] text-slate-400">Everything in Pro • Never expires</div>
+                    </div>
+                    <button onclick="triggerCheckout('pack_10')" class="bg-slate-800 hover:bg-brand-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
+                        <span id="pack10BtnText">$10 USD</span>
+                    </button>
+                </div>
+
+                <!-- 500 Messages ($20 USD) -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between hover:border-slate-700 transition">
+                    <div>
+                        <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                            <span id="pack20Title">500 Messages</span>
+                            <span class="text-[9px] bg-slate-800 text-slate-300 font-bold px-1.5 py-0.2 rounded">$20 USD</span>
+                        </div>
+                        <div id="pack20Sub" class="text-[11px] text-slate-400">Everything in Pro • Never expires</div>
+                    </div>
+                    <button onclick="triggerCheckout('pack_20')" class="bg-slate-800 hover:bg-brand-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
+                        <span id="pack20BtnText">$20 USD</span>
+                    </button>
+                </div>
+
+                <!-- 1,000 Messages ($30 USD) -->
+                <div class="bg-slate-950 border border-emerald-500/30 rounded-xl p-3 flex items-center justify-between hover:border-emerald-500/60 transition">
+                    <div>
+                        <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                            <span id="pack30Title">1,000 Messages</span>
+                            <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.2 rounded">$30 USD</span>
+                            <span id="pack30Badge" class="text-[9px] bg-brand-600 text-white font-bold px-1.5 py-0.2 rounded">BEST VALUE</span>
+                        </div>
+                        <div id="pack30Sub" class="text-[11px] text-slate-400">Everything in Pro • Never expires</div>
+                    </div>
+                    <button onclick="triggerCheckout('pack_30')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
+                        <span id="pack30BtnText">$30 USD</span>
                     </button>
                 </div>
 

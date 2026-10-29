@@ -1,5 +1,20 @@
-// Abrevia 1 — Stripe Checkout Session Handler
-import Stripe from 'stripe';
+// Abrevia — Stripe Checkout Session Handler
+const PACK_PAYMENT_LINKS = {
+    'pack_5': 'https://buy.stripe.com/6oU5kDf5U7sh57S9GI8Vi09?locale=en',
+    'pack_10': 'https://buy.stripe.com/dRm14n6zo13T1VGbOQ8Vi0a?locale=en',
+    'pack_20': 'https://buy.stripe.com/3cI7sL4rg6odcAk1ac8Vi0b?locale=en',
+    'pack_30': 'https://buy.stripe.com/4gMaEX3nccMBfMwg568Vi0c?locale=en',
+    'credits': 'https://buy.stripe.com/3cI7sL4rg6odcAk1ac8Vi0b?locale=en',
+    'pro': 'https://buy.stripe.com/5kQ6oHe1Q8wlcAk7yA8Vi08?locale=en'
+};
+
+const PACK_PRICES = {
+    'pack_5': { priceId: 'price_1UVkKwE1uOSjePxYn7i9ZYyB', amount: 500, name: '100 Messages Pack', count: 100 },
+    'pack_10': { priceId: 'price_1UVkKxE1uOSjePxYPxoBSkuS', amount: 1000, name: '250 Messages Pack', count: 250 },
+    'pack_20': { priceId: 'price_1UVkKyE1uOSjePxYd6u4bkdK', amount: 2000, name: '500 Messages Pack', count: 500 },
+    'pack_30': { priceId: 'price_1UVkKzE1uOSjePxYPu0z4k5N', amount: 3000, name: '1,000 Messages Pack', count: 1000 },
+    'credits': { priceId: 'price_1UVkKyE1uOSjePxYd6u4bkdK', amount: 2000, name: '500 Messages Pack', count: 500 }
+};
 
 export default async function handler(req, res) {
     // CORS headers
@@ -16,8 +31,7 @@ export default async function handler(req, res) {
     }
 
     const stripeKey = process.env.STRIPE_SECRET_KEY;
-    const paymentLinkPro = process.env.STRIPE_PAYMENT_LINK_PRO || 'https://buy.stripe.com/5kQ6oHe1Q8wlcAk7yA8Vi08';
-    const { plan = 'pro', customerEmail, successUrl, cancelUrl } = req.body || {};
+    const { plan = 'pro', customerEmail, successUrl, cancelUrl, locale = 'en' } = req.body || {};
 
     const host = req.headers.host || 'abrevia-beta.vercel.app';
     const protocol = host.includes('localhost') ? 'http' : 'https';
@@ -25,14 +39,16 @@ export default async function handler(req, res) {
     const defaultCancelUrl = `${protocol}://${host}/dashboard.html?billing=canceled`;
 
     // Direct fallback if user provided a Stripe Payment Link
-    if (plan === 'payment_link' && paymentLinkPro) {
-        return res.status(200).json({ url: paymentLinkPro });
+    if (plan === 'payment_link' && PACK_PAYMENT_LINKS.pro) {
+        return res.status(200).json({ url: PACK_PAYMENT_LINKS.pro });
     }
 
+    // Direct fallback payment link
+    const directLink = PACK_PAYMENT_LINKS[plan] || PACK_PAYMENT_LINKS.pro;
+
     if (!stripeKey) {
-        // Graceful fallback if Stripe key is not yet configured in environment variables
-        if (paymentLinkPro) {
-            return res.status(200).json({ url: paymentLinkPro });
+        if (directLink) {
+            return res.status(200).json({ url: directLink });
         }
         return res.status(400).json({
             error: 'Stripe API key (STRIPE_SECRET_KEY) is not yet configured in environment variables.',
@@ -41,75 +57,62 @@ export default async function handler(req, res) {
     }
 
     try {
-        const stripe = new Stripe(stripeKey, {
-            apiVersion: '2024-12-18.acacia'
-        });
+        const body = new URLSearchParams();
+        body.append('success_url', successUrl || defaultSuccessUrl);
+        body.append('cancel_url', cancelUrl || defaultCancelUrl);
+        body.append('locale', locale || 'en'); // Explicit English display
+        body.append('allow_promotion_codes', 'true');
+        body.append('billing_address_collection', 'auto');
+        body.append('metadata[app]', 'abrevia');
+        body.append('metadata[plan]', plan);
+        if (customerEmail) body.append('customer_email', customerEmail);
 
-        let sessionConfig = {
-            payment_method_types: ['card'],
-            billing_address_collection: 'auto',
-            success_url: successUrl || defaultSuccessUrl,
-            cancel_url: cancelUrl || defaultCancelUrl,
-            customer_email: customerEmail || undefined,
-            allow_promotion_codes: true,
-            metadata: {
-                app: 'abrevia-1',
-                plan: plan
-            }
-        };
-
-        if (plan === 'credits') {
-            // One-time payment: 500 SMS Credit Pack ($20 USD)
-            if (process.env.STRIPE_CREDITS_PRICE_ID) {
-                sessionConfig.line_items = [{
-                    price: process.env.STRIPE_CREDITS_PRICE_ID,
-                    quantity: 1
-                }];
-            } else {
-                sessionConfig.line_items = [{
-                    price_data: {
-                        currency: 'usd',
-                        product_data: {
-                            name: 'Abrevia 500 SMS Relay Credit Pack',
-                            description: '500 Bilingual SMS messages with real-time Gemini AI translation & Human-in-the-loop review.'
-                        },
-                        unit_amount: 2000 // $20.00 USD
-                    },
-                    quantity: 1
-                }];
-            }
-            sessionConfig.mode = 'payment';
+        if (PACK_PRICES[plan]) {
+            const pack = PACK_PRICES[plan];
+            body.append('mode', 'payment');
+            body.append('line_items[0][price]', pack.priceId);
+            body.append('line_items[0][quantity]', '1');
+            body.append('metadata[messageCount]', String(pack.count));
         } else {
-            // Monthly Subscription: Operations Pro ($49/mo)
+            // Subscription: Operations Pro ($49/mo)
+            body.append('mode', 'subscription');
             if (process.env.STRIPE_MONTHLY_PRICE_ID) {
-                sessionConfig.line_items = [{
-                    price: process.env.STRIPE_MONTHLY_PRICE_ID,
-                    quantity: 1
-                }];
+                body.append('line_items[0][price]', process.env.STRIPE_MONTHLY_PRICE_ID);
             } else {
-                sessionConfig.line_items = [{
-                    price_data: {
-                        currency: 'usd',
-                        product_data: {
-                            name: 'Abrevia Operations Pro',
-                            description: 'Unlimited bilingual SMS relay, Human-in-the-loop review, MMS attachments & persistent latent channels.'
-                        },
-                        unit_amount: 4900, // $49.00 USD / month
-                        recurring: {
-                            interval: 'month'
-                        }
-                    },
-                    quantity: 1
-                }];
+                body.append('line_items[0][price_data][currency]', 'usd');
+                body.append('line_items[0][price_data][unit_amount]', '4900');
+                body.append('line_items[0][price_data][recurring][interval]', 'month');
+                body.append('line_items[0][price_data][product_data][name]', 'Abrevia Operations Pro');
+                body.append('line_items[0][price_data][product_data][description]', 'Unlimited bilingual SMS relay, Human-in-the-loop review, MMS attachments & persistent latent channels.');
             }
-            sessionConfig.mode = 'subscription';
+            body.append('line_items[0][quantity]', '1');
         }
 
-        const session = await stripe.checkout.sessions.create(sessionConfig);
-        return res.status(200).json({ url: session.url, sessionId: session.id });
+        const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${stripeKey}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: body.toString()
+        });
+
+        const data = await stripeRes.json();
+        if (data.url) {
+            return res.status(200).json({ url: data.url, sessionId: data.id });
+        } else {
+            console.error('Stripe session create error, using direct link:', data.error);
+            if (directLink) {
+                return res.status(200).json({ url: directLink });
+            }
+            return res.status(500).json({ error: data.error?.message || 'Failed to create checkout session' });
+        }
 
     } catch (err) {
-        console.error('Stripe Checkout Error:', err.message);
+        console.error('Stripe Checkout Error, falling back to direct payment link:', err.message);
+        if (directLink) {
+            return res.status(200).json({ url: directLink });
+        }
         return res.status(500).json({ error: err.message });
     }
 }

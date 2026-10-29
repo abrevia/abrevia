@@ -117,7 +117,31 @@ const I18N = {
         interpreterCancelBtn: 'Cancel',
         interpreterConfirmBtnText: 'Request Interpreter Now',
         interpreterActiveNotice: '✓ Live Interpreter Requested: Connecting with accredited LSP specialist...',
-        interpreterCancelledNotice: 'Live interpreter request cancelled.'
+        interpreterCancelledNotice: 'Live interpreter request cancelled.',
+        billingModalTitle: 'Billing & Message Packs',
+        billingModalDesc: 'Manage your subscription, activate Operations Pro, or buy pay-as-you-go message packs via Stripe.',
+        billingCommunityTitle: 'Community & Non-Profit',
+        billingCommunityBadge: 'FREE FOREVER',
+        billingCommunitySub: '$0 • Up to 500 messages/mo for community & non-profit organizations',
+        billingProTitle: 'Operations Pro',
+        billingProBadge: 'BUSINESS & ORGS',
+        billingProSub: '$49/month • Unlimited relay, proofreading & managed intake options',
+        billingProBtn: 'Subscribe',
+        packsSectionTitle: 'Pay-As-You-Go Message Packs',
+        packsSectionBadge: 'Never Expires',
+        pack5Title: '100 Messages',
+        pack5Sub: 'Everything in Pro • Never expires',
+        pack10Title: '250 Messages',
+        pack10Sub: 'Everything in Pro • Never expires',
+        pack20Title: '500 Messages',
+        pack20Sub: 'Everything in Pro • Never expires',
+        pack30Title: '1,000 Messages',
+        pack30Sub: 'Everything in Pro • Never expires',
+        pack30Badge: 'BEST VALUE',
+        billingPortalTitle: 'Stripe Customer Portal',
+        billingPortalSub: 'View past invoices, update cards or cancel',
+        billingPortalBtn: 'Manage →',
+        billingCloseBtn: 'Close'
     },
     es: {
         consoleBadge: 'Estado de Consola',
@@ -229,7 +253,31 @@ const I18N = {
         interpreterCancelBtn: 'Cancelar',
         interpreterConfirmBtnText: 'Solicitar Intérprete Ahora',
         interpreterActiveNotice: '✓ Intérprete en Vivo Solicitado: Conectando con especialista acreditado de LSP...',
-        interpreterCancelledNotice: 'Solicitud de intérprete en vivo cancelada.'
+        interpreterCancelledNotice: 'Solicitud de intérprete en vivo cancelada.',
+        billingModalTitle: 'Facturación y Paquetes de Mensajes',
+        billingModalDesc: 'Administre su suscripción, active Operaciones Pro o adquiera paquetes de mensajes de pago por uso mediante Stripe.',
+        billingCommunityTitle: 'Comunidad y Sin Fines de Lucro',
+        billingCommunityBadge: 'GRATIS SIEMPRE',
+        billingCommunitySub: '$0 • Hasta 500 mensajes/mes para organizaciones comunitarias y sin fines de lucro',
+        billingProTitle: 'Operaciones Pro',
+        billingProBadge: 'EMPRESAS Y ORGS',
+        billingProSub: '$49/mes • Relevo ilimitado, revisión previa y opciones de recepción gestionada',
+        billingProBtn: 'Suscribirse',
+        packsSectionTitle: 'Paquetes de Mensajes de Pago por Uso',
+        packsSectionBadge: 'Nunca Vencen',
+        pack5Title: '100 Mensajes',
+        pack5Sub: 'Todo incluido en Pro • Nunca vencen',
+        pack10Title: '250 Mensajes',
+        pack10Sub: 'Todo incluido en Pro • Nunca vencen',
+        pack20Title: '500 Mensajes',
+        pack20Sub: 'Todo incluido en Pro • Nunca vencen',
+        pack30Title: '1.000 Mensajes',
+        pack30Sub: 'Todo incluido en Pro • Nunca vencen',
+        pack30Badge: 'MEJOR VALOR',
+        billingPortalTitle: 'Portal de Clientes de Stripe',
+        billingPortalSub: 'Ver facturas anteriores, actualizar tarjetas o cancelar',
+        billingPortalBtn: 'Administrar →',
+        billingCloseBtn: 'Cerrar'
     }
 };
 
@@ -1155,6 +1203,30 @@ function applyDashboardLocalization() {
     const liConfirmBtn = document.getElementById('interpreterConfirmBtnText');
     if (liConfirmBtn) liConfirmBtn.textContent = t.interpreterConfirmBtnText;
     updateLiveInterpreterUI();
+
+    // Message Packs Localization
+    const pSecTitle = document.getElementById('packsSectionTitle');
+    if (pSecTitle) pSecTitle.textContent = t.packsSectionTitle || 'Pay-As-You-Go Message Packs';
+    const pSecBadge = document.getElementById('packsSectionBadge');
+    if (pSecBadge) pSecBadge.textContent = t.packsSectionBadge || 'Never Expires';
+    const p5T = document.getElementById('pack5Title');
+    if (p5T) p5T.textContent = t.pack5Title || '100 Messages';
+    const p5S = document.getElementById('pack5Sub');
+    if (p5S) p5S.textContent = t.pack5Sub || 'Everything in Pro • Never expires';
+    const p10T = document.getElementById('pack10Title');
+    if (p10T) p10T.textContent = t.pack10Title || '250 Messages';
+    const p10S = document.getElementById('pack10Sub');
+    if (p10S) p10S.textContent = t.pack10Sub || 'Everything in Pro • Never expires';
+    const p20T = document.getElementById('pack20Title');
+    if (p20T) p20T.textContent = t.pack20Title || '500 Messages';
+    const p20S = document.getElementById('pack20Sub');
+    if (p20S) p20S.textContent = t.pack20Sub || 'Everything in Pro • Never expires';
+    const p30T = document.getElementById('pack30Title');
+    if (p30T) p30T.textContent = t.pack30Title || '1,000 Messages';
+    const p30S = document.getElementById('pack30Sub');
+    if (p30S) p30S.textContent = t.pack30Sub || 'Everything in Pro • Never expires';
+    const p30B = document.getElementById('pack30Badge');
+    if (p30B) p30B.textContent = t.pack30Badge || 'BEST VALUE';
 }
 
 // Toggle Proofread Translated Message Mode (Human-In-The-Loop) — Paid Tier feature
@@ -2622,6 +2694,7 @@ async function triggerCheckout(plan) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 plan: plan,
+                locale: 'en',
                 successUrl: window.location.origin + '/dashboard.html?billing=success',
                 cancelUrl: window.location.origin + '/dashboard.html?billing=canceled'
             })
