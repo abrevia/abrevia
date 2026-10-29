@@ -10,7 +10,7 @@ Abrevia is a zero-download bilingual (English/Spanish) communication technology 
 
 Agents type in English or Spanish from a web operations dashboard, text is instantly translated in two directions via Google Gemini with Human-In-The-Loop (HITL) pre-send review, and delivered directly to the citizen/customer via standard cellular SMS or mobile web with zero app downloads.
 
-> 🏛️ **Title VI & Legal Compliance Dossiers:**  
+> 🏛️ **Title VI & Legal Compliance Dossiers:** (Contact: 📧 [info@mvhlsp.site](mailto:info@mvhlsp.site))  
 > * 📋 [**Official Title VI Compliance Self-Assessment & DOJ 4-Factor Audit**](TITLE_VI_SELF_ASSESSMENT.md)
 > * 🏛️ [**Sector Guide: Who is this app for? (Education, Courts, Transit, HUD, Police, FEMA)**](WHO_IS_THIS_FOR.md)
 > * 📜 [**Terms of Service / Términos de Servicio**](TERMS_OF_SERVICE.md)

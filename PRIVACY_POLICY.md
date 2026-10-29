@@ -56,7 +56,7 @@ We partner with specialized infrastructure providers to deliver reliable cellula
 
 ### 6. Contact & Data Inquiries
 If you have questions regarding this Privacy Policy or wish to request data deletion, contact us at:  
-📧 **privacy@abrevia.app** • 🌐 [abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)
+📧 **info@mvhlsp.site** • 🌐 [abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)
 
 ---
 ---
@@ -111,4 +111,4 @@ Trabajamos con proveedores de primer nivel técnico:
 
 ### 6. Contacto y Derechos de Privacidad
 Para cualquier consulta o solicitud sobre sus datos personales:  
-📧 **privacy@abrevia.app** • 🌐 [abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)
+📧 **info@mvhlsp.site** • 🌐 [abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)

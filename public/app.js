@@ -176,6 +176,7 @@ const I18N = {
         statusLinkTerms: 'Terms of Service',
         statusLinkPrivacy: 'Privacy Policy',
         statusLinkDisclaimers: 'Disclaimers',
+        statusLinkContact: 'Contact: info@mvhlsp.site',
         testSmsCardTitle: 'Send Test SMS to My Phone',
         testSmsCardDesc: 'Enter your personal mobile number to receive a live SMS containing the Abrevia zero-download link.',
         sendTestSmsBtnText: 'Send SMS',
@@ -358,6 +359,7 @@ const I18N = {
         statusLinkTerms: 'Términos de Servicio',
         statusLinkPrivacy: 'Aviso de Privacidad',
         statusLinkDisclaimers: 'Deslindes Legales',
+        statusLinkContact: 'Contacto: info@mvhlsp.site',
         testSmsCardTitle: 'Enviar SMS de Prueba a Mi Celular',
         testSmsCardDesc: 'Ingrese su número celular para recibir un SMS en vivo con el enlace de Abrevia sin descargas.',
         sendTestSmsBtnText: 'Enviar SMS',
@@ -1402,6 +1404,8 @@ function applyDashboardLocalization() {
     const stPrv = document.getElementById('statusLinkPrivacy');
     if (stPrv && t.statusLinkPrivacy) stPrv.textContent = t.statusLinkPrivacy;
     const stDsc = document.getElementById('statusLinkDisclaimers');
+    const stCnt = document.getElementById('statusLinkContact');
+    if (stCnt && t.statusLinkContact) stCnt.textContent = t.statusLinkContact;
     if (stDsc && t.statusLinkDisclaimers) stDsc.textContent = t.statusLinkDisclaimers;
     const tSmsT = document.getElementById('testSmsCardTitle');
     if (tSmsT && t.testSmsCardTitle) tSmsT.textContent = t.testSmsCardTitle;

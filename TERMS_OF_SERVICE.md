@@ -60,7 +60,7 @@ TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SERVICE IS PROVIDED "AS IS" AND "AS 
 
 ### 8. Governing Law & Contact
 These Terms are governed by the laws of the State of Delaware and applicable United States federal law. For questions regarding these Terms, contact us at:  
-📧 **support@abrevia.app** • 🌐 [abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)
+📧 **info@mvhlsp.site** • 🌐 [abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)
 
 ---
 ---
@@ -119,4 +119,4 @@ EN LA MEDIDA MÁXIMA PERMITIDA POR LA LEY, EL SERVICIO SE ENTREGA "TAL CUAL" Y "
 
 ### 8. Ley Aplicable y Contacto
 Estos Términos se rigen por las leyes del Estado de Delaware y las leyes federales de los Estados Unidos. Para consultas legales:  
-📧 **support@abrevia.app** • 🌐 [abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)
+📧 **info@mvhlsp.site** • 🌐 [abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)

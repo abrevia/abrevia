@@ -136,6 +136,9 @@ Beyond federal Title VI compliance, Abrevia serves high-velocity commercial oper
 2. **📑 Auditable Bilingual Trails:** Immutable logs with timestamps, original source text, and translation outputs ready for federal civil rights audits.
 3. **🛡️ Human Oversight (HITL):** Built-in review buffers allowing operators to verify sensitive or legal messages before transmission, plus escalation to certified LSP human interpreters.
 
+
+*For institutional inquiries, corporate agreements, or implementation support: 📧 [info@mvhlsp.site](mailto:info@mvhlsp.site) • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*
+
 ---
 ---
 
@@ -266,4 +269,4 @@ Además del cumplimiento del Título VI, Abrevia potencia operaciones comerciale
 
 ---
 
-*Para consultas institucionales, acuerdos corporativos o soporte de implementación, visite [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app).*
+*Para consultas institucionales, acuerdos corporativos o soporte de implementación: 📧 **info@mvhlsp.site** • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app).*

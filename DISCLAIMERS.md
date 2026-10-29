@@ -21,6 +21,9 @@ Abrevia provides zero-download SMS communication tools and immutable audit recor
 ### 4. Carrier Deliverability & Third-Party Telecommunications
 SMS delivery relies on underlying commercial cellular networks and gateway hardware. Message delivery times and receipt may be affected by carrier network congestion, recipient device availability, cellular signal coverage, or local telecommunications regulations.
 
+
+*For legal and compliance inquiries: 📧 [info@mvhlsp.site](mailto:info@mvhlsp.site) • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*
+
 ---
 ---
 
@@ -38,3 +41,6 @@ Abrevia proporciona herramientas técnicas sin descargas y bitácoras inmutables
 
 ### 4. Redes Celulares y Entrega de Mensajes
 La entrega de mensajes de texto SMS depende de las redes de telefonía celular y pasarelas de comunicación. La velocidad y confirmación de recepción pueden verse condicionadas por la cobertura de señal, congestión de antenas o políticas de los operadores telefónicos.
+
+
+*Para consultas legales y regulatorias: 📧 **info@mvhlsp.site** • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*

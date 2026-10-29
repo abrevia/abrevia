@@ -94,6 +94,9 @@ Federally funded organizations deploying Abrevia satisfy all five core complianc
 - [x] **4. Zero Digital Barrier:** Operates via standard SMS without requiring app store downloads, logins, or fees from the citizen.
 - [x] **5. Immutable Compliance Documentation:** Complete bilingual logs ready for civil rights audits.
 
+
+*For compliance inquiries, institutional agreements, or Title VI documentation support: 📧 [info@mvhlsp.site](mailto:info@mvhlsp.site) • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*
+
 ---
 ---
 
@@ -142,4 +145,4 @@ Abrevia conserva un registro inmutable con fecha y hora UTC, transcripción bili
 
 ---
 
-*Para consultas legales o acuerdos institucionales de cumplimiento: [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*
+*Para consultas legales o acuerdos institucionales de cumplimiento: 📧 **info@mvhlsp.site** • [https://abrevia-beta.vercel.app](https://abrevia-beta.vercel.app)*

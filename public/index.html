@@ -292,6 +292,12 @@
                                 <span id="footerLinkDisclaimers">Legal Disclaimers</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="mailto:info@mvhlsp.site" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>📧</span>
+                                <span id="footerLinkContact">Contact: info@mvhlsp.site</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -424,6 +430,7 @@
                 footerLinkTerms: 'Terms of Service',
                 footerLinkPrivacy: 'Privacy Policy',
                 footerLinkDisclaimers: 'Legal Disclaimers',
+                footerLinkContact: 'Contact: info@mvhlsp.site',
                 footerColPlatformHeader: 'Platform & Utilities',
                 footerLinkShortcut: 'Add Shortcut',
                 footerStatusBadge: 'Platform Operational',
@@ -522,6 +529,7 @@
                 footerLinkTerms: 'Términos de Servicio',
                 footerLinkPrivacy: 'Aviso de Privacidad',
                 footerLinkDisclaimers: 'Deslindes Legales',
+                footerLinkContact: 'Contacto: info@mvhlsp.site',
                 footerColPlatformHeader: 'Plataforma y Utilidades',
                 footerLinkShortcut: 'Agregar Atajo',
                 footerStatusBadge: 'Plataforma Operativa',
@@ -700,6 +708,8 @@
             const ftPrv = document.getElementById('footerLinkPrivacy');
             if (ftPrv && c.footerLinkPrivacy) ftPrv.textContent = c.footerLinkPrivacy;
             const ftDsc = document.getElementById('footerLinkDisclaimers');
+            const ftCnt = document.getElementById('footerLinkContact');
+            if (ftCnt && c.footerLinkContact) ftCnt.textContent = c.footerLinkContact;
             if (ftDsc && c.footerLinkDisclaimers) ftDsc.textContent = c.footerLinkDisclaimers;
             const ftCol3 = document.getElementById('footerColPlatformHeader');
             if (ftCol3 && c.footerColPlatformHeader) ftCol3.textContent = c.footerColPlatformHeader;
