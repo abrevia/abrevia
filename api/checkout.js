@@ -119,7 +119,7 @@ export default async function handler(req, res) {
                 body.append('line_items[0][price_data][unit_amount]', '4900');
                 body.append('line_items[0][price_data][recurring][interval]', 'month');
                 body.append('line_items[0][price_data][product_data][name]', 'Abrevia Operations Pro');
-                body.append('line_items[0][price_data][product_data][description]', 'Unlimited bilingual SMS relay, Human-in-the-loop review, MMS attachments & persistent latent channels.');
+                body.append('line_items[0][price_data][product_data][description]', 'Unlimited two-way bilingual WhatsApp & message relay, Title VI audit logging, and pre-signed HIPAA BAA.');
             }
             body.append('line_items[0][quantity]', '1');
         }

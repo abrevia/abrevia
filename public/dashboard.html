@@ -277,7 +277,7 @@
     </div>
 
     <!-- Billing & Subscription Modal (Stripe) -->
-    <div id="billingModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div id="billingModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl text-left relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeBillingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg font-bold p-1">
                 &times;
@@ -323,17 +323,48 @@
                 </div>
 
                 <!-- Monthly Subscription Option (Business & Organizations) -->
-                <div class="bg-slate-950 border border-brand-500/40 rounded-xl p-3.5 flex items-center justify-between hover:border-brand-500 transition">
-                    <div>
-                        <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
-                            <span>Operations Pro</span>
-                            <span class="text-[9px] bg-brand-600 text-white font-bold px-1.5 py-0.2 rounded-full">BUSINESS & ORGS</span>
+                <div class="bg-slate-950 border border-brand-500/50 rounded-2xl p-4 space-y-3 shadow-lg shadow-brand-500/5">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <div class="text-xs font-bold text-white flex items-center space-x-2">
+                                <span class="text-sm">⚡</span>
+                                <span>Operations Pro</span>
+                                <span class="text-[9px] bg-brand-600 text-white font-bold px-2 py-0.5 rounded-full">BUSINESS &amp; HEALTHCARE</span>
+                            </div>
+                            <div class="text-xs text-brand-300 font-semibold mt-1">
+                                $49 / month
+                            </div>
+                            <div class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                                Unlimited automated bilingual WhatsApp &amp; message relay, pre-signed HIPAA BAA, Title VI compliance logging &amp; contact directory.
+                            </div>
                         </div>
-                        <div class="text-[11px] text-slate-400">$49/month • Unlimited relay, translation & certified interpreter access</div>
+                        <button onclick="triggerCheckout('pro')" class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-md shadow-brand-600/30 shrink-0 cursor-pointer">
+                            <span>Subscribe</span>
+                        </button>
                     </div>
-                    <button onclick="triggerCheckout('pro')" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shrink-0">
-                        Subscribe
-                    </button>
+
+                    <!-- Cancel Anytime Trust Micro-Copy -->
+                    <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[10px] text-slate-400 gap-y-1">
+                        <span class="flex items-center space-x-1 text-emerald-400 font-medium">
+                            <span>✓</span>
+                            <span>Cancel anytime</span>
+                        </span>
+                        <span class="hidden sm:inline">•</span>
+                        <span>No fixed commitments</span>
+                        <span class="hidden sm:inline">•</span>
+                        <span>Zero cancellation fees</span>
+                    </div>
+                </div>
+
+                <!-- Live Certified Interpreter Clarification Box -->
+                <div class="bg-indigo-950/30 border border-indigo-500/30 rounded-xl p-3 text-[11px] text-indigo-200/90 space-y-1">
+                    <div class="font-bold text-indigo-300 flex items-center space-x-1.5">
+                        <span>🎧</span>
+                        <span>On-Demand Certified Live Human Interpreter Gateway</span>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed text-[11px]">
+                        Certified medical &amp; court human interpreters (OPI/VRI) are dispatched on demand and <strong>billed separately per minute</strong> at accredited partner rates (~$1.95 – $2.50/min). No subscription markups.
+                    </p>
                 </div>
 
                 <!-- Pay-As-You-Go Message Packs Header -->
@@ -1431,7 +1462,7 @@ Responda ALTO para no recibir más mensajes.</div>
 
 
     <!-- Dedicated HIPAA Compliance & Pre-Signed BAA Modal -->
-    <div id="hipaaBaaModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+    <div id="hipaaBaaModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-5 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full flex flex-col shadow-2xl relative overflow-hidden max-h-[92vh]">
             
             <!-- Modal Header -->

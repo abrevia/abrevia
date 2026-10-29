@@ -1101,6 +1101,7 @@ function updateSenderProfileUI() {
 }
 
 function openSenderProfileModal() {
+    closeSettingsModal();
     const orgInput = document.getElementById('profileOrgInput');
     const userInput = document.getElementById('profileUserInput');
     const linkRadio = document.getElementById('dispatchModeLink');
@@ -3164,7 +3165,9 @@ window.runDiagnosticPingTest = runDiagnosticPingTest;
 
 // --- Stripe Billing Integration ---
 function openBillingModal() {
-    document.getElementById('billingModal')?.classList.remove('hidden');
+    closeSettingsModal();
+    const modal = document.getElementById('billingModal');
+    if (modal) modal.classList.remove('hidden');
 }
 
 function closeBillingModal() {
@@ -3611,6 +3614,7 @@ function applyEncryptionProofLocalization() {
 // =========================================================================
 
 function openHipaaBaaModal() {
+    closeSettingsModal();
     const modal = document.getElementById('hipaaBaaModal');
     if (modal) {
         modal.classList.remove('hidden');
