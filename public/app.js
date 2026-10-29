@@ -179,9 +179,9 @@ const I18N = {
         statusLinkPrivacy: 'Privacy Policy',
         statusLinkDisclaimers: 'Disclaimers',
         statusLinkContact: 'Contact: info@mvhlsp.site',
-        testSmsCardTitle: 'Send Test SMS to My Phone',
-        testSmsCardDesc: 'Enter your personal mobile number to receive a live SMS containing the Abrevia zero-download link.',
-        sendTestSmsBtnText: 'Send SMS',
+        testSmsCardTitle: 'Send Test Message to My Phone',
+        testSmsCardDesc: 'Enter your personal mobile number to receive a live test message containing the Abrevia zero-download link.',
+        sendTestSmsBtnText: 'Send Test Message',
         signOut: 'Sign Out',
         sidebarTitle: 'Conversations',
         contactsBtn: 'Contacts',
@@ -362,9 +362,9 @@ const I18N = {
         statusLinkPrivacy: 'Aviso de Privacidad',
         statusLinkDisclaimers: 'Deslindes Legales',
         statusLinkContact: 'Contacto: info@mvhlsp.site',
-        testSmsCardTitle: 'Enviar SMS de Prueba a Mi Celular',
-        testSmsCardDesc: 'Ingrese su número celular para recibir un SMS en vivo con el enlace de Abrevia sin descargas.',
-        sendTestSmsBtnText: 'Enviar SMS',
+        testSmsCardTitle: 'Enviar Mensaje de Prueba a Mi Celular',
+        testSmsCardDesc: 'Ingrese su número celular para recibir un mensaje de prueba en vivo con el enlace de Abrevia sin descargas.',
+        sendTestSmsBtnText: 'Enviar Mensaje',
         signOut: 'Cerrar Sesión',
         sidebarTitle: 'Conversaciones',
         contactsBtn: 'Contactos',
@@ -3497,7 +3497,7 @@ async function dispatchTestSmsToSelf() {
     if (btnText) btnText.textContent = isEs ? 'Enviando...' : 'Sending...';
     if (feedback) {
         feedback.className = 'text-[10px] mt-1 text-slate-400 block';
-        feedback.textContent = isEs ? 'Despachando SMS de prueba vía pasarela celular...' : 'Dispatching test SMS via cellular gateway...';
+        feedback.textContent = isEs ? 'Despachando mensaje de prueba vía pasarela celular...' : 'Dispatching test message via cellular gateway...';
         feedback.classList.remove('hidden');
     }
 
@@ -3527,14 +3527,14 @@ async function dispatchTestSmsToSelf() {
             if (feedback) {
                 feedback.className = 'text-[10px] mt-1 text-emerald-400 font-semibold block';
                 feedback.textContent = isEs 
-                    ? `✅ ¡SMS despachado con éxito vía ${data.provider}! Revise los mensajes de texto de su teléfono.`
-                    : `✅ SMS dispatched successfully via ${data.provider}! Check your mobile text inbox now.`;
+                    ? `✅ ¡Mensaje despachado con éxito vía ${data.provider}! Revise la bandeja de entrada de su teléfono.`
+                    : `✅ Message dispatched successfully via ${data.provider}! Check your mobile text inbox now.`;
                 feedback.classList.remove('hidden');
             }
         } else {
             if (feedback) {
                 feedback.className = 'text-[10px] mt-1 text-red-400 font-medium block';
-                feedback.textContent = `⚠️ Error: ${data.error || 'No se pudo enviar el SMS'}`;
+                feedback.textContent = `⚠️ Error: ${data.error || 'No se pudo enviar el mensaje'}`;
                 feedback.classList.remove('hidden');
             }
         }
@@ -3777,7 +3777,7 @@ async function generateAndDownloadBaaPdf(e) {
 
     <h3>RECITALS</h3>
     <p><strong>WHEREAS</strong>, Covered Entity is a &ldquo;Covered Entity&rdquo; as defined under the Health Insurance Portability and Accountability Act of 1996, Public Law 104-191 (&ldquo;HIPAA&rdquo;), the Health Information Technology for Economic and Clinical Health Act, Public Law 111-5 (&ldquo;HITECH Act&rdquo;), and regulations promulgated thereunder by the U.S. Department of Health and Human Services (HHS), set forth at 45 CFR Parts 160 and 164 (collectively, the &ldquo;HIPAA Rules&rdquo;);</p>
-    <p><strong>WHEREAS</strong>, Business Associate provides software services, including two-way bilingual SMS/WhatsApp relay, automated translation, and communication tools (&ldquo;Services&rdquo;) to Covered Entity, which may involve the creation, receipt, maintenance, or transmission of Protected Health Information (&ldquo;PHI&rdquo;) or Electronic Protected Health Information (&ldquo;ePHI&rdquo;);</p>
+    <p><strong>WHEREAS</strong>, Business Associate provides software services, including two-way bilingual messaging and WhatsApp relay, automated translation, and communication tools (&ldquo;Services&rdquo;) to Covered Entity, which may involve the creation, receipt, maintenance, or transmission of Protected Health Information (&ldquo;PHI&rdquo;) or Electronic Protected Health Information (&ldquo;ePHI&rdquo;);</p>
     <p><strong>WHEREAS</strong>, the Parties desire to comply with 45 CFR &sect; 164.502(e) and &sect; 164.504(e), establishing required contractual assurances regarding the safeguarding and privacy of PHI;</p>
     <p><strong>NOW, THEREFORE</strong>, in consideration of the mutual covenants set forth herein, the Parties agree as follows:</p>
 
