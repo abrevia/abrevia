@@ -2371,6 +2371,116 @@ async function confirmAndSend() {
     }
 }
 
+// Direct Personal WhatsApp Dispatch (Universal wa.me protocol)
+async function handleSendPersonalWhatsApp() {
+    if (!currentTicket) {
+        alert(dashboardMode === 'es' ? 'Por favor seleccione o cree una conversación primero.' : 'Please select or create a conversation first.');
+        return;
+    }
+    const rawPhone = currentTicket.customer_phone || '';
+    let cleanPhone = rawPhone.replace(/\D/g, '');
+    if (!cleanPhone) {
+        alert(dashboardMode === 'es' ? 'El contacto seleccionado no tiene un número telefónico válido.' : 'The selected contact has no valid phone number.');
+        return;
+    }
+    if (cleanPhone.length === 10) {
+        cleanPhone = '1' + cleanPhone;
+    }
+
+    const t = I18N[dashboardMode];
+    const hitlBox = document.getElementById('target-review-box');
+    const inputEl = document.getElementById('agent-input');
+    let reviewedText = hitlBox ? hitlBox.value.trim() : '';
+    let originalDraft = inputEl ? inputEl.value.trim() : '';
+
+    if (!reviewedText && !originalDraft && !currentAttachment) {
+        alert(dashboardMode === 'es' ? 'Por favor escriba un mensaje antes de abrir WhatsApp.' : 'Please enter a message before dispatching via WhatsApp.');
+        return;
+    }
+
+    const waBtn = document.getElementById('whatsapp-direct-btn');
+    const waText = document.getElementById('whatsappDirectBtnText');
+    const originalWaText = waText ? waText.textContent : '';
+    if (waBtn) waBtn.disabled = true;
+    if (waText) waText.textContent = dashboardMode === 'es' ? 'Traduciendo...' : 'Translating...';
+
+    try {
+        let spanishMessage = reviewedText;
+        let englishMessage = originalDraft;
+
+        if (!spanishMessage && originalDraft) {
+            const transRes = await fetch('/api/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    text: originalDraft, 
+                    targetLang: t.targetLang || 'es' 
+                }),
+                signal: AbortSignal.timeout(8000)
+            });
+            if (transRes.ok) {
+                const transData = await transRes.json();
+                spanishMessage = transData.translated || originalDraft;
+            } else {
+                spanishMessage = originalDraft;
+            }
+        } else if (!spanishMessage && !originalDraft && currentAttachment) {
+            spanishMessage = 'Adjunto: ' + currentAttachment.name;
+            englishMessage = 'Attachment: ' + currentAttachment.name;
+        }
+
+        let mediaUrl = null;
+        if (currentAttachment) {
+            try {
+                mediaUrl = await uploadMediaToStorage(currentAttachment);
+                if (mediaUrl) {
+                    spanishMessage += '\n\n📎 Adjunto: ' + mediaUrl;
+                    englishMessage += '\n\n📎 Attachment: ' + mediaUrl;
+                }
+            } catch (upErr) {
+                console.warn('Media upload failed during WhatsApp dispatch:', upErr);
+            }
+        }
+
+        try {
+            await fetch('/api/send-sms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: cleanPhone,
+                    body: spanishMessage,
+                    ticketId: currentTicket.id,
+                    englishText: englishMessage || spanishMessage,
+                    spanishText: spanishMessage,
+                    provider: 'whatsapp',
+                    orgName: getSenderOrgName(),
+                    senderName: getSenderUserName(),
+                    targetLang: t.targetLang || 'es'
+                })
+            });
+        } catch (dbErr) {
+            console.warn('Logging to Abrevia feed warning:', dbErr);
+        }
+
+        if (inputEl) inputEl.value = '';
+        if (typeof removeAttachment === 'function') removeAttachment();
+        cancelHITL();
+
+        if (typeof fetchMessages === 'function') {
+            await fetchMessages(currentTicket.id, true);
+        }
+
+        const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(spanishMessage);
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+        alert((dashboardMode === 'es' ? 'Error al preparar WhatsApp: ' : 'WhatsApp dispatch error: ') + err.message);
+    } finally {
+        if (waBtn) waBtn.disabled = false;
+        if (waText) waText.textContent = originalWaText || 'WhatsApp';
+    }
+}
+window.handleSendPersonalWhatsApp = handleSendPersonalWhatsApp;
+
 // Cancel HITL review
 function cancelHITL() {
     const hitlContainer = document.getElementById('hitlContainer');

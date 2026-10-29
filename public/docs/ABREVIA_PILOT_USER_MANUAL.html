@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Abrevia // Pilot User Manual & Quick-Start Testing Guide</title>
+<style>
+  @page {
+    size: letter;
+    margin: 0.5in 0.55in 0.55in 0.55in;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 8pt;
+      color: #64748b;
+    }
+  }
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #0f172a;
+    background: #ffffff;
+    line-height: 1.45;
+    font-size: 9.5pt;
+    margin: 0;
+    padding: 0;
+  }
+  .header-bar {
+    background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #0f172a 100%);
+    color: #ffffff;
+    padding: 18pt 20pt;
+    border-radius: 8pt;
+    margin-bottom: 14pt;
+    border-left: 5pt solid #10b981;
+  }
+  .brand-title {
+    font-size: 19pt;
+    font-weight: 800;
+    letter-spacing: -0.5pt;
+    margin: 0 0 2pt 0;
+    color: #ffffff;
+  }
+  .brand-sub {
+    font-size: 10.5pt;
+    color: #a7f3d0;
+    font-weight: 600;
+    margin: 0 0 6pt 0;
+  }
+  .meta-pills {
+    display: flex;
+    gap: 8pt;
+    font-size: 7.5pt;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 700;
+  }
+  .pill {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #d1fae5;
+    padding: 2pt 6pt;
+    border-radius: 4pt;
+  }
+  .pill-cyan {
+    background: rgba(6, 182, 212, 0.2);
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    color: #cffafe;
+    padding: 2pt 6pt;
+    border-radius: 4pt;
+  }
+  h2 {
+    font-size: 12.5pt;
+    font-weight: 800;
+    color: #064e3b;
+    margin: 12pt 0 4pt 0;
+    padding-bottom: 2pt;
+    border-bottom: 1.5pt solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+  }
+  h3 {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 8pt 0 3pt 0;
+  }
+  p {
+    margin: 0 0 6pt 0;
+    color: #334155;
+  }
+  .highlight-card {
+    background: #ecfdf5;
+    border: 1.5pt solid #10b981;
+    border-radius: 6pt;
+    padding: 9pt 12pt;
+    margin: 8pt 0;
+  }
+  .highlight-title {
+    font-weight: 800;
+    color: #065f46;
+    font-size: 10pt;
+    margin-bottom: 3pt;
+  }
+  .milestone-box {
+    background: #eff6ff;
+    border: 1.5pt solid #3b82f6;
+    border-radius: 6pt;
+    padding: 10pt 12pt;
+    margin: 9pt 0;
+  }
+  .milestone-title {
+    font-weight: 800;
+    color: #1e40af;
+    font-size: 10pt;
+    margin-bottom: 3pt;
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8pt;
+    margin: 8pt 0;
+  }
+  .step-card {
+    background: #f8fafc;
+    border: 1pt solid #cbd5e1;
+    border-radius: 6pt;
+    padding: 8pt;
+  }
+  .step-num {
+    background: #064e3b;
+    color: #ffffff;
+    font-size: 8pt;
+    font-weight: 800;
+    display: inline-block;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    margin-bottom: 4pt;
+  }
+  .step-title {
+    font-weight: 700;
+    font-size: 9pt;
+    color: #0f172a;
+    margin-bottom: 2pt;
+  }
+  .poster-container {
+    margin: 10pt 0;
+    text-align: center;
+    border: 1.5pt solid #cbd5e1;
+    border-radius: 8pt;
+    overflow: hidden;
+    background: #04090e;
+    page-break-inside: avoid;
+  }
+  .poster-img {
+    width: 100%;
+    max-height: 260pt;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .poster-caption {
+    font-size: 7.5pt;
+    color: #94a3b8;
+    padding: 4pt 8pt;
+    background: #020617;
+    border-top: 1pt solid #1e293b;
+    display: flex;
+    justify-content: space-between;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0;
+    font-size: 8.5pt;
+  }
+  th {
+    background: #0f172a;
+    color: #ffffff;
+    text-align: left;
+    padding: 4pt 6pt;
+    font-weight: 700;
+  }
+  td {
+    padding: 4pt 6pt;
+    border-bottom: 1pt solid #e2e8f0;
+    color: #334155;
+  }
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  .do-item { color: #047857; font-weight: 600; }
+  .dont-item { color: #b91c1c; font-weight: 600; }
+  .page-break {
+    page-break-before: always;
+  }
+  .footer-notice {
+    margin-top: 14pt;
+    padding-top: 6pt;
+    border-top: 1pt solid #cbd5e1;
+    font-size: 7.5pt;
+    color: #64748b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Header Banner -->
+  <div class="header-bar">
+    <div class="brand-title">Abrevia // Pilot User Manual &amp; Testing Protocol</div>
+    <div class="brand-sub">Bilingual Asynchronous Relay Technology &bull; Frictionless Early Adoption Guide</div>
+    <div class="meta-pills">
+      <span class="pill">PORTAL: abrevia-beta.vercel.app</span>
+      <span class="pill">VER: Beta Pilot v1.4</span>
+      <span class="pill-cyan">TITLE VI &bull; EO 13166 &bull; HIPAA READY</span>
+      <span class="pill">ZERO SETUP / PERSONAL PHONE DISPATCH</span>
+    </div>
+  </div>
+
+  <!-- Section 1: Executive Overview -->
+  <h2>🏛️ 1. Executive Overview &amp; The Problem Abrevia Solves</h2>
+  <p>
+    Across healthcare outreach, residential property management, logistics dispatch, municipal public works, and field services, English-speaking operators interact daily with Limited English Proficient (LEP) Spanish-speaking constituents. Traditional solutions are fraught with friction: phone-tag interpreter queues cause massive delays, while unvetted consumer translation apps introduce diagnostic errors and severe civil rights liabilities.
+  </p>
+  <p>
+    <strong>Abrevia delivers frictionless, legally compliant bilingual communication:</strong> You write naturally in English (.a) &rarr; Abrevia generates culturally calibrated, self-correcting Spanish translation (.b) &rarr; The constituent receives the message directly on their personal mobile phone via WhatsApp or SMS text with <strong>zero app downloads required</strong>.
+  </p>
+
+  <!-- Section 2: Zero Friction Advantage -->
+  <div class="highlight-card">
+    <div class="highlight-title">🚀 Test the Waters Immediately: Test with Your Own Personal Phone Number</div>
+    <p style="margin: 0; font-size: 9pt;">
+      You do not need corporate credit cards, enterprise developer accounts, or complex IT reviews to start testing Abrevia today. Early testers can immediately link their <strong>own personal phone number / personal WhatsApp</strong> to dispatch live translated messages. When your recipient receives your message, they see <strong>your real phone number, your verified contact card, and your profile name</strong>—fostering immediate trust, 100% open rates, and instant responses.
+    </p>
+  </div>
+
+  <!-- Section 3: The 10-Subscriber Roadmap Milestone -->
+  <div class="milestone-box">
+    <div class="milestone-title">🎯 The 10-Subscriber Milestone: Transition to Full Background Cloud Automation</div>
+    <p style="margin-bottom: 4pt; font-size: 8.8pt;">
+      <strong>Why are we utilizing the Personal WhatsApp Bridge for early pilot testing?</strong><br>
+      To allow any business, contractor, or clinical team to evaluate Abrevia’s translation fidelity and operational speed instantly without waiting for Meta Business Manager verification or server provisioning.
+    </p>
+    <p style="margin: 0; font-size: 8.8pt;">
+      <strong>The Milestone Guarantee:</strong> Once Abrevia secures its <strong>first 10 foundational subscribed organizations</strong>, the manual personal WhatsApp bridge will be completely upgraded to fully automated enterprise cloud infrastructure. All communications will dispatch in the background with zero taps required, featuring dedicated organizational numbers, automated intake queues, and multi-seat team management. Early pilot testers are grandfathered into our lowest lifetime pricing tier ($49/month unlimited relay).
+    </p>
+  </div>
+
+  <!-- Visual Poster / Blueprint -->
+  <div class="poster-container">
+    <img src="file:///C:/Users/Personal/.gemini/antigravity/brain/e1be7085-8193-4808-a049-e85e403dd1e3/abrevia_whatsapp_translation_poster_1793285758427.jpg" class="poster-img" alt="Abrevia Personal WhatsApp Dispatcher Blueprint">
+    <div class="poster-caption">
+      <span>FIG 1: Operator English Console (Left) connected via calibrated AI translation to Recipient Personal WhatsApp (Right).</span>
+      <span>Live Carrier Delivery &bull; Zero App Downloads</span>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Section 4: 3-Step Quick Start Testing Guide -->
+  <h2>⚡ 2. Quick-Start Testing Guide (3 Simple Steps)</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <span class="step-num">STEP 1</span>
+      <div class="step-title">Open Operator Console</div>
+      <p style="font-size: 8.5pt; margin: 0;">
+        Navigate to <strong>abrevia-beta.vercel.app</strong> on your computer, tablet, or smartphone. Click <strong>Launch Operator Console</strong> (or scan the PWA home-screen shortcut).
+      </p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 2</span>
+      <div class="step-title">Compose in Plain English</div>
+      <p style="font-size: 8.5pt; margin: 0;">
+        Select or add a constituent phone number. Type your message naturally in English (e.g., <em>"Your water heater repair is scheduled for tomorrow at 2 PM. Please confirm if someone is home."</em>).
+      </p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 3</span>
+      <div class="step-title">Tap &amp; Send via WhatsApp</div>
+      <p style="font-size: 8.5pt; margin: 0;">
+        Review the calibrated Spanish translation preview. Click <strong>Send via Personal WhatsApp</strong>. WhatsApp opens instantly with the chat and message pre-filled. Tap Send. Done!
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 5: Best Practices for Communicating with LEP Constituents -->
+  <h2>🗣️ 3. Federal Compliance &amp; Best Practices Job Aid</h2>
+  <p>
+    Under <strong>Title VI of the Civil Rights Act of 1964</strong>, <strong>Executive Order 13166</strong>, and <strong>Section 1557 of the Affordable Care Act</strong>, federally funded programs, healthcare clinics, and housing authorities are legally required to provide competent, free language access. When working with interpreters or sending translated notices, adhere to these professional standards:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50%;">✅ WHAT TO DO (Mandated Best Practices)</th>
+        <th style="width: 50%;">❌ WHAT NEVER TO DO (Civil Rights Liabilities)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="do-item">Speak in the first person directly to the constituent (*"What symptoms are you feeling?"*).</td>
+        <td class="dont-item">Never speak in the third person (*"Tell him..."* or *"Ask her..."*).</td>
+      </tr>
+      <tr>
+        <td class="do-item">Deliver messages in short, clear chunks (1 to 2 sentences per thought).</td>
+        <td class="dont-item">Never speak in lengthy, uninterrupted technical paragraphs.</td>
+      </tr>
+      <tr>
+        <td class="do-item">Use simple, plain language. Plain English translates with 99%+ accuracy.</td>
+        <td class="dont-item">Never use idioms (*"ballpark figure"*), slang, or bureaucratic acronyms.</td>
+      </tr>
+      <tr>
+        <td class="do-item">Use qualified professional translators or accredited on-demand LSP interpreters.</td>
+        <td class="dont-item"><strong style="color: #991b1b;">NEVER use minor children or family members</strong> to interpret legal or medical matters.</td>
+      </tr>
+      <tr>
+        <td class="do-item">Use the Teach-Back Method: *"To ensure I was clear, could you tell me what our next steps are?"*</td>
+        <td class="dont-item">Never assume a simple *"Yes"* means understanding (it often reflects politeness or shame).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Section 6: Official Free Federal Resources & Certificate Links -->
+  <h2>🎓 4. Verified Free Federal Portals &amp; Annual HIPAA Certification</h2>
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6pt; margin: 6pt 0;">
+    <div style="background: #f8fafc; border: 1pt solid #cbd5e1; padding: 6pt; border-radius: 4pt;">
+      <strong style="color: #064e3b; font-size: 8.5pt;">🏛️ DOJ Civil Rights Division (FCS) Title VI:</strong>
+      <p style="margin: 2pt 0 0 0; font-size: 8pt; color: #475569;">Central federal statutory coordinator for language access: <strong>justice.gov/crt/fcs</strong></p>
+    </div>
+    <div style="background: #f8fafc; border: 1pt solid #cbd5e1; padding: 6pt; border-radius: 4pt;">
+      <strong style="color: #064e3b; font-size: 8.5pt;">🩺 HHS Think Cultural Health (CLAS):</strong>
+      <p style="margin: 2pt 0 0 0; font-size: 8pt; color: #475569;">Free accredited e-learning with CE credits and certificates: <strong>thinkculturalhealth.hhs.gov</strong></p>
+    </div>
+    <div style="background: #f8fafc; border: 1pt solid #cbd5e1; padding: 6pt; border-radius: 4pt;">
+      <strong style="color: #064e3b; font-size: 8.5pt;">🎓 Free HIPAA Training &amp; Annual PDF Certificate:</strong>
+      <p style="margin: 2pt 0 0 0; font-size: 8pt; color: #475569;">Free 30-min online training course for workforce handling PHI: <strong>hipaatraining.us</strong></p>
+    </div>
+    <div style="background: #f8fafc; border: 1pt solid #cbd5e1; padding: 6pt; border-radius: 4pt;">
+      <strong style="color: #064e3b; font-size: 8.5pt;">📡 Abrevia Global Telemetry &amp; Industry Briefings:</strong>
+      <p style="margin: 2pt 0 0 0; font-size: 8pt; color: #475569;">Live language technology news &amp; radio telemetry: <strong>serviciosadg.github.io/global-news-radio/</strong></p>
+    </div>
+  </div>
+
+  <!-- Section 7: Feedback & Founding Pilot Perks -->
+  <h2>🤝 5. Pilot Feedback &amp; Founding Partner Perks</h2>
+  <p>
+    We welcome your real-world feedback as we scale to our 10-subscriber milestone. As an early pilot tester, you receive:
+  </p>
+  <ul style="margin: 4pt 0 8pt 0; padding-left: 14pt; color: #334155; font-size: 8.8pt;">
+    <li><strong>Grandfathered Pricing:</strong> Guaranteed $49/month flat rate for unlimited relay (exempt from all future enterprise price increases).</li>
+    <li><strong>Custom Bilingual Macro Templates:</strong> Custom intake, dispatch, and lease-renewal templates crafted specifically for your workflow.</li>
+    <li><strong>Priority Feature Requests:</strong> Direct Slack/WhatsApp access to the Abrevia engineering team.</li>
+  </ul>
+
+  <!-- Footer Notice -->
+  <div class="footer-notice">
+    <div>
+      <strong>Abrevia Inc. &bull; Operations &amp; Legal Center:</strong> info@mvhlsp.site &bull; abrevia-beta.vercel.app
+    </div>
+    <div>
+      &copy; 2026 Abrevia Inc. All rights reserved.
+    </div>
+  </div>
+
+</body>
+</html>

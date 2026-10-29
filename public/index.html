@@ -137,16 +137,16 @@
                 </button>
             </div>
 
-            <!-- Prominent Trust Notes & Frictionless Onboarding -->
-            <div class="mt-4 pt-1 space-y-2.5">
-                <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs sm:text-sm font-medium text-slate-300">
-                    <span id="trustNote1">🔒 Secure Operations</span>
-                    <span class="text-slate-600">&bull;</span>
-                    <span id="trustNote2">📱 Zero App Downloads</span>
+            <!-- Prominent Trust Notes & Frictionless Onboarding (Enhanced Visibility) -->
+            <div class="mt-6 pt-2 space-y-3.5">
+                <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm sm:text-base font-semibold text-slate-200">
+                    <span id="trustNote1" class="flex items-center gap-1.5">🔒 Secure Operations</span>
+                    <span class="text-slate-600 font-bold">&bull;</span>
+                    <span id="trustNote2" class="flex items-center gap-1.5">📱 Zero App Downloads</span>
                 </div>
                 <div>
-                    <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm font-semibold shadow-sm">
-                        <span id="trustNote3">✨ Start Free • No Credit Card Required</span>
+                    <span class="inline-flex items-center justify-center px-5 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 text-sm sm:text-base font-bold shadow-md shadow-emerald-950/40 tracking-wide">
+                        <span id="trustNote3">✨ Start Free &bull; No Credit Card Required</span>
                     </span>
                 </div>
             </div>
@@ -303,6 +303,12 @@
                     <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColPlatformHeader">Platform & Utilities</div>
                     <ul class="space-y-1.5 text-[11px]">
                         <li>
+                            <a href="/docs/ABREVIA_PILOT_USER_MANUAL.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-300 transition flex items-center space-x-1 text-emerald-400 font-semibold" id="footerLinkPilotManual" title="Download the official Abrevia Pilot Testing Manual & Protocol (PDF)">
+                                <span>📄</span>
+                                <span id="footerLinkPilotManualText">Pilot Testing Manual (PDF)</span>
+                            </a>
+                        </li>
+                        <li>
                             <button onclick="triggerIndexPwaInstall()" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
                                 <span>📲</span>
                                 <span id="footerLinkShortcut">Add Shortcut</span>
@@ -436,6 +442,7 @@
                 footerColHipaaHeader: 'HIPAA & Training',
                 footerLinkHhsClasText: 'HHS CLAS Training & CE Credits',
                 footerColPlatformHeader: 'Platform & Utilities',
+                footerLinkPilotManualText: 'Pilot Testing Manual (PDF)',
                 footerLinkShortcut: 'Add Shortcut',
                 footerStatusBadge: 'Platform Operational',
                 footerNonHipaaBadge: '🛡️ HIPAA Compliant Communication Tool',
@@ -541,6 +548,7 @@
                 footerColHipaaHeader: 'HIPAA y Capacitación',
                 footerLinkHhsClasText: 'Capacitación CLAS del HHS y Créditos CE',
                 footerColPlatformHeader: 'Plataforma y Utilidades',
+                footerLinkPilotManualText: 'Manual de Pruebas Piloto (PDF)',
                 footerLinkShortcut: 'Agregar Atajo',
                 footerStatusBadge: 'Plataforma Operativa',
                 footerNonHipaaBadge: '🛡️ Herramienta de Comunicación Compatible con HIPAA',
@@ -736,6 +744,8 @@
             if (ftHhs && c.footerLinkHhsClasText) ftHhs.textContent = c.footerLinkHhsClasText;
             const ftCol3 = document.getElementById('footerColPlatformHeader');
             if (ftCol3 && c.footerColPlatformHeader) ftCol3.textContent = c.footerColPlatformHeader;
+            const ftManual = document.getElementById('footerLinkPilotManualText');
+            if (ftManual && c.footerLinkPilotManualText) ftManual.textContent = c.footerLinkPilotManualText;
             const ftSho = document.getElementById('footerLinkShortcut');
             if (ftSho && c.footerLinkShortcut) ftSho.textContent = c.footerLinkShortcut;
             const ftSts = document.getElementById('footerStatusBadge');

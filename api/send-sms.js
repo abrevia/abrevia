@@ -133,7 +133,10 @@ export default async function handler(req, res) {
     };
 
     // Execute with target provider, with graceful fallback to comparison gateway if requested
-    if (selectedProvider === 'textbee') {
+    if (selectedProvider === 'whatsapp' || selectedProvider === 'manual') {
+      sendResult = { mode: 'whatsapp', status: 'dispatched' };
+      usedProvider = 'whatsapp';
+    } else if (selectedProvider === 'textbee') {
       try {
         sendResult = await sendViaTextBee();
         usedProvider = 'textbee';
