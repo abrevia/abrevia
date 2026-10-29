@@ -712,6 +712,48 @@
                     </div>
                     <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Active</span>
                 </div>
+
+                <!-- Live Diagnostics Ping & Handshake Test -->
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm">⚡</span>
+                            <div>
+                                <span class="text-xs font-bold text-white block">Instant Diagnostics Ping</span>
+                                <span class="text-[10px] text-slate-400 block">Send live ping &amp; verify return handshake</span>
+                            </div>
+                        </div>
+                        <button id="runPingBtn" type="button" onclick="runDiagnosticPingTest()" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs px-3.5 py-1.5 rounded-xl transition shadow flex items-center space-x-1.5 cursor-pointer shrink-0">
+                            <span>⚡</span>
+                            <span id="runPingBtnText">Instant Test</span>
+                        </button>
+                    </div>
+
+                    <!-- Progress Bar & Status Text -->
+                    <div id="pingProgressContainer" class="hidden space-y-1.5 pt-1">
+                        <div class="w-full bg-slate-900 border border-slate-800 rounded-full h-2 overflow-hidden p-0.5">
+                            <div id="pingProgressBar" class="bg-gradient-to-r from-brand-500 to-emerald-400 h-full rounded-full transition-all duration-300 w-0"></div>
+                        </div>
+                        <div class="flex items-center justify-between text-[10px]">
+                            <span id="pingStatusText" class="text-slate-400 font-medium">Sending telemetry ping...</span>
+                            <span id="pingPercentText" class="text-emerald-400 font-mono font-bold">0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Returned Handshake Badge / Telemetry Box -->
+                    <div id="pingHandshakeResult" class="hidden p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 space-y-1.5">
+                        <div class="flex items-center justify-between font-bold text-xs text-white">
+                            <span class="flex items-center space-x-1.5 text-emerald-400">
+                                <span>✅</span>
+                                <span>Live Handshake Verified</span>
+                            </span>
+                            <span id="pingLatencyBadge" class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full text-[10px] font-mono border border-emerald-500/40">-- ms</span>
+                        </div>
+                        <div id="pingDetailsBox" class="text-[10px] text-slate-300 space-y-0.5 pt-1 border-t border-emerald-500/20">
+                            <!-- Populated with live handshake services -->
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Modal Footer -->
@@ -803,6 +845,48 @@
                         </div>
                     </div>
                     <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Active</span>
+                </div>
+
+                <!-- Live Diagnostics Ping & Handshake Test -->
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm">⚡</span>
+                            <div>
+                                <span class="text-xs font-bold text-white block">Instant Diagnostics Ping</span>
+                                <span class="text-[10px] text-slate-400 block">Send live ping &amp; verify return handshake</span>
+                            </div>
+                        </div>
+                        <button id="runPingBtn" type="button" onclick="runDiagnosticPingTest()" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs px-3.5 py-1.5 rounded-xl transition shadow flex items-center space-x-1.5 cursor-pointer shrink-0">
+                            <span>⚡</span>
+                            <span id="runPingBtnText">Instant Test</span>
+                        </button>
+                    </div>
+
+                    <!-- Progress Bar & Status Text -->
+                    <div id="pingProgressContainer" class="hidden space-y-1.5 pt-1">
+                        <div class="w-full bg-slate-900 border border-slate-800 rounded-full h-2 overflow-hidden p-0.5">
+                            <div id="pingProgressBar" class="bg-gradient-to-r from-brand-500 to-emerald-400 h-full rounded-full transition-all duration-300 w-0"></div>
+                        </div>
+                        <div class="flex items-center justify-between text-[10px]">
+                            <span id="pingStatusText" class="text-slate-400 font-medium">Sending telemetry ping...</span>
+                            <span id="pingPercentText" class="text-emerald-400 font-mono font-bold">0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Returned Handshake Badge / Telemetry Box -->
+                    <div id="pingHandshakeResult" class="hidden p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 space-y-1.5">
+                        <div class="flex items-center justify-between font-bold text-xs text-white">
+                            <span class="flex items-center space-x-1.5 text-emerald-400">
+                                <span>✅</span>
+                                <span>Live Handshake Verified</span>
+                            </span>
+                            <span id="pingLatencyBadge" class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full text-[10px] font-mono border border-emerald-500/40">-- ms</span>
+                        </div>
+                        <div id="pingDetailsBox" class="text-[10px] text-slate-300 space-y-0.5 pt-1 border-t border-emerald-500/20">
+                            <!-- Populated with live handshake services -->
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1110,7 +1194,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_11"></script>
+    <script src="app.js?v=20261029_12"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
