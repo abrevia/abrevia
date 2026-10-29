@@ -9,8 +9,8 @@
 <a name="-english-disclaimers"></a>
 # 🇺🇸 English: Legal Disclaimers
 
-### 1. Strictly Administrative & Non-Clinical Scope (Non-HIPAA)
-Abrevia is designed solely as an administrative, customer care, and operational communication technology. It is **not** engineered or intended for use by covered healthcare entities to store, transmit, or process Protected Health Information (PHI) under the Health Insurance Portability and Accountability Act (HIPAA) or ACA Section 1557. Organizations requiring HIPAA-compliant clinical messaging must not use this version of Abrevia for medical diagnosis or clinical patient care records.
+### 1. HIPAA BAA-Eligible Architecture & AWS Infrastructure
+Abrevia is engineered to support strict healthcare data privacy requirements under the Health Insurance Portability and Accountability Act (HIPAA). Clinical text translation is powered by **Amazon Translate & AWS Bedrock**, both of which operate under an active **AWS Business Associate Addendum (BAA)**. All transmissions utilize TLS 1.3 in transit and cryptographic AES-256 encryption at rest via AWS KMS. Covered entities deploying Abrevia for Protected Health Information (PHI) can execute an enterprise BAA for end-to-end statutory compliance.
 
 ### 2. Automated AI Translation & Human-In-The-Loop Advisory
 Abrevia utilizes state-of-the-art neural language models (Google Gemini) for real-time translation between English and Spanish. While translation quality is high, automated translation systems can produce errors, idioms, or colloquial discrepancies. Users transmitting legally significant notifications, court summons, or official disciplinary records are advised to use the **Human-In-The-Loop (HITL) pre-send review** feature or retain a certified human interpreter.
@@ -33,8 +33,8 @@ Under no circumstances shall the software developers, computer programmers, syst
 <a name="-español-deslindes"></a>
 # 🇲🇽 Español: Deslindes Legales
 
-### 1. Ámbito Estrictamente Administrativo y No Clínico (No Sujeto a HIPAA)
-Abrevia ha sido concebida exclusivamente para operaciones administrativas, atención a clientes y logística de campo. **No** está diseñada ni autorizada para que entidades de salud procesen, transmitan o almacenen Información de Salud Protegida (PHI) sujeta a las regulaciones de la Ley HIPAA de EE. UU. o la Sección 1557 de ACA.
+### 1. Arquitectura Elegible para HIPAA BAA e Infraestructura AWS
+Abrevia está diseñada para cumplir con los estándares de privacidad de la ley HIPAA de EE. UU. La traducción de comunicaciones clínicas está respaldada por **Amazon Translate y AWS Bedrock**, servicios cubiertos bajo el **Business Associate Addendum (BAA) de AWS**. Todas las transmisiones emplean TLS 1.3 en tránsito y cifrado criptográfico AES-256 en reposo mediante AWS KMS.
 
 ### 2. Aviso sobre Traducción por Inteligencia Artificial y Supervisión Humana
 Abrevia emplea modelos neuronales avanzados (Google Gemini) para la traducción instantánea entre inglés y español. Aunque el nivel de fidelidad técnica es sobresaliente, los sistemas automáticos pueden presentar discrepancias idiomáticas. Para notificaciones judiciales o avisos formales vinculantes, se recomienda emplear la opción de **revisión previa con intervención humana (HITL)**.

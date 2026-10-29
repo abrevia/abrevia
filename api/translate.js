@@ -1,3 +1,5 @@
+import { isAwsTranslateConfigured, translateWithAws } from '../lib/aws-translate.js';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   
@@ -6,9 +8,27 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing text to translate' });
   }
 
+  // 1. If AWS Translate is configured, use AWS under HIPAA BAA
+  if (isAwsTranslateConfigured()) {
+    try {
+      const targetCode = targetLang.toLowerCase().includes('en') ? 'en' : 'es';
+      const sourceCode = targetCode === 'es' ? 'en' : 'es';
+      const awsResult = await translateWithAws(text, sourceCode, targetCode);
+      return res.status(200).json({
+        translated: awsResult.translated,
+        correctedDraft: text,
+        original: text,
+        provider: 'aws-translate-hipaa'
+      });
+    } catch (awsErr) {
+      console.warn('[AWS Translate Warning] Falling back to Gemini:', awsErr.message);
+    }
+  }
+
+  // 2. Google Gemini Neural Engine (Default / Fallback)
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY environment variable is not configured' });
+    return res.status(500).json({ error: 'Neither AWS Translate nor GEMINI_API_KEY is configured' });
   }
 
   try {
@@ -52,34 +72,32 @@ Return raw JSON only, no markdown fences, no explanations.`;
               result = {
                 translated: parsed.translated.trim(),
                 correctedDraft: (parsed.correctedDraft || text).trim(),
-                original: text
+                original: text,
+                provider: 'gemini'
               };
               break;
             }
           } catch (jsonErr) {
-            // Fallback if model returned plain string
             result = {
               translated: raw.trim(),
-              correctedDraft: text,
-              original: text
+              correctedDraft: text.trim(),
+              original: text,
+              provider: 'gemini'
             };
             break;
           }
-        } else {
-          lastErr = data.error?.message || 'Model call failed';
         }
-      } catch (e) {
-        lastErr = e.message;
+      } catch (err) {
+        lastErr = err;
       }
     }
 
-    if (result) {
-      res.status(200).json(result);
-    } else {
-      res.status(500).json({ error: lastErr || 'Translation failed' });
+    if (!result) {
+      return res.status(500).json({ error: 'Translation failed', details: lastErr?.message });
     }
+
+    res.status(200).json(result);
   } catch (error) {
-    console.error('Translation error:', error);
-    res.status(500).json({ error: 'Translation failed: ' + error.message });
+    res.status(500).json({ error: 'Translation service error', details: error.message });
   }
 }

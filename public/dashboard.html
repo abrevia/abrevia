@@ -641,17 +641,16 @@
                 <h3 id="consoleStatusModalTitle" class="text-sm font-bold text-white">Console Status: Active</h3>
             </div>
 
-            <!-- Console Controls: Language Switcher -->
+            <!-- Primary Dispatch Channel (WhatsApp Meta Cloud API + SMS Fallback) -->
             <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950 border border-slate-800">
-                <span class="text-xs text-slate-300 font-medium" id="statusLangSelectorTitle">Language Mode:</span>
-                <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
-                    <button id="modeBtnEn" onclick="switchDashboardMode('en')" class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition" title="English Mode (Agent writes English &rarr; Recipient receives Spanish)">
-                        EN
-                    </button>
-                    <button id="modeBtnEs" onclick="switchDashboardMode('es')" class="px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition" title="Modo Español (Agente escribe Español &rarr; Destinatario recibe Inglés)">
-                        ES
-                    </button>
+                <div class="flex items-center space-x-2">
+                    <span class="text-base">💬</span>
+                    <div>
+                        <span class="text-xs text-white font-bold block">Outbound Channel: WhatsApp</span>
+                        <span class="text-[10px] text-slate-400 block">Recipient receives native WhatsApp &bull; SMS Fallback active</span>
+                    </div>
                 </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Primary</span>
             </div>
 
             <!-- Quick Utility Actions Grid -->

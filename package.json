@@ -9,6 +9,7 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
+    "@aws-sdk/client-translate": "^3.1159.0",
     "@supabase/supabase-js": "^2.48.0",
     "stripe": "^17.5.0"
   },

@@ -2231,21 +2231,17 @@ async function handleTranslateAndSend() {
             const spanishText = (dashboardMode === 'en') ? (translatedText || (mediaUrl ? 'Adjunto enviado' : '')) : (polishedDraft || (mediaUrl ? 'Adjunto enviado' : ''));
             const smsBody = (dashboardMode === 'en' ? translatedText : polishedDraft) || (dashboardMode === 'en' ? 'Adjunto recibido:' : 'Attachment:');
 
-            const res = await fetch('/api/send-sms', {
+            // Dispatch via WhatsApp Cloud API with automatic SMS fallback
+            const res = await fetch('/api/send-whatsapp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     to: currentTicket.customer_phone,
-                    body: smsBody,
-                    mediaUrl: mediaUrl,
+                    message: translatedText,
                     ticketId: currentTicket.id,
-                    englishText: englishText,
-                    spanishText: spanishText,
-                    provider: getActiveSmsGateway(),
-                    orgName: getSenderOrgName(),
-                    senderName: getSenderUserName(),
-                    targetLang: (dashboardMode === 'en') ? 'es' : 'en',
-                    dispatchMode: getDispatchMode()
+                    englishText: polishedDraft || draftText,
+                    spanishText: translatedText,
+                    mediaUrl: mediaUrl
                 })
             });
 
@@ -2342,21 +2338,17 @@ async function confirmAndSend() {
     const smsBody = reviewedText || (dashboardMode === 'en' ? 'Adjunto recibido:' : 'Attachment:');
 
     try {
-        const res = await fetch('/api/send-sms', {
+        // Dispatch via WhatsApp Cloud API with automatic SMS fallback
+        const res = await fetch('/api/send-whatsapp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 to: currentTicket.customer_phone,
-                body: smsBody,
-                mediaUrl: mediaUrl,
+                message: reviewedText,
                 ticketId: currentTicket.id,
-                englishText: englishText,
-                spanishText: spanishText,
-                provider: getActiveSmsGateway(),
-                orgName: getSenderOrgName(),
-                senderName: getSenderUserName(),
-                targetLang: (dashboardMode === 'en') ? 'es' : 'en',
-                dispatchMode: getDispatchMode()
+                englishText: originalDraft,
+                spanishText: reviewedText,
+                mediaUrl: mediaUrl
             })
         });
 
