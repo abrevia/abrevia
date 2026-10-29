@@ -1,1039 +1,1024 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrevia | Secure Instant Messaging Translator for Businesses, Organizations & Individuals</title>
-    <link rel="icon" type="image/png" href="/assets/logo.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            500: '#3B82F6',
-                            600: '#2D74C4',
-                            700: '#1D4ED8'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#2563eb">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Abrevia">
-    <link rel="apple-touch-icon" href="/assets/logo.png?v=3">
-    <!-- Home Page Landing: Visitors and links open directly on the Home Page -->
-</head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-600 selection:text-white">
-
-    <!-- Header Navigation -->
-    <header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur-md px-3.5 sm:px-6 py-2.5 sm:py-3.5 sticky top-0 z-50 w-full">
-        <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
-            <!-- Left: Abrevia Brand Logo & Title -->
-            <a href="/" class="flex items-center space-x-2 min-w-0 hover:opacity-85 transition cursor-pointer" title="Abrevia Home">
-                <img src="/assets/logo.png?v=3" alt="Abrevia Logo" class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg shadow shrink-0">
-                <span class="text-base sm:text-xl font-extrabold tracking-tight text-white">Abrevia</span>
-            </a>
-
-            <!-- Right: Share & Language Switcher (Clean, Uncluttered Top Bar) -->
-            <div class="flex items-center space-x-2 shrink-0">
-                <button id="indexShareBtn" onclick="shareAbreviaApp()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm" title="Share Abrevia">
-                    <span>↗</span>
-                    <span id="indexShareBtnText">Share</span>
-                </button>
-                <button id="indexInstallBtn" onclick="triggerIndexPwaInstall()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 border border-brand-500/30 transition shadow-sm" title="Add shortcut to desktop or home screen">
-                    <span>📲</span>
-                    <span id="indexInstallBtnText">Add Shortcut</span>
-                </button>
-                
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content Area (Easy & Minimal, Inspired by Abrevia Squircle) -->
-    <main class="max-w-3xl mx-auto w-full px-6 py-8 sm:py-12 flex-grow flex flex-col items-center justify-center text-center">
-        
-        <!-- Clean, Bold, Minimal Headline -->
-        <h1 id="heroTitle" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-2 leading-tight">
-            Bilingual Asynchronous Communication Technology
-        </h1>
-        <div id="heroIndustries" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-3">
-            <a id="indLogistics" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistics" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 hover:text-white border border-brand-500/30 hover:border-brand-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Logistics & Dispatch use cases on GitHub">
-                <span>🚚 Logistics</span>
-            </a>
-            <a id="indField" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#field-services" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white border border-indigo-500/30 hover:border-indigo-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Field Services & Contractors use cases on GitHub">
-                <span>🛠️ Field Services</span>
-            </a>
-            <a id="indOperations" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#operations" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-white border border-emerald-500/30 hover:border-emerald-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Operations & Dispatch on GitHub">
-                <span>⚡ Operations</span>
-            </a>
-            <a id="indTitle6" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#title-vi-overview" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Federal Title VI Language Access Compliance on GitHub">
-                <span>🏛️ Title VI Sectors</span>
-            </a>
-        </div>
-        <!-- Crisp Minimal Subtitle -->
-        <p id="heroSubtitle" class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-4 leading-relaxed">
-            Messages are 2-way translated and dispatched directly. No downloads, zero friction.
-        </p>
-
-        <!-- Who is this app for? Link to GitHub Guide -->
-        <div class="mb-6">
-            <a id="whoIsThisForHeroBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition shadow-sm hover:scale-[1.02]">
-                <span>🏛️</span>
-                <span id="whoIsThisForHeroText">Who is this app for? Federal Title VI & Use Cases &rarr;</span>
-            </a>
-        </div>
-
-        <!-- Effortless Minimal Launchpad -->
-        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 sm:p-7 max-w-md w-full shadow-2xl backdrop-blur-sm text-center mb-6 sm:mb-8">
-            
-            <!-- Operator Directional Flow -->
-            <div class="inline-flex items-center justify-center space-x-2 bg-slate-950/80 border border-slate-800 px-3.5 py-2 rounded-xl mb-4 w-full">
-                <span class="text-xs font-semibold text-slate-300">🇺🇸 English Operator</span>
-                <span class="text-brand-400 font-bold">&rarr;</span>
-                <span class="text-xs font-semibold text-emerald-400">📱 Recipient Mobile (WhatsApp &amp; Message)</span>
-            </div>
-
-            <!-- Directional Flow Hint -->
-            <p id="profileHint" class="text-xs text-slate-400 mb-5">
-                You type in English &rarr; Constituent receives Spanish translation directly on their phone.
-            </p>
-
-
-            <!-- PIN Unlock Card (Shown when user signed out with a PIN) -->
-            <div id="pinUnlockCard" class="hidden w-full bg-slate-950 border border-brand-500/40 rounded-2xl p-5 sm:p-6 text-center shadow-xl shadow-brand-500/10 mb-4">
-                <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-lg mx-auto mb-2">
-                    🔒
-                </div>
-                <h3 id="pinCardTitle" class="text-sm font-bold text-white mb-0.5">Workspace Locked</h3>
-                <p id="pinCardSubtitle" class="text-xs text-slate-400 mb-4">Enter your 4-digit PIN to open your conversations</p>
-                <div class="flex items-center justify-center space-x-2.5 mb-4">
-                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox1" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 1)">
-                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox2" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 2)">
-                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox3" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 3)">
-                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox4" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 4)">
-                </div>
-                <button type="button" onclick="attemptPinUnlock()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs py-2.5 rounded-xl transition shadow-md">
-                    <span id="pinUnlockBtnText">Unlock & Open Dashboard</span>
-                </button>
-                <div id="pinErrorMsg" class="text-xs text-red-400 font-medium mt-2 hidden">Incorrect PIN. Please try again.</div>
-                <div class="mt-3">
-                    <button type="button" onclick="resetPinAndEnter()" class="text-[11px] text-slate-500 hover:text-slate-300 transition">
-                        <span id="pinResetLinkText">Forgot PIN? Reset & enter workspace</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Standard 1-Click Launch Button Container -->
-            <div id="launchContainer">
-                <button id="launchBtn" onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm group">
-                    <span id="launchBtnText">Launch Operator Console</span>
-                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </button>
-            </div>
-
-            <!-- Quiet Trust Notes -->
-            <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 text-[11px] text-slate-500">
-                <span id="trustNote1">🔒 Secure Operations</span>
-                <span class="hidden sm:inline text-slate-600">&bull;</span>
-                <span id="trustNote2">📱 Zero App Downloads</span>
-                <span class="hidden sm:inline text-slate-600">&bull;</span>
-                <span id="trustNote3" class="text-brand-400 font-medium">✨ Start Free • No Credit Card Required</span>
-            </div>
-        </div>
-
-        <!-- 3 Quiet Minimal Pillars (Row) -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl text-left mb-6 sm:mb-8">
-            <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
-                <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
-                    <span>🔒</span>
-                    <span id="pillar1Title">Secure & Private</span>
-                </div>
-                <p id="pillar1Desc" class="text-[11px] text-slate-400 leading-normal">
-                    Administrative workspace for operations with on-demand certified live human interpreter (LSP) gateway.
-                </p>
-            </div>
-            <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
-                <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
-                    <span>⚡</span>
-                    <span id="pillar2Title">Real-Time Relay</span>
-                </div>
-                <p id="pillar2Desc" class="text-[11px] text-slate-400 leading-normal">
-                    Instant bilingual English ⇄ Spanish translation and direct dispatch for operations on the move.
-                </p>
-            </div>
-            <div class="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl">
-                <div class="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
-                    <span>📱</span>
-                    <span id="pillar3Title">Zero-Download Technology</span>
-                </div>
-                <p id="pillar3Desc" class="text-[11px] text-slate-400 leading-normal">
-                    Drivers, field technicians & clients text naturally from any mobile phone.
-                </p>
-            </div>
-        </div>
-
-        <!-- Industry Pills (Minimal) -->
-        <div class="flex flex-wrap items-center justify-center gap-2 text-[11px] text-slate-400">
-            <span id="builtForLabel" class="text-slate-500">Built for:</span>
-            <a id="builtFor1" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistics" target="_blank" rel="noopener noreferrer" class="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg transition inline-flex items-center space-x-1 cursor-pointer">
-                <span>Logistics & Dispatch</span>
-            </a>
-            <a id="builtFor2" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#housing" target="_blank" rel="noopener noreferrer" class="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg transition inline-flex items-center space-x-1 cursor-pointer">
-                <span>Property & Housing (HUD)</span>
-            </a>
-            <a id="builtFor3" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#field-services" target="_blank" rel="noopener noreferrer" class="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg transition inline-flex items-center space-x-1 cursor-pointer">
-                <span>Field Services</span>
-            </a>
-            <a id="builtFor4" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#title-vi-overview" target="_blank" rel="noopener noreferrer" class="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg transition inline-flex items-center space-x-1 cursor-pointer">
-                <span>Title VI & Public Care</span>
-            </a>
-        </div>
-
-    </main>
-
-        <!-- Comprehensive Legal, Title VI & Compliance Footer at Very Bottom -->
-    <footer class="border-t border-slate-800/80 bg-slate-950 py-10 px-4 sm:px-6 text-slate-400">
-        <div class="max-w-5xl mx-auto space-y-8">
-            <!-- Top Row: Columns -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-xs text-left">
-                <!-- Col 1: Brand & Organic Share -->
-                <div class="space-y-3">
-                    <div class="flex items-center space-x-2">
-                        <img src="/assets/logo.png?v=3" alt="Abrevia" class="h-6 w-6 rounded-md">
-                        <span class="text-white font-bold text-sm tracking-tight">Abrevia</span>
-                    </div>
-                    <p class="text-[11px] text-slate-400 leading-relaxed" id="footerBrandBio">
-                        Bilingual asynchronous communication technology. Messages are 2-way translated and dispatched directly with zero downloads.
-                    </p>
-                    <div>
-                        <button onclick="shareAbreviaApp()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm">
-                            <span>↗</span>
-                            <span id="footerShareBtnText">Share Abrevia</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Col 2: Compliance & Sectors (GitHub) -->
-                <div class="space-y-2.5">
-                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColComplianceHeader">Compliance & Sectors</div>
-                    <ul class="space-y-1.5 text-[11px]">
-                        <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
-                                <span>🏛️</span>
-                                <span id="footerLinkWhoIsThis">Who is this app for?</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/TITLE_VI_SELF_ASSESSMENT.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
-                                <span>📋</span>
-                                <span id="footerLinkSelfAssessment">Title VI Self-Assessment</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#-english-who-is-abrevia-for" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkTitle6">
-                                Title VI & EO 13166 Mandates
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#3-major-federally-bound-sectors--statutory-use-cases" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkSectors">
-                                7 Major Federal Sectors
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Col 3: Legal & Transparency (GitHub) -->
-                <div class="space-y-2.5">
-                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColLegalHeader">Legal & Transparency</div>
-                    <ul class="space-y-1.5 text-[11px]">
-                        <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
-                                <span>📜</span>
-                                <span id="footerLinkTerms">Terms of Service</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
-                                <span>🛡️</span>
-                                <span id="footerLinkPrivacy">Privacy Policy</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
-                                <span>⚖️</span>
-                                <span id="footerLinkDisclaimers">Legal Disclaimers</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="mailto:info@mvhlsp.site" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
-                                <span>📧</span>
-                                <span id="footerLinkContact">Contact: info@mvhlsp.site</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Col 4: Platform & Utilities -->
-                <div class="space-y-2.5">
-                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColPlatformHeader">Platform & Utilities</div>
-                    <ul class="space-y-1.5 text-[11px]">
-                        <li>
-                            <button onclick="triggerIndexPwaInstall()" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
-                                <span>📲</span>
-                                <span id="footerLinkShortcut">Add Shortcut</span>
-                            </button>
-                        </li>
-                        <li>
-                            <a href="https://github.com/serviciosadg/abrevia" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-400">
-                                <span>🐙</span>
-                                <span>GitHub Repository</span>
-                            </a>
-                        </li>
-                        <li>
-                            <span class="text-emerald-400 text-[10px] font-semibold flex items-center space-x-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                <span id="footerStatusBadge">Platform Operational</span>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Bottom Bar: Administrative Disclaimer & Copyright -->
-            <div class="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 text-center sm:text-left">
-                <p id="footerCopyright">
-                    &copy; 2026 Abrevia Inc. All rights reserved.
-                </p>
-                <div class="flex flex-wrap items-center justify-center gap-2 text-[10px] text-slate-400">
-                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-medium inline-flex items-center space-x-1" id="footerNonHipaaBadge">
-                        <span>🛡️</span>
-                        <span>HIPAA Compliant Communication Tool</span>
-                    </span>
-                    <span class="px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800" id="footerTitle6Badge">
-                        Title VI & EO 13166 Ready
-                    </span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-<!-- HIPAA & Abrevia 2 Roadmap Modal -->
-    <div id="hipaaModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl text-left relative">
-            <button onclick="closeHipaaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
-                &times;
-            </button>
-
-            <div class="flex items-center space-x-3 mb-4">
-                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-base shadow-sm">
-                    🛡️
-                </div>
-                <div>
-                    <h3 id="hipaaModalTitle" class="text-base font-bold text-white">HIPAA Compliance &amp; Title VI Verification</h3>
-                    <span id="hipaaModalBadge" class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Active Safeguards &amp; Pre-Signed BAA</span>
-                </div>
-            </div>
-
-            <div class="space-y-4 text-xs text-slate-300 leading-relaxed mb-6">
-                <!-- Title VI & LEP Language Access Compliance Banner -->
-                <div class="bg-brand-950/40 border border-brand-500/40 rounded-xl p-4 space-y-2">
-                    <div class="flex items-center space-x-2 text-brand-300 font-bold text-xs">
-                        <span>🏛️</span>
-                        <span id="title6Heading">Title VI (Title 6) & LEP Language Access Compliance</span>
-                    </div>
-                    <p class="text-[11px] text-slate-300 leading-relaxed" id="title6Desc">
-                        Under <strong>Title VI of the Civil Rights Act of 1964</strong> (42 U.S.C. § 2000d) and <strong>Executive Order 13166</strong>, all recipients of federal funding (transportation, logistics, housing authorities, municipal contractors, and public agencies) are legally mandated to provide <em>meaningful language access</em> to Limited English Proficient (LEP) individuals.
-                    </p>
-                    <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-400 pt-1">
-                        <li id="title6Point1"><strong>Zero-Download Access:</strong> LEP recipients text naturally or use frictionless mobile links with no app downloads required.</li>
-                        <li id="title6Point2"><strong>Auditable Compliance Trails:</strong> Immutable timestamped bilingual logs demonstrate active compliance under federal review.</li>
-                        <li id="title6Point3"><strong>Human Oversight:</strong> Pre-send proofreading (HITL) and certified live LSP interpreters for critical operational notices.</li>
-                    </ul>
-                </div>
-
-                <!-- Administrative vs Clinical Distinction -->
-                <div>
-                    <p id="hipaaP1" class="text-[11px] text-slate-300 leading-relaxed">
-                        <strong>Abrevia</strong> is engineered for HIPAA Privacy and Security Rule compliance (45 CFR Parts 160 &amp; 164). Covered Entities can download a pre-signed Business Associate Agreement (BAA) with AES-256 KMS hardware encryption at rest, TLS 1.3 in transit, and Title VI compliance logging.
-                    </p>
-                </div>
-                
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2 text-[11px] text-slate-400">
-                    <div id="hipaaUpcomingTitle" class="font-semibold text-emerald-400">Active HIPAA Security Safeguards (45 CFR § 164.312):</div>
-                    <ul class="list-disc list-inside space-y-1 text-slate-300">
-                        <li id="hipaaFeat1"><strong>Pre-Signed BAA On-Demand:</strong> Standard Business Associate Agreements under 45 CFR § 164.502(e) &amp; § 164.504(e).</li>
-                        <li id="hipaaFeat2"><strong>AES-256 KMS Hardware Encryption:</strong> Persistent databases and attachments encrypted at rest on AWS block storage.</li>
-                        <li id="hipaaFeat3"><strong>Enforced TLS 1.3 Transmission Security:</strong> Modern AES-GCM ciphers protecting all transit between operator, edge &amp; carrier.</li>
-                        <li id="hipaaFeat4"><strong>On-Demand Certified Live Interpreters:</strong> Accredited LSP network access for clinical and urgent communication.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="flex justify-end">
-                <button id="hipaaCloseBtn" onclick="closeHipaaModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const content = {
-            en: {
-                heroTitle: 'Bilingual Asynchronous Communication Technology',
-                heroSubtitleBilingual: 'Tecnología de Comunicación Asíncrona Bilingüe',
-                heroSubtitle: 'Messages are 2-way translated and dispatched directly. No downloads, zero friction.',
-                indLogistics: '🚚 Logistics',
-                indField: '🛠️ Field Services',
-                indOperations: '⚡ Operations',
-                indTitle6: '🏛️ Title VI Sectors',
-                urlLogistics: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistics',
-                urlField: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#field-services',
-                urlOperations: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#operations',
-                urlTitle6: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#title-vi-overview',
-                                indexShareBtnText: 'Share',
-                footerBrandBio: 'Bilingual asynchronous communication technology. Messages are 2-way translated and dispatched directly with zero downloads.',
-                footerShareBtnText: 'Share Abrevia',
-                footerColComplianceHeader: 'Compliance & Sectors',
-                footerLinkWhoIsThis: 'Who is this app for?',
-                footerLinkSelfAssessment: 'Title VI Self-Assessment',
-                footerLinkTitle6: 'Title VI & EO 13166 Mandates',
-                footerLinkSectors: '7 Major Federal Sectors',
-                footerColLegalHeader: 'Legal & Transparency',
-                footerLinkTerms: 'Terms of Service',
-                footerLinkPrivacy: 'Privacy Policy',
-                footerLinkDisclaimers: 'Legal Disclaimers',
-                footerLinkContact: 'Contact: info@mvhlsp.site',
-                footerColPlatformHeader: 'Platform & Utilities',
-                footerLinkShortcut: 'Add Shortcut',
-                footerStatusBadge: 'Platform Operational',
-                footerNonHipaaBadge: '🛡️ HIPAA Compliant Communication Tool',
-                footerTitle6Badge: 'Title VI & EO 13166 Ready',
-                whoIsThisForHeroText: 'Who is this app for? Federal Title VI & Use Cases →',
-                footerLearnMore: 'Who is this app for?',
-                indexInstallBtnText: 'Add Shortcut',
-                                pinCardTitle: 'Workspace Locked',
-                pinCardSubtitle: 'Enter your 4-digit PIN to open your conversations',
-                pinUnlockBtnText: 'Unlock & Open Dashboard',
-                pinResetLinkText: 'Forgot PIN? Reset & enter workspace',
-                pinErrorMsg: 'Incorrect PIN. Please try again.',
-                profileHint: 'You write in English (.a) &rarr; Recipient receives Spanish translation (.b)',
-                launchBtnText: 'Launch English Console',
-                trustNote1: '🔒 Secure Operations',
-                trustNote2: '📱 Zero App Downloads',
-                trustNote3: '✨ Start Free • No Credit Card Required',
-                pillar1Title: 'Secure & Private',
-                pillar1Desc: 'Administrative workspace for operations with on-demand certified live human interpreter (LSP) gateway.',
-                pillar2Title: 'Real-Time Relay',
-                pillar2Desc: 'Instant bilingual English ⇄ Spanish translation and direct dispatch for operations on the move.',
-                pillar3Title: 'Zero-Download Technology',
-                pillar3Desc: 'Drivers, field technicians & clients text naturally from any mobile phone.',
-                builtForLabel: 'Built for:',
-                builtFor1: 'Logistics & Dispatch',
-                builtFor2: 'Property Management',
-                builtFor3: 'Field Services',
-                builtFor4: 'Customer Care',
-                footerCopyright: '&copy; 2026 Abrevia Inc. All rights reserved.',
-                footerNoticeTitle: 'Notice:',
-                footerNotice: 'Abrevia is strictly for administrative operations and is not designed for PHI processing. Learn more about Section 1557, HIPAA and our HIPAA-compliant app, available soon.',
-                footerLearnMore: 'Learn More',
-                navPricing: 'Pricing & Plans',
-                pricingModalTag: 'B2B SaaS Pricing',
-                pricingModalTitle: 'Simple, Transparent Relay Plans',
-                pricingModalSubtitle: 'Abrevia provides instant automated translation. Upgrade to a paid tier to proofread translated messages before delivery.',
-                tier1Name: 'Community & Non-Profit',
-                tier1Desc: 'Always free forever to remove language barriers for individuals, community members, and non-profits.',
-                tier1Period: '/ forever',
-                tier1F1: 'Up to 500 Messages / Month',
-                tier1F2: 'Zero Monthly Cost or Card Required',
-                tier1F3: 'Device Contact Sync & Address Book',
-                tier1Btn: 'Start Free Forever',
-                tier2Badge: 'Businesses & Orgs',
-                tier2Name: 'Operations Pro',
-                tier2Period: '/ month',
-                tier2Desc: 'Enterprise advantages for businesses, logistics, and organizations. We can even manage your Spanish intake for you.',
-                tier2F1: 'Unlimited Messages & Real-Time Relay',
-                tier2F2: 'Proofread Translated Messages (HITL)',
-                tier2F3: 'Full Device Contact Sync & Directory',
-                tier2F4: 'Managed Spanish Intake Available',
-                tier2Btn: 'Start 30-Day Free Trial (No Card Required)',
-                tier3Name: 'Abrevia 2 Clinical',
-                tier3Price: 'Custom',
-                tier3Period: '/ HIPAA',
-                tier3Desc: 'Engineered for covered healthcare entities, medical clinics, and interpreter teams.',
-                tier3F1: 'Signed Healthcare BAA',
-                tier3F2: 'Automated PHI De-identification',
-                tier3F3: 'Immutable HIPAA Audit Logs',
-                tier3Btn: 'View HIPAA Roadmap',
-                pricingSecure: 'Secured by Stripe • 256-bit SSL Encryption • PCI-DSS Compliant',
-                pricingClose: 'Back to Sign-In',
-                hipaaTitle: 'HIPAA & Healthcare Roadmap',
-                hipaaBadge: 'Abrevia 2 Preview',
-                hipaaP1: 'Abrevia is engineered for HIPAA Privacy and Security Rule compliance (45 CFR Parts 160 & 164) with pre-signed Business Associate Agreements (BAAs), AES-256 KMS encryption, and Title VI compliance logging.',
-                hipaaP2: 'We are patiently engineering Abrevia 2, our clinical-grade edition designed specifically for covered healthcare organizations, clinics, and medical interpreter workflows.',
-                hipaaUpcomingTitle: 'Upcoming Clinical Features in Abrevia 2:',
-                hipaaFeat1: 'Signed Business Associate Agreements (BAAs) with cloud and telecommunication providers.',
-                hipaaFeat2: 'Automated PHI sanitization and de-identification pre-translation.',
-                hipaaFeat3: 'Immutable audit logs complying with HIPAA Security Rule §164.312(b).',
-                hipaaFeat4: 'ACA Section 1557 qualified human-in-the-loop language assistance review.',
-                hipaaClose: 'Close'
-            },
-            es: {
-                heroTitle: 'Tecnología de Comunicación Asíncrona Bilingüe',
-                heroSubtitleBilingual: 'Bilingual Asynchronous Communication Technology',
-                heroSubtitle: 'Los mensajes se traducen en 2 vías y se envían de forma directa. Sin descargas, cero fricción.',
-                indLogistics: '🚚 Logística',
-                indField: '🛠️ Servicios en Campo',
-                indOperations: '⚡ Operaciones',
-                indTitle6: '🏛️ Sectores Título VI',
-                urlLogistics: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistica',
-                urlField: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#servicios-campo',
-                urlOperations: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#operaciones',
-                urlTitle6: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#titulo-vi-resumen',
-                                indexShareBtnText: 'Compartir',
-                footerBrandBio: 'Tecnología de comunicación asíncrona bilingüe. Los mensajes se traducen en 2 vías y se envían directamente sin descargas.',
-                footerShareBtnText: 'Compartir Abrevia',
-                footerColComplianceHeader: 'Cumplimiento y Sectores',
-                footerLinkWhoIsThis: '¿Para quién es esta app?',
-                footerLinkSelfAssessment: 'Autoevaluación de Título VI',
-                footerLinkTitle6: 'Mandatos de Título VI y OE 13166',
-                footerLinkSectors: '7 Sectores Federales Principales',
-                footerColLegalHeader: 'Legalidad y Transparencia',
-                footerLinkTerms: 'Términos de Servicio',
-                footerLinkPrivacy: 'Aviso de Privacidad',
-                footerLinkDisclaimers: 'Deslindes Legales',
-                footerLinkContact: 'Contacto: info@mvhlsp.site',
-                footerColPlatformHeader: 'Plataforma y Utilidades',
-                footerLinkShortcut: 'Agregar Atajo',
-                footerStatusBadge: 'Plataforma Operativa',
-                footerNonHipaaBadge: 'Herramienta Administrativa • No Médica',
-                footerTitle6Badge: 'Listo para Título VI y OE 13166',
-                whoIsThisForHeroText: '¿Para quién es esta app? Título VI y Casos de Uso →',
-                footerLearnMore: '¿Para quién es esta app?',
-                indexInstallBtnText: 'Agregar Atajo',
-                                pinCardTitle: 'Espacio de Trabajo Bloqueado',
-                pinCardSubtitle: 'Ingrese su PIN de 4 dígitos para abrir sus conversaciones',
-                pinUnlockBtnText: 'Desbloquear y Abrir Panel',
-                pinResetLinkText: '¿Olvidó su PIN? Restablecer e ingresar al espacio de trabajo',
-                pinErrorMsg: 'PIN incorrecto. Por favor intente de nuevo.',
-                profileHint: 'Usted escribe en Español (.b) &rarr; El destinatario recibe traducción en Inglés (.a)',
-                launchBtnText: 'Abrir Consola en Español',
-                trustNote1: '🔒 Operaciones Seguras',
-                trustNote2: '📱 Sin Descarga de Apps',
-                trustNote3: '✨ Comience Gratis • Sin Tarjeta',
-                pillar1Title: 'Seguro y Privado',
-                pillar1Desc: 'Espacio administrativo para operaciones con revisión humana (HITL) opcional antes de enviar.',
-                pillar2Title: 'Relevo en Tiempo Real',
-                pillar2Desc: 'Traducción bilingüe instantánea y despacho directo para operaciones en movimiento.',
-                pillar3Title: 'Tecnología Sin Descargas',
-                pillar3Desc: 'Choferes, técnicos y clientes se comunican de forma natural por mensajería móvil tradicional.',
-                builtForLabel: 'Diseñado para:',
-                builtFor1: 'Logística y Despacho',
-                builtFor2: 'Administración Inmobiliaria',
-                builtFor3: 'Servicios en Campo',
-                builtFor4: 'Atención a Clientes',
-                footerCopyright: '&copy; 2026 Abrevia Inc. Todos los derechos reservados.',
-                footerNoticeTitle: 'Aviso:',
-                footerNotice: 'Abrevia es estrictamente para operaciones administrativas y no está diseñada para el procesamiento de PHI. Conozca más sobre la Sección 1557, HIPAA y nuestra app compatible, disponible pronto.',
-                footerLearnMore: 'Más Información',
-                navPricing: 'Planes y Tarifas',
-                pricingModalTag: 'Tarifas SaaS B2B',
-                pricingModalTitle: 'Planes Simples y Transparentes',
-                pricingModalSubtitle: 'Abrevia ofrece traducción instantánea automática. Actualice a un plan de pago para revisar mensajes traducidos antes del envío.',
-                tier1Name: 'Comunidad y ONGs (Gratis)',
-                tier1Desc: 'Siempre gratis para eliminar barreras del idioma en la comunidad y organizaciones sin fines de lucro.',
-                tier1Period: '/ para siempre',
-                tier1F1: 'Hasta 500 Mensajes / Mes',
-                tier1F2: 'Cero Costo Mensual y Sin Tarjeta',
-                tier1F3: 'Sincronización de Contactos y Directorio',
-                tier1Btn: 'Comenzar Gratis para Siempre',
-                tier2Badge: 'Empresas y Operaciones',
-                tier2Name: 'Operaciones Pro',
-                tier2Period: '/ mes',
-                tier2Desc: 'Ventajas empresariales para negocios y organizaciones. Incluso podemos gestionar la recepción de mensajes en español.',
-                tier2F1: 'Mensajes y Relevo Ilimitado en Tiempo Real',
-                tier2F2: 'Revisión de Mensajes Traducidos (HITL)',
-                tier2F3: 'Sincronización Total de Contactos',
-                tier2F4: 'Gestión de Mensajes en Español Disponible',
-                tier2Btn: 'Iniciar Prueba Gratis de 30 Días (Sin Tarjeta)',
-                tier3Name: 'Abrevia 2 Clínico',
-                tier3Price: 'A Medida',
-                tier3Period: '/ HIPAA',
-                tier3Desc: 'Diseñado para organizaciones de salud cubiertas, clínicas y equipos de intérpretes.',
-                tier3F1: 'Acuerdo BAA de Salud Firmado',
-                tier3F2: 'Desidentificación Automática de PHI',
-                tier3F3: 'Registros de Auditoría Inmutables',
-                tier3Btn: 'Ver Ruta de Cumplimiento HIPAA',
-                pricingSecure: 'Asegurado por Stripe • Cifrado SSL de 256 bits • Cumplimiento PCI-DSS',
-                pricingClose: 'Volver al Inicio',
-                hipaaTitle: 'Ruta de Cumplimiento HIPAA y Salud',
-                hipaaBadge: 'Vista Previa de Abrevia 2',
-                hipaaP1: 'Abrevia es estrictamente una herramienta de operaciones administrativas diseñada para comunicación no médica (logística, bienes raíces, comercio y servicios en campo).',
-                hipaaP2: 'Estamos desarrollando pacientemente Abrevia 2, nuestra edición de grado clínico diseñada específicamente para entidades de salud e intérpretes médicos.',
-                hipaaUpcomingTitle: 'Próximas Funcionalidades Clínicas en Abrevia 2:',
-                hipaaFeat1: 'Acuerdos de Asociado Comercial (BAA) firmados con proveedores de nube y telecomunicaciones.',
-                hipaaFeat2: 'Sanitización automática de PHI y desidentificación previa a la traducción.',
-                hipaaFeat3: 'Registros de auditoría inmutables según la Regla de Seguridad HIPAA §164.312(b).',
-                hipaaFeat4: 'Protocolos de revisión humana calificada bajo ACA Sección 1557.',
-                hipaaClose: 'Cerrar'
-            }
-        };
-
-        let currentLang = 'en';
-        localStorage.setItem('abrevia_agent_lang', 'en');
-
-        function selectLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('abrevia_agent_lang', lang);
-
-            // Update Header Switchers
-            const btnEn = document.getElementById('langHeaderEn');
-            const btnEs = document.getElementById('langHeaderEs');
-            if (lang === 'en') {
-                if (btnEn) btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition';
-                if (btnEs) btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition';
-            } else {
-                if (btnEs) btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition';
-                if (btnEn) btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition';
-            }
-
-            // Update Toggle Pills
-            const toggleEn = document.getElementById('toggleEn');
-            const toggleEs = document.getElementById('toggleEs');
-            if (toggleEn && toggleEs) {
-                if (lang === 'en') {
-                    toggleEn.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition bg-brand-600 text-white shadow-sm';
-                    toggleEs.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition text-slate-400 hover:text-white';
-                } else {
-                    toggleEs.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition bg-brand-600 text-white shadow-sm';
-                    toggleEn.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition text-slate-400 hover:text-white';
-                }
-            }
-
-            // Update Hero & Launchpad
-            const c = content[lang];
-            const heroTitle = document.getElementById('heroTitle');
-            if (heroTitle) heroTitle.textContent = c.heroTitle;
-            const heroSubtitleEs = document.getElementById('heroSubtitleEs');
-            if (heroSubtitleEs && c.heroSubtitleBilingual) heroSubtitleEs.textContent = c.heroSubtitleBilingual;
-            const heroSubtitle = document.getElementById('heroSubtitle');
-            if (heroSubtitle) heroSubtitle.textContent = c.heroSubtitle;
-
-            // Industry & Title VI Badges under Headline (Clickable to GitHub)
-            const indLog = document.getElementById('indLogistics');
-            if (indLog) {
-                indLog.textContent = c.indLogistics;
-                if (c.urlLogistics) indLog.href = c.urlLogistics;
-            }
-            const indFld = document.getElementById('indField');
-            if (indFld) {
-                indFld.textContent = c.indField;
-                if (c.urlField) indFld.href = c.urlField;
-            }
-            const indOps = document.getElementById('indOperations');
-            if (indOps) {
-                indOps.textContent = c.indOperations;
-                if (c.urlOperations) indOps.href = c.urlOperations;
-            }
-            const indT6 = document.getElementById('indTitle6');
-            if (indT6) {
-                indT6.textContent = c.indTitle6 || '🏛️ Title VI Sectors';
-                if (c.urlTitle6) indT6.href = c.urlTitle6;
-            }
-
-            const profileHint = document.getElementById('profileHint');
-            if (profileHint) profileHint.innerHTML = c.profileHint;
-            const launchBtnText = document.getElementById('launchBtnText');
-            if (launchBtnText) launchBtnText.textContent = c.launchBtnText;
-
-            // PIN Card Localization
-            const pinTitle = document.getElementById('pinCardTitle');
-            if (pinTitle && c.pinCardTitle) pinTitle.textContent = c.pinCardTitle;
-            const pinSub = document.getElementById('pinCardSubtitle');
-            if (pinSub && c.pinCardSubtitle) pinSub.textContent = c.pinCardSubtitle;
-            const pinBtn = document.getElementById('pinUnlockBtnText');
-            if (pinBtn && c.pinUnlockBtnText) pinBtn.textContent = c.pinUnlockBtnText;
-            const pinReset = document.getElementById('pinResetLinkText');
-            if (pinReset && c.pinResetLinkText) pinReset.textContent = c.pinResetLinkText;
-            const pinErr = document.getElementById('pinErrorMsg');
-            if (pinErr && c.pinErrorMsg) pinErr.textContent = c.pinErrorMsg;
-
-                        // Share & Footer Localization
-            const idxShr = document.getElementById('indexShareBtnText');
-            if (idxShr && c.indexShareBtnText) idxShr.textContent = c.indexShareBtnText;
-            const ftBio = document.getElementById('footerBrandBio');
-            if (ftBio && c.footerBrandBio) ftBio.textContent = c.footerBrandBio;
-            const ftShr = document.getElementById('footerShareBtnText');
-            if (ftShr && c.footerShareBtnText) ftShr.textContent = c.footerShareBtnText;
-            const ftCol1 = document.getElementById('footerColComplianceHeader');
-            if (ftCol1 && c.footerColComplianceHeader) ftCol1.textContent = c.footerColComplianceHeader;
-            const ftWho = document.getElementById('footerLinkWhoIsThis');
-            const ftSelf = document.getElementById('footerLinkSelfAssessment');
-            if (ftSelf && c.footerLinkSelfAssessment) ftSelf.textContent = c.footerLinkSelfAssessment;
-            if (ftWho && c.footerLinkWhoIsThis) ftWho.textContent = c.footerLinkWhoIsThis;
-            const ftT6 = document.getElementById('footerLinkTitle6');
-            if (ftT6 && c.footerLinkTitle6) ftT6.textContent = c.footerLinkTitle6;
-            const ftSec = document.getElementById('footerLinkSectors');
-            if (ftSec && c.footerLinkSectors) ftSec.textContent = c.footerLinkSectors;
-            const ftCol2 = document.getElementById('footerColLegalHeader');
-            if (ftCol2 && c.footerColLegalHeader) ftCol2.textContent = c.footerColLegalHeader;
-            const ftTrm = document.getElementById('footerLinkTerms');
-            if (ftTrm && c.footerLinkTerms) ftTrm.textContent = c.footerLinkTerms;
-            const ftPrv = document.getElementById('footerLinkPrivacy');
-            if (ftPrv && c.footerLinkPrivacy) ftPrv.textContent = c.footerLinkPrivacy;
-            const ftDsc = document.getElementById('footerLinkDisclaimers');
-            const ftCnt = document.getElementById('footerLinkContact');
-            if (ftCnt && c.footerLinkContact) ftCnt.textContent = c.footerLinkContact;
-            if (ftDsc && c.footerLinkDisclaimers) ftDsc.textContent = c.footerLinkDisclaimers;
-            const ftCol3 = document.getElementById('footerColPlatformHeader');
-            if (ftCol3 && c.footerColPlatformHeader) ftCol3.textContent = c.footerColPlatformHeader;
-            const ftSho = document.getElementById('footerLinkShortcut');
-            if (ftSho && c.footerLinkShortcut) ftSho.textContent = c.footerLinkShortcut;
-            const ftSts = document.getElementById('footerStatusBadge');
-            if (ftSts && c.footerStatusBadge) ftSts.textContent = c.footerStatusBadge;
-            const ftNhp = document.getElementById('footerNonHipaaBadge');
-            if (ftNhp && c.footerNonHipaaBadge) ftNhp.textContent = c.footerNonHipaaBadge;
-            const ftT6b = document.getElementById('footerTitle6Badge');
-            if (ftT6b && c.footerTitle6Badge) ftT6b.textContent = c.footerTitle6Badge;
-
-            // Who is this app for Localization
-            const whoHdr = document.getElementById('whoIsThisForHeaderText');
-            if (whoHdr && c.whoIsThisForHeaderText) whoHdr.textContent = c.whoIsThisForHeaderText;
-            const whoHero = document.getElementById('whoIsThisForHeroText');
-            if (whoHero && c.whoIsThisForHeroText) whoHero.textContent = c.whoIsThisForHeroText;
-            const ftLearn = document.getElementById('footerLearnMoreBtn');
-            if (ftLearn && c.footerLearnMore) ftLearn.textContent = c.footerLearnMore;
-
-            // Shortcut Localization
-            const idxInstBtn = document.getElementById('indexInstallBtnText');
-            if (idxInstBtn && c.indexInstallBtnText) idxInstBtn.textContent = c.indexInstallBtnText;
-            const pwaTitle = document.getElementById('pwaBannerTitle');
-            if (pwaTitle && c.pwaBannerTitle) pwaTitle.textContent = c.pwaBannerTitle;
-            const pwaSub = document.getElementById('pwaBannerSubtitle');
-            if (pwaSub && c.pwaBannerSubtitle) pwaSub.textContent = c.pwaBannerSubtitle;
-            const pwaAct = document.getElementById('pwaBannerActionBtn');
-            if (pwaAct && c.pwaBannerActionBtn) pwaAct.textContent = c.pwaBannerActionBtn;
-            const instTitle = document.getElementById('installModalTitle');
-            if (instTitle && c.installModalTitle) instTitle.textContent = c.installModalTitle;
-            const instBadge = document.getElementById('installModalBadge');
-            if (instBadge && c.installModalBadge) instBadge.textContent = c.installModalBadge;
-            const instDesc = document.getElementById('installModalDesc');
-            if (instDesc && c.installModalDesc) instDesc.textContent = c.installModalDesc;
-            const instIos = document.getElementById('installStepIos');
-            if (instIos && c.installStepIos) instIos.innerHTML = c.installStepIos;
-            const instAnd = document.getElementById('installStepAndroid');
-            if (instAnd && c.installStepAndroid) instAnd.innerHTML = c.installStepAndroid;
-            const instDesk = document.getElementById('installStepDesktop');
-            if (instDesk && c.installStepDesktop) instDesk.innerHTML = c.installStepDesktop;
-            const instClose = document.getElementById('installCloseBtnText');
-            if (instClose && c.installCloseBtnText) instClose.textContent = c.installCloseBtnText;
-
-
-
-            // Trust Notes
-            const t1 = document.getElementById('trustNote1');
-            if (t1) t1.textContent = c.trustNote1;
-            const t2 = document.getElementById('trustNote2');
-            if (t2) t2.textContent = c.trustNote2;
-            const t3 = document.getElementById('trustNote3');
-            if (t3) t3.textContent = c.trustNote3;
-
-            // Update Pillars
-            const p1Title = document.getElementById('pillar1Title');
-            if (p1Title) p1Title.textContent = c.pillar1Title;
-            const p1Desc = document.getElementById('pillar1Desc');
-            if (p1Desc) p1Desc.textContent = c.pillar1Desc;
-
-            const p2Title = document.getElementById('pillar2Title');
-            if (p2Title) p2Title.textContent = c.pillar2Title;
-            const p2Desc = document.getElementById('pillar2Desc');
-            if (p2Desc) p2Desc.textContent = c.pillar2Desc;
-
-            const p3Title = document.getElementById('pillar3Title');
-            if (p3Title) p3Title.textContent = c.pillar3Title;
-            const p3Desc = document.getElementById('pillar3Desc');
-            if (p3Desc) p3Desc.textContent = c.pillar3Desc;
-
-            // Built For Pills
-            const bfLabel = document.getElementById('builtForLabel');
-            if (bfLabel) bfLabel.textContent = c.builtForLabel;
-            const bf1 = document.getElementById('builtFor1');
-            if (bf1) bf1.textContent = c.builtFor1;
-            const bf2 = document.getElementById('builtFor2');
-            if (bf2) bf2.textContent = c.builtFor2;
-            const bf3 = document.getElementById('builtFor3');
-            if (bf3) bf3.textContent = c.builtFor3;
-            const bf4 = document.getElementById('builtFor4');
-            if (bf4) bf4.textContent = c.builtFor4;
-
-            // Footer Copyright & Notice
-            const ftCopy = document.getElementById('footerCopyright');
-            if (ftCopy) ftCopy.innerHTML = c.footerCopyright;
-            document.getElementById('footerNoticeText').innerHTML = `<span class="font-semibold text-slate-300">${c.footerNoticeTitle}</span> ${c.footerNotice}`;
-            document.getElementById('footerLearnMoreBtn').textContent = c.footerLearnMore;
-
-            // Update Modal Content
-            document.getElementById('hipaaModalTitle').textContent = c.hipaaTitle;
-            document.getElementById('hipaaModalBadge').textContent = c.hipaaBadge;
-            document.getElementById('hipaaP1').innerHTML = c.hipaaP1;
-            document.getElementById('hipaaP2').innerHTML = c.hipaaP2;
-            document.getElementById('hipaaUpcomingTitle').textContent = c.hipaaUpcomingTitle;
-            document.getElementById('hipaaFeat1').textContent = c.hipaaFeat1;
-            document.getElementById('hipaaFeat2').textContent = c.hipaaFeat2;
-            document.getElementById('hipaaFeat3').textContent = c.hipaaFeat3;
-            document.getElementById('hipaaFeat4').textContent = c.hipaaFeat4;
-            document.getElementById('hipaaCloseBtn').textContent = c.hipaaClose;
-
-            // Pricing removed from landing page (accessible only in user dashboard)
-        }
-
-        function handleEnterWorkspace(e) {
-            e.preventDefault();
-            localStorage.removeItem('abrevia_signed_out');
-            window.location.href = `/dashboard.html?lang=${currentLang}`;
-        }
-
-        // --- PIN Unlock Handlers ---
-        function checkPinStatus() {
-            const pin = localStorage.getItem('abrevia_pin');
-            const isSignedOut = localStorage.getItem('abrevia_signed_out') === 'true';
-            const pinCard = document.getElementById('pinUnlockCard');
-            const launchContainer = document.getElementById('launchContainer');
-
-            if (pin && isSignedOut) {
-                pinCard?.classList.remove('hidden');
-                launchContainer?.classList.add('hidden');
-                setTimeout(() => document.getElementById('unlockBox1')?.focus(), 150);
-            } else {
-                pinCard?.classList.add('hidden');
-                launchContainer?.classList.remove('hidden');
-            }
-        }
-
-        function handleUnlockPinKey(event, idx) {
-            const val = event.target.value;
-            if (event.key === 'Backspace') {
-                if (!val && idx > 1) {
-                    document.getElementById('unlockBox' + (idx - 1))?.focus();
-                }
-                return;
-            }
-            if (event.key === 'Enter') {
-                attemptPinUnlock();
-                return;
-            }
-            if (val && val.length >= 1 && idx < 4) {
-                document.getElementById('unlockBox' + (idx + 1))?.focus();
-            }
-            if (idx === 4 && val) {
-                attemptPinUnlock();
-            }
-        }
-
-        function attemptPinUnlock() {
-            const b1 = document.getElementById('unlockBox1')?.value || '';
-            const b2 = document.getElementById('unlockBox2')?.value || '';
-            const b3 = document.getElementById('unlockBox3')?.value || '';
-            const b4 = document.getElementById('unlockBox4')?.value || '';
-            const entered = (b1 + b2 + b3 + b4).trim();
-            const stored = localStorage.getItem('abrevia_pin');
-            const errorMsg = document.getElementById('pinErrorMsg');
-
-            if (entered === stored) {
-                localStorage.removeItem('abrevia_signed_out');
-                window.location.href = '/dashboard.html?lang=' + currentLang;
-            } else {
-                if (errorMsg) errorMsg.classList.remove('hidden');
-                for (let i = 1; i <= 4; i++) {
-                    const b = document.getElementById('unlockBox' + i);
-                    if (b) b.value = '';
-                }
-                document.getElementById('unlockBox1')?.focus();
-            }
-        }
-
-        function resetPinAndEnter() {
-            const msg = currentLang === 'es' 
-                ? '¿Desea restablecer su PIN y acceder a su espacio de trabajo?' 
-                : 'Would you like to reset your PIN and access your workspace?';
-            if (confirm(msg)) {
-                localStorage.removeItem('abrevia_pin');
-                localStorage.removeItem('abrevia_signed_out');
-                window.location.href = '/dashboard.html?lang=' + currentLang;
-            }
-        }
-
-        // Run PIN check on load
-        window.addEventListener('DOMContentLoaded', checkPinStatus);
-
-
-        // HIPAA Modal Handlers
-        function openHipaaModal() {
-            document.getElementById('hipaaModal').classList.remove('hidden');
-        }
-
-        function closeHipaaModal() {
-            document.getElementById('hipaaModal').classList.add('hidden');
-        }
-
-        // Initialize with default or saved language
-        selectLanguage(currentLang);
-
-        // PWA Shortcut Installation
-        let indexDeferredPrompt = null;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            indexDeferredPrompt = e;
-        });
-
-        function triggerIndexPwaInstall() {
-            if (indexDeferredPrompt) {
-                indexDeferredPrompt.prompt();
-                indexDeferredPrompt.userChoice.then(() => {
-                    indexDeferredPrompt = null;
-                    dismissIndexPwaBanner();
-                });
-            } else {
-                openInstallModal();
-            }
-        }
-
-        function openInstallModal() {
-            document.getElementById('installHelperModal')?.classList.remove('hidden');
-        }
-
-        function closeInstallModal() {
-            document.getElementById('installHelperModal')?.classList.add('hidden');
-        }
-
-        function initIndexPwaBanner() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-            if (isStandalone) return;
-            const isDismissed = sessionStorage.getItem('abrevia_pwa_dismissed') === 'true';
-            if (!isDismissed) {
-                setTimeout(() => {
-                    const banner = document.getElementById('pwaPromptBanner');
-                    if (banner) {
-                        banner.classList.remove('hidden');
-                        banner.classList.add('flex');
-                    }
-                }, 1200);
-            }
-        }
-
-        function dismissIndexPwaBanner() {
-            sessionStorage.setItem('abrevia_pwa_dismissed', 'true');
-            const banner = document.getElementById('pwaPromptBanner');
-            if (banner) {
-                banner.classList.add('hidden');
-                banner.classList.remove('flex');
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', initIndexPwaBanner);
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(() => {});
-            });
-        }
-
-    
-        // --- Web Share API & Organic Growth Handler ---
-        async function shareAbreviaApp() {
-            const isEs = (typeof currentLang !== 'undefined' ? currentLang : 'en') === 'es';
-            const shareData = {
-                title: 'Abrevia',
-                text: isEs 
-                    ? 'Abrevia — Tecnología de comunicación bilingüe instantánea sin descargas para operaciones, empresas y comunidades.'
-                    : 'Abrevia — Instant two-way bilingual asynchronous communication technology with zero downloads for operations, organizations & communities.',
-                url: 'https://abrevia-beta.vercel.app'
-            };
-
-            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
-                try {
-                    await navigator.share(shareData);
-                    return;
-                } catch (err) {
-                    if (err.name === 'AbortError') return;
-                }
-            }
-
-            try {
-                await navigator.clipboard.writeText('https://abrevia-beta.vercel.app');
-                alert(isEs ? '¡Enlace copiado al portapapeles! Listo para compartir.' : 'Link copied to clipboard! Ready to share.');
-            } catch (err) {
-                window.prompt(isEs ? 'Copie este enlace para compartir Abrevia:' : 'Copy this link to share Abrevia:', 'https://abrevia-beta.vercel.app');
-            }
-        }
-
-    </script>
-
-
-    <!-- Proactive Desktop & Mobile Shortcut Banner -->
-    <div id="pwaPromptBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm bg-slate-900 border border-brand-500/40 rounded-2xl p-4 shadow-2xl z-40 flex items-center justify-between gap-3 backdrop-blur-md hidden">
-        <div class="flex items-center space-x-3 min-w-0">
-            <div class="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-300 text-lg shrink-0">
-                📲
-            </div>
-            <div class="min-w-0">
-                <div class="text-xs font-bold text-white truncate" id="pwaBannerTitle">Add Shortcut</div>
-                <div class="text-[11px] text-slate-400 truncate" id="pwaBannerSubtitle">1-tap desktop & home screen access</div>
-            </div>
-        </div>
-        <div class="flex items-center space-x-2 shrink-0">
-            <button onclick="triggerIndexPwaInstall()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow-sm" id="pwaBannerActionBtn">
-                Add
-            </button>
-            <button onclick="dismissIndexPwaBanner()" class="text-slate-500 hover:text-slate-300 text-sm px-1.5 font-bold transition">
-                &times;
-            </button>
-        </div>
-    </div>
-
-    <!-- Add Desktop / Home Screen Shortcut Modal -->
-    <div id="installHelperModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl text-left relative">
-            <button onclick="closeInstallModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg font-bold p-1">
-                &times;
-            </button>
-            <div class="flex items-center space-x-3 mb-3">
-                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-lg shadow-sm">
-                    📲
-                </div>
-                <div>
-                    <h3 id="installModalTitle" class="text-base font-bold text-white">Add Shortcut</h3>
-                    <span id="installModalBadge" class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">1-Tap Instant Access</span>
-                </div>
-            </div>
-            <p id="installModalDesc" class="text-xs text-slate-300 mb-4 leading-relaxed">
-                Add Abrevia directly to your computer desktop or phone home screen for instant zero-friction launch without typing URLs.
-            </p>
-            <div class="space-y-3 text-xs text-slate-400 bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                <div class="flex items-start space-x-2">
-                    <span class="text-brand-400 font-bold">1.</span>
-                    <span id="installStepIos"><strong>iPhone (Safari):</strong> Tap Share (<span class="text-white">⎋</span>) and select <strong>"Add to Home Screen"</strong> (<span class="text-white">➕</span>).</span>
-                </div>
-                <div class="flex items-start space-x-2">
-                    <span class="text-brand-400 font-bold">2.</span>
-                    <span id="installStepAndroid"><strong>Android (Chrome / Samsung):</strong> Tap menu (<span class="text-white">⋮</span>) and select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</span>
-                </div>
-                <div class="flex items-start space-x-2">
-                    <span class="text-brand-400 font-bold">3.</span>
-                    <span id="installStepDesktop"><strong>PC / Mac:</strong> Look for the <strong>Install</strong> icon (<span class="text-white">⊕</span>) in your browser address bar.</span>
-                </div>
-            </div>
-            <button onclick="closeInstallModal()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
-                <span id="installCloseBtnText">Got it</span>
-            </button>
-        </div>
-    </div>
-
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrevia | Secure Instant Messaging Translator for Businesses, Organizations & Individuals</title>
+    <link rel="icon" type="image/png" href="/assets/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#3B82F6',
+                            600: '#2D74C4',
+                            700: '#1D4ED8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Abrevia">
+    <link rel="apple-touch-icon" href="/assets/logo.png?v=3">
+    <!-- Home Page Landing: Visitors and links open directly on the Home Page -->
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-600 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur-md px-3.5 sm:px-6 py-2.5 sm:py-3.5 sticky top-0 z-50 w-full">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+            <!-- Left: Abrevia Brand Logo & Title -->
+            <a href="/" class="flex items-center space-x-2 min-w-0 hover:opacity-85 transition cursor-pointer" title="Abrevia Home">
+                <img src="/assets/logo.png?v=3" alt="Abrevia Logo" class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg shadow shrink-0">
+                <span class="text-base sm:text-xl font-extrabold tracking-tight text-white">Abrevia</span>
+            </a>
+
+            <!-- Right: Share & Language Switcher (Clean, Uncluttered Top Bar) -->
+            <div class="flex items-center space-x-2 shrink-0">
+                <button id="indexShareBtn" onclick="shareAbreviaApp()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm" title="Share Abrevia">
+                    <span>↗</span>
+                    <span id="indexShareBtnText">Share</span>
+                </button>
+                <button id="indexInstallBtn" onclick="triggerIndexPwaInstall()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 border border-brand-500/30 transition shadow-sm" title="Add shortcut to desktop or home screen">
+                    <span>📲</span>
+                    <span id="indexInstallBtnText">Add Shortcut</span>
+                </button>
+                
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area (Easy & Minimal, Inspired by Abrevia Squircle) -->
+    <main class="max-w-3xl mx-auto w-full px-6 py-8 sm:py-12 flex-grow flex flex-col items-center justify-center text-center">
+        
+        <!-- Clean, Bold, Minimal Headline -->
+        <h1 id="heroTitle" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-2 leading-tight">
+            Bilingual Asynchronous Communication Technology
+        </h1>
+        <div id="heroIndustries" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-3">
+            <a id="indLogistics" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistics" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 hover:text-white border border-brand-500/30 hover:border-brand-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Logistics & Dispatch use cases on GitHub">
+                <span>🚚 Logistics</span>
+            </a>
+            <a id="indField" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#field-services" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white border border-indigo-500/30 hover:border-indigo-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Field Services & Contractors use cases on GitHub">
+                <span>🛠️ Field Services</span>
+            </a>
+            <a id="indOperations" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#operations" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-white border border-emerald-500/30 hover:border-emerald-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Operations & Dispatch on GitHub">
+                <span>⚡ Operations</span>
+            </a>
+            <a id="indTitle6" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#title-vi-overview" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Federal Title VI Language Access Compliance on GitHub">
+                <span>🏛️ Title VI Sectors</span>
+            </a>
+        </div>
+        <!-- Crisp Minimal Subtitle -->
+        <p id="heroSubtitle" class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-4 leading-relaxed">
+            Messages are 2-way translated and dispatched directly. No downloads, zero friction.
+        </p>
+
+        <!-- Who is this app for? Link to GitHub Guide -->
+        <div class="mb-6">
+            <a id="whoIsThisForHeroBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition shadow-sm hover:scale-[1.02]">
+                <span>🏛️</span>
+                <span id="whoIsThisForHeroText">Who is this app for? Federal Title VI & Use Cases &rarr;</span>
+            </a>
+        </div>
+
+        <!-- Effortless Minimal Launchpad -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 sm:p-7 max-w-md w-full shadow-2xl backdrop-blur-sm text-center mb-6 sm:mb-8">
+            
+            <!-- Operator Directional Flow -->
+            <div class="inline-flex items-center justify-center space-x-2 bg-slate-950/80 border border-slate-800 px-3.5 py-2 rounded-xl mb-4 w-full">
+                <span class="text-xs font-semibold text-slate-300">🇺🇸 English Operator</span>
+                <span class="text-brand-400 font-bold">&rarr;</span>
+                <span class="text-xs font-semibold text-emerald-400">📱 Recipient Mobile (WhatsApp &amp; Message)</span>
+            </div>
+
+            <!-- Directional Flow Hint -->
+            <p id="profileHint" class="text-xs text-slate-400 mb-5">
+                You type in English &rarr; Constituent receives Spanish translation directly on their phone.
+            </p>
+
+
+            <!-- PIN Unlock Card (Shown when user signed out with a PIN) -->
+            <div id="pinUnlockCard" class="hidden w-full bg-slate-950 border border-brand-500/40 rounded-2xl p-5 sm:p-6 text-center shadow-xl shadow-brand-500/10 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-lg mx-auto mb-2">
+                    🔒
+                </div>
+                <h3 id="pinCardTitle" class="text-sm font-bold text-white mb-0.5">Workspace Locked</h3>
+                <p id="pinCardSubtitle" class="text-xs text-slate-400 mb-4">Enter your 4-digit PIN to open your conversations</p>
+                <div class="flex items-center justify-center space-x-2.5 mb-4">
+                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox1" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 1)">
+                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox2" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 2)">
+                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox3" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 3)">
+                    <input type="password" maxlength="1" inputmode="numeric" id="unlockBox4" class="w-11 h-12 text-center text-xl font-bold bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl text-white outline-none transition" onkeyup="handleUnlockPinKey(event, 4)">
+                </div>
+                <button type="button" onclick="attemptPinUnlock()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs py-2.5 rounded-xl transition shadow-md">
+                    <span id="pinUnlockBtnText">Unlock & Open Dashboard</span>
+                </button>
+                <div id="pinErrorMsg" class="text-xs text-red-400 font-medium mt-2 hidden">Incorrect PIN. Please try again.</div>
+                <div class="mt-3">
+                    <button type="button" onclick="resetPinAndEnter()" class="text-[11px] text-slate-500 hover:text-slate-300 transition">
+                        <span id="pinResetLinkText">Forgot PIN? Reset & enter workspace</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Standard 1-Click Launch Button Container -->
+            <div id="launchContainer">
+                <button id="launchBtn" onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm group">
+                    <span id="launchBtnText">Launch Operator Console</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </button>
+            </div>
+
+            <!-- Quiet Trust Notes -->
+            <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 text-[11px] text-slate-500">
+                <span id="trustNote1">🔒 Secure Operations</span>
+                <span class="hidden sm:inline text-slate-600">&bull;</span>
+                <span id="trustNote2">📱 Zero App Downloads</span>
+                <span class="hidden sm:inline text-slate-600">&bull;</span>
+                <span id="trustNote3" class="text-brand-400 font-medium">✨ Start Free • No Credit Card Required</span>
+            </div>
+        </div>
+
+        <!-- 3 Quiet Minimal Pillars (Row - Headlines Only) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl text-center mb-6 sm:mb-8">
+            <div class="bg-slate-900/40 border border-slate-800/80 px-4 py-3 rounded-xl flex items-center justify-center space-x-2 shadow-sm">
+                <span>🔒</span>
+                <span id="pillar1Title" class="text-xs font-semibold text-white">Secure & Private</span>
+            </div>
+            <div class="bg-slate-900/40 border border-slate-800/80 px-4 py-3 rounded-xl flex items-center justify-center space-x-2 shadow-sm">
+                <span>⚡</span>
+                <span id="pillar2Title" class="text-xs font-semibold text-white">Real-Time Relay</span>
+            </div>
+            <div class="bg-slate-900/40 border border-slate-800/80 px-4 py-3 rounded-xl flex items-center justify-center space-x-2 shadow-sm">
+                <span>📱</span>
+                <span id="pillar3Title" class="text-xs font-semibold text-white">Zero-Download Technology</span>
+            </div>
+        </div>
+
+        <!-- Industry Pills (Minimal) -->
+        <div class="flex flex-wrap items-center justify-center gap-2 text-[11px] text-slate-400">
+            <span id="builtForLabel" class="text-slate-500">Built for:</span>
+            <a id="builtFor1" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistics" target="_blank" rel="noopener noreferrer" class="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg transition inline-flex items-center space-x-1 cursor-pointer">
+                <span>Logistics & Dispatch</span>
+            </a>
+            <a id="builtFor2" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#housing" target="_blank" rel="noopener noreferrer" class="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg transition inline-flex items-center space-x-1 cursor-pointer">
+                <span>Property & Housing (HUD)</span>
+            </a>
+            <a id="builtFor3" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#field-services" target="_blank" rel="noopener noreferrer" class="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg transition inline-flex items-center space-x-1 cursor-pointer">
+                <span>Field Services</span>
+            </a>
+            <a id="builtFor4" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#title-vi-overview" target="_blank" rel="noopener noreferrer" class="bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg transition inline-flex items-center space-x-1 cursor-pointer">
+                <span>Title VI & Public Care</span>
+            </a>
+        </div>
+
+    </main>
+
+        <!-- Comprehensive Legal, Title VI & Compliance Footer at Very Bottom -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-10 px-4 sm:px-6 text-slate-400">
+        <div class="max-w-5xl mx-auto space-y-8">
+            <!-- Top Row: Columns -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-xs text-left">
+                <!-- Col 1: Brand & Organic Share -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <img src="/assets/logo.png?v=3" alt="Abrevia" class="h-6 w-6 rounded-md">
+                        <span class="text-white font-bold text-sm tracking-tight">Abrevia</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed" id="footerBrandBio">
+                        Bilingual asynchronous communication technology. Messages are 2-way translated and dispatched directly with zero downloads.
+                    </p>
+                    <div>
+                        <button onclick="shareAbreviaApp()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm">
+                            <span>↗</span>
+                            <span id="footerShareBtnText">Share Abrevia</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Col 2: Compliance & Sectors (GitHub) -->
+                <div class="space-y-2.5">
+                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColComplianceHeader">Compliance & Sectors</div>
+                    <ul class="space-y-1.5 text-[11px]">
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>🏛️</span>
+                                <span id="footerLinkWhoIsThis">Who is this app for?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/TITLE_VI_SELF_ASSESSMENT.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>📋</span>
+                                <span id="footerLinkSelfAssessment">Title VI Self-Assessment</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#-english-who-is-abrevia-for" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkTitle6">
+                                Title VI & EO 13166 Mandates
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#3-major-federally-bound-sectors--statutory-use-cases" target="_blank" rel="noopener noreferrer" class="hover:text-white transition text-slate-400" id="footerLinkSectors">
+                                7 Major Federal Sectors
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Legal & Transparency (GitHub) -->
+                <div class="space-y-2.5">
+                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColLegalHeader">Legal & Transparency</div>
+                    <ul class="space-y-1.5 text-[11px]">
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>📜</span>
+                                <span id="footerLinkTerms">Terms of Service</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>🛡️</span>
+                                <span id="footerLinkPrivacy">Privacy Policy</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia/blob/main/DISCLAIMERS.md" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>⚖️</span>
+                                <span id="footerLinkDisclaimers">Legal Disclaimers</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:info@mvhlsp.site" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>📧</span>
+                                <span id="footerLinkContact">Contact: info@mvhlsp.site</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Platform & Utilities -->
+                <div class="space-y-2.5">
+                    <div class="font-bold text-white uppercase text-[10px] tracking-wider" id="footerColPlatformHeader">Platform & Utilities</div>
+                    <ul class="space-y-1.5 text-[11px]">
+                        <li>
+                            <button onclick="triggerIndexPwaInstall()" class="hover:text-white transition flex items-center space-x-1 text-slate-300">
+                                <span>📲</span>
+                                <span id="footerLinkShortcut">Add Shortcut</span>
+                            </button>
+                        </li>
+                        <li>
+                            <a href="https://github.com/serviciosadg/abrevia" target="_blank" rel="noopener noreferrer" class="hover:text-white transition flex items-center space-x-1 text-slate-400">
+                                <span>🐙</span>
+                                <span>GitHub Repository</span>
+                            </a>
+                        </li>
+                        <li>
+                            <span class="text-emerald-400 text-[10px] font-semibold flex items-center space-x-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span id="footerStatusBadge">Platform Operational</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar: Administrative Disclaimer & Copyright -->
+            <div class="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 text-center sm:text-left">
+                <p id="footerCopyright">
+                    &copy; 2026 Abrevia Inc. All rights reserved.
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-2 text-[10px] text-slate-400">
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-medium inline-flex items-center space-x-1" id="footerNonHipaaBadge">
+                        <span>🛡️</span>
+                        <span>HIPAA Compliant Communication Tool</span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800" id="footerTitle6Badge">
+                        Title VI & EO 13166 Ready
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<!-- HIPAA & Abrevia 2 Roadmap Modal -->
+    <div id="hipaaModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl text-left relative">
+            <button onclick="closeHipaaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-base shadow-sm">
+                    🛡️
+                </div>
+                <div>
+                    <h3 id="hipaaModalTitle" class="text-base font-bold text-white">HIPAA Compliance &amp; Title VI Verification</h3>
+                    <span id="hipaaModalBadge" class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Active Safeguards &amp; Pre-Signed BAA</span>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed mb-6">
+                <!-- Title VI & LEP Language Access Compliance Banner -->
+                <div class="bg-brand-950/40 border border-brand-500/40 rounded-xl p-4 space-y-2">
+                    <div class="flex items-center space-x-2 text-brand-300 font-bold text-xs">
+                        <span>🏛️</span>
+                        <span id="title6Heading">Title VI (Title 6) & LEP Language Access Compliance</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-relaxed" id="title6Desc">
+                        Under <strong>Title VI of the Civil Rights Act of 1964</strong> (42 U.S.C. § 2000d) and <strong>Executive Order 13166</strong>, all recipients of federal funding (transportation, logistics, housing authorities, municipal contractors, and public agencies) are legally mandated to provide <em>meaningful language access</em> to Limited English Proficient (LEP) individuals.
+                    </p>
+                    <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-400 pt-1">
+                        <li id="title6Point1"><strong>Zero-Download Access:</strong> LEP recipients text naturally or use frictionless mobile links with no app downloads required.</li>
+                        <li id="title6Point2"><strong>Auditable Compliance Trails:</strong> Immutable timestamped bilingual logs demonstrate active compliance under federal review.</li>
+                        <li id="title6Point3"><strong>Human Oversight:</strong> Pre-send proofreading (HITL) and certified live LSP interpreters for critical operational notices.</li>
+                    </ul>
+                </div>
+
+                <!-- Administrative vs Clinical Distinction -->
+                <div>
+                    <p id="hipaaP1" class="text-[11px] text-slate-300 leading-relaxed">
+                        <strong>Abrevia</strong> is engineered for HIPAA Privacy and Security Rule compliance (45 CFR Parts 160 &amp; 164). Covered Entities can download a pre-signed Business Associate Agreement (BAA) with AES-256 KMS hardware encryption at rest, TLS 1.3 in transit, and Title VI compliance logging.
+                    </p>
+                </div>
+                
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2 text-[11px] text-slate-400">
+                    <div id="hipaaUpcomingTitle" class="font-semibold text-emerald-400">Active HIPAA Security Safeguards (45 CFR § 164.312):</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-300">
+                        <li id="hipaaFeat1"><strong>Pre-Signed BAA On-Demand:</strong> Standard Business Associate Agreements under 45 CFR § 164.502(e) &amp; § 164.504(e).</li>
+                        <li id="hipaaFeat2"><strong>AES-256 KMS Hardware Encryption:</strong> Persistent databases and attachments encrypted at rest on AWS block storage.</li>
+                        <li id="hipaaFeat3"><strong>Enforced TLS 1.3 Transmission Security:</strong> Modern AES-GCM ciphers protecting all transit between operator, edge &amp; carrier.</li>
+                        <li id="hipaaFeat4"><strong>On-Demand Certified Live Interpreters:</strong> Accredited LSP network access for clinical and urgent communication.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="hipaaCloseBtn" onclick="closeHipaaModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const content = {
+            en: {
+                heroTitle: 'Bilingual Asynchronous Communication Technology',
+                heroSubtitleBilingual: 'Tecnología de Comunicación Asíncrona Bilingüe',
+                heroSubtitle: 'Messages are 2-way translated and dispatched directly. No downloads, zero friction.',
+                indLogistics: '🚚 Logistics',
+                indField: '🛠️ Field Services',
+                indOperations: '⚡ Operations',
+                indTitle6: '🏛️ Title VI Sectors',
+                urlLogistics: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistics',
+                urlField: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#field-services',
+                urlOperations: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#operations',
+                urlTitle6: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#title-vi-overview',
+                                indexShareBtnText: 'Share',
+                footerBrandBio: 'Bilingual asynchronous communication technology. Messages are 2-way translated and dispatched directly with zero downloads.',
+                footerShareBtnText: 'Share Abrevia',
+                footerColComplianceHeader: 'Compliance & Sectors',
+                footerLinkWhoIsThis: 'Who is this app for?',
+                footerLinkSelfAssessment: 'Title VI Self-Assessment',
+                footerLinkTitle6: 'Title VI & EO 13166 Mandates',
+                footerLinkSectors: '7 Major Federal Sectors',
+                footerColLegalHeader: 'Legal & Transparency',
+                footerLinkTerms: 'Terms of Service',
+                footerLinkPrivacy: 'Privacy Policy',
+                footerLinkDisclaimers: 'Legal Disclaimers',
+                footerLinkContact: 'Contact: info@mvhlsp.site',
+                footerColPlatformHeader: 'Platform & Utilities',
+                footerLinkShortcut: 'Add Shortcut',
+                footerStatusBadge: 'Platform Operational',
+                footerNonHipaaBadge: '🛡️ HIPAA Compliant Communication Tool',
+                footerTitle6Badge: 'Title VI & EO 13166 Ready',
+                whoIsThisForHeroText: 'Who is this app for? Federal Title VI & Use Cases →',
+                footerLearnMore: 'Who is this app for?',
+                indexInstallBtnText: 'Add Shortcut',
+                                pinCardTitle: 'Workspace Locked',
+                pinCardSubtitle: 'Enter your 4-digit PIN to open your conversations',
+                pinUnlockBtnText: 'Unlock & Open Dashboard',
+                pinResetLinkText: 'Forgot PIN? Reset & enter workspace',
+                pinErrorMsg: 'Incorrect PIN. Please try again.',
+                profileHint: 'You write in English (.a) &rarr; Recipient receives Spanish translation (.b)',
+                launchBtnText: 'Launch English Console',
+                trustNote1: '🔒 Secure Operations',
+                trustNote2: '📱 Zero App Downloads',
+                trustNote3: '✨ Start Free • No Credit Card Required',
+                pillar1Title: 'Secure & Private',
+                pillar1Desc: 'Administrative workspace for operations with on-demand certified live human interpreter (LSP) gateway.',
+                pillar2Title: 'Real-Time Relay',
+                pillar2Desc: 'Instant bilingual English ⇄ Spanish translation and direct dispatch for operations on the move.',
+                pillar3Title: 'Zero-Download Technology',
+                pillar3Desc: 'Drivers, field technicians & clients text naturally from any mobile phone.',
+                builtForLabel: 'Built for:',
+                builtFor1: 'Logistics & Dispatch',
+                builtFor2: 'Property Management',
+                builtFor3: 'Field Services',
+                builtFor4: 'Customer Care',
+                footerCopyright: '&copy; 2026 Abrevia Inc. All rights reserved.',
+                footerNoticeTitle: 'Notice:',
+                footerNotice: 'Abrevia is strictly for administrative operations and is not designed for PHI processing. Learn more about Section 1557, HIPAA and our HIPAA-compliant app, available soon.',
+                footerLearnMore: 'Learn More',
+                navPricing: 'Pricing & Plans',
+                pricingModalTag: 'B2B SaaS Pricing',
+                pricingModalTitle: 'Simple, Transparent Relay Plans',
+                pricingModalSubtitle: 'Abrevia provides instant automated translation. Upgrade to a paid tier to proofread translated messages before delivery.',
+                tier1Name: 'Community & Non-Profit',
+                tier1Desc: 'Always free forever to remove language barriers for individuals, community members, and non-profits.',
+                tier1Period: '/ forever',
+                tier1F1: 'Up to 500 Messages / Month',
+                tier1F2: 'Zero Monthly Cost or Card Required',
+                tier1F3: 'Device Contact Sync & Address Book',
+                tier1Btn: 'Start Free Forever',
+                tier2Badge: 'Businesses & Orgs',
+                tier2Name: 'Operations Pro',
+                tier2Period: '/ month',
+                tier2Desc: 'Enterprise advantages for businesses, logistics, and organizations. We can even manage your Spanish intake for you.',
+                tier2F1: 'Unlimited Messages & Real-Time Relay',
+                tier2F2: 'Proofread Translated Messages (HITL)',
+                tier2F3: 'Full Device Contact Sync & Directory',
+                tier2F4: 'Managed Spanish Intake Available',
+                tier2Btn: 'Start 30-Day Free Trial (No Card Required)',
+                tier3Name: 'Abrevia 2 Clinical',
+                tier3Price: 'Custom',
+                tier3Period: '/ HIPAA',
+                tier3Desc: 'Engineered for covered healthcare entities, medical clinics, and interpreter teams.',
+                tier3F1: 'Signed Healthcare BAA',
+                tier3F2: 'Automated PHI De-identification',
+                tier3F3: 'Immutable HIPAA Audit Logs',
+                tier3Btn: 'View HIPAA Roadmap',
+                pricingSecure: 'Secured by Stripe • 256-bit SSL Encryption • PCI-DSS Compliant',
+                pricingClose: 'Back to Sign-In',
+                hipaaTitle: 'HIPAA & Healthcare Roadmap',
+                hipaaBadge: 'Abrevia 2 Preview',
+                hipaaP1: 'Abrevia is engineered for HIPAA Privacy and Security Rule compliance (45 CFR Parts 160 & 164) with pre-signed Business Associate Agreements (BAAs), AES-256 KMS encryption, and Title VI compliance logging.',
+                hipaaP2: 'We are patiently engineering Abrevia 2, our clinical-grade edition designed specifically for covered healthcare organizations, clinics, and medical interpreter workflows.',
+                hipaaUpcomingTitle: 'Upcoming Clinical Features in Abrevia 2:',
+                hipaaFeat1: 'Signed Business Associate Agreements (BAAs) with cloud and telecommunication providers.',
+                hipaaFeat2: 'Automated PHI sanitization and de-identification pre-translation.',
+                hipaaFeat3: 'Immutable audit logs complying with HIPAA Security Rule §164.312(b).',
+                hipaaFeat4: 'ACA Section 1557 qualified human-in-the-loop language assistance review.',
+                hipaaClose: 'Close'
+            },
+            es: {
+                heroTitle: 'Tecnología de Comunicación Asíncrona Bilingüe',
+                heroSubtitleBilingual: 'Bilingual Asynchronous Communication Technology',
+                heroSubtitle: 'Los mensajes se traducen en 2 vías y se envían de forma directa. Sin descargas, cero fricción.',
+                indLogistics: '🚚 Logística',
+                indField: '🛠️ Servicios en Campo',
+                indOperations: '⚡ Operaciones',
+                indTitle6: '🏛️ Sectores Título VI',
+                urlLogistics: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistica',
+                urlField: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#servicios-campo',
+                urlOperations: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#operaciones',
+                urlTitle6: 'https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#titulo-vi-resumen',
+                                indexShareBtnText: 'Compartir',
+                footerBrandBio: 'Tecnología de comunicación asíncrona bilingüe. Los mensajes se traducen en 2 vías y se envían directamente sin descargas.',
+                footerShareBtnText: 'Compartir Abrevia',
+                footerColComplianceHeader: 'Cumplimiento y Sectores',
+                footerLinkWhoIsThis: '¿Para quién es esta app?',
+                footerLinkSelfAssessment: 'Autoevaluación de Título VI',
+                footerLinkTitle6: 'Mandatos de Título VI y OE 13166',
+                footerLinkSectors: '7 Sectores Federales Principales',
+                footerColLegalHeader: 'Legalidad y Transparencia',
+                footerLinkTerms: 'Términos de Servicio',
+                footerLinkPrivacy: 'Aviso de Privacidad',
+                footerLinkDisclaimers: 'Deslindes Legales',
+                footerLinkContact: 'Contacto: info@mvhlsp.site',
+                footerColPlatformHeader: 'Plataforma y Utilidades',
+                footerLinkShortcut: 'Agregar Atajo',
+                footerStatusBadge: 'Plataforma Operativa',
+                footerNonHipaaBadge: 'Herramienta Administrativa • No Médica',
+                footerTitle6Badge: 'Listo para Título VI y OE 13166',
+                whoIsThisForHeroText: '¿Para quién es esta app? Título VI y Casos de Uso →',
+                footerLearnMore: '¿Para quién es esta app?',
+                indexInstallBtnText: 'Agregar Atajo',
+                                pinCardTitle: 'Espacio de Trabajo Bloqueado',
+                pinCardSubtitle: 'Ingrese su PIN de 4 dígitos para abrir sus conversaciones',
+                pinUnlockBtnText: 'Desbloquear y Abrir Panel',
+                pinResetLinkText: '¿Olvidó su PIN? Restablecer e ingresar al espacio de trabajo',
+                pinErrorMsg: 'PIN incorrecto. Por favor intente de nuevo.',
+                profileHint: 'Usted escribe en Español (.b) &rarr; El destinatario recibe traducción en Inglés (.a)',
+                launchBtnText: 'Abrir Consola en Español',
+                trustNote1: '🔒 Operaciones Seguras',
+                trustNote2: '📱 Sin Descarga de Apps',
+                trustNote3: '✨ Comience Gratis • Sin Tarjeta',
+                pillar1Title: 'Seguro y Privado',
+                pillar1Desc: 'Espacio administrativo para operaciones con revisión humana (HITL) opcional antes de enviar.',
+                pillar2Title: 'Relevo en Tiempo Real',
+                pillar2Desc: 'Traducción bilingüe instantánea y despacho directo para operaciones en movimiento.',
+                pillar3Title: 'Tecnología Sin Descargas',
+                pillar3Desc: 'Choferes, técnicos y clientes se comunican de forma natural por mensajería móvil tradicional.',
+                builtForLabel: 'Diseñado para:',
+                builtFor1: 'Logística y Despacho',
+                builtFor2: 'Administración Inmobiliaria',
+                builtFor3: 'Servicios en Campo',
+                builtFor4: 'Atención a Clientes',
+                footerCopyright: '&copy; 2026 Abrevia Inc. Todos los derechos reservados.',
+                footerNoticeTitle: 'Aviso:',
+                footerNotice: 'Abrevia es estrictamente para operaciones administrativas y no está diseñada para el procesamiento de PHI. Conozca más sobre la Sección 1557, HIPAA y nuestra app compatible, disponible pronto.',
+                footerLearnMore: 'Más Información',
+                navPricing: 'Planes y Tarifas',
+                pricingModalTag: 'Tarifas SaaS B2B',
+                pricingModalTitle: 'Planes Simples y Transparentes',
+                pricingModalSubtitle: 'Abrevia ofrece traducción instantánea automática. Actualice a un plan de pago para revisar mensajes traducidos antes del envío.',
+                tier1Name: 'Comunidad y ONGs (Gratis)',
+                tier1Desc: 'Siempre gratis para eliminar barreras del idioma en la comunidad y organizaciones sin fines de lucro.',
+                tier1Period: '/ para siempre',
+                tier1F1: 'Hasta 500 Mensajes / Mes',
+                tier1F2: 'Cero Costo Mensual y Sin Tarjeta',
+                tier1F3: 'Sincronización de Contactos y Directorio',
+                tier1Btn: 'Comenzar Gratis para Siempre',
+                tier2Badge: 'Empresas y Operaciones',
+                tier2Name: 'Operaciones Pro',
+                tier2Period: '/ mes',
+                tier2Desc: 'Ventajas empresariales para negocios y organizaciones. Incluso podemos gestionar la recepción de mensajes en español.',
+                tier2F1: 'Mensajes y Relevo Ilimitado en Tiempo Real',
+                tier2F2: 'Revisión de Mensajes Traducidos (HITL)',
+                tier2F3: 'Sincronización Total de Contactos',
+                tier2F4: 'Gestión de Mensajes en Español Disponible',
+                tier2Btn: 'Iniciar Prueba Gratis de 30 Días (Sin Tarjeta)',
+                tier3Name: 'Abrevia 2 Clínico',
+                tier3Price: 'A Medida',
+                tier3Period: '/ HIPAA',
+                tier3Desc: 'Diseñado para organizaciones de salud cubiertas, clínicas y equipos de intérpretes.',
+                tier3F1: 'Acuerdo BAA de Salud Firmado',
+                tier3F2: 'Desidentificación Automática de PHI',
+                tier3F3: 'Registros de Auditoría Inmutables',
+                tier3Btn: 'Ver Ruta de Cumplimiento HIPAA',
+                pricingSecure: 'Asegurado por Stripe • Cifrado SSL de 256 bits • Cumplimiento PCI-DSS',
+                pricingClose: 'Volver al Inicio',
+                hipaaTitle: 'Ruta de Cumplimiento HIPAA y Salud',
+                hipaaBadge: 'Vista Previa de Abrevia 2',
+                hipaaP1: 'Abrevia es estrictamente una herramienta de operaciones administrativas diseñada para comunicación no médica (logística, bienes raíces, comercio y servicios en campo).',
+                hipaaP2: 'Estamos desarrollando pacientemente Abrevia 2, nuestra edición de grado clínico diseñada específicamente para entidades de salud e intérpretes médicos.',
+                hipaaUpcomingTitle: 'Próximas Funcionalidades Clínicas en Abrevia 2:',
+                hipaaFeat1: 'Acuerdos de Asociado Comercial (BAA) firmados con proveedores de nube y telecomunicaciones.',
+                hipaaFeat2: 'Sanitización automática de PHI y desidentificación previa a la traducción.',
+                hipaaFeat3: 'Registros de auditoría inmutables según la Regla de Seguridad HIPAA §164.312(b).',
+                hipaaFeat4: 'Protocolos de revisión humana calificada bajo ACA Sección 1557.',
+                hipaaClose: 'Cerrar'
+            }
+        };
+
+        let currentLang = 'en';
+        localStorage.setItem('abrevia_agent_lang', 'en');
+
+        function selectLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('abrevia_agent_lang', lang);
+
+            // Update Header Switchers
+            const btnEn = document.getElementById('langHeaderEn');
+            const btnEs = document.getElementById('langHeaderEs');
+            if (lang === 'en') {
+                if (btnEn) btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition';
+                if (btnEs) btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition';
+            } else {
+                if (btnEs) btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition';
+                if (btnEn) btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition';
+            }
+
+            // Update Toggle Pills
+            const toggleEn = document.getElementById('toggleEn');
+            const toggleEs = document.getElementById('toggleEs');
+            if (toggleEn && toggleEs) {
+                if (lang === 'en') {
+                    toggleEn.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition bg-brand-600 text-white shadow-sm';
+                    toggleEs.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition text-slate-400 hover:text-white';
+                } else {
+                    toggleEs.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition bg-brand-600 text-white shadow-sm';
+                    toggleEn.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition text-slate-400 hover:text-white';
+                }
+            }
+
+            // Update Hero & Launchpad
+            const c = content[lang];
+            const heroTitle = document.getElementById('heroTitle');
+            if (heroTitle) heroTitle.textContent = c.heroTitle;
+            const heroSubtitleEs = document.getElementById('heroSubtitleEs');
+            if (heroSubtitleEs && c.heroSubtitleBilingual) heroSubtitleEs.textContent = c.heroSubtitleBilingual;
+            const heroSubtitle = document.getElementById('heroSubtitle');
+            if (heroSubtitle) heroSubtitle.textContent = c.heroSubtitle;
+
+            // Industry & Title VI Badges under Headline (Clickable to GitHub)
+            const indLog = document.getElementById('indLogistics');
+            if (indLog) {
+                indLog.textContent = c.indLogistics;
+                if (c.urlLogistics) indLog.href = c.urlLogistics;
+            }
+            const indFld = document.getElementById('indField');
+            if (indFld) {
+                indFld.textContent = c.indField;
+                if (c.urlField) indFld.href = c.urlField;
+            }
+            const indOps = document.getElementById('indOperations');
+            if (indOps) {
+                indOps.textContent = c.indOperations;
+                if (c.urlOperations) indOps.href = c.urlOperations;
+            }
+            const indT6 = document.getElementById('indTitle6');
+            if (indT6) {
+                indT6.textContent = c.indTitle6 || '🏛️ Title VI Sectors';
+                if (c.urlTitle6) indT6.href = c.urlTitle6;
+            }
+
+            const profileHint = document.getElementById('profileHint');
+            if (profileHint) profileHint.innerHTML = c.profileHint;
+            const launchBtnText = document.getElementById('launchBtnText');
+            if (launchBtnText) launchBtnText.textContent = c.launchBtnText;
+
+            // PIN Card Localization
+            const pinTitle = document.getElementById('pinCardTitle');
+            if (pinTitle && c.pinCardTitle) pinTitle.textContent = c.pinCardTitle;
+            const pinSub = document.getElementById('pinCardSubtitle');
+            if (pinSub && c.pinCardSubtitle) pinSub.textContent = c.pinCardSubtitle;
+            const pinBtn = document.getElementById('pinUnlockBtnText');
+            if (pinBtn && c.pinUnlockBtnText) pinBtn.textContent = c.pinUnlockBtnText;
+            const pinReset = document.getElementById('pinResetLinkText');
+            if (pinReset && c.pinResetLinkText) pinReset.textContent = c.pinResetLinkText;
+            const pinErr = document.getElementById('pinErrorMsg');
+            if (pinErr && c.pinErrorMsg) pinErr.textContent = c.pinErrorMsg;
+
+                        // Share & Footer Localization
+            const idxShr = document.getElementById('indexShareBtnText');
+            if (idxShr && c.indexShareBtnText) idxShr.textContent = c.indexShareBtnText;
+            const ftBio = document.getElementById('footerBrandBio');
+            if (ftBio && c.footerBrandBio) ftBio.textContent = c.footerBrandBio;
+            const ftShr = document.getElementById('footerShareBtnText');
+            if (ftShr && c.footerShareBtnText) ftShr.textContent = c.footerShareBtnText;
+            const ftCol1 = document.getElementById('footerColComplianceHeader');
+            if (ftCol1 && c.footerColComplianceHeader) ftCol1.textContent = c.footerColComplianceHeader;
+            const ftWho = document.getElementById('footerLinkWhoIsThis');
+            const ftSelf = document.getElementById('footerLinkSelfAssessment');
+            if (ftSelf && c.footerLinkSelfAssessment) ftSelf.textContent = c.footerLinkSelfAssessment;
+            if (ftWho && c.footerLinkWhoIsThis) ftWho.textContent = c.footerLinkWhoIsThis;
+            const ftT6 = document.getElementById('footerLinkTitle6');
+            if (ftT6 && c.footerLinkTitle6) ftT6.textContent = c.footerLinkTitle6;
+            const ftSec = document.getElementById('footerLinkSectors');
+            if (ftSec && c.footerLinkSectors) ftSec.textContent = c.footerLinkSectors;
+            const ftCol2 = document.getElementById('footerColLegalHeader');
+            if (ftCol2 && c.footerColLegalHeader) ftCol2.textContent = c.footerColLegalHeader;
+            const ftTrm = document.getElementById('footerLinkTerms');
+            if (ftTrm && c.footerLinkTerms) ftTrm.textContent = c.footerLinkTerms;
+            const ftPrv = document.getElementById('footerLinkPrivacy');
+            if (ftPrv && c.footerLinkPrivacy) ftPrv.textContent = c.footerLinkPrivacy;
+            const ftDsc = document.getElementById('footerLinkDisclaimers');
+            const ftCnt = document.getElementById('footerLinkContact');
+            if (ftCnt && c.footerLinkContact) ftCnt.textContent = c.footerLinkContact;
+            if (ftDsc && c.footerLinkDisclaimers) ftDsc.textContent = c.footerLinkDisclaimers;
+            const ftCol3 = document.getElementById('footerColPlatformHeader');
+            if (ftCol3 && c.footerColPlatformHeader) ftCol3.textContent = c.footerColPlatformHeader;
+            const ftSho = document.getElementById('footerLinkShortcut');
+            if (ftSho && c.footerLinkShortcut) ftSho.textContent = c.footerLinkShortcut;
+            const ftSts = document.getElementById('footerStatusBadge');
+            if (ftSts && c.footerStatusBadge) ftSts.textContent = c.footerStatusBadge;
+            const ftNhp = document.getElementById('footerNonHipaaBadge');
+            if (ftNhp && c.footerNonHipaaBadge) ftNhp.textContent = c.footerNonHipaaBadge;
+            const ftT6b = document.getElementById('footerTitle6Badge');
+            if (ftT6b && c.footerTitle6Badge) ftT6b.textContent = c.footerTitle6Badge;
+
+            // Who is this app for Localization
+            const whoHdr = document.getElementById('whoIsThisForHeaderText');
+            if (whoHdr && c.whoIsThisForHeaderText) whoHdr.textContent = c.whoIsThisForHeaderText;
+            const whoHero = document.getElementById('whoIsThisForHeroText');
+            if (whoHero && c.whoIsThisForHeroText) whoHero.textContent = c.whoIsThisForHeroText;
+            const ftLearn = document.getElementById('footerLearnMoreBtn');
+            if (ftLearn && c.footerLearnMore) ftLearn.textContent = c.footerLearnMore;
+
+            // Shortcut Localization
+            const idxInstBtn = document.getElementById('indexInstallBtnText');
+            if (idxInstBtn && c.indexInstallBtnText) idxInstBtn.textContent = c.indexInstallBtnText;
+            const pwaTitle = document.getElementById('pwaBannerTitle');
+            if (pwaTitle && c.pwaBannerTitle) pwaTitle.textContent = c.pwaBannerTitle;
+            const pwaSub = document.getElementById('pwaBannerSubtitle');
+            if (pwaSub && c.pwaBannerSubtitle) pwaSub.textContent = c.pwaBannerSubtitle;
+            const pwaAct = document.getElementById('pwaBannerActionBtn');
+            if (pwaAct && c.pwaBannerActionBtn) pwaAct.textContent = c.pwaBannerActionBtn;
+            const instTitle = document.getElementById('installModalTitle');
+            if (instTitle && c.installModalTitle) instTitle.textContent = c.installModalTitle;
+            const instBadge = document.getElementById('installModalBadge');
+            if (instBadge && c.installModalBadge) instBadge.textContent = c.installModalBadge;
+            const instDesc = document.getElementById('installModalDesc');
+            if (instDesc && c.installModalDesc) instDesc.textContent = c.installModalDesc;
+            const instIos = document.getElementById('installStepIos');
+            if (instIos && c.installStepIos) instIos.innerHTML = c.installStepIos;
+            const instAnd = document.getElementById('installStepAndroid');
+            if (instAnd && c.installStepAndroid) instAnd.innerHTML = c.installStepAndroid;
+            const instDesk = document.getElementById('installStepDesktop');
+            if (instDesk && c.installStepDesktop) instDesk.innerHTML = c.installStepDesktop;
+            const instClose = document.getElementById('installCloseBtnText');
+            if (instClose && c.installCloseBtnText) instClose.textContent = c.installCloseBtnText;
+
+
+
+            // Trust Notes
+            const t1 = document.getElementById('trustNote1');
+            if (t1) t1.textContent = c.trustNote1;
+            const t2 = document.getElementById('trustNote2');
+            if (t2) t2.textContent = c.trustNote2;
+            const t3 = document.getElementById('trustNote3');
+            if (t3) t3.textContent = c.trustNote3;
+
+            // Update Pillars
+            const p1Title = document.getElementById('pillar1Title');
+            if (p1Title) p1Title.textContent = c.pillar1Title;
+            const p1Desc = document.getElementById('pillar1Desc');
+            if (p1Desc) p1Desc.textContent = c.pillar1Desc;
+
+            const p2Title = document.getElementById('pillar2Title');
+            if (p2Title) p2Title.textContent = c.pillar2Title;
+            const p2Desc = document.getElementById('pillar2Desc');
+            if (p2Desc) p2Desc.textContent = c.pillar2Desc;
+
+            const p3Title = document.getElementById('pillar3Title');
+            if (p3Title) p3Title.textContent = c.pillar3Title;
+            const p3Desc = document.getElementById('pillar3Desc');
+            if (p3Desc) p3Desc.textContent = c.pillar3Desc;
+
+            // Built For Pills
+            const bfLabel = document.getElementById('builtForLabel');
+            if (bfLabel) bfLabel.textContent = c.builtForLabel;
+            const bf1 = document.getElementById('builtFor1');
+            if (bf1) bf1.textContent = c.builtFor1;
+            const bf2 = document.getElementById('builtFor2');
+            if (bf2) bf2.textContent = c.builtFor2;
+            const bf3 = document.getElementById('builtFor3');
+            if (bf3) bf3.textContent = c.builtFor3;
+            const bf4 = document.getElementById('builtFor4');
+            if (bf4) bf4.textContent = c.builtFor4;
+
+            // Footer Copyright & Notice
+            const ftCopy = document.getElementById('footerCopyright');
+            if (ftCopy) ftCopy.innerHTML = c.footerCopyright;
+            document.getElementById('footerNoticeText').innerHTML = `<span class="font-semibold text-slate-300">${c.footerNoticeTitle}</span> ${c.footerNotice}`;
+            document.getElementById('footerLearnMoreBtn').textContent = c.footerLearnMore;
+
+            // Update Modal Content
+            document.getElementById('hipaaModalTitle').textContent = c.hipaaTitle;
+            document.getElementById('hipaaModalBadge').textContent = c.hipaaBadge;
+            document.getElementById('hipaaP1').innerHTML = c.hipaaP1;
+            document.getElementById('hipaaP2').innerHTML = c.hipaaP2;
+            document.getElementById('hipaaUpcomingTitle').textContent = c.hipaaUpcomingTitle;
+            document.getElementById('hipaaFeat1').textContent = c.hipaaFeat1;
+            document.getElementById('hipaaFeat2').textContent = c.hipaaFeat2;
+            document.getElementById('hipaaFeat3').textContent = c.hipaaFeat3;
+            document.getElementById('hipaaFeat4').textContent = c.hipaaFeat4;
+            document.getElementById('hipaaCloseBtn').textContent = c.hipaaClose;
+
+            // Pricing removed from landing page (accessible only in user dashboard)
+        }
+
+        function handleEnterWorkspace(e) {
+            e.preventDefault();
+            localStorage.removeItem('abrevia_signed_out');
+            window.location.href = `/dashboard.html?lang=${currentLang}`;
+        }
+
+        // --- PIN Unlock Handlers ---
+        function checkPinStatus() {
+            const pin = localStorage.getItem('abrevia_pin');
+            const isSignedOut = localStorage.getItem('abrevia_signed_out') === 'true';
+            const pinCard = document.getElementById('pinUnlockCard');
+            const launchContainer = document.getElementById('launchContainer');
+
+            if (pin && isSignedOut) {
+                pinCard?.classList.remove('hidden');
+                launchContainer?.classList.add('hidden');
+                setTimeout(() => document.getElementById('unlockBox1')?.focus(), 150);
+            } else {
+                pinCard?.classList.add('hidden');
+                launchContainer?.classList.remove('hidden');
+            }
+        }
+
+        function handleUnlockPinKey(event, idx) {
+            const val = event.target.value;
+            if (event.key === 'Backspace') {
+                if (!val && idx > 1) {
+                    document.getElementById('unlockBox' + (idx - 1))?.focus();
+                }
+                return;
+            }
+            if (event.key === 'Enter') {
+                attemptPinUnlock();
+                return;
+            }
+            if (val && val.length >= 1 && idx < 4) {
+                document.getElementById('unlockBox' + (idx + 1))?.focus();
+            }
+            if (idx === 4 && val) {
+                attemptPinUnlock();
+            }
+        }
+
+        function attemptPinUnlock() {
+            const b1 = document.getElementById('unlockBox1')?.value || '';
+            const b2 = document.getElementById('unlockBox2')?.value || '';
+            const b3 = document.getElementById('unlockBox3')?.value || '';
+            const b4 = document.getElementById('unlockBox4')?.value || '';
+            const entered = (b1 + b2 + b3 + b4).trim();
+            const stored = localStorage.getItem('abrevia_pin');
+            const errorMsg = document.getElementById('pinErrorMsg');
+
+            if (entered === stored) {
+                localStorage.removeItem('abrevia_signed_out');
+                window.location.href = '/dashboard.html?lang=' + currentLang;
+            } else {
+                if (errorMsg) errorMsg.classList.remove('hidden');
+                for (let i = 1; i <= 4; i++) {
+                    const b = document.getElementById('unlockBox' + i);
+                    if (b) b.value = '';
+                }
+                document.getElementById('unlockBox1')?.focus();
+            }
+        }
+
+        function resetPinAndEnter() {
+            const msg = currentLang === 'es' 
+                ? '¿Desea restablecer su PIN y acceder a su espacio de trabajo?' 
+                : 'Would you like to reset your PIN and access your workspace?';
+            if (confirm(msg)) {
+                localStorage.removeItem('abrevia_pin');
+                localStorage.removeItem('abrevia_signed_out');
+                window.location.href = '/dashboard.html?lang=' + currentLang;
+            }
+        }
+
+        // Run PIN check on load
+        window.addEventListener('DOMContentLoaded', checkPinStatus);
+
+
+        // HIPAA Modal Handlers
+        function openHipaaModal() {
+            document.getElementById('hipaaModal').classList.remove('hidden');
+        }
+
+        function closeHipaaModal() {
+            document.getElementById('hipaaModal').classList.add('hidden');
+        }
+
+        // Initialize with default or saved language
+        selectLanguage(currentLang);
+
+        // PWA Shortcut Installation
+        let indexDeferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            indexDeferredPrompt = e;
+        });
+
+        function triggerIndexPwaInstall() {
+            if (indexDeferredPrompt) {
+                indexDeferredPrompt.prompt();
+                indexDeferredPrompt.userChoice.then(() => {
+                    indexDeferredPrompt = null;
+                    dismissIndexPwaBanner();
+                });
+            } else {
+                openInstallModal();
+            }
+        }
+
+        function openInstallModal() {
+            document.getElementById('installHelperModal')?.classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installHelperModal')?.classList.add('hidden');
+        }
+
+        function initIndexPwaBanner() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            if (isStandalone) return;
+            const isDismissed = sessionStorage.getItem('abrevia_pwa_dismissed') === 'true';
+            if (!isDismissed) {
+                setTimeout(() => {
+                    const banner = document.getElementById('pwaPromptBanner');
+                    if (banner) {
+                        banner.classList.remove('hidden');
+                        banner.classList.add('flex');
+                    }
+                }, 1200);
+            }
+        }
+
+        function dismissIndexPwaBanner() {
+            sessionStorage.setItem('abrevia_pwa_dismissed', 'true');
+            const banner = document.getElementById('pwaPromptBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+                banner.classList.remove('flex');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', initIndexPwaBanner);
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+        }
+
+    
+        // --- Web Share API & Organic Growth Handler ---
+        async function shareAbreviaApp() {
+            const isEs = (typeof currentLang !== 'undefined' ? currentLang : 'en') === 'es';
+            const shareData = {
+                title: 'Abrevia',
+                text: isEs 
+                    ? 'Abrevia — Tecnología de comunicación bilingüe instantánea sin descargas para operaciones, empresas y comunidades.'
+                    : 'Abrevia — Instant two-way bilingual asynchronous communication technology with zero downloads for operations, organizations & communities.',
+                url: 'https://abrevia-beta.vercel.app'
+            };
+
+            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
+            }
+
+            try {
+                await navigator.clipboard.writeText('https://abrevia-beta.vercel.app');
+                alert(isEs ? '¡Enlace copiado al portapapeles! Listo para compartir.' : 'Link copied to clipboard! Ready to share.');
+            } catch (err) {
+                window.prompt(isEs ? 'Copie este enlace para compartir Abrevia:' : 'Copy this link to share Abrevia:', 'https://abrevia-beta.vercel.app');
+            }
+        }
+
+    </script>
+
+
+    <!-- Proactive Desktop & Mobile Shortcut Banner -->
+    <div id="pwaPromptBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm bg-slate-900 border border-brand-500/40 rounded-2xl p-4 shadow-2xl z-40 flex items-center justify-between gap-3 backdrop-blur-md hidden">
+        <div class="flex items-center space-x-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-300 text-lg shrink-0">
+                📲
+            </div>
+            <div class="min-w-0">
+                <div class="text-xs font-bold text-white truncate" id="pwaBannerTitle">Add Shortcut</div>
+                <div class="text-[11px] text-slate-400 truncate" id="pwaBannerSubtitle">1-tap desktop & home screen access</div>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 shrink-0">
+            <button onclick="triggerIndexPwaInstall()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow-sm" id="pwaBannerActionBtn">
+                Add
+            </button>
+            <button onclick="dismissIndexPwaBanner()" class="text-slate-500 hover:text-slate-300 text-sm px-1.5 font-bold transition">
+                &times;
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Desktop / Home Screen Shortcut Modal -->
+    <div id="installHelperModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl text-left relative">
+            <button onclick="closeInstallModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-lg shadow-sm">
+                    📲
+                </div>
+                <div>
+                    <h3 id="installModalTitle" class="text-base font-bold text-white">Add Shortcut</h3>
+                    <span id="installModalBadge" class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">1-Tap Instant Access</span>
+                </div>
+            </div>
+            <p id="installModalDesc" class="text-xs text-slate-300 mb-4 leading-relaxed">
+                Add Abrevia directly to your computer desktop or phone home screen for instant zero-friction launch without typing URLs.
+            </p>
+            <div class="space-y-3 text-xs text-slate-400 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">1.</span>
+                    <span id="installStepIos"><strong>iPhone (Safari):</strong> Tap Share (<span class="text-white">⎋</span>) and select <strong>"Add to Home Screen"</strong> (<span class="text-white">➕</span>).</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">2.</span>
+                    <span id="installStepAndroid"><strong>Android (Chrome / Samsung):</strong> Tap menu (<span class="text-white">⋮</span>) and select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">3.</span>
+                    <span id="installStepDesktop"><strong>PC / Mac:</strong> Look for the <strong>Install</strong> icon (<span class="text-white">⊕</span>) in your browser address bar.</span>
+                </div>
+            </div>
+            <button onclick="closeInstallModal()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
+                <span id="installCloseBtnText">Got it</span>
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>
