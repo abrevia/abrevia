@@ -311,6 +311,7 @@ const I18N = {
         wrapUpDirectSignOutBtn: 'Sign Out Without PIN',
         wrapUpCancelBtn: 'Stay in Dashboard',
         // Install Helper Modal & PWA Banner
+        installAppBtnText: 'Add Shortcut',
         installModalTitle: 'Add Shortcut',
         installModalBadge: '1-Tap Instant Access',
         installModalDesc: 'Add Abrevia directly to your computer desktop or phone home screen for instant zero-friction launch without typing URLs.',
@@ -477,6 +478,7 @@ const I18N = {
         wrapUpDirectSignOutBtn: 'Cerrar Sesión Sin PIN',
         wrapUpCancelBtn: 'Permanecer en el Panel',
         // Install Helper Modal & PWA Banner
+        installAppBtnText: 'Agregar Atajo',
         installModalTitle: 'Agregar Acceso Directo',
         installModalBadge: 'Acceso Instantáneo en 1 Toque',
         installModalDesc: 'Agregue Abrevia directamente al escritorio de su computadora o pantalla de inicio de su teléfono para iniciar al instante sin escribir URLs.',
@@ -1479,6 +1481,10 @@ function applyDashboardLocalization() {
     if (wCancelBtn) wCancelBtn.textContent = t.wrapUpCancelBtn || 'Stay in Dashboard';
 
     // Install Helper Modal Localization
+    const instHeaderBtnText = document.getElementById('installAppBtnText');
+    if (instHeaderBtnText) instHeaderBtnText.textContent = t.installAppBtnText || (dashboardMode === 'es' ? 'Agregar Atajo' : 'Add Shortcut');
+    const instHeaderBtn = document.getElementById('installAppBtn');
+    if (instHeaderBtn) instHeaderBtn.title = dashboardMode === 'es' ? 'Agregar acceso directo al escritorio o pantalla principal' : 'Add shortcut to desktop or home screen';
     const instTitle = document.getElementById('installModalTitle');
     if (instTitle) instTitle.textContent = t.installModalTitle || 'Add Shortcut';
     const instBadge = document.getElementById('installModalBadge');
@@ -3201,20 +3207,24 @@ function signOutWithoutPin() {
 
 
 function initPwaBanner() {
-    const isDismissed = localStorage.getItem('abrevia_pwa_dismissed') === 'true';
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isStandalone) return;
+
+    const isDismissed = sessionStorage.getItem('abrevia_pwa_dismissed') === 'true';
     if (!isDismissed) {
         setTimeout(() => {
             const banner = document.getElementById('pwaPromptBanner');
             if (banner) {
+                applyDashboardLocalization();
                 banner.classList.remove('hidden');
                 banner.classList.add('flex');
             }
-        }, 1500);
+        }, 1200);
     }
 }
 
 function dismissPwaBanner() {
-    localStorage.setItem('abrevia_pwa_dismissed', 'true');
+    sessionStorage.setItem('abrevia_pwa_dismissed', 'true');
     const banner = document.getElementById('pwaPromptBanner');
     if (banner) {
         banner.classList.add('hidden');

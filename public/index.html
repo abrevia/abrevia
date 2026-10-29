@@ -50,8 +50,12 @@
                 <span class="text-base sm:text-xl font-extrabold tracking-tight text-white">Abrevia</span>
             </div>
 
-            <!-- Right: Language Switcher -->
+            <!-- Right: Shortcut & Language Switcher -->
             <div class="flex items-center space-x-2 shrink-0">
+                <button id="indexInstallBtn" onclick="triggerIndexPwaInstall()" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 border border-brand-500/30 transition shadow-sm" title="Add shortcut to desktop or home screen">
+                    <span>📲</span>
+                    <span id="indexInstallBtnText">Add Shortcut</span>
+                </button>
                 <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 rounded-lg shadow-inner">
                     <button id="langHeaderEn" onclick="selectLanguage('en')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-brand-600 text-white transition">EN</button>
                     <button id="langHeaderEs" onclick="selectLanguage('es')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white transition">ES</button>
@@ -483,6 +487,31 @@
             const pinErr = document.getElementById('pinErrorMsg');
             if (pinErr && c.pinErrorMsg) pinErr.textContent = c.pinErrorMsg;
 
+            // Shortcut Localization
+            const idxInstBtn = document.getElementById('indexInstallBtnText');
+            if (idxInstBtn && c.indexInstallBtnText) idxInstBtn.textContent = c.indexInstallBtnText;
+            const pwaTitle = document.getElementById('pwaBannerTitle');
+            if (pwaTitle && c.pwaBannerTitle) pwaTitle.textContent = c.pwaBannerTitle;
+            const pwaSub = document.getElementById('pwaBannerSubtitle');
+            if (pwaSub && c.pwaBannerSubtitle) pwaSub.textContent = c.pwaBannerSubtitle;
+            const pwaAct = document.getElementById('pwaBannerActionBtn');
+            if (pwaAct && c.pwaBannerActionBtn) pwaAct.textContent = c.pwaBannerActionBtn;
+            const instTitle = document.getElementById('installModalTitle');
+            if (instTitle && c.installModalTitle) instTitle.textContent = c.installModalTitle;
+            const instBadge = document.getElementById('installModalBadge');
+            if (instBadge && c.installModalBadge) instBadge.textContent = c.installModalBadge;
+            const instDesc = document.getElementById('installModalDesc');
+            if (instDesc && c.installModalDesc) instDesc.textContent = c.installModalDesc;
+            const instIos = document.getElementById('installStepIos');
+            if (instIos && c.installStepIos) instIos.innerHTML = c.installStepIos;
+            const instAnd = document.getElementById('installStepAndroid');
+            if (instAnd && c.installStepAndroid) instAnd.innerHTML = c.installStepAndroid;
+            const instDesk = document.getElementById('installStepDesktop');
+            if (instDesk && c.installStepDesktop) instDesk.innerHTML = c.installStepDesktop;
+            const instClose = document.getElementById('installCloseBtnText');
+            if (instClose && c.installCloseBtnText) instClose.textContent = c.installCloseBtnText;
+
+
 
             // Trust Notes
             const t1 = document.getElementById('trustNote1');
@@ -632,7 +661,127 @@
 
         // Initialize with default or saved language
         selectLanguage(currentLang);
+
+        // PWA Shortcut Installation
+        let indexDeferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            indexDeferredPrompt = e;
+        });
+
+        function triggerIndexPwaInstall() {
+            if (indexDeferredPrompt) {
+                indexDeferredPrompt.prompt();
+                indexDeferredPrompt.userChoice.then(() => {
+                    indexDeferredPrompt = null;
+                    dismissIndexPwaBanner();
+                });
+            } else {
+                openInstallModal();
+            }
+        }
+
+        function openInstallModal() {
+            document.getElementById('installHelperModal')?.classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installHelperModal')?.classList.add('hidden');
+        }
+
+        function initIndexPwaBanner() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            if (isStandalone) return;
+            const isDismissed = sessionStorage.getItem('abrevia_pwa_dismissed') === 'true';
+            if (!isDismissed) {
+                setTimeout(() => {
+                    const banner = document.getElementById('pwaPromptBanner');
+                    if (banner) {
+                        banner.classList.remove('hidden');
+                        banner.classList.add('flex');
+                    }
+                }, 1200);
+            }
+        }
+
+        function dismissIndexPwaBanner() {
+            sessionStorage.setItem('abrevia_pwa_dismissed', 'true');
+            const banner = document.getElementById('pwaPromptBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+                banner.classList.remove('flex');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', initIndexPwaBanner);
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+        }
+
     </script>
+
+
+    <!-- Proactive Desktop & Mobile Shortcut Banner -->
+    <div id="pwaPromptBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm bg-slate-900 border border-brand-500/40 rounded-2xl p-4 shadow-2xl z-40 flex items-center justify-between gap-3 backdrop-blur-md hidden">
+        <div class="flex items-center space-x-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-300 text-lg shrink-0">
+                📲
+            </div>
+            <div class="min-w-0">
+                <div class="text-xs font-bold text-white truncate" id="pwaBannerTitle">Add Shortcut</div>
+                <div class="text-[11px] text-slate-400 truncate" id="pwaBannerSubtitle">1-tap desktop & home screen access</div>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 shrink-0">
+            <button onclick="triggerIndexPwaInstall()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow-sm" id="pwaBannerActionBtn">
+                Add
+            </button>
+            <button onclick="dismissIndexPwaBanner()" class="text-slate-500 hover:text-slate-300 text-sm px-1.5 font-bold transition">
+                &times;
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Desktop / Home Screen Shortcut Modal -->
+    <div id="installHelperModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl text-left relative">
+            <button onclick="closeInstallModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-lg shadow-sm">
+                    📲
+                </div>
+                <div>
+                    <h3 id="installModalTitle" class="text-base font-bold text-white">Add Shortcut</h3>
+                    <span id="installModalBadge" class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">1-Tap Instant Access</span>
+                </div>
+            </div>
+            <p id="installModalDesc" class="text-xs text-slate-300 mb-4 leading-relaxed">
+                Add Abrevia directly to your computer desktop or phone home screen for instant zero-friction launch without typing URLs.
+            </p>
+            <div class="space-y-3 text-xs text-slate-400 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">1.</span>
+                    <span id="installStepIos"><strong>iPhone (Safari):</strong> Tap Share (<span class="text-white">⎋</span>) and select <strong>"Add to Home Screen"</strong> (<span class="text-white">➕</span>).</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">2.</span>
+                    <span id="installStepAndroid"><strong>Android (Chrome / Samsung):</strong> Tap menu (<span class="text-white">⋮</span>) and select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">3.</span>
+                    <span id="installStepDesktop"><strong>PC / Mac:</strong> Look for the <strong>Install</strong> icon (<span class="text-white">⊕</span>) in your browser address bar.</span>
+                </div>
+            </div>
+            <button onclick="closeInstallModal()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
+                <span id="installCloseBtnText">Got it</span>
+            </button>
+        </div>
+    </div>
 
 </body>
 </html>

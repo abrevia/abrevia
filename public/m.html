@@ -40,6 +40,10 @@
 
             <!-- Language Switcher -->
             <div class="flex items-center space-x-2">
+                <button id="portalInstallBtn" onclick="triggerPortalInstall()" class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-brand-500/15 text-brand-300 border border-brand-500/30 hover:bg-brand-500/25 transition shadow-sm" title="Add Shortcut">
+                    <span>📲</span>
+                    <span id="portalInstallBtnText">Atajo</span>
+                </button>
                 <button id="portalSoundBtn" onclick="togglePortalSound()" class="p-1 rounded-md text-slate-400 hover:text-white transition text-xs" title="Sound alerts">
                     <span id="portalSoundIcon">🔔</span>
                 </button>
@@ -194,6 +198,28 @@
             document.getElementById('sendReplyBtnText').textContent = t.sendBtn;
             document.getElementById('smsShorthandNote').textContent = t.smsHint;
             document.getElementById('footerSecureText').textContent = t.footerText;
+
+            const pBtn = document.getElementById('portalInstallBtnText');
+            if (pBtn && t.portalInstallBtnText) pBtn.textContent = t.portalInstallBtnText;
+            const pwaTitle = document.getElementById('pwaBannerTitle');
+            if (pwaTitle && t.pwaBannerTitle) pwaTitle.textContent = t.pwaBannerTitle;
+            const pwaSub = document.getElementById('pwaBannerSubtitle');
+            if (pwaSub && t.pwaBannerSubtitle) pwaSub.textContent = t.pwaBannerSubtitle;
+            const pwaAct = document.getElementById('pwaBannerActionBtn');
+            if (pwaAct && t.pwaBannerActionBtn) pwaAct.textContent = t.pwaBannerActionBtn;
+            const instTitle = document.getElementById('installModalTitle');
+            if (instTitle && t.installModalTitle) instTitle.textContent = t.installModalTitle;
+            const instBadge = document.getElementById('installModalBadge');
+            if (instBadge && t.installModalBadge) instBadge.textContent = t.installModalBadge;
+            const instDesc = document.getElementById('installModalDesc');
+            if (instDesc && t.installModalDesc) instDesc.textContent = t.installModalDesc;
+            const instIos = document.getElementById('installStepIos');
+            if (instIos && t.installStepIos) instIos.innerHTML = t.installStepIos;
+            const instAnd = document.getElementById('installStepAndroid');
+            if (instAnd && t.installStepAndroid) instAnd.innerHTML = t.installStepAndroid;
+            const instClose = document.getElementById('installCloseBtnText');
+            if (instClose && t.installCloseBtnText) instClose.textContent = t.installCloseBtnText;
+
 
             const btnEs = document.getElementById('langEsBtn');
             const btnEn = document.getElementById('langEnBtn');
@@ -402,6 +428,60 @@
                     renderMessages();
                 } else {
                     await loadTicketData();
+
+        // Recipient PWA Shortcut Installation
+        let portalDeferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            portalDeferredPrompt = e;
+        });
+
+        function triggerPortalInstall() {
+            if (portalDeferredPrompt) {
+                portalDeferredPrompt.prompt();
+                portalDeferredPrompt.userChoice.then(() => {
+                    portalDeferredPrompt = null;
+                    dismissPortalPwaBanner();
+                });
+            } else {
+                openInstallModal();
+            }
+        }
+
+        function openInstallModal() {
+            document.getElementById('installHelperModal')?.classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installHelperModal')?.classList.add('hidden');
+        }
+
+        function initPortalPwaBanner() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            if (isStandalone) return;
+            const isDismissed = sessionStorage.getItem('abrevia_portal_pwa_dismissed') === 'true';
+            if (!isDismissed) {
+                setTimeout(() => {
+                    const banner = document.getElementById('pwaPromptBanner');
+                    if (banner) {
+                        banner.classList.remove('hidden');
+                        banner.classList.add('flex');
+                    }
+                }, 1500);
+            }
+        }
+
+        function dismissPortalPwaBanner() {
+            sessionStorage.setItem('abrevia_portal_pwa_dismissed', 'true');
+            const banner = document.getElementById('pwaPromptBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+                banner.classList.remove('flex');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', initPortalPwaBanner);
+
                 }
             } catch (err) {
                 alert('Error: ' + err.message);
@@ -466,6 +546,60 @@
         // Initialize
         setPortalLang(portalLang);
         loadTicketData();
+
+        // Recipient PWA Shortcut Installation
+        let portalDeferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            portalDeferredPrompt = e;
+        });
+
+        function triggerPortalInstall() {
+            if (portalDeferredPrompt) {
+                portalDeferredPrompt.prompt();
+                portalDeferredPrompt.userChoice.then(() => {
+                    portalDeferredPrompt = null;
+                    dismissPortalPwaBanner();
+                });
+            } else {
+                openInstallModal();
+            }
+        }
+
+        function openInstallModal() {
+            document.getElementById('installHelperModal')?.classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installHelperModal')?.classList.add('hidden');
+        }
+
+        function initPortalPwaBanner() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            if (isStandalone) return;
+            const isDismissed = sessionStorage.getItem('abrevia_portal_pwa_dismissed') === 'true';
+            if (!isDismissed) {
+                setTimeout(() => {
+                    const banner = document.getElementById('pwaPromptBanner');
+                    if (banner) {
+                        banner.classList.remove('hidden');
+                        banner.classList.add('flex');
+                    }
+                }, 1500);
+            }
+        }
+
+        function dismissPortalPwaBanner() {
+            sessionStorage.setItem('abrevia_portal_pwa_dismissed', 'true');
+            const banner = document.getElementById('pwaPromptBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+                banner.classList.remove('flex');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', initPortalPwaBanner);
+
 
         
         // --- Discreet Audio & Haptic Notification for Recipient ---
@@ -626,5 +760,61 @@
             } catch (e) {}
         }, 5000);
     </script>
+
+    <!-- Proactive Desktop & Mobile Shortcut Banner -->
+    <div id="pwaPromptBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm bg-slate-900 border border-brand-500/40 rounded-2xl p-3.5 shadow-2xl z-40 flex items-center justify-between gap-3 backdrop-blur-md hidden">
+        <div class="flex items-center space-x-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-lg bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-300 text-base shrink-0">
+                📲
+            </div>
+            <div class="min-w-0">
+                <div class="text-xs font-bold text-white truncate" id="pwaBannerTitle">Agregar Acceso Directo</div>
+                <div class="text-[10px] text-slate-400 truncate" id="pwaBannerSubtitle">Abrevia en su pantalla de inicio</div>
+            </div>
+        </div>
+        <div class="flex items-center space-x-1.5 shrink-0">
+            <button onclick="triggerPortalInstall()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-2.5 py-1 rounded-lg transition shadow-sm" id="pwaBannerActionBtn">
+                Instalar
+            </button>
+            <button onclick="dismissPortalPwaBanner()" class="text-slate-500 hover:text-slate-300 text-sm px-1 font-bold transition">
+                &times;
+            </button>
+        </div>
+    </div>
+
+    <!-- Shortcut Instructions Modal -->
+    <div id="installHelperModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-sm w-full shadow-2xl text-left relative">
+            <button onclick="closeInstallModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg font-bold p-1">
+                &times;
+            </button>
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-lg shadow-sm">
+                    📲
+                </div>
+                <div>
+                    <h3 id="installModalTitle" class="text-base font-bold text-white">Agregar Acceso Directo</h3>
+                    <span id="installModalBadge" class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Acceso Rápido</span>
+                </div>
+            </div>
+            <p id="installModalDesc" class="text-xs text-slate-300 mb-4 leading-relaxed">
+                Agregue este portal de mensajes a su pantalla de inicio para responder al instante sin buscar enlaces SMS.
+            </p>
+            <div class="space-y-3 text-xs text-slate-400 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">1.</span>
+                    <span id="installStepIos"><strong>iPhone (Safari):</strong> Toque Compartir (<span class="text-white">⎋</span>) y seleccione <strong>"Agregar a Inicio"</strong> (<span class="text-white">➕</span>).</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="text-brand-400 font-bold">2.</span>
+                    <span id="installStepAndroid"><strong>Android (Chrome / Samsung):</strong> Toque el menú (<span class="text-white">⋮</span>) y seleccione <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</span>
+                </div>
+            </div>
+            <button onclick="closeInstallModal()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2.5 rounded-xl transition">
+                <span id="installCloseBtnText">Entendido</span>
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>
