@@ -240,29 +240,13 @@
                             </div>
                         </div>
 
-                        <!-- Status & Prominent Dedicated HITL Button Bar -->
-                        <div class="flex items-center justify-between text-[11px] px-1 mt-2 text-slate-400 gap-2">
+                        <!-- Status Bar -->
+                        <div class="flex items-center justify-between text-[11px] px-1 mt-1.5 text-slate-400">
                             <div class="flex items-center space-x-2 min-w-0 truncate">
                                 <span class="inline-flex items-center space-x-1.5 text-emerald-400 font-medium shrink-0">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                     <span id="instantModeLabel">Secure</span>
                                 </span>
-                            </div>
-
-                            <!-- Action Buttons Bar: Pilot Manual, Live Interpreter & HITL -->
-                            <div class="shrink-0 flex items-center space-x-2">
-                                <!-- Pilot User Manual (PDF) Download Link -->
-                                <a href="/docs/ABREVIA_PILOT_USER_MANUAL.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 hover:text-white shadow-sm" title="Download official Abrevia Pilot Testing Manual & Protocol (PDF)">
-                                    <span>📄</span>
-                                    <span class="hidden sm:inline">Pilot Manual</span>
-                                </a>
-
-                                <!-- Request Live Interpreter Now Button -->
-                                <button id="liveInterpreterBtn" type="button" onclick="openLiveInterpreterModal()" class="inline-flex items-center space-x-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-semibold transition border border-indigo-500/40 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 hover:text-white shadow-sm" title="Request a certified live human interpreter from an on-demand Language Service Provider (LSP)">
-                                    <span id="liveInterpreterBtnIcon">🎧</span>
-                                    <span id="liveInterpreterBtnLabel" class="hidden sm:inline">Request Live Interpreter Now</span><span class="sm:hidden">Interpreter</span>
-                                    <span id="liveInterpreterBtnBadge" class="hidden text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-500/50 animate-pulse">REQ</span>
-                                </button>
                             </div>
                         </div>
 
@@ -1183,7 +1167,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_31"></script>
+    <script src="app.js?v=20261029_32"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
