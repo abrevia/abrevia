@@ -217,12 +217,12 @@ const I18N = {
         inputLabel: 'Type reply in English (Agent):',
         inputPlaceholder: 'Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)...',
         translateBtn: 'Send',
-        reviewModalTitle: 'Review Verified Translation',
-        reviewModalSubtitle: 'Confirm before opening WhatsApp to dispatch',
-        reviewOriginalHeader: 'Your Original Draft (English)',
-        reviewTranslatedHeader: 'Recipient Translation (Spanish)',
-        reviewCancelBtnText: 'Cancel / Edit',
-        reviewConfirmBtnText: 'Confirm & Open WhatsApp',
+        reviewModalTitle: 'Translation Preview',
+        reviewModalSubtitle: 'Check your message translation before submitting to WhatsApp',
+        reviewOriginalHeader: 'Your Message (English)',
+        reviewTranslatedHeader: 'Translated Message (Spanish)',
+        reviewCancelBtnText: 'Cancel',
+        reviewConfirmBtnText: 'Submit to WhatsApp →',
         translating: 'Translating...',
         progressStatus: 'Auto-Correcting Grammar & Translating...',
         progressComplete: '✓ Translated & Verified (100%)',
@@ -406,12 +406,12 @@ const I18N = {
         inputLabel: 'Escribe respuesta en Español (Agente):',
         inputPlaceholder: 'Escribe tu respuesta en español (ej. Su entrega está programada para mañana a las 2 PM)...',
         translateBtn: 'Enviar',
-        reviewModalTitle: 'Revisar Traducción Verificada',
-        reviewModalSubtitle: 'Confirme antes de abrir WhatsApp para enviar',
-        reviewOriginalHeader: 'Su Borrador Original (Español)',
-        reviewTranslatedHeader: 'Traducción al Destinatario (Inglés)',
-        reviewCancelBtnText: 'Cancelar / Editar',
-        reviewConfirmBtnText: 'Confirmar y Abrir WhatsApp',
+        reviewModalTitle: 'Vista Previa de Traducción',
+        reviewModalSubtitle: 'Revise la traducción de su mensaje antes de enviar a WhatsApp',
+        reviewOriginalHeader: 'Su Mensaje (Español)',
+        reviewTranslatedHeader: 'Mensaje Traducido (Inglés)',
+        reviewCancelBtnText: 'Cancelar',
+        reviewConfirmBtnText: 'Enviar a WhatsApp →',
         translating: 'Traduciendo...',
         progressStatus: 'Auto-corrigiendo gramática y traduciendo...',
         progressComplete: '✓ Traducción Verificada (100%)',
@@ -810,6 +810,7 @@ function insertTemplate(tplId) {
     const inputEl = document.getElementById('agent-input');
     if (inputEl) {
         inputEl.value = textToInsert;
+        inputEl.dispatchEvent(new Event('input', { bubbles: true }));
         inputEl.focus();
     }
     closeTemplatesModal();
@@ -1529,12 +1530,10 @@ function applyDashboardLocalization() {
     const schedSub = document.getElementById('scheduleModalSubtitle');
     if (schedSub) schedSub.textContent = t.scheduleModalSubtitle;
 
-    // HITL
-    document.getElementById('hitlTitleText').textContent = t.hitlTitle;
-    document.getElementById('hitlSubtitle').textContent = t.hitlSubtitle;
-    document.getElementById('cancelHitlBtn').textContent = t.cancelHitl;
-    document.getElementById('sendBtnText').textContent = t.sendBtn;
-    updateHitlAttachmentPreview();
+    // Optional HITL attachment preview guard
+    if (typeof updateHitlAttachmentPreview === 'function') {
+        updateHitlAttachmentPreview();
+    }
 
     // Contacts & New Thread Modal Localization
     const contactsBtnEl = document.getElementById('contactsBtnText');
@@ -1563,11 +1562,16 @@ function applyDashboardLocalization() {
     if (pullDeviceBtnEl) pullDeviceBtnEl.textContent = t.pullDeviceBtnText;
 
     // Modal
-    document.getElementById('modalTitle').textContent = t.modalTitle;
-    document.getElementById('modalSubtitle').textContent = t.modalSubtitle;
-    document.getElementById('modalPhoneLabel').innerHTML = `${t.modalPhoneLabel} <span class="text-red-400">*</span>`;
-    document.getElementById('modalCancelBtn').textContent = t.modalCancel;
-    document.getElementById('modalSubmitBtn').textContent = t.modalSubmit;
+    const mTitle = document.getElementById('modalTitle');
+    if (mTitle) mTitle.textContent = t.modalTitle;
+    const mSub = document.getElementById('modalSubtitle');
+    if (mSub) mSub.textContent = t.modalSubtitle;
+    const mPhone = document.getElementById('modalPhoneLabel');
+    if (mPhone) mPhone.innerHTML = `${t.modalPhoneLabel} <span class="text-red-400">*</span>`;
+    const mCancel = document.getElementById('modalCancelBtn');
+    if (mCancel) mCancel.textContent = t.modalCancel;
+    const mSubmit = document.getElementById('modalSubmitBtn');
+    if (mSubmit) mSubmit.textContent = t.modalSubmit;
 
     // Sender Profile Localization
     const spNavText = document.getElementById('senderProfileNavText');
@@ -1799,8 +1803,10 @@ function updateHitlAttachmentPreview() {
     if (!notice) return;
     const t = I18N[dashboardMode];
     if (currentAttachment) {
-        document.getElementById('hitlAttachmentLabel').textContent = t.mmsNotice;
-        document.getElementById('hitlAttachmentFileName').textContent = currentAttachment.name;
+        const lbl = document.getElementById('hitlAttachmentLabel');
+        if (lbl) lbl.textContent = t.mmsNotice;
+        const fn = document.getElementById('hitlAttachmentFileName');
+        if (fn) fn.textContent = currentAttachment.name;
         notice.classList.remove('hidden');
     } else {
         notice.classList.add('hidden');
@@ -2342,8 +2348,10 @@ async function legacyHandleTranslateAndSend() {
 // HITL Step 2: Confirm reviewed translation, upload attachment if any, and dispatch message via httpSMS
 async function confirmAndSend() {
     if (!currentTicket) return;
-    const reviewedText = document.getElementById('target-review-box').value.trim();
-    const originalDraft = document.getElementById('agent-input').value.trim();
+    const targetBox = document.getElementById('target-review-box');
+    const reviewedText = targetBox ? targetBox.value.trim() : '';
+    const inputEl = document.getElementById('agent-input');
+    const originalDraft = inputEl ? inputEl.value.trim() : '';
     if (!reviewedText && !currentAttachment) return;
 
     const t = I18N[dashboardMode];
@@ -2474,7 +2482,7 @@ async function handleSendPersonalWhatsApp() {
                         text: originalDraft, 
                         targetLang: targetLang 
                     }),
-                    signal: AbortSignal.timeout(4000)
+                    signal: AbortSignal.timeout(8000)
                 });
                 if (transRes.ok) {
                     const transData = await transRes.json();
@@ -2518,6 +2526,15 @@ async function handleSendPersonalWhatsApp() {
             if (charCount) charCount.textContent = `${translatedText.length} characters`;
             transBox.oninput = () => {
                 if (charCount) charCount.textContent = `${transBox.value.length} characters`;
+            };
+            transBox.onkeydown = (e) => {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeWhatsAppReviewModal();
+                } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    confirmWhatsAppDispatch();
+                }
             };
         }
 
