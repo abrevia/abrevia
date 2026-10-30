@@ -169,6 +169,69 @@ let dashboardMode = 'en';
 let currentAttachment = null; // { file, base64, name, size, type, uploadedUrl }
 let hitlModeEnabled = false; // Abrevia 1 default: Instant translation without human in the loop
 let contactsMap = {}; // phone -> { phone, name, company, email, notes, updatedAt }
+let cachedTickets = []; // Fast 0ms instant-load cached conversations
+try {
+    const rawCached = localStorage.getItem('abrevia_cached_tickets');
+    if (rawCached) cachedTickets = JSON.parse(rawCached);
+} catch (e) {}
+
+// Smart phone search helper: matches any format (+1, 10-digit, dashes, parentheses)
+function findContactByPhone(phoneInput) {
+    if (!phoneInput) return null;
+    const digits = phoneInput.replace(/\D/g, '');
+    if (!digits) return null;
+
+    if (contactsMap['+' + digits]) return contactsMap['+' + digits];
+    if (contactsMap[phoneInput]) return contactsMap[phoneInput];
+
+    if (digits.length === 10) {
+        if (contactsMap['+1' + digits]) return contactsMap['+1' + digits];
+        if (contactsMap['+52' + digits]) return contactsMap['+52' + digits];
+    }
+
+    const last10 = digits.length >= 10 ? digits.slice(-10) : digits;
+    const all = Object.values(contactsMap);
+    for (const c of all) {
+        const cDigits = (c.phone || '').replace(/\D/g, '');
+        if (cDigits && (cDigits === digits || (last10.length >= 7 && cDigits.endsWith(last10)))) {
+            return c;
+        }
+    }
+    return null;
+}
+
+// Find existing conversation ticket by phone (prevents duplicate instances)
+function findTicketByPhone(phoneInput) {
+    if (!phoneInput) return null;
+    const digits = phoneInput.replace(/\D/g, '');
+    if (!digits) return null;
+    const last10 = digits.length >= 10 ? digits.slice(-10) : digits;
+
+    for (const t of cachedTickets) {
+        const tDigits = (t.customer_phone || '').replace(/\D/g, '');
+        if (tDigits && (tDigits === digits || (last10.length >= 7 && tDigits.endsWith(last10)))) {
+            return t;
+        }
+    }
+    return null;
+}
+
+// Deduplicate conversation tickets array by clean recipient phone
+function deduplicateTickets(tickets) {
+    if (!Array.isArray(tickets)) return [];
+    const seen = new Set();
+    const result = [];
+    for (const t of tickets) {
+        if (!t || !t.customer_phone) continue;
+        const digits = t.customer_phone.replace(/\D/g, '');
+        const key = digits.length >= 10 ? digits.slice(-10) : digits;
+        if (!seen.has(key)) {
+            seen.add(key);
+            result.push(t);
+        }
+    }
+    return result;
+}
 
 const I18N = {
     en: {
@@ -1336,7 +1399,19 @@ document.addEventListener('DOMContentLoaded', () => {
     checkScheduledMessages();
 
     applyDashboardLocalization();
-    refreshTickets();
+
+    // 0ms Instant Load: Render cached conversations immediately on first open!
+    if (cachedTickets && cachedTickets.length > 0) {
+        renderTicketsList(cachedTickets);
+        const lastActiveId = localStorage.getItem('abrevia_last_active_ticket_id');
+        const found = lastActiveId ? cachedTickets.find(t => t.id === lastActiveId) : cachedTickets[0];
+        if (found) {
+            selectTicket(found.id, found.customer_phone, found.contact || findContactByPhone(found.customer_phone));
+        }
+    }
+
+    // Refresh tickets from backend in background (no blocking spinner!)
+    refreshTickets(cachedTickets.length === 0);
 
     // Keyboard shortcuts: Enter to Translate and Enter to Send Encrypted Message
     const agentInput = document.getElementById('agent-input');
@@ -1813,65 +1888,90 @@ function updateHitlAttachmentPreview() {
     }
 }
 
-// Fetch active tickets from backend
+// Render list of conversation threads (Instant & Flicker-Free)
+function renderTicketsList(tickets) {
+    const listEl = document.getElementById('ticketList');
+    if (!listEl) return;
+    const t = I18N[dashboardMode];
+
+    if (!tickets || tickets.length === 0) {
+        listEl.innerHTML = `
+            <div class="text-center py-8 text-xs text-slate-500">
+                ${t.noTickets}
+            </div>
+        `;
+        return;
+    }
+
+    listEl.innerHTML = tickets.map(item => {
+        const isSelected = currentTicket && currentTicket.id === item.id;
+        const dateStr = item.created_at ? new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        const norm = normalizeClientPhone(item.customer_phone);
+        const contact = item.contact || findContactByPhone(item.customer_phone) || contactsMap[norm] || null;
+        if (contact && !contactsMap[norm]) {
+            contactsMap[norm] = contact;
+        }
+
+        const hasName = contact && contact.name && contact.name.trim();
+        const displayName = hasName ? escapeHtml(contact.name) : escapeHtml(item.customer_phone);
+        const subDetail = hasName 
+            ? `${escapeHtml(item.customer_phone)}${contact.company ? ' • ' + escapeHtml(contact.company) : ''}`
+            : `<span class="text-brand-400 font-normal hover:underline">${t.addContactBtn}</span>`;
+
+        return `
+            <div onclick="selectTicket('${item.id}', '${item.customer_phone}')" 
+                 class="w-full text-left p-3 rounded-xl cursor-pointer transition border ${
+                     isSelected 
+                     ? 'bg-brand-600/15 border-brand-500/40 text-white shadow-sm ring-1 ring-brand-500/30' 
+                     : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:bg-slate-800/60 hover:border-slate-700'
+                 }">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="font-semibold text-xs text-white truncate max-w-[170px]">${displayName}</span>
+                    <span class="text-[10px] text-slate-500 shrink-0">${dateStr}</span>
+                </div>
+                <div class="flex justify-between items-center text-[11px] text-slate-400">
+                    <span class="truncate max-w-[175px]">${subDetail}</span>
+                    <span class="text-[10px] ${item.status === 'active' ? 'text-emerald-400' : 'text-slate-500'} font-medium uppercase shrink-0">
+                        ${item.status}
+                    </span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Fetch active tickets from backend with instant cache rendering
 async function refreshTickets(showLoading = true) {
     const listEl = document.getElementById('ticketList');
     const t = I18N[dashboardMode];
 
-    if (showLoading && !currentTicket) {
-        listEl.innerHTML = `<div class="text-center py-8 text-xs text-slate-500">${t.loadingQueues}</div>`;
+    // If no cache and loading requested, show placeholder
+    if (showLoading && (!cachedTickets || cachedTickets.length === 0) && !currentTicket) {
+        if (listEl) listEl.innerHTML = `<div class="text-center py-8 text-xs text-slate-500">${t.loadingQueues}</div>`;
     }
 
     try {
         const res = await fetch('/api/tickets');
         if (!res.ok) throw new Error('Failed to load tickets');
         const data = await res.json();
-        const tickets = data.tickets || [];
+        
+        // Deduplicate so each recipient has ONLY ONE conversation instance
+        const cleanTickets = deduplicateTickets(data.tickets || []);
+        cachedTickets = cleanTickets;
+        try {
+            localStorage.setItem('abrevia_cached_tickets', JSON.stringify(cachedTickets));
+        } catch (e) {}
 
-        if (tickets.length === 0) {
-            listEl.innerHTML = `
-                <div class="text-center py-8 text-xs text-slate-500">
-                    ${t.noTickets}
-                </div>
-            `;
-            return;
-        }
+        renderTicketsList(cachedTickets);
 
-        listEl.innerHTML = tickets.map(item => {
-            const isSelected = currentTicket && currentTicket.id === item.id;
-            const dateStr = new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const norm = normalizeClientPhone(item.customer_phone);
-            const contact = item.contact || contactsMap[norm] || null;
-            if (contact && !contactsMap[norm]) {
-                contactsMap[norm] = contact;
+        // Keep active selection in sync if open
+        if (currentTicket) {
+            const freshActive = cachedTickets.find(t => t.id === currentTicket.id);
+            if (freshActive && freshActive.contact) {
+                currentTicket.contact = freshActive.contact;
+                updateHeaderWithContact(currentTicket.customer_phone, freshActive.contact);
             }
-
-            const hasName = contact && contact.name && contact.name.trim();
-            const displayName = hasName ? escapeHtml(contact.name) : escapeHtml(item.customer_phone);
-            const subDetail = hasName 
-                ? `${escapeHtml(item.customer_phone)}${contact.company ? ' • ' + escapeHtml(contact.company) : ''}`
-                : `<span class="text-brand-400 font-normal hover:underline">${t.addContactBtn}</span>`;
-
-            return `
-                <div onclick="selectTicket('${item.id}', '${item.customer_phone}')" 
-                     class="w-full text-left p-3 rounded-xl cursor-pointer transition border ${
-                         isSelected 
-                         ? 'bg-brand-600/15 border-brand-500/40 text-white shadow-sm' 
-                         : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:bg-slate-800/60 hover:border-slate-700'
-                     }">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-semibold text-xs text-white truncate max-w-[170px]">${displayName}</span>
-                        <span class="text-[10px] text-slate-500 shrink-0">${dateStr}</span>
-                    </div>
-                    <div class="flex justify-between items-center text-[11px] text-slate-400">
-                        <span class="truncate max-w-[175px]">${subDetail}</span>
-                        <span class="text-[10px] ${item.status === 'active' ? 'text-emerald-400' : 'text-slate-500'} font-medium uppercase shrink-0">
-                            ${item.status}
-                        </span>
-                    </div>
-                </div>
-            `;
-        }).join('');
+        }
     } catch (err) {
         console.error('Error refreshing tickets:', err);
     }
@@ -1880,26 +1980,32 @@ async function refreshTickets(showLoading = true) {
 // Select a ticket to view conversation
 async function selectTicket(ticketId, customerPhone, contactData = null) {
     const norm = normalizeClientPhone(customerPhone);
-    const contact = contactData || contactsMap[norm] || { phone: customerPhone, name: '' };
+    const contact = contactData || findContactByPhone(customerPhone) || contactsMap[norm] || { phone: customerPhone, name: '' };
     currentTicket = { id: ticketId, customer_phone: customerPhone, contact };
     const t = I18N[dashboardMode];
     
+    // Remember last active conversation
+    try {
+        localStorage.setItem('abrevia_last_active_ticket_id', ticketId);
+        localStorage.setItem('abrevia_last_active_ticket_phone', customerPhone);
+    } catch (e) {}
+
     // Update Header with Contact details
     updateHeaderWithContact(customerPhone, contact);
 
-    document.getElementById('activeSubtitle').textContent = t.threadSubtitle(ticketId);
+    const subEl = document.getElementById('activeSubtitle');
+    if (subEl) subEl.textContent = t.threadSubtitle(ticketId);
     const purgeBtnEl = document.getElementById('purgeBtn');
     if (purgeBtnEl) purgeBtnEl.classList.remove('hidden');
     const editContactBtn = document.getElementById('editContactBtn');
     if (editContactBtn) editContactBtn.classList.remove('hidden');
     const closeThreadBtn = document.getElementById('closeThreadBtn');
     if (closeThreadBtn) closeThreadBtn.classList.remove('hidden');
-    document.getElementById('inputArea').classList.remove('hidden');
+    const inputArea = document.getElementById('inputArea');
+    if (inputArea) inputArea.classList.remove('hidden');
     updateLiveInterpreterUI();
 
     // Responsive view management:
-    // On mobile (< 768px): collapse sidebar and display chat workspace full screen
-    // On desktop (>= 768px): keep BOTH sidebar and chat workspace visible side-by-side
     const sidebar = document.getElementById('conversationsSidebar');
     const workspace = document.getElementById('chatWorkspace');
     if (sidebar && workspace) {
@@ -1918,7 +2024,19 @@ async function selectTicket(ticketId, customerPhone, contactData = null) {
 
     cancelHITL();
     removeAttachment();
-    refreshTickets(false);
+
+    // Re-render sidebar to reflect selection highlight
+    renderTicketsList(cachedTickets);
+
+    // 0ms instant cached messages render
+    try {
+        const cachedMsgs = localStorage.getItem('abrevia_msgs_' + ticketId);
+        if (cachedMsgs) {
+            renderChatFeed(JSON.parse(cachedMsgs), true);
+        }
+    } catch (e) {}
+
+    // Fetch fresh messages in background
     await fetchMessages(ticketId, true);
 }
 
@@ -2028,6 +2146,9 @@ async function fetchMessages(ticketId, scrollToBottom = true) {
         if (!res.ok) return;
         const data = await res.json();
         const messages = data.messages || [];
+        try {
+            localStorage.setItem('abrevia_msgs_' + ticketId, JSON.stringify(messages));
+        } catch (e) {}
         renderChatFeed(messages, scrollToBottom);
     } catch (err) {
         console.error('Error fetching messages:', err);
@@ -2771,42 +2892,155 @@ function closeMobileConversation() {
 
 // Modal handling for New Ticket
 function openNewTicketModal() {
-    document.getElementById('newTicketModal').classList.remove('hidden');
-    document.getElementById('newCustomerPhone').focus();
+    const modal = document.getElementById('newTicketModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    const phoneInput = document.getElementById('newCustomerPhone');
+    if (phoneInput) {
+        phoneInput.value = '';
+        phoneInput.focus();
+    }
+    const foundBadge = document.getElementById('newTicketFoundBadge');
+    if (foundBadge) foundBadge.classList.add('hidden');
+
+    const submitBtn = document.getElementById('modalSubmitBtn');
+    if (submitBtn) submitBtn.textContent = (dashboardMode === 'es') ? 'Iniciar Conversación' : 'Start Conversation';
+
+    // Populate Recent Recipients Chips for instant 1-click continuation
+    renderRecentRecipientsChips();
 }
 
 function closeNewTicketModal() {
-    document.getElementById('newTicketModal').classList.add('hidden');
-    document.getElementById('newCustomerPhone').value = '';
+    const modal = document.getElementById('newTicketModal');
+    if (modal) modal.classList.add('hidden');
+    const phoneInput = document.getElementById('newCustomerPhone');
+    if (phoneInput) phoneInput.value = '';
     const nameEl = document.getElementById('newCustomerName');
     if (nameEl) nameEl.value = '';
     const compEl = document.getElementById('newCustomerCompany');
     if (compEl) compEl.value = '';
     const notesEl = document.getElementById('newCustomerNotes');
     if (notesEl) notesEl.value = '';
+    const foundBadge = document.getElementById('newTicketFoundBadge');
+    if (foundBadge) foundBadge.classList.add('hidden');
 }
 
-// Auto-lookup contact as user enters phone number in the modal
-function checkExistingContactLookup(phoneVal) {
-    if (!phoneVal) return;
-    const norm = normalizeClientPhone(phoneVal);
-    const existing = contactsMap[norm];
-    if (existing) {
-        const nameInput = document.getElementById('newCustomerName');
-        const companyInput = document.getElementById('newCustomerCompany');
-        const notesInput = document.getElementById('newCustomerNotes');
-        if (nameInput && !nameInput.value && existing.name) {
-            nameInput.value = existing.name;
+// Populate Quick Recent Recipients chips in New Conversation modal
+function renderRecentRecipientsChips() {
+    const sec = document.getElementById('newTicketRecentSection');
+    const container = document.getElementById('newTicketRecentChips');
+    if (!sec || !container) return;
+
+    const list = [];
+    const seen = new Set();
+
+    // 1. From existing active conversations
+    for (const t of cachedTickets) {
+        if (!t || !t.customer_phone) continue;
+        const norm = normalizeClientPhone(t.customer_phone);
+        if (!seen.has(norm)) {
+            seen.add(norm);
+            const contact = t.contact || findContactByPhone(t.customer_phone) || { phone: t.customer_phone };
+            list.push({
+                phone: t.customer_phone,
+                name: contact.name || '',
+                company: contact.company || ''
+            });
         }
-        if (companyInput && !companyInput.value && existing.company) {
-            companyInput.value = existing.company;
+    }
+
+    // 2. From saved contacts directory
+    for (const c of Object.values(contactsMap)) {
+        if (!c || !c.phone) continue;
+        const norm = normalizeClientPhone(c.phone);
+        if (!seen.has(norm)) {
+            seen.add(norm);
+            list.push({
+                phone: c.phone,
+                name: c.name || '',
+                company: c.company || ''
+            });
         }
-        if (notesInput && !notesInput.value && existing.notes) {
-            notesInput.value = existing.notes;
-        }
+    }
+
+    if (list.length === 0) {
+        sec.classList.add('hidden');
+        return;
+    }
+
+    sec.classList.remove('hidden');
+    container.innerHTML = list.slice(0, 6).map(r => {
+        const label = r.name ? `${escapeHtml(r.name)} (${escapeHtml(r.phone)})` : escapeHtml(r.phone);
+        return `
+            <button type="button" onclick="quickSelectRecentRecipient('${escapeHtml(r.phone)}')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-brand-600/20 border border-slate-700 hover:border-brand-500/50 text-slate-300 hover:text-white text-[11px] font-medium transition shrink-0 flex items-center space-x-1 cursor-pointer">
+                <span>👤</span>
+                <span class="truncate max-w-[160px]">${label}</span>
+            </button>
+        `;
+    }).join('');
+}
+window.quickSelectRecentRecipient = quickSelectRecentRecipient;
+
+// 1-Click Resume: Tap any recent recipient to immediately open their conversation
+function quickSelectRecentRecipient(phone) {
+    const phoneInput = document.getElementById('newCustomerPhone');
+    if (phoneInput) phoneInput.value = phone;
+    checkExistingContactLookup(phone);
+
+    // If an existing conversation thread exists for this recipient, open it immediately!
+    const existingTicket = findTicketByPhone(phone);
+    if (existingTicket) {
+        closeNewTicketModal();
+        selectTicket(existingTicket.id, existingTicket.customer_phone, existingTicket.contact || findContactByPhone(phone));
     }
 }
 
+// Smart Auto-lookup: checks contact directory AND existing tickets as user types
+function checkExistingContactLookup(phoneVal) {
+    const foundBadge = document.getElementById('newTicketFoundBadge');
+    const foundText = document.getElementById('newTicketFoundText');
+    const submitBtn = document.getElementById('modalSubmitBtn');
+    if (!phoneVal || phoneVal.trim().length < 3) {
+        if (foundBadge) foundBadge.classList.add('hidden');
+        if (submitBtn) submitBtn.textContent = (dashboardMode === 'es') ? 'Iniciar Conversación' : 'Start Conversation';
+        return;
+    }
+
+    const existingContact = findContactByPhone(phoneVal);
+    const existingTicket = findTicketByPhone(phoneVal);
+
+    if (existingContact || existingTicket) {
+        const nameInput = document.getElementById('newCustomerName');
+        const companyInput = document.getElementById('newCustomerCompany');
+        const notesInput = document.getElementById('newCustomerNotes');
+
+        const name = existingContact?.name || existingTicket?.contact?.name || '';
+        const company = existingContact?.company || existingTicket?.contact?.company || '';
+        const notes = existingContact?.notes || existingTicket?.contact?.notes || '';
+
+        if (nameInput && name && !nameInput.value) nameInput.value = name;
+        if (companyInput && company && !companyInput.value) companyInput.value = company;
+        if (notesInput && notes && !notesInput.value) notesInput.value = notes;
+
+        if (foundBadge && foundText) {
+            const displayTitle = name || existingContact?.phone || phoneVal;
+            foundText.textContent = (dashboardMode === 'es')
+                ? `Contacto guardado: ${displayTitle} • Se continuará conversación existente`
+                : `Saved contact: ${displayTitle} • Will resume existing conversation`;
+            foundBadge.classList.remove('hidden');
+        }
+
+        if (submitBtn) {
+            submitBtn.textContent = (dashboardMode === 'es') ? 'Reanudar Conversación →' : 'Resume Conversation →';
+        }
+    } else {
+        if (foundBadge) foundBadge.classList.add('hidden');
+        if (submitBtn) submitBtn.textContent = (dashboardMode === 'es') ? 'Iniciar Conversación' : 'Start Conversation';
+    }
+}
+
+// Handle New Thread: Resumes existing thread if recipient already exists, or creates new thread
 async function handleCreateTicket(e) {
     e.preventDefault();
     const phone = document.getElementById('newCustomerPhone').value.trim();
@@ -2814,6 +3048,36 @@ async function handleCreateTicket(e) {
     const company = document.getElementById('newCustomerCompany')?.value.trim() || '';
     const notes = document.getElementById('newCustomerNotes')?.value.trim() || '';
     if (!phone) return;
+
+    const norm = normalizeClientPhone(phone);
+
+    // Auto-save contact details immediately
+    const contactObj = {
+        phone: norm,
+        name: name || (contactsMap[norm] && contactsMap[norm].name) || '',
+        company: company || (contactsMap[norm] && contactsMap[norm].company) || '',
+        notes: notes || (contactsMap[norm] && contactsMap[norm].notes) || '',
+        updatedAt: new Date().toISOString()
+    };
+    contactsMap[norm] = contactObj;
+    saveContactsToLocalStorage();
+
+    // Check if an existing conversation thread exists for this recipient!
+    // NEVER create a duplicate thread if one already exists!
+    const existingTicket = findTicketByPhone(phone);
+    if (existingTicket) {
+        closeNewTicketModal();
+        existingTicket.contact = contactObj;
+        selectTicket(existingTicket.id, existingTicket.customer_phone, contactObj);
+
+        // Sync contact update in background
+        fetch('/api/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(contactObj)
+        }).catch(() => {});
+        return;
+    }
 
     try {
         const res = await fetch('/api/tickets', {
@@ -2829,23 +3093,18 @@ async function handleCreateTicket(e) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to create thread');
 
-        // Immediately register in local contact directory
-        const norm = normalizeClientPhone(phone);
-        const contactObj = data.ticket?.contact || {
-            phone: norm,
-            name: name,
-            company: company,
-            notes: notes,
-            updatedAt: new Date().toISOString()
-        };
-        contactsMap[norm] = contactObj;
-        saveContactsToLocalStorage();
+        const ticket = data.ticket;
+        ticket.contact = contactObj;
+
+        // Add to cached tickets without duplicates
+        cachedTickets = deduplicateTickets([ticket, ...cachedTickets]);
+        try {
+            localStorage.setItem('abrevia_cached_tickets', JSON.stringify(cachedTickets));
+        } catch (e) {}
+        renderTicketsList(cachedTickets);
 
         closeNewTicketModal();
-        await refreshTickets(true);
-        if (data.ticket) {
-            selectTicket(data.ticket.id, data.ticket.customer_phone, contactObj);
-        }
+        selectTicket(ticket.id, ticket.customer_phone, contactObj);
     } catch (err) {
         alert('Create thread error: ' + err.message);
     }
@@ -3019,6 +3278,13 @@ function renderContactsDirectory(filter = '') {
 
 async function startThreadWithContact(phone) {
     closeContactsModal();
+    // 1. If an existing conversation already exists for this contact, open it immediately (0ms)!
+    const existingTicket = findTicketByPhone(phone);
+    if (existingTicket) {
+        selectTicket(existingTicket.id, existingTicket.customer_phone, existingTicket.contact || findContactByPhone(phone));
+        return;
+    }
+
     try {
         const res = await fetch('/api/tickets', {
             method: 'POST',
@@ -3026,8 +3292,12 @@ async function startThreadWithContact(phone) {
             body: JSON.stringify({ customerPhone: phone })
         });
         const data = await res.json();
-        await refreshTickets(true);
         if (data.ticket) {
+            cachedTickets = deduplicateTickets([data.ticket, ...cachedTickets]);
+            try {
+                localStorage.setItem('abrevia_cached_tickets', JSON.stringify(cachedTickets));
+            } catch (e) {}
+            renderTicketsList(cachedTickets);
             selectTicket(data.ticket.id, data.ticket.customer_phone, data.ticket.contact);
         }
     } catch (err) {

@@ -539,6 +539,15 @@
                 <p id="modalSubtitle" class="hidden"></p>
             </div>
             
+            <!-- Quick Recent Recipients Section -->
+            <div id="newTicketRecentSection" class="hidden pb-2.5 mb-2 border-b border-slate-800/80">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider" id="recentRecipientsLabel">Recent Recipients</span>
+                    <span class="text-[10px] text-brand-400 font-medium">Tap to resume</span>
+                </div>
+                <div id="newTicketRecentChips" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto no-scrollbar"></div>
+            </div>
+
             <form onsubmit="handleCreateTicket(event)" class="space-y-3.5">
                 <!-- Sender Identity Badge -->
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between text-xs">
@@ -559,7 +568,11 @@
                         Phone Number <span class="text-red-400">*</span>
                     </label>
                     <input id="newCustomerPhone" type="text" oninput="checkExistingContactLookup(this.value)" placeholder="+1... or +52..." required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-                    <p class="text-[11px] text-emerald-400/90 mt-1.5 flex items-center space-x-1">
+                    <p id="newTicketFoundBadge" class="hidden text-[11px] text-emerald-400 font-semibold mt-1.5 flex items-center space-x-1">
+                        <span>✓</span>
+                        <span id="newTicketFoundText">Existing contact found • Will resume conversation</span>
+                    </p>
+                    <p class="text-[11px] text-slate-400 mt-1.5 flex items-center space-x-1">
                         <span>✓</span>
                         <span id="modalAutoSaveNote">Auto-saved to your contact directory upon creation</span>
                     </p>
@@ -1238,7 +1251,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_35"></script>
+    <script src="app.js?v=20261029_36"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">

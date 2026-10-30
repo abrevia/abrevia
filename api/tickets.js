@@ -42,58 +42,81 @@ export default async function handler(req, res) {
     const { id } = req.query;
 
     if (id) {
-      // Get messages for ticket
-      const { data: messages, error: msgErr } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('ticket_id', id)
-        .order('created_at', { ascending: true });
-
-      if (msgErr) {
-        return res.status(500).json({ error: msgErr.message });
-      }
-
-      // Also get ticket details
+      // Get ticket details
       const { data: ticket, error: ticketErr } = await supabase
         .from('tickets')
         .select('*')
         .eq('id', id)
         .single();
 
-      if (ticketErr) {
-        return res.status(500).json({ error: ticketErr.message });
+      if (ticketErr || !ticket) {
+        return res.status(500).json({ error: ticketErr ? ticketErr.message : 'Conversation ticket not found' });
       }
 
-      const contacts = await getAllContacts();
       const normPhone = normalizePhone(ticket.customer_phone);
-      const contact = contacts[normPhone] || { phone: ticket.customer_phone, name: '' };
+
+      // Find all ticket IDs for this customer phone to consolidate past test instances into 1 thread
+      const [relRes, contacts] = await Promise.all([
+        supabase
+          .from('tickets')
+          .select('id')
+          .eq('customer_phone', normPhone),
+        getAllContacts().catch(() => ({}))
+      ]);
+
+      const ticketIds = (relRes.data && relRes.data.length > 0)
+        ? relRes.data.map(r => r.id)
+        : [id];
+
+      // Get all messages across all instances for this recipient
+      const { data: messages, error: msgErr } = await supabase
+        .from('messages')
+        .select('*')
+        .in('ticket_id', ticketIds)
+        .order('created_at', { ascending: true });
+
+      if (msgErr) {
+        return res.status(500).json({ error: msgErr.message });
+      }
+
+      const contact = (contacts && contacts[normPhone]) || { phone: ticket.customer_phone, name: '' };
 
       return res.status(200).json({ 
         ticket: { ...ticket, contact }, 
-        messages 
+        messages: messages || [] 
       });
     } else {
-      // List all active tickets
-      const { data: tickets, error } = await supabase
-        .from('tickets')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+      // List all active tickets (Parallel fetch + Deduplicate by recipient phone)
+      const [ticketsRes, contacts] = await Promise.all([
+        supabase
+          .from('tickets')
+          .select('*')
+          .eq('status', 'active')
+          .order('created_at', { ascending: false }),
+        getAllContacts().catch(() => ({}))
+      ]);
 
-      if (error) {
-        return res.status(500).json({ error: error.message });
+      if (ticketsRes.error) {
+        return res.status(500).json({ error: ticketsRes.error.message });
       }
 
-      const contacts = await getAllContacts();
-      const enrichedTickets = (tickets || []).map(t => {
+      // Deduplicate active tickets so there is ONLY ONE conversation per recipient phone number!
+      const seenPhones = new Set();
+      const enrichedTickets = [];
+      for (const t of (ticketsRes.data || [])) {
         const normPhone = normalizePhone(t.customer_phone);
-        const contact = contacts[normPhone] || { phone: t.customer_phone, name: '' };
-        return {
-          ...t,
-          contact
-        };
-      });
+        if (!seenPhones.has(normPhone)) {
+          seenPhones.add(normPhone);
+          const contact = (contacts && contacts[normPhone]) || { phone: t.customer_phone, name: '' };
+          enrichedTickets.push({
+            ...t,
+            contact
+          });
+        }
+      }
 
+      // Short browser/edge cache to speed up repeat loads
+      res.setHeader('Cache-Control', 'public, s-maxage=2, stale-while-revalidate=10');
       return res.status(200).json({ tickets: enrichedTickets });
     }
   }
@@ -239,7 +262,25 @@ export default async function handler(req, res) {
       console.warn('Error auto-saving contact:', cErr.message);
     }
 
-    // 2. Insert ticket into Supabase
+    // 2. Check if an active conversation for this phone already exists
+    const { data: existingTicket } = await supabase
+      .from('tickets')
+      .select('*')
+      .eq('customer_phone', normPhone)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (existingTicket) {
+      // Re-use existing conversation thread rather than creating duplicate instances!
+      return res.status(200).json({ 
+        ticket: { ...existingTicket, contact: contact || { phone: normPhone, name: customerName || '' } },
+        isExisting: true
+      });
+    }
+
+    // 3. Insert new ticket into Supabase if no active ticket exists
     const { data: ticket, error } = await supabase
       .from('tickets')
       .insert({
