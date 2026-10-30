@@ -22,6 +22,10 @@
       "destination": "/abrevia_project_state.json"
     },
     {
+      "source": "/api/ping",
+      "destination": "/api/tickets?action=ping"
+    },
+    {
       "source": "/api/customer-portal",
       "destination": "/api/checkout"
     },
