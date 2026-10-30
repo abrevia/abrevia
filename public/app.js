@@ -741,21 +741,24 @@ const QUICK_TEMPLATES = [
 ];
 
 function openTemplatesModal() {
-    if (!requireProFeature(dashboardMode === 'es' ? 'Plantillas de Respuesta Rápida' : 'Quick Response Templates')) {
-        return;
+    try {
+        renderTemplatesList();
+    } catch (e) {
+        console.warn('renderTemplatesList error:', e);
     }
-    renderTemplatesList();
     const modal = document.getElementById('templatesModal');
-    if (modal) applyDashboardLocalization();
-    applyDashboardLocalization();
-    updateWrapUpTrialCountdown();
-    modal.classList.remove('hidden');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
 }
+window.openTemplatesModal = openTemplatesModal;
 
 function closeTemplatesModal() {
     const modal = document.getElementById('templatesModal');
     if (modal) modal.classList.add('hidden');
 }
+window.closeTemplatesModal = closeTemplatesModal;
+window.insertTemplate = insertTemplate;
 
 function renderTemplatesList() {
     const container = document.getElementById('templatesListContainer');
@@ -1370,12 +1373,14 @@ function applyDashboardLocalization() {
     // Header language toggle buttons (compact segmented control)
     const btnEn = document.getElementById('modeBtnEn');
     const btnEs = document.getElementById('modeBtnEs');
-    if (dashboardMode === 'en') {
-        btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition';
-        btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition';
-    } else {
-        btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition';
-        btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition';
+    if (btnEn && btnEs) {
+        if (dashboardMode === 'en') {
+            btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition';
+            btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition';
+        } else {
+            btnEs.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-sm transition';
+            btnEn.className = 'px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition';
+        }
     }
 
     // Header title next to logo
@@ -1427,9 +1432,12 @@ function applyDashboardLocalization() {
     if (menuBtnText) menuBtnText.textContent = 'Settings';
     const langSelTitle = document.getElementById('statusLangSelectorTitle');
     if (langSelTitle) langSelTitle.textContent = (dashboardMode === 'es') ? 'Idioma de la Consola:' : 'Language Mode:';
-    document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
-    document.getElementById('refreshBtn').textContent = t.refresh;
-    document.getElementById('newThreadBtnText').textContent = t.newThreadBtn;
+    const sbTitleEl = document.getElementById('sidebarTitle');
+    if (sbTitleEl) sbTitleEl.textContent = t.sidebarTitle;
+    const refBtnEl = document.getElementById('refreshBtn');
+    if (refBtnEl) refBtnEl.textContent = t.refresh;
+    const newThreadBtnEl = document.getElementById('newThreadBtnText');
+    if (newThreadBtnEl) newThreadBtnEl.textContent = t.newThreadBtn;
     const topNewBtn = document.getElementById('topNewThreadBtnText');
     if (topNewBtn) topNewBtn.textContent = t.newThreadBtn;
     const mobileBackBtnTextEl = document.getElementById('mobileBackBtnText');
