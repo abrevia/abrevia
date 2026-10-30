@@ -480,11 +480,10 @@
             <button type="button" onclick="closeNewTicketModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
                 &times;
             </button>
-            <div class="flex items-center space-x-2.5 mb-1">
-                <span class="text-lg">💬</span>
-                <h3 id="modalTitle" class="text-base font-bold text-white">Start New Conversation</h3>
+            <div class="mb-4 pr-6">
+                <h3 id="modalTitle" class="text-base font-bold text-white">New Conversation</h3>
+                <p id="modalSubtitle" class="hidden"></p>
             </div>
-            <p id="modalSubtitle" class="text-xs text-slate-400 mb-4">Phone numbers are auto-saved as contacts. You can optionally add a name and details.</p>
             
             <form onsubmit="handleCreateTicket(event)" class="space-y-3.5">
                 <!-- Sender Identity Badge -->
@@ -1185,7 +1184,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_29"></script>
+    <script src="app.js?v=20261029_30"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
