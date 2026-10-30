@@ -33,23 +33,39 @@
 <body class="bg-slate-900 text-slate-100 font-sans h-screen h-[100dvh] flex flex-col overflow-hidden selection:bg-brand-600 selection:text-white">
 
     <!-- Clean Distraction-Free Navigation Header -->
-    <header class="bg-slate-950 border-b border-slate-800 px-3 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between shrink-0">
+    <header class="bg-slate-950 border-b border-slate-800 px-3 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between shrink-0 gap-2 overflow-x-auto no-scrollbar">
         <!-- Logo (Left) -> Links to Home Page -->
-        <a href="/" class="flex items-center hover:opacity-85 transition cursor-pointer" title="Go to Abrevia Home">
+        <a href="/" class="flex items-center hover:opacity-85 transition cursor-pointer shrink-0" title="Go to Abrevia Home">
             <img src="/assets/logo.png?v=3" alt="Abrevia" class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg shadow-sm shrink-0">
         </a>
 
+        <!-- Middle Action Controls: Auto-Reply, Profile, Contacts (Placed between Logo and Lock/Settings) -->
+        <div class="flex items-center space-x-1.5 sm:space-x-2 text-xs shrink-0">
+            <button id="autoResponderNavBtn" onclick="openAutoResponderModal()" title="After-Hours Auto-Responder" class="text-xs text-slate-300 hover:text-amber-300 px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center space-x-1.5 cursor-pointer shadow-sm shrink-0">
+                <span>🌙</span>
+                <span id="autoResponderNavText" class="text-xs font-medium">Auto-Reply</span>
+            </button>
+            <button id="senderProfileNavBtn" onclick="openSenderProfileModal()" title="Organization & Sender Profile" class="text-xs text-slate-300 hover:text-white px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center space-x-1.5 cursor-pointer shadow-sm shrink-0">
+                <span>🏢</span>
+                <span id="senderProfileNavText" class="text-xs font-medium">Profile</span>
+            </button>
+            <button id="contactsDirectoryBtn" onclick="openContactsModal()" title="View saved contacts" class="text-xs text-brand-400 hover:text-brand-300 font-medium flex items-center space-x-1.5 bg-brand-500/10 border border-brand-500/20 px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl transition cursor-pointer shadow-sm shrink-0">
+                <span>👥</span>
+                <span id="contactsBtnText" class="text-xs font-medium">Contacts</span>
+            </button>
+        </div>
+
         <!-- Header Action Controls (Right) -->
-        <div class="flex items-center space-x-2 text-xs">
+        <div class="flex items-center space-x-1.5 sm:space-x-2 text-xs shrink-0">
             <!-- Simple Sign Out / Lock Session Button (Header) -->
-            <button id="headerSignOutBtn" type="button" onclick="handleSignOutOrLock()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-red-300 border border-slate-800 hover:border-red-500/40 bg-slate-900 hover:bg-red-500/10 transition shadow-sm cursor-pointer" title="Sign Out & Lock Session">
+            <button id="headerSignOutBtn" type="button" onclick="handleSignOutOrLock()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-red-300 border border-slate-800 hover:border-red-500/40 bg-slate-900 hover:bg-red-500/10 transition shadow-sm cursor-pointer shrink-0" title="Sign Out & Lock Session">
                 <span class="text-xs">🚪</span>
                 <span id="headerSignOutBtnText" class="hidden sm:inline">Sign Out / Lock Session</span>
                 <span class="sm:hidden">Lock</span>
             </button>
 
             <!-- Settings Trigger -->
-            <button id="settingsBtn" type="button" onclick="openSettingsModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-900 transition shadow-sm cursor-pointer" title="Settings & Preferences">
+            <button id="settingsBtn" type="button" onclick="openSettingsModal()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-900 transition shadow-sm cursor-pointer shrink-0" title="Settings & Preferences">
                 <span>⚙️</span>
                 <span id="dashboardMenuBtnText">Settings</span>
             </button>
@@ -61,32 +77,15 @@
         
         <!-- Sidebar: Active Conversations -->
         <aside id="conversationsSidebar" class="w-full md:w-80 bg-slate-950/70 border-r border-slate-800 flex flex-col shrink-0">
-            <div class="px-3 py-2.5 border-b border-slate-800 flex items-center justify-between gap-1.5">
+            <!-- Top Pinned Action: Start New Conversation + Refresh -->
+            <div class="p-2.5 sm:p-3 border-b border-slate-800/80 bg-slate-950/95 shrink-0 flex items-center gap-2">
                 <span id="sidebarTitle" class="hidden"></span>
-                <div class="flex items-center space-x-1.5 w-full justify-between">
-                    <button id="autoResponderNavBtn" onclick="openAutoResponderModal()" title="After-Hours Auto-Responder" class="text-xs text-slate-300 hover:text-amber-300 px-2.5 py-1.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center space-x-1.5 cursor-pointer shadow-sm">
-                        <span>🌙</span>
-                        <span id="autoResponderNavText" class="text-xs font-medium">Auto-Reply</span>
-                    </button>
-                    <button id="senderProfileNavBtn" onclick="openSenderProfileModal()" title="Organization & Sender Profile" class="text-xs text-slate-300 hover:text-white px-2.5 py-1.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center space-x-1.5 cursor-pointer shadow-sm">
-                        <span>🏢</span>
-                        <span id="senderProfileNavText" class="text-xs font-medium">Profile</span>
-                    </button>
-                    <button id="contactsDirectoryBtn" onclick="openContactsModal()" title="View saved contacts" class="text-xs text-brand-400 hover:text-brand-300 font-medium flex items-center space-x-1.5 bg-brand-500/10 border border-brand-500/20 px-2.5 py-1.5 rounded-xl transition cursor-pointer shadow-sm">
-                        <span>👥</span>
-                        <span id="contactsBtnText" class="text-xs font-medium">Contacts</span>
-                    </button>
-                    <button id="refreshBtn" onclick="refreshTickets()" title="Refresh conversations" class="text-slate-400 hover:text-white text-sm p-1.5 rounded-lg hover:bg-slate-800 transition cursor-pointer">
-                        &#x21bb;
-                    </button>
-                </div>
-            </div>
-
-            <!-- Top Pinned Action: Start New Conversation (Instant Access, Zero Scrolling Needed) -->
-            <div class="p-2.5 sm:p-3 border-b border-slate-800/80 bg-slate-950/95 shrink-0">
-                <button onclick="openNewTicketModal()" class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-brand-600/25">
+                <button onclick="openNewTicketModal()" class="flex-grow bg-brand-600 hover:bg-brand-500 active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-brand-600/25">
                     <span class="text-base font-extrabold leading-none">+</span>
                     <span id="topNewThreadBtnText">New Conversation</span>
+                </button>
+                <button id="refreshBtn" onclick="refreshTickets()" title="Refresh conversations" class="text-slate-400 hover:text-white text-sm p-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition cursor-pointer shrink-0">
+                    &#x21bb;
                 </button>
             </div>
             
@@ -1184,7 +1183,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_30"></script>
+    <script src="app.js?v=20261029_31"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
