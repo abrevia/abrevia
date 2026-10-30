@@ -1477,6 +1477,8 @@ function applyDashboardLocalization() {
     if (agentInputLabel) agentInputLabel.textContent = t.inputLabel;
     document.getElementById('agent-input').placeholder = t.inputPlaceholder;
     document.getElementById('translate-btn').innerHTML = `<span>${t.translateBtn}</span> <span class="text-xs font-bold">↵</span>`;
+    const waBtnLabel = document.getElementById('whatsappDirectBtnText');
+    if (waBtnLabel) waBtnLabel.textContent = t.translateBtn || 'Send';
 
     // Instant Translation Status & Mode Indicator
     const instantLabel = document.getElementById('instantModeLabel');
@@ -2152,8 +2154,12 @@ function renderChatFeed(messages, scrollToBottom = false) {
 }
 
 // Abrevia 1 Composer: Auto-translates & dispatches messages directly with real-time translating technology (Instant Mode).
-// Pre-send review is reserved for Premium Tier.
+// Pilot Stage: route handleTranslateAndSend to personal phone WhatsApp dispatch
 async function handleTranslateAndSend() {
+    return handleSendPersonalWhatsApp();
+}
+
+async function legacyHandleTranslateAndSend() {
     if (!currentTicket) {
         alert(dashboardMode === 'es' ? 'Por favor seleccione o cree una conversación primero.' : 'Please select or create a conversation first.');
         return;
@@ -2529,7 +2535,7 @@ async function handleSendPersonalWhatsApp() {
         window.open(fallbackUrl, '_blank');
     } finally {
         if (waBtn) waBtn.disabled = false;
-        if (waText) waText.textContent = originalWaText || 'WhatsApp';
+        if (waText) waText.textContent = originalWaText || (dashboardMode === 'es' ? 'Enviar' : 'Send');
     }
 }
 window.handleSendPersonalWhatsApp = handleSendPersonalWhatsApp;

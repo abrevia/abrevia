@@ -223,19 +223,14 @@
                                     </button>
                                 </div>
 
-                                <!-- Primary Dispatch Buttons: WhatsApp & Send -->
-                                <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-                                    <!-- Direct Personal WhatsApp Dispatch Button (wa.me) -->
-                                    <button id="whatsapp-direct-btn" type="button" onclick="handleSendPersonalWhatsApp()" title="Open translated message directly in your personal WhatsApp" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-xs font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5 shadow-md shadow-emerald-500/20 border border-emerald-400/30">
-                                        <span>💬</span>
-                                        <span id="whatsappDirectBtnText">WhatsApp</span>
-                                    </button>
-
-                                    <!-- Send / Translate Button -->
-                                    <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send via Automated Relay" class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white text-xs font-semibold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5 shadow-md shadow-brand-500/20">
-                                        <span id="translateBtnText">Send</span>
+                                <!-- Primary Dispatch Button: Unified Personal WhatsApp Send -->
+                                <div class="flex items-center shrink-0">
+                                    <!-- Single Unified Green Send Button (Direct Personal Phone WhatsApp Bridge) -->
+                                    <button id="whatsapp-direct-btn" type="button" onclick="handleSendPersonalWhatsApp()" title="Send translated message via your personal phone on WhatsApp (Enter ↵)" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-xs font-semibold px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5 shadow-md shadow-emerald-500/25 border border-emerald-400/30 cursor-pointer">
+                                        <span id="whatsappDirectBtnText">Send</span>
                                         <span class="text-xs font-bold">↵</span>
                                     </button>
+                                    <button id="translate-btn" type="button" onclick="handleSendPersonalWhatsApp()" class="hidden"></button>
                                 </div>
                             </div>
                         </div>
@@ -1167,7 +1162,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_32"></script>
+    <script src="app.js?v=20261029_33"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
