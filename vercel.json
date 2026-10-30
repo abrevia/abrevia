@@ -14,6 +14,14 @@
       "destination": "/reply.html"
     },
     {
+      "source": "/state",
+      "destination": "/abrevia_project_state.json"
+    },
+    {
+      "source": "/project-state",
+      "destination": "/abrevia_project_state.json"
+    },
+    {
       "source": "/api/customer-portal",
       "destination": "/api/checkout"
     },
