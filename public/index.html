@@ -321,7 +321,7 @@
             <!-- Bottom Bar: Administrative Disclaimer & Copyright -->
             <div class="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 text-center sm:text-left">
                 <p id="footerCopyright">
-                    &copy; 2026 Abrevia Inc. All rights reserved.
+                    &copy; 2026 Abrevia (operated by Servicios ADG LLC). All rights reserved.
                 </p>
                 <div class="flex flex-wrap items-center justify-center gap-2 text-[10px] text-slate-400">
                     <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-medium inline-flex items-center space-x-1" id="footerNonHipaaBadge">
@@ -427,19 +427,13 @@
 
             <!-- Form: Electronic Signature & Strict Checkbox Controls -->
             <form id="betaTermsForm" onsubmit="submitBetaTermsAgreement(event)" class="space-y-2.5 pt-2 shrink-0">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <div>
-                        <label id="termsSignerLabel" class="block text-[11px] font-semibold text-white mb-0.5">
-                            Full Legal Name (Electronic Signature) <span class="text-red-400">*</span>
-                        </label>
-                        <input id="termsSignerName" type="text" placeholder="e.g. Jane Doe" required oninput="validateTermsForm()" class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition">
+                <!-- Device Attribution & Session Signature Badge (Zero-Friction Clickwrap) -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between text-[11px] text-slate-300 shadow-inner">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-base text-emerald-400">📱</span>
+                        <span><strong class="text-white" id="termsDeviceSignerLabel">Device Signature:</strong> <span id="termsDeviceIdDisplay" class="font-mono text-[10px] text-emerald-300 font-bold tracking-wider">DEV-...</span></span>
                     </div>
-                    <div>
-                        <label id="termsOrgLabel" class="block text-[11px] font-semibold text-slate-300 mb-0.5">
-                            Organization / Business <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
-                        </label>
-                        <input id="termsOrgName" type="text" placeholder="e.g. Acme Dispatch" class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition">
-                    </div>
+                    <span class="text-[10px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20" id="termsHardwareBadge">Verified Hardware Session</span>
                 </div>
 
                 <!-- Phase 3 Clickwrap Checkbox (Disabled until full scroll completes) -->
@@ -461,8 +455,8 @@
 
                 <!-- Audit Trail Microcopy -->
                 <div class="text-[9px] text-slate-500 font-mono flex items-center justify-between">
-                    <span>🕒 Immutable audit timestamp, IP &amp; browser cryptographic token recorded upon execution.</span>
-                    <span id="termsDeclineSubtext" class="text-slate-500 text-right">No messages can be sent or received without active acceptance.</span>
+                    <span id="termsAuditNote">🕒 Permanent audit timestamp, client IP &amp; device signature recorded upon execution.</span>
+                    <span id="termsDeclineSubtext" class="text-slate-500 text-right">Zero personal or company info required.</span>
                 </div>
 
                 <div id="termsErrorMsg" class="hidden text-xs text-red-400 font-medium"></div>
@@ -545,7 +539,7 @@
         const content = {
             en: {
                                                 termsSummaryNotice: 'This application routes messages using real-time ephemeral transmission and automated translation engines. Communications are not archived on our servers and cannot be recovered once delivered. This application does not support emergency calls (911/112) and must never be used for life-critical, medical triage, or high-risk operational instructions. By continuing, you agree to an individual binding arbitration clause, strict acceptable use rules, and comprehensive liability caps.',
-                termsCheckAgreementText: 'I have read, understood, and agree to be bound by the Terms of Service, Acceptable Use Policy, and Arbitration Clause, and I certify that I am at least 18 years of age.',
+                termsCheckAgreementText: 'I have read and agree to the Terms of Service & Acceptable Use Policy. I confirm this device is under my authorized control and I accept legal responsibility for all transmissions and usage originating from it.',
                 termsCheckBetaNoPhiText: 'I acknowledge that Abrevia is in functional beta testing and agree NOT to transmit HIPAA PHI, medical records, or sensitive confidential data.',
                 termsDeclineBtnText: 'Decline / Exit',
                 termsSubmitBtnText: 'Agree & Continue',
@@ -670,7 +664,7 @@
             },
             es: {
                                                 termsSummaryNotice: 'Esta aplicación enruta mensajes mediante transmisión efímera en tiempo real y motores de traducción automatizados. Las comunicaciones no se archivan en nuestros servidores y no se pueden recuperar una vez entregadas. Esta aplicación no admite llamadas de emergencia (911/112) y nunca debe utilizarse para instrucciones médicas críticas o de alto riesgo. Al continuar, usted acepta una cláusula de arbitraje vinculante individual, reglas estrictas de uso aceptable y límites integrales de responsabilidad.',
-                termsCheckAgreementText: 'He leído, comprendido y acepto estar sujeto a los Términos de Servicio, la Política de Uso Aceptable y la Cláusula de Arbitraje, y certifico que tengo al menos 18 años de edad.',
+                termsCheckAgreementText: 'He leído y acepto los Términos de Servicio y la Política de Uso Aceptable. Confirmo que este dispositivo está bajo mi control autorizado y asumo la responsabilidad legal de todas las transmisiones y uso originados en él.',
                 termsCheckBetaNoPhiText: 'Reconozco que Abrevia está en prueba beta funcional y acepto NO transmitir PHI de HIPAA, registros médicos ni datos confidenciales sensibles.',
                 termsDeclineBtnText: 'Rechazar / Salir',
                 termsSubmitBtnText: 'Aceptar y Continuar',
@@ -1071,6 +1065,15 @@
         // --- Beta Testing Terms & Safeguards Handlers (Phase 3 Clickwrap) ---
         let hasScrolledToBottom = false;
 
+        function getOrCreateDeviceId() {
+            let deviceId = localStorage.getItem('abrevia_device_id');
+            if (!deviceId) {
+                deviceId = 'DEV-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+                localStorage.setItem('abrevia_device_id', deviceId);
+            }
+            return deviceId;
+        }
+
         function openBetaTermsModal() {
             const modal = document.getElementById('betaTermsModal');
             if (modal) {
@@ -1078,10 +1081,16 @@
                 hasScrolledToBottom = false;
                 const scrollBox = document.getElementById('termsScrollBox');
                 if (scrollBox) scrollBox.scrollTop = 0;
+
+                const devId = getOrCreateDeviceId();
+                const devDisp = document.getElementById('termsDeviceIdDisplay');
+                if (devDisp) devDisp.textContent = devId;
+
                 const checkAgree = document.getElementById('termsCheckAgreement');
                 const checkBeta = document.getElementById('termsCheckBetaNoPhi');
                 if (checkAgree) { checkAgree.checked = false; checkAgree.disabled = true; }
                 if (checkBeta) { checkBeta.checked = false; checkBeta.disabled = true; }
+
                 const hint = document.getElementById('scrollPromptHint');
                 if (hint) {
                     hint.className = 'text-amber-400 font-semibold flex items-center space-x-1';
@@ -1090,7 +1099,6 @@
                 const badge = document.getElementById('scrollPercentBadge');
                 if (badge) badge.textContent = '0% Scrolled';
                 validateTermsForm();
-                setTimeout(() => document.getElementById('termsSignerName')?.focus(), 150);
             }
         }
         window.openBetaTermsModal = openBetaTermsModal;
@@ -1130,12 +1138,12 @@
         window.handleTermsScroll = handleTermsScroll;
 
         function validateTermsForm() {
-            const name = document.getElementById('termsSignerName')?.value.trim();
             const checkAgree = document.getElementById('termsCheckAgreement')?.checked;
             const checkBeta = document.getElementById('termsCheckBetaNoPhi')?.checked;
             const btn = document.getElementById('termsSubmitBtn');
             if (btn) {
-                btn.disabled = !(hasScrolledToBottom && checkAgree && checkBeta && name && name.length >= 2);
+                // Zero friction: scroll to bottom + both checkboxes checked
+                btn.disabled = !(hasScrolledToBottom && checkAgree && checkBeta);
             }
         }
         window.validateTermsForm = validateTermsForm;
@@ -1151,8 +1159,7 @@
 
         async function submitBetaTermsAgreement(e) {
             if (e) e.preventDefault();
-            const signerName = document.getElementById('termsSignerName')?.value.trim();
-            const orgName = document.getElementById('termsOrgName')?.value.trim() || '';
+            const deviceId = getOrCreateDeviceId();
             const checkAgree = document.getElementById('termsCheckAgreement')?.checked;
             const checkBeta = document.getElementById('termsCheckBetaNoPhi')?.checked;
             const errorEl = document.getElementById('termsErrorMsg');
@@ -1170,16 +1177,6 @@
                 return;
             }
 
-            if (!signerName || signerName.length < 2) {
-                if (errorEl) {
-                    errorEl.textContent = currentLang === 'es' 
-                        ? 'Por favor ingrese su nombre legal completo para la firma electrónica.' 
-                        : 'Please enter your full legal name for the electronic signature.';
-                    errorEl.classList.remove('hidden');
-                }
-                return;
-            }
-
             if (!checkAgree || !checkBeta) {
                 if (errorEl) {
                     errorEl.textContent = currentLang === 'es'
@@ -1192,15 +1189,14 @@
 
             if (errorEl) errorEl.classList.add('hidden');
             if (submitBtn) submitBtn.disabled = true;
-            if (submitBtnText) submitBtnText.textContent = currentLang === 'es' ? 'Registrando firma y auditoría...' : 'Recording signature audit...';
+            if (submitBtnText) submitBtnText.textContent = currentLang === 'es' ? 'Autorizando sesión del dispositivo...' : 'Authorizing device session...';
 
             try {
                 const res = await fetch('/api/accept-terms', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        signerName: signerName,
-                        organization: orgName,
+                        deviceId: deviceId,
                         ackBeta: true,
                         ackNoSensitive: true,
                         ackTerms: true,
@@ -1209,13 +1205,13 @@
                 });
 
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Failed to record signature');
+                if (!res.ok) throw new Error(data.error || 'Failed to record device signature');
 
-                // Store compliance token in localStorage
+                // Store compliance token in localStorage linking this physical device
                 const record = {
                     signatureId: data.signature?.id || ('sig_' + Date.now()),
-                    signerName: signerName,
-                    organization: orgName,
+                    deviceId: deviceId,
+                    signerType: 'device_operator',
                     timestamp: data.signature?.timestamp || new Date().toISOString(),
                     termsVersion: 'beta-pilot-v1.0',
                     accepted: true
@@ -1230,11 +1226,12 @@
                 console.warn('Network notice recording signature, storing local audit:', err);
                 const fallbackRecord = {
                     signatureId: 'sig_local_' + Date.now(),
-                    signerName: signerName,
-                    organization: orgName,
+                    deviceId: deviceId,
+                    signerType: 'device_operator',
                     timestamp: new Date().toISOString(),
                     termsVersion: 'beta-pilot-v1.0',
-                    accepted: true
+                    accepted: true,
+                    localOnly: true
                 };
                 localStorage.setItem('abrevia_beta_terms_accepted', JSON.stringify(fallbackRecord));
                 localStorage.removeItem('abrevia_signed_out');

@@ -26,16 +26,13 @@ export default async function handler(req, res) {
     try {
       const {
         signerName,
+        deviceId,
         organization,
         ackBeta,
         ackNoSensitive,
         ackTerms,
         termsVersion
       } = req.body || {};
-
-      if (!signerName || typeof signerName !== 'string' || signerName.trim().length < 2) {
-        return res.status(400).json({ error: 'Valid full legal name is required for electronic signature' });
-      }
 
       if (!ackBeta || !ackNoSensitive || !ackTerms) {
         return res.status(400).json({ error: 'All mandatory beta safeguards and terms acknowledgments must be accepted' });
@@ -49,17 +46,25 @@ export default async function handler(req, res) {
       const nowIso = new Date().toISOString();
       const signatureId = `sig_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
+      // Support bare-minimum frictionless device signature (no personal/company name required)
+      const effectiveSigner = (signerName && typeof signerName === 'string' && signerName.trim().length >= 2)
+        ? signerName.trim()
+        : `Device Operator (${deviceId || 'Client Hardware'})`;
+
       const signatureRecord = {
         id: signatureId,
-        signer_name: signerName.trim(),
-        organization: organization ? organization.trim() : '',
+        signer_name: effectiveSigner,
+        device_id: deviceId || 'unknown_device',
+        organization: organization ? organization.trim() : 'N/A (Frictionless Device Clickwrap)',
         ack_beta_testing: Boolean(ackBeta),
         ack_no_sensitive_phi: Boolean(ackNoSensitive),
         ack_terms_accepted: Boolean(ackTerms),
+        device_liability_confirmed: true,
         terms_version: termsVersion || 'beta-pilot-v1.0',
         timestamp: nowIso,
         ip_address: clientIp,
         user_agent: userAgent,
+        operator_entity: 'Servicios ADG LLC',
         safeguard_disclaimer: 'Abrevia Beta Testing Stage. Functional testing only. Strict prohibition on PHI / HIPAA / sensitive personal data.'
       };
 
