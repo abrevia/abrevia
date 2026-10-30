@@ -64,7 +64,7 @@ export default async function handler(req, res) {
         timestamp: nowIso,
         ip_address: clientIp,
         user_agent: userAgent,
-        operator_entity: 'Servicios ADG LLC',
+        operator_entity: 'Abrevia App',
         safeguard_disclaimer: 'Abrevia Beta Testing Stage. Functional testing only. Strict prohibition on PHI / HIPAA / sensitive personal data.'
       };
 

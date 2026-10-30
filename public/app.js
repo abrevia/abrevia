@@ -1448,7 +1448,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchMessages(currentTicket.id, false);
         }
         checkScheduledMessages();
-    }, 5000);
+    }, 3000);
 });
 
 // Mode switch handler
@@ -2629,6 +2629,17 @@ async function handleSendPersonalWhatsApp() {
             attachment: currentAttachment ? { name: currentAttachment.name, file: currentAttachment } : null
         };
 
+        // Compute Option C Signature Stamp & Recipient 1-Click Reply Link
+        const orgName = getSenderOrgName() || currentTicket?.company || 'Despacho Operativo';
+        const ticketId = currentTicket ? currentTicket.id : ('t_' + cleanPhone);
+        const baseUrl = window.location.origin || 'https://abrevia-beta.vercel.app';
+        const replyUrl = `${baseUrl}/reply.html?t=${encodeURIComponent(ticketId)}&sender=${encodeURIComponent(orgName)}`;
+        const signatureStamp = `\n\n──────────────────────\nRemitente: ${orgName}\nPara responder en español a su operador, toque aquí:\n${replyUrl}\n──────────────────────\nAviso: Este mensaje fue transmitido mediante la plataforma de comunicación Abrevia App. Abrevia App es una herramienta tecnológica de retransmisión y no es responsable del contenido, transacciones ni acuerdos entre las partes.`;
+
+        window.pendingWhatsAppDispatch.signatureStamp = signatureStamp;
+        window.pendingWhatsAppDispatch.ticketId = ticketId;
+        window.pendingWhatsAppDispatch.replyUrl = replyUrl;
+
         // Populate Review Modal
         const recipientLabel = document.getElementById('reviewRecipientLabel');
         if (recipientLabel) {
@@ -2637,6 +2648,11 @@ async function handleSendPersonalWhatsApp() {
                 : targetPhone;
             recipientLabel.textContent = displayName;
         }
+
+        const stampNameEl = document.getElementById('reviewSenderStampName');
+        if (stampNameEl) stampNameEl.textContent = orgName;
+        const stampLinkEl = document.getElementById('reviewReplyLinkPreview');
+        if (stampLinkEl) stampLinkEl.textContent = replyUrl;
 
         const origBox = document.getElementById('reviewOriginalText');
         if (origBox) origBox.textContent = originalDraft || '(Attachment only)';
@@ -2749,8 +2765,16 @@ async function confirmWhatsAppDispatch() {
         // Close modal
         closeWhatsAppReviewModal();
 
+        // Append Option C Signature Stamp & 1-Click Reply Link to WhatsApp payload
+        let finalOutboundPayload = finalTranslatedMessage;
+        if (window.pendingWhatsAppDispatch && window.pendingWhatsAppDispatch.signatureStamp) {
+            if (!finalOutboundPayload.includes('reply.html?t=')) {
+                finalOutboundPayload += window.pendingWhatsAppDispatch.signatureStamp;
+            }
+        }
+
         // Dispatch via wa.me protocol
-        const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(finalTranslatedMessage);
+        const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(finalOutboundPayload);
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         if (isMobile) {
             window.location.href = waUrl;
@@ -4332,7 +4356,7 @@ async function generateAndDownloadBaaPdf(e) {
         <strong>Notice Contact Email:</strong> ${escapeHtml(signerEmail)} | <strong>Phone:</strong> ${escapeHtml(signerPhone)}<br><br>
         <strong>AND</strong><br><br>
         <strong>BUSINESS ASSOCIATE:</strong><br>
-        <strong>Legal Entity Name:</strong> Servicios ADG LLC d/b/a Abrevia (&ldquo;<strong>Business Associate</strong>&rdquo; or &ldquo;<strong>Abrevia</strong>&rdquo;)<br>
+        <strong>Legal Entity Name:</strong> Abrevia App Platform (&ldquo;<strong>Business Associate</strong>&rdquo; or &ldquo;<strong>Abrevia</strong>&rdquo;)<br>
         <strong>Corporate Notice Contact:</strong> Compliance &amp; Legal Operations, info@mvhisp.site<br>
         <strong>Open-Source Security Audit Repository:</strong> github.com/serviciosadg/abrevia
     </div>
@@ -4394,9 +4418,9 @@ async function generateAndDownloadBaaPdf(e) {
         <tr>
             <td>
                 <div class="sig-header">BUSINESS ASSOCIATE (PRE-SIGNED)</div>
-                <strong>Servicios ADG LLC d/b/a Abrevia</strong><br><br>
+                <strong>Abrevia App Platform</strong><br><br>
                 <div style="font-family: 'Brush Script MT', 'Dancing Script', cursive; font-size: 20pt; color: #1e3a8a; padding: 4px 0;">
-                    Servicios ADG Compliance Officer
+                    Abrevia Compliance Operations
                 </div>
                 <div style="border-top: 1px solid #111827; padding-top: 4px; margin-top: 2px;">
                     <strong>Authorized Signature</strong>
@@ -4433,7 +4457,7 @@ async function generateAndDownloadBaaPdf(e) {
     </table>
 
     <div style="margin-top: 30px; font-size: 8.5pt; color: #6b7280; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 10px;">
-        Abrevia / Servicios ADG LLC &bull; Official Business Associate Record &bull; Verification ID: ${docVerificationId} &bull; Page 1 of 1
+        Abrevia / Abrevia App &bull; Official Business Associate Record &bull; Verification ID: ${docVerificationId} &bull; Page 1 of 1
     </div>
 </body>
 </html>`;
@@ -4512,3 +4536,65 @@ function updateSettingsPinLabel() {
 window.handleSignOutOrLock = handleSignOutOrLock;
 window.openPinConfigModal = openPinConfigModal;
 window.updateSettingsPinLabel = updateSettingsPinLabel;
+
+// ==========================================
+// Inbound Paste Safety Net (WhatsApp Direct Reply Fallback)
+// ==========================================
+function openPasteInboundModal() {
+    const modal = document.getElementById('pasteInboundModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        const text = document.getElementById('pastedInboundText');
+        if (text) { text.value = ''; setTimeout(() => text.focus(), 150); }
+    }
+}
+window.openPasteInboundModal = openPasteInboundModal;
+
+function closePasteInboundModal() {
+    const modal = document.getElementById('pasteInboundModal');
+    if (modal) modal.classList.add('hidden');
+}
+window.closePasteInboundModal = closePasteInboundModal;
+
+async function handleSavePastedInbound(e) {
+    if (e) e.preventDefault();
+    if (!currentTicket) {
+        alert(dashboardMode === 'es' ? 'Por favor seleccione o inicie una conversación primero.' : 'Please select or start a conversation first.');
+        return;
+    }
+    const input = document.getElementById('pastedInboundText');
+    const text = input ? input.value.trim() : '';
+    if (!text) return;
+
+    const btn = document.getElementById('savePastedBtn');
+    const btnText = document.getElementById('savePastedBtnText');
+    if (btn) btn.disabled = true;
+    if (btnText) btnText.textContent = dashboardMode === 'es' ? 'Traduciendo y guardando...' : 'Translating and saving...';
+
+    try {
+        const res = await fetch('/api/reply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ticketId: currentTicket.id,
+                message: text,
+                phone: currentTicket.customer_phone
+            })
+        });
+
+        if (res.ok) {
+            closePasteInboundModal();
+            await fetchMessages(currentTicket.id, true);
+            await refreshTickets(false);
+        } else {
+            alert(dashboardMode === 'es' ? 'No se pudo registrar la respuesta.' : 'Failed to record reply.');
+        }
+    } catch (err) {
+        console.error('Error in handleSavePastedInbound:', err);
+        alert(dashboardMode === 'es' ? 'Error de red al guardar.' : 'Network error saving reply.');
+    } finally {
+        if (btn) btn.disabled = false;
+        if (btnText) btnText.textContent = dashboardMode === 'es' ? 'Traducir y Guardar en Conversación' : 'Translate & Save to Conversation';
+    }
+}
+window.handleSavePastedInbound = handleSavePastedInbound;
