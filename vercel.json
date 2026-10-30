@@ -10,15 +10,19 @@
       "destination": "/dashboard.html"
     },
     {
+      "source": "/reply",
+      "destination": "/reply.html"
+    },
+    {
+      "source": "/r/:id",
+      "destination": "/reply.html?t=:id"
+    },
+    {
       "source": "/api/customer-portal",
       "destination": "/api/checkout"
     },
     {
       "source": "/api/purge",
-      "destination": "/api/tickets"
-    },
-    {
-      "source": "/api/reply",
       "destination": "/api/tickets"
     },
     {
