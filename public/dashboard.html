@@ -464,69 +464,97 @@
         </div>
     </div>
 
-    <!-- Translation Review & WhatsApp Confirmation Modal -->
-    <div id="whatsAppReviewModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden" onclick="if(event.target===this)closeWhatsAppReviewModal()">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full flex flex-col shadow-2xl relative overflow-hidden max-h-[90vh]">
+    <!-- Multi-Channel Dispatch & Translation Review Modal (WhatsApp, SMS, Email) -->
+    <div id="whatsAppReviewModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-2.5 sm:p-5 hidden" onclick="if(event.target===this)closeWhatsAppReviewModal()">
+        <div class="bg-black border border-slate-800 rounded-2xl max-w-lg w-full flex flex-col shadow-2xl relative overflow-hidden max-h-[92vh] text-slate-100 font-sans">
             
-            <!-- Modal Header -->
-            <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
-                <div class="flex items-center space-x-2">
-                    <span class="text-base text-emerald-400 font-bold">✓</span>
-                    <div>
-                        <h3 id="reviewModalTitle" class="text-sm font-bold text-white">Translation Preview</h3>
-                        <p id="reviewModalSubtitle" class="text-[11px] text-slate-400">Check your message translation before submitting to WhatsApp</p>
-                    </div>
+            <!-- Modal Header: High Contrast Minimalist -->
+            <div class="px-4 sm:px-5 py-3 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950">
+                <div>
+                    <h3 id="reviewModalTitle" class="text-sm font-bold text-white tracking-wide">Multi-Channel Dispatch &amp; Translation</h3>
+                    <p id="reviewModalSubtitle" class="text-[11px] text-slate-400">Choose delivery channels &amp; review translation before dispatching</p>
                 </div>
-                <button type="button" onclick="closeWhatsAppReviewModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition cursor-pointer" title="Cancel & Return">
+                <button type="button" onclick="closeWhatsAppReviewModal()" class="text-slate-400 hover:text-white text-2xl font-bold p-1 leading-none transition cursor-pointer" title="Cancel & Return">
                     &times;
                 </button>
             </div>
 
             <!-- Modal Body -->
             <div class="p-4 sm:p-5 space-y-3.5 overflow-y-auto overscroll-contain text-xs">
-                <!-- Recipient Info Badge -->
-                <div class="flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs">
-                    <div class="flex items-center space-x-2 truncate">
-                        <span class="text-slate-400 text-[11px]">Recipient:</span>
-                        <span id="reviewRecipientLabel" class="font-semibold text-white truncate">+1 ...</span>
+                
+                <!-- 1. Destination Channel Selector (Pick 1, 2, or All 3) -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                            Destination Channels (SMS, WhatsApp, Email):
+                        </label>
+                        <span class="text-[10px] text-slate-500 font-mono">1, 2 or All 3</span>
                     </div>
-                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-semibold shrink-0">Direct Personal Phone</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <!-- WhatsApp Option -->
+                        <label class="flex items-center space-x-2 bg-slate-950 border border-slate-800 hover:border-slate-700 p-2.5 rounded-xl cursor-pointer select-none transition">
+                            <input type="checkbox" id="channelWhatsApp" checked onchange="updateDispatchChannelUI()" class="rounded border-slate-700 text-blue-500 focus:ring-0 cursor-pointer">
+                            <span class="text-xs font-bold text-white">WhatsApp</span>
+                        </label>
+                        <!-- SMS Option -->
+                        <label class="flex items-center space-x-2 bg-slate-950 border border-slate-800 hover:border-slate-700 p-2.5 rounded-xl cursor-pointer select-none transition">
+                            <input type="checkbox" id="channelSms" checked onchange="updateDispatchChannelUI()" class="rounded border-slate-700 text-blue-500 focus:ring-0 cursor-pointer">
+                            <span class="text-xs font-bold text-white">SMS Text</span>
+                        </label>
+                        <!-- Email Option -->
+                        <label class="flex items-center space-x-2 bg-slate-950 border border-slate-800 hover:border-slate-700 p-2.5 rounded-xl cursor-pointer select-none transition">
+                            <input type="checkbox" id="channelEmail" onchange="updateDispatchChannelUI()" class="rounded border-slate-700 text-blue-500 focus:ring-0 cursor-pointer">
+                            <span class="text-xs font-bold text-white">Email</span>
+                        </label>
+                    </div>
                 </div>
 
-                <!-- Box 1: Original Agent Draft -->
+                <!-- Recipient Contact Details Bar -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-400 text-[11px]">Recipient Phone:</span>
+                        <span id="reviewRecipientLabel" class="font-semibold text-white font-mono">+1 ...</span>
+                    </div>
+                    <!-- Email Input row (visible when Email is checked) -->
+                    <div id="dispatchEmailRow" class="hidden flex items-center justify-between text-xs pt-2 border-t border-slate-900 gap-2">
+                        <span class="text-slate-400 text-[11px] shrink-0">Recipient Email:</span>
+                        <input type="email" id="dispatchRecipientEmail" placeholder="client@example.com" class="bg-black border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-slate-400 w-full font-mono text-left">
+                    </div>
+                </div>
+
+                <!-- Box 1: Original Agent Draft (English) -->
                 <div>
                     <div class="flex items-center justify-between mb-1">
                         <span id="reviewOriginalHeader" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Your Message (English)</span>
-                        <span class="text-[10px] text-slate-500">Source</span>
+                        <span class="text-[10px] text-slate-500 font-mono">Original Draft</span>
                     </div>
-                    <div id="reviewOriginalText" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 leading-relaxed whitespace-pre-wrap max-h-28 overflow-y-auto font-sans">
+                    <div id="reviewOriginalText" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto font-sans">
                     </div>
                 </div>
 
-                <!-- Box 2: Verified Translation (Editable) -->
+                <!-- Box 2: Verified Translation (Spanish - Editable) -->
                 <div>
                     <div class="flex items-center justify-between mb-1">
-                        <span id="reviewTranslatedHeader" class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider flex items-center space-x-1">
+                        <span id="reviewTranslatedHeader" class="text-[10px] font-bold text-white uppercase tracking-wider flex items-center space-x-1">
                             <span>Translated Message (Spanish)</span>
-                            <span class="text-emerald-500 font-normal text-[9px]">(Editable)</span>
+                            <span class="text-slate-400 font-normal text-[9px]">(Editable)</span>
                         </span>
-                        <span class="text-[10px] text-slate-500">Will be sent to WhatsApp</span>
+                        <span id="reviewCharCount" class="text-slate-400 text-[10px] font-mono">0 chars</span>
                     </div>
-                    <textarea id="reviewTranslatedText" rows="4" class="w-full bg-slate-950 border border-emerald-500/40 focus:border-emerald-500 rounded-xl p-3 text-xs sm:text-sm text-white focus:outline-none transition leading-relaxed resize-none shadow-inner"></textarea>
+                    <textarea id="reviewTranslatedText" rows="4" class="w-full bg-black border border-slate-700 focus:border-white rounded-xl p-3 text-xs sm:text-sm text-white focus:outline-none transition leading-relaxed resize-none font-sans"></textarea>
                     <div class="text-[10px] text-slate-500 mt-1 flex items-center justify-between">
-                        <span>Feel free to edit or polish before submitting</span>
-                        <span id="reviewCharCount" class="text-slate-400">0 characters</span>
+                        <span>Feel free to edit or polish Spanish wording before dispatching</span>
                     </div>
                 </div>
 
                 <!-- Box 3: Origin Stamp & Recipient 1-Click Reply Link Preview -->
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-[10px] text-slate-400 space-y-1">
-                    <div class="flex items-center justify-between text-slate-300 font-bold text-[10px] border-b border-slate-800 pb-1">
+                    <div class="flex items-center justify-between text-slate-300 font-bold border-b border-slate-800 pb-1">
                         <span>📋 Sello de Origen y Enlace de Respuesta (Opción C)</span>
-                        <span class="text-emerald-400 font-mono text-[9px]">Abrevia App</span>
+                        <span class="text-white font-mono text-[9px]">Abrevia App</span>
                     </div>
                     <div class="text-slate-300">Remitente: <span id="reviewSenderStampName" class="text-white font-semibold">Despacho Operativo</span></div>
-                    <div class="text-brand-400 truncate font-mono text-[9px]">Enlace: <span id="reviewReplyLinkPreview">https://abrevia-beta.vercel.app/reply.html?t=...</span></div>
+                    <div class="text-slate-400 truncate font-mono text-[9px]">Enlace: <span id="reviewReplyLinkPreview">https://abrevia-beta.vercel.app/m.html?t=...</span></div>
                     <div class="text-[9px] text-slate-500 pt-0.5 leading-snug">
                         Aviso: Transmitido mediante Abrevia App. Abrevia App no es responsable del contenido ni de acuerdos entre las partes.
                     </div>
@@ -535,20 +563,36 @@
                 <!-- Attachment notice if any -->
                 <div id="reviewAttachmentNotice" class="hidden bg-slate-950 border border-slate-800 rounded-xl p-2.5 flex items-center space-x-2 text-xs text-slate-300">
                     <span>📎</span>
-                    <span id="reviewAttachmentName" class="truncate flex-grow text-brand-300"></span>
+                    <span id="reviewAttachmentName" class="truncate flex-grow text-white"></span>
                 </div>
             </div>
 
-            <!-- Modal Footer -->
-            <div class="px-5 py-3 border-t border-slate-800 bg-slate-950/80 shrink-0 flex items-center justify-between gap-2">
-                <button type="button" onclick="closeWhatsAppReviewModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold px-4 py-2 rounded-xl transition cursor-pointer">
-                    <span id="reviewCancelBtnText">Cancel</span>
-                </button>
+            <!-- Modal Footer: Multi-Channel Action Buttons -->
+            <div class="px-4 sm:px-5 py-3 border-t border-slate-800 bg-slate-950 shrink-0 space-y-2">
+                <!-- Action Buttons: Taps trigger respective native app -->
+                <div id="multiChannelActionRow" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <button id="dispatchWhatsAppBtn" type="button" onclick="executeChannelDispatch('whatsapp')" class="flex-1 bg-white hover:bg-slate-200 active:scale-95 text-black text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer min-h-[42px]">
+                        <span id="dispatchWhatsAppBtnText">📱 Send WhatsApp</span>
+                    </button>
+                    <button id="dispatchSmsBtn" type="button" onclick="executeChannelDispatch('sms')" class="flex-1 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer border border-slate-700 min-h-[42px]">
+                        <span id="dispatchSmsBtnText">💬 Send SMS</span>
+                    </button>
+                    <button id="dispatchEmailBtn" type="button" onclick="executeChannelDispatch('email')" class="hidden flex-1 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer border border-slate-700 min-h-[42px]">
+                        <span id="dispatchEmailBtnText">✉️ Send Email</span>
+                    </button>
+                </div>
 
-                <button id="reviewConfirmBtn" type="button" onclick="confirmWhatsAppDispatch()" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-lg shadow-emerald-600/30 flex items-center space-x-2 cursor-pointer">
-                    <span id="reviewConfirmBtnText">Submit to WhatsApp &rarr;</span>
-                    <span class="text-xs">&rarr;</span>
-                </button>
+                <!-- Secondary Row: Copy Text & Close -->
+                <div class="flex items-center justify-between pt-1">
+                    <button type="button" onclick="copyDispatchText()" class="text-slate-400 hover:text-white text-xs font-medium flex items-center space-x-1 cursor-pointer">
+                        <span id="copyDispatchTextIcon">📋</span>
+                        <span id="copyDispatchTextLabel">Copy Spanish Text</span>
+                    </button>
+
+                    <button type="button" onclick="closeWhatsAppReviewModal()" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold px-4 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 transition cursor-pointer">
+                        <span id="reviewCancelBtnText">Done / Close</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

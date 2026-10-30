@@ -2547,7 +2547,31 @@ async function confirmAndSend() {
     }
 }
 
-// Direct Personal WhatsApp Dispatch with Verified Translation Review
+// Universal Multi-Channel Dispatch (SMS, WhatsApp, Email) with Real-Time Translation Review
+function updateDispatchChannelUI() {
+    const waCheck = document.getElementById('channelWhatsApp');
+    const smsCheck = document.getElementById('channelSms');
+    const emailCheck = document.getElementById('channelEmail');
+
+    const waBtn = document.getElementById('dispatchWhatsAppBtn');
+    const smsBtn = document.getElementById('dispatchSmsBtn');
+    const emailBtn = document.getElementById('dispatchEmailBtn');
+    const emailRow = document.getElementById('dispatchEmailRow');
+
+    if (emailRow) {
+        if (emailCheck && emailCheck.checked) {
+            emailRow.classList.remove('hidden');
+        } else {
+            emailRow.classList.add('hidden');
+        }
+    }
+
+    if (waBtn) waBtn.classList.toggle('hidden', !waCheck?.checked);
+    if (smsBtn) smsBtn.classList.toggle('hidden', !smsCheck?.checked);
+    if (emailBtn) emailBtn.classList.toggle('hidden', !emailCheck?.checked);
+}
+window.updateDispatchChannelUI = updateDispatchChannelUI;
+
 async function handleSendPersonalWhatsApp() {
     let targetPhone = '';
     if (currentTicket && currentTicket.customer_phone) {
@@ -2556,7 +2580,7 @@ async function handleSendPersonalWhatsApp() {
     
     if (!targetPhone) {
         const promptMsg = dashboardMode === 'es' 
-            ? 'Ingrese el número telefónico del destinatario con código de país (ej. +52 55... o +1 415...):' 
+            ? 'Ingrese el número telefónico del destinatario con código de país (ej. +1 415... o +52 55...):' 
             : 'Enter recipient phone number with country code (e.g. +1 415... or +52 55...):';
         const entered = prompt(promptMsg);
         if (!entered || !entered.trim()) return;
@@ -2574,7 +2598,7 @@ async function handleSendPersonalWhatsApp() {
         cleanPhone = '1' + cleanPhone;
     }
 
-    const t = I18N[dashboardMode];
+    const t = I18N[dashboardMode] || {};
     const inputEl = document.getElementById('agent-input');
     let originalDraft = inputEl ? inputEl.value.trim() : '';
 
@@ -2620,14 +2644,9 @@ async function handleSendPersonalWhatsApp() {
             translatedText = dashboardMode === 'es' ? ('Adjunto: ' + currentAttachment.name) : ('Attachment: ' + currentAttachment.name);
         }
 
-        // Store pending dispatch state
-        window.pendingWhatsAppDispatch = {
-            cleanPhone: cleanPhone,
-            targetPhone: targetPhone,
-            originalDraft: originalDraft,
-            translatedText: translatedText,
-            attachment: currentAttachment ? { name: currentAttachment.name, file: currentAttachment } : null
-        };
+        // Resolve recipient contact data (Phone & Email)
+        const contact = (currentTicket && currentTicket.contact) || findContactByPhone(cleanPhone) || {};
+        const recipientEmail = contact.email || currentTicket?.email || '';
 
         // Compute Option C Signature Stamp & Recipient 1-Click Reply Link
         const orgName = getSenderOrgName() || currentTicket?.company || 'Despacho Operativo';
@@ -2636,18 +2655,68 @@ async function handleSendPersonalWhatsApp() {
         const replyUrl = `${baseUrl}/m.html?t=${encodeURIComponent(ticketId)}&sender=${encodeURIComponent(orgName)}`;
         const signatureStamp = `\n\n──────────────────────\nRemitente: ${orgName}\nPara responder en español a su operador, toque aquí:\n${replyUrl}\n──────────────────────\nAviso: Este mensaje fue transmitido mediante la plataforma de comunicación Abrevia App. Abrevia App es una herramienta tecnológica de retransmisión y no es responsable del contenido, transacciones ni acuerdos entre las partes.`;
 
-        window.pendingWhatsAppDispatch.signatureStamp = signatureStamp;
-        window.pendingWhatsAppDispatch.ticketId = ticketId;
-        window.pendingWhatsAppDispatch.replyUrl = replyUrl;
+        // Store pending dispatch state
+        window.pendingWhatsAppDispatch = {
+            cleanPhone: cleanPhone,
+            targetPhone: targetPhone,
+            recipientEmail: recipientEmail,
+            originalDraft: originalDraft,
+            translatedText: translatedText,
+            attachment: currentAttachment ? { name: currentAttachment.name, file: currentAttachment } : null,
+            ticketId: ticketId,
+            replyUrl: replyUrl,
+            signatureStamp: signatureStamp,
+            hasLoggedAudit: false
+        };
 
         // Populate Review Modal
         const recipientLabel = document.getElementById('reviewRecipientLabel');
         if (recipientLabel) {
             const displayName = currentTicket?.customer_name 
-                ? `${currentTicket.customer_name} (${targetPhone})` 
-                : targetPhone;
+                ? `${currentTicket.customer_name} (+${cleanPhone})` 
+                : ('+' + cleanPhone);
             recipientLabel.textContent = displayName;
         }
+
+        const emailInput = document.getElementById('dispatchRecipientEmail');
+        if (emailInput) {
+            emailInput.value = recipientEmail;
+        }
+
+        // Channel checkboxes initialization
+        const waCheck = document.getElementById('channelWhatsApp');
+        const smsCheck = document.getElementById('channelSms');
+        const emailCheck = document.getElementById('channelEmail');
+        if (waCheck) waCheck.checked = true;
+        if (smsCheck) smsCheck.checked = true;
+        if (emailCheck) emailCheck.checked = !!recipientEmail;
+
+        updateDispatchChannelUI();
+
+        // Reset button states
+        const dWaBtn = document.getElementById('dispatchWhatsAppBtn');
+        const dWaText = document.getElementById('dispatchWhatsAppBtnText');
+        if (dWaBtn) {
+            dWaBtn.disabled = false;
+            dWaBtn.className = "flex-1 bg-white hover:bg-slate-200 active:scale-95 text-black text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer min-h-[42px]";
+        }
+        if (dWaText) dWaText.textContent = '📱 Send WhatsApp';
+
+        const dSmsBtn = document.getElementById('dispatchSmsBtn');
+        const dSmsText = document.getElementById('dispatchSmsBtnText');
+        if (dSmsBtn) {
+            dSmsBtn.disabled = false;
+            dSmsBtn.className = "flex-1 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer border border-slate-700 min-h-[42px]";
+        }
+        if (dSmsText) dSmsText.textContent = '💬 Send SMS';
+
+        const dEmailBtn = document.getElementById('dispatchEmailBtn');
+        const dEmailText = document.getElementById('dispatchEmailBtnText');
+        if (dEmailBtn) {
+            dEmailBtn.disabled = false;
+            dEmailBtn.className = "flex-1 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer border border-slate-700 min-h-[42px]";
+        }
+        if (dEmailText) dEmailText.textContent = '✉️ Send Email';
 
         const stampNameEl = document.getElementById('reviewSenderStampName');
         if (stampNameEl) stampNameEl.textContent = orgName;
@@ -2661,9 +2730,9 @@ async function handleSendPersonalWhatsApp() {
         if (transBox) {
             transBox.value = translatedText;
             const charCount = document.getElementById('reviewCharCount');
-            if (charCount) charCount.textContent = `${translatedText.length} characters`;
+            if (charCount) charCount.textContent = `${translatedText.length} chars`;
             transBox.oninput = () => {
-                if (charCount) charCount.textContent = `${transBox.value.length} characters`;
+                if (charCount) charCount.textContent = `${transBox.value.length} chars`;
             };
             transBox.onkeydown = (e) => {
                 if (e.key === 'Escape') {
@@ -2671,7 +2740,7 @@ async function handleSendPersonalWhatsApp() {
                     closeWhatsAppReviewModal();
                 } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                     e.preventDefault();
-                    confirmWhatsAppDispatch();
+                    executeChannelDispatch('whatsapp');
                 }
             };
         }
@@ -2691,7 +2760,7 @@ async function handleSendPersonalWhatsApp() {
         if (transBox) transBox.focus();
 
     } catch (err) {
-        console.error('Error preparing review translation:', err);
+        console.error('Error preparing multi-channel dispatch review:', err);
         alert((dashboardMode === 'es' ? 'Error al preparar traducción: ' : 'Error preparing translation: ') + err.message);
     } finally {
         if (waBtn) waBtn.disabled = false;
@@ -2700,22 +2769,21 @@ async function handleSendPersonalWhatsApp() {
 }
 window.handleSendPersonalWhatsApp = handleSendPersonalWhatsApp;
 
-// Confirm reviewed translation and launch WhatsApp wa.me
-async function confirmWhatsAppDispatch() {
+// Execute specific channel dispatch (WhatsApp, SMS, or Email)
+async function executeChannelDispatch(channel) {
     if (!window.pendingWhatsAppDispatch) return;
-    const { cleanPhone, originalDraft, attachment } = window.pendingWhatsAppDispatch;
+    const { cleanPhone, originalDraft, attachment, signatureStamp } = window.pendingWhatsAppDispatch;
     const transBox = document.getElementById('reviewTranslatedText');
     let finalTranslatedMessage = transBox ? transBox.value.trim() : window.pendingWhatsAppDispatch.translatedText;
-    
+
     if (!finalTranslatedMessage && !originalDraft && !attachment) return;
 
-    const confirmBtn = document.getElementById('reviewConfirmBtn');
-    const confirmBtnText = document.getElementById('reviewConfirmBtnText');
-    const origConfirmText = confirmBtnText ? confirmBtnText.textContent : '';
-    if (confirmBtn) confirmBtn.disabled = true;
-    if (confirmBtnText) confirmBtnText.textContent = dashboardMode === 'es' ? 'Abriendo WhatsApp...' : 'Opening WhatsApp...';
+    const orgName = getSenderOrgName() || currentTicket?.company || 'Despacho Operativo';
 
-    try {
+    // 1. Audit and persist message once per dispatch session
+    if (!window.pendingWhatsAppDispatch.hasLoggedAudit) {
+        window.pendingWhatsAppDispatch.hasLoggedAudit = true;
+
         let mediaUrl = null;
         if (attachment && attachment.file) {
             try {
@@ -2724,11 +2792,10 @@ async function confirmWhatsAppDispatch() {
                     finalTranslatedMessage += '\n\n📎 Adjunto: ' + mediaUrl;
                 }
             } catch (upErr) {
-                console.warn('Media upload warning during WhatsApp dispatch:', upErr);
+                console.warn('Media upload warning during dispatch:', upErr);
             }
         }
 
-        // Record message in active conversation transcript as DELIVERED
         if (currentTicket) {
             if (!currentTicket.messages) currentTicket.messages = [];
             const newMsg = {
@@ -2738,6 +2805,7 @@ async function confirmWhatsAppDispatch() {
                 original_draft: originalDraft,
                 media_url: mediaUrl,
                 status: 'DELIVERED',
+                channel: channel,
                 timestamp: new Date().toISOString()
             };
             currentTicket.messages.push(newMsg);
@@ -2761,19 +2829,25 @@ async function confirmWhatsAppDispatch() {
         const inputEl = document.getElementById('agent-input');
         if (inputEl) inputEl.value = '';
         if (typeof removeAttachment === 'function') removeAttachment();
+    }
 
-        // Close modal
-        closeWhatsAppReviewModal();
-
-        // Append Option C Signature Stamp & 1-Click Reply Link to WhatsApp payload
-        let finalOutboundPayload = finalTranslatedMessage;
-        if (window.pendingWhatsAppDispatch && window.pendingWhatsAppDispatch.signatureStamp) {
-            if (!finalOutboundPayload.includes('reply.html?t=')) {
-                finalOutboundPayload += window.pendingWhatsAppDispatch.signatureStamp;
-            }
+    // Build outbound message with Abrevia Option C Signature Stamp & Web Reply Link
+    let finalOutboundPayload = finalTranslatedMessage;
+    if (signatureStamp) {
+        if (!finalOutboundPayload.includes('m.html?t=') && !finalOutboundPayload.includes('reply.html?t=')) {
+            finalOutboundPayload += signatureStamp;
         }
+    }
 
-        // Dispatch via wa.me protocol
+    // 2. Launch channel protocol
+    if (channel === 'whatsapp') {
+        const waBtn = document.getElementById('dispatchWhatsAppBtn');
+        const waText = document.getElementById('dispatchWhatsAppBtnText');
+        if (waBtn) {
+            waBtn.className = "flex-1 bg-emerald-600 text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer min-h-[42px]";
+        }
+        if (waText) waText.textContent = '✓ WhatsApp Sent';
+
         const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(finalOutboundPayload);
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         if (isMobile) {
@@ -2784,18 +2858,72 @@ async function confirmWhatsAppDispatch() {
                 window.location.href = waUrl;
             }
         }
-    } catch (err) {
-        console.error('WhatsApp dispatch error:', err);
-        const fallbackUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(finalTranslatedMessage);
-        window.open(fallbackUrl, '_blank');
-        closeWhatsAppReviewModal();
-    } finally {
-        if (confirmBtn) confirmBtn.disabled = false;
-        if (confirmBtnText) confirmBtnText.textContent = origConfirmText || (dashboardMode === 'es' ? 'Confirmar y Abrir WhatsApp' : 'Confirm & Open WhatsApp');
-        window.pendingWhatsAppDispatch = null;
+    } else if (channel === 'sms') {
+        const smsBtn = document.getElementById('dispatchSmsBtn');
+        const smsText = document.getElementById('dispatchSmsBtnText');
+        if (smsBtn) {
+            smsBtn.className = "flex-1 bg-emerald-600 text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer min-h-[42px]";
+        }
+        if (smsText) smsText.textContent = '✓ SMS Sent';
+
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const smsSep = isIOS ? '&body=' : '?body=';
+        const smsUrl = 'sms:' + cleanPhone + smsSep + encodeURIComponent(finalOutboundPayload);
+        window.location.href = smsUrl;
+    } else if (channel === 'email') {
+        const emailInput = document.getElementById('dispatchRecipientEmail');
+        const emailVal = emailInput ? emailInput.value.trim() : '';
+        if (!emailVal) {
+            alert(dashboardMode === 'es' ? 'Por favor ingrese el correo electrónico del destinatario.' : 'Please enter recipient email address.');
+            if (emailInput) emailInput.focus();
+            return;
+        }
+
+        const emailBtn = document.getElementById('dispatchEmailBtn');
+        const emailText = document.getElementById('dispatchEmailBtnText');
+        if (emailBtn) {
+            emailBtn.className = "flex-1 bg-emerald-600 text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer min-h-[42px]";
+        }
+        if (emailText) emailText.textContent = '✓ Email Sent';
+
+        const emailSubject = (dashboardMode === 'es' ? 'Mensaje de ' : 'Message from ') + orgName;
+        const emailUrl = 'mailto:' + encodeURIComponent(emailVal) + '?subject=' + encodeURIComponent(emailSubject) + '&body=' + encodeURIComponent(finalOutboundPayload);
+        window.location.href = emailUrl;
     }
 }
+window.executeChannelDispatch = executeChannelDispatch;
+
+// Backward-compatible trigger for keyboard shortcuts and legacy calls
+async function confirmWhatsAppDispatch() {
+    return executeChannelDispatch('whatsapp');
+}
 window.confirmWhatsAppDispatch = confirmWhatsAppDispatch;
+
+// Copy Spanish text to clipboard
+function copyDispatchText() {
+    const transBox = document.getElementById('reviewTranslatedText');
+    let text = transBox ? transBox.value.trim() : '';
+    if (window.pendingWhatsAppDispatch && window.pendingWhatsAppDispatch.signatureStamp) {
+        if (!text.includes('m.html?t=') && !text.includes('reply.html?t=')) {
+            text += window.pendingWhatsAppDispatch.signatureStamp;
+        }
+    }
+    if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+            const label = document.getElementById('copyDispatchTextLabel');
+            const icon = document.getElementById('copyDispatchTextIcon');
+            if (label) label.textContent = '✓ Copied to Clipboard!';
+            if (icon) icon.textContent = '✓';
+            setTimeout(() => {
+                if (label) label.textContent = 'Copy Spanish Text';
+                if (icon) icon.textContent = '📋';
+            }, 2500);
+        }).catch(err => {
+            console.warn('Clipboard write error:', err);
+        });
+    }
+}
+window.copyDispatchText = copyDispatchText;
 
 function closeWhatsAppReviewModal() {
     const modal = document.getElementById('whatsAppReviewModal');

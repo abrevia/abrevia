@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "project": {
+    "name": "Abrevia App",
+    "version": "1.0.0-beta",
+    "description": "Zero-friction bilingual asynchronous relay platform connecting English-speaking operators with Spanish-speaking workforce and clients via multi-channel dispatch (SMS, WhatsApp, Email) and bidirectional web bridge.",
+    "production_url": "https://abrevia-beta.vercel.app",
+    "repository": "https://github.com/alexisduran1/abrevia.git",
+    "exported_at": "2026-10-30T05:35:10.973471+00:00",
+    "primary_jurisdiction": "United States of America (USA exclusively, +1 telephone routing)",
+    "design_language": "High-contrast minimalist dark mode (white text on dark background), token-efficient, zero decorative fluff, 100% mobile-optimized."
+  },
+  "operator_profile": {
+    "technical_level": "Advanced computer user, non-technical in cloud/IT/software engineering.",
+    "role": "Project Owner & Principal Operator.",
+    "ai_collaboration_guidelines": [
+      "Always conduct a feasibility and viability assessment of every prompt prior to coding.",
+      "Clearly explain technical trade-offs, limitations, and industry standards in accessible, non-jargon terms.",
+      "Test mobile responsiveness (360px-430px smartphone viewports) for all releases.",
+      "Maintain strict high-contrast minimalist aesthetic to conserve tokens and optimize readability.",
+      "Mirror every commit to the external storage drive at D:\\02 PROJECTS\\abrevia\\."
+    ]
+  },
+  "architecture": {
+    "hosting": "Vercel Serverless & Edge Network",
+    "frontend": {
+      "technology": "Vanilla ECMAScript 2022 (ES6+), Tailwind CSS via CDN, Progressive Web App (PWA) manifest.",
+      "entry_points": {
+        "landing_and_terms": "public/index.html",
+        "operator_workspace": "public/dashboard.html",
+        "recipient_mobile_bridge": "public/m.html and public/reply.html"
+      },
+      "state_management": "localStorage with ephemeral RAM ticket caching"
+    },
+    "backend": {
+      "runtime": "Vercel Node.js Serverless Functions (ES Modules)",
+      "database": "Supabase PostgreSQL (tickets, messages, contacts) with graceful in-memory fallback",
+      "ai_engine": {
+        "provider": "Google Gemini API (@google/genai SDK)",
+        "models": [
+          "gemini-2.5-flash",
+          "gemini-1.5-flash"
+        ],
+        "capabilities": [
+          "Real-time bidirectional English <-> Spanish translation",
+          "Cultural and linguistic context preservation",
+          "Automated after-hours bilingual responder"
+        ]
+      }
+    }
+  },
+  "relay_and_communication_tier": {
+    "active_recipient_model": "Option C: Dual-Direction Web Bridge with Multi-Channel Outbound Dispatch",
+    "outbound_channels": {
+      "whatsapp": {
+        "mechanism": "wa.me personal device URI (https://wa.me/{phone}?text={encoded})",
+        "cost": "$0.00 (Zero third-party API keys, zero business verification delay)",
+        "carrier_registration_required": false
+      },
+      "sms": {
+        "mechanism": "Native mobile URI scheme (sms:{phone}?body={encoded})",
+        "cost": "$0.00 (Uses operator cellular device plan)",
+        "carrier_registration_required": false,
+        "commercial_roadmap": "A2P 10DLC Campaign Registry verification with Twilio/AWS SNS for cloud-automated scale"
+      },
+      "email": {
+        "mechanism": "Native email URI scheme (mailto:{email}?subject={subject}&body={encoded})",
+        "cost": "$0.00 (Uses operator default email client)",
+        "commercial_roadmap": "Transactional email gateway (Resend / AWS SES / SendGrid) with verified SPF, DKIM, and DMARC DNS records"
+      }
+    },
+    "inbound_reply_mechanisms": {
+      "option_c_web_bridge": {
+        "url_pattern": "https://abrevia-beta.vercel.app/m.html?t={ticket_id}&sender={org_name}",
+        "workflow": "Recipient receives translated text via WhatsApp/SMS/Email, clicks link, opens lightweight Spanish mobile page, types reply in Spanish, posts to /api/tickets, Gemini translates to English in real time, appears immediately in operator workspace."
+      },
+      "safety_net_inbound_paste": {
+        "workflow": "If recipient replies directly to operator personal WhatsApp or SMS number, operator clicks 'Paste Inbound' on dashboard to record and auto-translate response into thread."
+      }
+    },
+    "legal_neutrality_signature_stamp": {
+      "sender_field": "Remitente: [Company / Sender Profile Name]",
+      "reply_link_field": "Para responder en español a su operador, toque aquí: [m.html?t=...]",
+      "liability_disclaimer": "Aviso: Este mensaje fue transmitido mediante la plataforma de comunicación Abrevia App. Abrevia App es una herramienta tecnológica de retransmisión y no es responsable del contenido, transacciones ni acuerdos entre las partes."
+    }
+  },
+  "api_specification": {
+    "/api/tickets": {
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "description": "Unified conversation management, message audit history, and real-time Spanish to English translation for recipient replies."
+    },
+    "/api/translate": {
+      "methods": [
+        "POST"
+      ],
+      "description": "Bidirectional translation endpoint utilizing Gemini AI with fallbacks."
+    },
+    "/api/accept-terms": {
+      "methods": [
+        "POST"
+      ],
+      "description": "Records clickwrap acceptance audit trail (device ID, timestamp, user agent, IP hash) for legal enforceability."
+    },
+    "/api/contacts": {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "description": "Contact directory management with phone normalization and auto-saving."
+    },
+    "/api/ping": {
+      "methods": [
+        "GET"
+      ],
+      "description": "Health check and uptime monitoring."
+    }
+  },
+  "legal_and_compliance": {
+    "operating_entity": "Abrevia App",
+    "data_retention": "Zero permanent message retention on server databases; ephemeral routing.",
+    "hipaa_status": "Beta testing tier strictly prohibits transmission of Protected Health Information (PHI). Pre-signed BAA and enterprise roadmap ready for clinical production.",
+    "clickwrap_terms": "Electronic acceptance modal with touch-scroll lock elimination, individual binding arbitration, class action waiver, and $100 aggregate liability cap.",
+    "title_vi_compliance": "Self-assessment framework in place for federally funded programs requiring language assistance services."
+  },
+  "evaluation_guide_for_external_ai": {
+    "assessment_prompt": "You are reviewing the architecture and codebase of Abrevia App. Review the configuration, data flow, multi-channel dispatch model (SMS, WhatsApp, Email), Option C recipient bridge, and legal neutrality framework. Assess its scalability, mobile ergonomics, carrier compliance, and identify the next 3 high-impact technical milestones."
+  }
+}
