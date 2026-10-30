@@ -2633,7 +2633,7 @@ async function handleSendPersonalWhatsApp() {
         const orgName = getSenderOrgName() || currentTicket?.company || 'Despacho Operativo';
         const ticketId = currentTicket ? currentTicket.id : ('t_' + cleanPhone);
         const baseUrl = window.location.origin || 'https://abrevia-beta.vercel.app';
-        const replyUrl = `${baseUrl}/reply.html?t=${encodeURIComponent(ticketId)}&sender=${encodeURIComponent(orgName)}`;
+        const replyUrl = `${baseUrl}/m.html?t=${encodeURIComponent(ticketId)}&sender=${encodeURIComponent(orgName)}`;
         const signatureStamp = `\n\n──────────────────────\nRemitente: ${orgName}\nPara responder en español a su operador, toque aquí:\n${replyUrl}\n──────────────────────\nAviso: Este mensaje fue transmitido mediante la plataforma de comunicación Abrevia App. Abrevia App es una herramienta tecnológica de retransmisión y no es responsable del contenido, transacciones ni acuerdos entre las partes.`;
 
         window.pendingWhatsAppDispatch.signatureStamp = signatureStamp;
@@ -4572,13 +4572,13 @@ async function handleSavePastedInbound(e) {
     if (btnText) btnText.textContent = dashboardMode === 'es' ? 'Traduciendo y guardando...' : 'Translating and saving...';
 
     try {
-        const res = await fetch('/api/reply', {
+        const res = await fetch('/api/tickets', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 ticketId: currentTicket.id,
                 message: text,
-                phone: currentTicket.customer_phone
+                sender: 'customer'
             })
         });
 

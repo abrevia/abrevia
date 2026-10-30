@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Respuesta Rápida | Abrevia</title>
+    <title>Canal de Respuesta Directa | Abrevia App</title>
     <link rel="icon" type="image/png" href="/assets/logo.png?v=3">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -55,7 +55,7 @@
                 <span id="syncIndicator" class="text-[9px] text-slate-500 font-normal">Sincronizado</span>
             </div>
 
-            <div id="messagesFeed" class="space-y-2.5 overflow-y-auto max-h-[46vh] p-2 bg-slate-900/50 border border-slate-800 rounded-2xl">
+            <div id="messagesFeed" class="space-y-2.5 overflow-y-auto max-h-[46vh] p-2.5 bg-slate-900/50 border border-slate-800 rounded-2xl">
                 <div class="text-center py-6 text-xs text-slate-500">
                     Cargando conversación...
                 </div>
@@ -63,8 +63,8 @@
         </div>
 
         <!-- Success Toast -->
-        <div id="successNotice" class="hidden bg-emerald-950/60 border border-emerald-500/50 p-3 rounded-xl text-emerald-200 text-xs flex items-center space-x-2">
-            <span class="text-base">✓</span>
+        <div id="successNotice" class="hidden bg-emerald-950/70 border border-emerald-500/50 p-3 rounded-xl text-emerald-200 text-xs flex items-center space-x-2">
+            <span class="text-base font-bold">✓</span>
             <span>Su respuesta fue entregada y traducida al operador en tiempo real.</span>
         </div>
 
@@ -73,7 +73,7 @@
             <label for="replyInput" class="block text-xs font-semibold text-slate-200">
                 Escriba su respuesta en español:
             </label>
-            <textarea id="replyInput" rows="3" required placeholder="Escriba aquí (ej. Confirmo la recepción, estaré disponible a las 2 PM)..." class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl p-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition resize-none"></textarea>
+            <textarea id="replyInput" rows="3" required placeholder="Escriba aquí su mensaje..." class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl p-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition resize-none"></textarea>
 
             <button id="sendBtn" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl transition flex items-center justify-center space-x-1.5 shadow-lg shadow-emerald-600/20 cursor-pointer min-h-[44px]">
                 <span id="sendBtnText">Enviar Respuesta al Operador</span>
@@ -94,7 +94,7 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const ticketId = urlParams.get('t') || urlParams.get('ticketId') || 'general';
+        const ticketId = urlParams.get('t') || urlParams.get('id') || urlParams.get('ticketId') || '';
         const senderFromUrl = urlParams.get('sender') || '';
 
         if (senderFromUrl) {
@@ -103,14 +103,21 @@
         }
 
         async function loadMessages() {
-            if (!ticketId) return;
+            if (!ticketId) {
+                const feed = document.getElementById('messagesFeed');
+                if (feed) {
+                    feed.innerHTML = '<div class="text-center py-6 text-xs text-slate-500">Escriba su respuesta en el cuadro inferior para enviar al despacho.</div>';
+                }
+                return;
+            }
+
             try {
-                const res = await fetch(`/api/reply?t=${encodeURIComponent(ticketId)}`);
+                const res = await fetch(`/api/tickets?id=${encodeURIComponent(ticketId)}`);
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.ticket && data.ticket.sender_name && !senderFromUrl) {
+                    if (data.ticket && data.ticket.company && !senderFromUrl) {
                         const senderEl = document.getElementById('senderNameDisplay');
-                        if (senderEl) senderEl.textContent = data.ticket.sender_name;
+                        if (senderEl) senderEl.textContent = data.ticket.company;
                     }
                     renderMessages(data.messages || []);
                 }
@@ -140,7 +147,7 @@
                     ? 'bg-emerald-600 text-white rounded-br-none'
                     : 'bg-slate-800 text-slate-100 rounded-bl-none border border-slate-700';
                 const label = isCustomer ? 'Usted' : 'Despacho';
-                const text = m.spanish_text || m.english_text || '';
+                const text = m.spanish_text || m.english_text || m.body || '';
 
                 html += `
                     <div class="flex ${bubbleAlign}">
@@ -178,12 +185,13 @@
             if (notice) notice.classList.add('hidden');
 
             try {
-                const res = await fetch('/api/reply', {
+                const res = await fetch('/api/tickets', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         ticketId: ticketId,
-                        message: text
+                        message: text,
+                        sender: 'customer'
                     })
                 });
 
@@ -206,9 +214,9 @@
             }
         }
 
-        // Initial load and fast polling (every 4 seconds) to pick up new operator messages
+        // Initial load and fast polling (every 3.5 seconds)
         loadMessages();
-        setInterval(loadMessages, 4000);
+        setInterval(loadMessages, 3500);
     </script>
 </body>
 </html>
