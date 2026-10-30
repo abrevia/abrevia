@@ -14,10 +14,6 @@
       "destination": "/reply.html"
     },
     {
-      "source": "/r/:id",
-      "destination": "/reply.html?t=:id"
-    },
-    {
       "source": "/api/customer-portal",
       "destination": "/api/checkout"
     },
