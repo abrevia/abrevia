@@ -2,11 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "project": {
     "name": "Abrevia App",
-    "version": "1.0.0-beta",
-    "description": "Zero-friction bilingual asynchronous relay platform connecting English-speaking operators with Spanish-speaking workforce and clients via multi-channel dispatch (SMS, WhatsApp, Email) and bidirectional web bridge.",
+    "version": "1.1.0-beta",
+    "description": "Zero-friction bilingual asynchronous relay platform connecting English-speaking operators with Spanish-speaking workforce and clients via multi-channel dispatch (SMS, WhatsApp, Email), two-way SMS automation (Textbee), and bidirectional web bridge.",
     "production_url": "https://abrevia-beta.vercel.app",
     "repository": "https://github.com/alexisduran1/abrevia.git",
-    "exported_at": "2026-10-30T05:35:10.973471+00:00",
+    "exported_at": "2026-10-30T06:40:00.000Z",
     "primary_jurisdiction": "United States of America (USA exclusively, +1 telephone routing)",
     "design_language": "High-contrast minimalist dark mode (white text on dark background), token-efficient, zero decorative fluff, 100% mobile-optimized."
   },
@@ -18,11 +18,31 @@
       "Clearly explain technical trade-offs, limitations, and industry standards in accessible, non-jargon terms.",
       "Test mobile responsiveness (360px-430px smartphone viewports) for all releases.",
       "Maintain strict high-contrast minimalist aesthetic to conserve tokens and optimize readability.",
+      "Strictly respect Vercel Hobby serverless function ceiling (maximum 12 functions).",
       "Mirror every commit to the external storage drive at D:\\02 PROJECTS\\abrevia\\."
     ]
   },
   "architecture": {
     "hosting": "Vercel Serverless & Edge Network",
+    "serverless_functions_budget": {
+      "plan": "Vercel Hobby",
+      "limit": 12,
+      "current_count": 12,
+      "functions": [
+        "api/accept-terms.js",
+        "api/checkout.js",
+        "api/contacts.js",
+        "api/inbound-sms.js",
+        "api/send-sms.js",
+        "api/send-whatsapp.js",
+        "api/stripe-webhook.js",
+        "api/tickets.js",
+        "api/translate.js",
+        "api/upload.js",
+        "api/whatsapp-webhook.js",
+        "api/webhooks/textbee.js"
+      ]
+    },
     "frontend": {
       "technology": "Vanilla ECMAScript 2022 (ES6+), Tailwind CSS via CDN, Progressive Web App (PWA) manifest.",
       "entry_points": {
@@ -30,46 +50,57 @@
         "operator_workspace": "public/dashboard.html",
         "recipient_mobile_bridge": "public/m.html and public/reply.html"
       },
-      "state_management": "localStorage with ephemeral RAM ticket caching"
+      "state_management": "localStorage with ephemeral RAM ticket caching, 3000ms polling"
     },
     "backend": {
       "runtime": "Vercel Node.js Serverless Functions (ES Modules)",
       "database": "Supabase PostgreSQL (tickets, messages, contacts) with graceful in-memory fallback",
       "ai_engine": {
-        "provider": "Google Gemini API (@google/genai SDK)",
+        "provider": "Google Gemini API (@google/genai SDK & fetch REST)",
         "models": [
-          "gemini-2.5-flash",
-          "gemini-1.5-flash"
+          "gemini-flash-lite-latest",
+          "gemini-3.1-flash-lite",
+          "gemini-3.5-flash-lite",
+          "gemini-2.5-flash"
         ],
         "capabilities": [
           "Real-time bidirectional English <-> Spanish translation",
-          "Cultural and linguistic context preservation",
-          "Automated after-hours bilingual responder"
-        ]
+          "Self-correcting grammar, typos, phonetic errors, and SMS shorthand",
+          "Cultural context preservation and professional tone polish"
+        ],
+        "shared_helper": "lib/translate-helper.js"
       }
     }
   },
   "relay_and_communication_tier": {
-    "active_recipient_model": "Option C: Dual-Direction Web Bridge with Multi-Channel Outbound Dispatch",
+    "active_recipient_model": "Multi-Channel Dispatch with Option C Web Bridge & Two-Way Textbee SMS Relay",
     "outbound_channels": {
+      "textbee_sms_cellular": {
+        "mechanism": "Android Gateway REST dispatch via paired Samsung device (https://api.textbee.dev/api/v1/gateway/devices/.../send-sms)",
+        "cost": "$0.00 carrier SMS included in cellular plan",
+        "device_id_configured": true
+      },
       "whatsapp": {
-        "mechanism": "wa.me personal device URI (https://wa.me/{phone}?text={encoded})",
+        "mechanism": "wa.me personal device URI scheme (https://wa.me/{phone}?text={encoded})",
         "cost": "$0.00 (Zero third-party API keys, zero business verification delay)",
         "carrier_registration_required": false
       },
       "sms": {
         "mechanism": "Native mobile URI scheme (sms:{phone}?body={encoded})",
         "cost": "$0.00 (Uses operator cellular device plan)",
-        "carrier_registration_required": false,
-        "commercial_roadmap": "A2P 10DLC Campaign Registry verification with Twilio/AWS SNS for cloud-automated scale"
+        "carrier_registration_required": false
       },
       "email": {
         "mechanism": "Native email URI scheme (mailto:{email}?subject={subject}&body={encoded})",
-        "cost": "$0.00 (Uses operator default email client)",
-        "commercial_roadmap": "Transactional email gateway (Resend / AWS SES / SendGrid) with verified SPF, DKIM, and DMARC DNS records"
+        "cost": "$0.00 (Uses operator default email client)"
       }
     },
     "inbound_reply_mechanisms": {
+      "textbee_two_way_sms": {
+        "endpoint": "https://abrevia-beta.vercel.app/api/webhooks/textbee",
+        "event": "MESSAGE_RECEIVED",
+        "workflow": "Recipient replies via SMS on their phone -> Samsung Android device receives message -> Textbee triggers webhook POST to /api/webhooks/textbee -> endpoint normalizes phone, resolves active ticket in Supabase, translates Spanish to English via Gemini, persists message to Supabase messages table (sender: 'customer'), and renders in real-time on operator dashboard."
+      },
       "option_c_web_bridge": {
         "url_pattern": "https://abrevia-beta.vercel.app/m.html?t={ticket_id}&sender={org_name}",
         "workflow": "Recipient receives translated text via WhatsApp/SMS/Email, clicks link, opens lightweight Spanish mobile page, types reply in Spanish, posts to /api/tickets, Gemini translates to English in real time, appears immediately in operator workspace."
@@ -85,13 +116,27 @@
     }
   },
   "api_specification": {
+    "/api/webhooks/textbee": {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "description": "Inbound webhook receiver for Textbee MESSAGE_RECEIVED events. Captures incoming SMS replies, auto-resolves tickets, translates Spanish to English via Gemini, and persists to Supabase."
+    },
+    "/api/inbound-sms": {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "description": "Multi-provider inbound SMS webhook receiver (httpSMS and Textbee compatible)."
+    },
     "/api/tickets": {
       "methods": [
         "GET",
         "POST",
         "DELETE"
       ],
-      "description": "Unified conversation management, message audit history, and real-time Spanish to English translation for recipient replies."
+      "description": "Unified conversation management, message audit history, ping healthcheck, and real-time Spanish to English translation for recipient replies."
     },
     "/api/translate": {
       "methods": [
@@ -110,13 +155,44 @@
         "GET",
         "POST"
       ],
-      "description": "Contact directory management with phone normalization and auto-saving."
+      "description": "Contact directory management with phone normalization, carrier opt-out tracking, and auto-saving."
     },
-    "/api/ping": {
+    "/api/send-sms": {
       "methods": [
-        "GET"
+        "POST"
       ],
-      "description": "Health check and uptime monitoring."
+      "description": "Outbound SMS dispatch via Textbee Android gateway or httpSMS."
+    },
+    "/api/send-whatsapp": {
+      "methods": [
+        "POST"
+      ],
+      "description": "Outbound WhatsApp message handler."
+    },
+    "/api/stripe-webhook": {
+      "methods": [
+        "POST"
+      ],
+      "description": "Stripe billing and subscription status synchronization."
+    },
+    "/api/checkout": {
+      "methods": [
+        "POST"
+      ],
+      "description": "Stripe checkout session creation and customer billing portal."
+    },
+    "/api/upload": {
+      "methods": [
+        "POST"
+      ],
+      "description": "Document and image upload handler to Supabase storage."
+    },
+    "/api/whatsapp-webhook": {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "description": "Meta WhatsApp Business Cloud API webhook verification and message receiver."
     }
   },
   "legal_and_compliance": {
@@ -124,9 +200,9 @@
     "data_retention": "Zero permanent message retention on server databases; ephemeral routing.",
     "hipaa_status": "Beta testing tier strictly prohibits transmission of Protected Health Information (PHI). Pre-signed BAA and enterprise roadmap ready for clinical production.",
     "clickwrap_terms": "Electronic acceptance modal with touch-scroll lock elimination, individual binding arbitration, class action waiver, and $100 aggregate liability cap.",
-    "title_vi_compliance": "Self-assessment framework in place for federally funded programs requiring language assistance services."
+    "tcpa_compliance": "Automated carrier keyword opt-out (STOP, ALTO, CANCEL, BAJA, UNSUBSCRIBE, QUIT, END) and opt-in (START, UNSTOP, REANUDAR, INICIAR) tracking."
   },
   "evaluation_guide_for_external_ai": {
-    "assessment_prompt": "You are reviewing the architecture and codebase of Abrevia App. Review the configuration, data flow, multi-channel dispatch model (SMS, WhatsApp, Email), Option C recipient bridge, and legal neutrality framework. Assess its scalability, mobile ergonomics, carrier compliance, and identify the next 3 high-impact technical milestones."
+    "assessment_prompt": "You are reviewing the architecture and codebase of Abrevia App. Review the configuration, data flow, multi-channel dispatch model (SMS, WhatsApp, Email), Option C recipient bridge, Textbee two-way SMS automation, and legal neutrality framework. Assess its scalability, mobile ergonomics, carrier compliance, and identify the next 3 high-impact technical milestones."
   }
 }

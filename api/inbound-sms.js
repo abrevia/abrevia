@@ -1,8 +1,19 @@
 import { supabase } from '../lib/supabase.js';
 import { decryptMessage } from '../lib/cipher.js';
-import { saveContact } from '../lib/contacts.js';
+import { saveContact, normalizePhone } from '../lib/contacts.js';
+import { translateSpanishToEnglish } from '../lib/translate-helper.js';
 
 export default async function handler(req, res) {
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      success: true,
+      service: 'Abrevia Inbound SMS Webhook',
+      status: 'operational',
+      endpoint: '/api/inbound-sms',
+      timestamp: new Date().toISOString()
+    });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -13,16 +24,18 @@ export default async function handler(req, res) {
   
   // Accept message.phone.received, TextBee MESSAGE_RECEIVED, or allow if simulation
   if (eventType && eventType !== 'message.phone.received' && !isTextBee) {
-    return res.status(200).json({ ignored: true, reason: 'Event type not message.phone.received or TextBee MESSAGE_RECEIVED' });
+    return res.status(200).json({ success: true, ignored: true, reason: 'Event type not message.phone.received or TextBee MESSAGE_RECEIVED' });
   }
 
-  const customerPhone = payload.sender || payload.from || payload.senderPhoneNumber || payload.data?.contact || payload.data?.from || payload.data?.phone_number;
-  let inboundContent = payload.message || payload.content || payload.data?.content || payload.data?.message || payload.data?.text;
+  const rawPhone = payload.sender || payload.from || payload.senderPhoneNumber || payload.phone || payload.phoneNumber || payload.data?.contact || payload.data?.from || payload.data?.phone_number;
+  let inboundContent = payload.message || payload.text || payload.content || payload.data?.content || payload.data?.message || payload.data?.text;
 
-  if (!customerPhone || !inboundContent) {
+  if (!rawPhone || !inboundContent) {
     console.warn('Inbound SMS missing contact or content:', payload);
     return res.status(400).json({ error: 'Missing contact or content in payload' });
   }
+
+  const customerPhone = normalizePhone(String(rawPhone));
 
   // httpSMS End-to-End Encryption Decryption
   const encryptionKey = process.env.HTTPSMS_ENCRYPTION_KEY;
@@ -37,47 +50,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1. Bidirectional translation & detection via Gemini
-    let englishText = inboundContent;
-    let spanishText = inboundContent;
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    if (apiKey) {
-      const models = ['gemini-flash-lite-latest', 'gemini-3.5-flash-lite', 'gemini-3.8-flash'];
-      for (const model of models) {
-        try {
-          const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-goog-api-key': apiKey
-            },
-            body: JSON.stringify({
-              systemInstruction: {
-                parts: [{ text: 'You are Abrevia\'s Bilingual Self-Correcting SMS Relay. Always auto-correct all misspellings, typos, SMS shorthand/abbreviations, phonetic errors, missing accents, and grammatical mistakes in the inbound text. Detect whether the message is in Spanish or English. Return a JSON object with: "detected" ("es" or "en"), "english" (the clean, grammatically correct and polished message in English), "spanish" (the clean, grammatically correct and polished message in Spanish). Return ONLY raw valid JSON.' }]
-              },
-              contents: [{ parts: [{ text: inboundContent }] }],
-              generationConfig: { responseMimeType: 'application/json' }
-            }),
-            signal: AbortSignal.timeout(3000)
-          });
-
-          const geminiData = await geminiRes.json();
-          const raw = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            if (parsed.english) englishText = parsed.english.trim();
-            if (parsed.spanish) spanishText = parsed.spanish.trim();
-            break;
-          }
-        } catch (transErr) {
-          console.error(`Gemini translation error with ${model}:`, transErr);
-        }
-      }
-    }
+    // 1. Bidirectional translation & detection via shared Gemini translation pipeline
+    const translationResult = await translateSpanishToEnglish(inboundContent);
+    const englishText = translationResult.englishText || inboundContent;
+    const spanishText = translationResult.spanishText || inboundContent;
 
     // 2. Save to Supabase
     let ticketId = null;
+    let messageId = null;
     if (supabase) {
       // Find or create active ticket for this customer
       const { data: existingTicket, error: ticketErr } = await supabase
@@ -127,23 +107,35 @@ export default async function handler(req, res) {
           console.warn('Inbound SMS auto-save contact error:', cErr.message);
         }
 
-        const { error: msgErr } = await supabase
+        const { data: savedMsg, error: msgErr } = await supabase
           .from('messages')
           .insert({
             ticket_id: ticketId,
             sender: 'customer',
             english_text: englishText,
             spanish_text: spanishText
-          });
+          })
+          .select()
+          .single();
 
         if (msgErr) {
           console.error('Error inserting inbound message:', msgErr);
+        } else {
+          messageId = savedMsg?.id;
         }
       }
     }
 
     // 3. Send final 200 OK after async work is completed
-    return res.status(200).json({ received: true, ticketId, translated: englishText });
+    return res.status(200).json({
+      success: true,
+      received: true,
+      ticketId,
+      messageId,
+      sender: customerPhone,
+      translated: englishText,
+      provider: translationResult.provider
+    });
   } catch (err) {
     console.error('Error processing inbound SMS webhook:', err);
     return res.status(500).json({ error: 'Processing error: ' + err.message });

@@ -36,6 +36,14 @@
     {
       "source": "/api/subscribe-updates",
       "destination": "/api/contacts"
+    },
+    {
+      "source": "/api/webhooks/textbee",
+      "destination": "/api/webhooks/textbee.js"
+    },
+    {
+      "source": "/api/webhook/textbee",
+      "destination": "/api/webhooks/textbee.js"
     }
   ],
   "headers": [
