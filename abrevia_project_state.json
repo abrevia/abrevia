@@ -27,7 +27,8 @@
     "serverless_functions_budget": {
       "plan": "Vercel Hobby",
       "limit": 12,
-      "current_count": 12,
+      "current_count": 11,
+      "headroom": "1 slot remaining safely below Vercel Hobby ceiling",
       "functions": [
         "api/accept-terms.js",
         "api/checkout.js",
@@ -39,9 +40,9 @@
         "api/tickets.js",
         "api/translate.js",
         "api/upload.js",
-        "api/whatsapp-webhook.js",
-        "api/webhooks/textbee.js"
-      ]
+        "api/whatsapp-webhook.js"
+      ],
+      "routing_strategy": "Vercel rewrites map /api/webhooks/textbee and /api/webhook/textbee to /api/inbound-sms, keeping serverless function count at 11."
     },
     "frontend": {
       "technology": "Vanilla ECMAScript 2022 (ES6+), Tailwind CSS via CDN, Progressive Web App (PWA) manifest.",

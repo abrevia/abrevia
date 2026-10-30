@@ -39,11 +39,11 @@
     },
     {
       "source": "/api/webhooks/textbee",
-      "destination": "/api/webhooks/textbee.js"
+      "destination": "/api/inbound-sms"
     },
     {
       "source": "/api/webhook/textbee",
-      "destination": "/api/webhooks/textbee.js"
+      "destination": "/api/inbound-sms"
     }
   ],
   "headers": [
