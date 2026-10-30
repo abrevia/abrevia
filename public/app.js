@@ -217,6 +217,12 @@ const I18N = {
         inputLabel: 'Type reply in English (Agent):',
         inputPlaceholder: 'Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)...',
         translateBtn: 'Send',
+        reviewModalTitle: 'Review Verified Translation',
+        reviewModalSubtitle: 'Confirm before opening WhatsApp to dispatch',
+        reviewOriginalHeader: 'Your Original Draft (English)',
+        reviewTranslatedHeader: 'Recipient Translation (Spanish)',
+        reviewCancelBtnText: 'Cancel / Edit',
+        reviewConfirmBtnText: 'Confirm & Open WhatsApp',
         translating: 'Translating...',
         progressStatus: 'Auto-Correcting Grammar & Translating...',
         progressComplete: '✓ Translated & Verified (100%)',
@@ -400,6 +406,12 @@ const I18N = {
         inputLabel: 'Escribe respuesta en Español (Agente):',
         inputPlaceholder: 'Escribe tu respuesta en español (ej. Su entrega está programada para mañana a las 2 PM)...',
         translateBtn: 'Enviar',
+        reviewModalTitle: 'Revisar Traducción Verificada',
+        reviewModalSubtitle: 'Confirme antes de abrir WhatsApp para enviar',
+        reviewOriginalHeader: 'Su Borrador Original (Español)',
+        reviewTranslatedHeader: 'Traducción al Destinatario (Inglés)',
+        reviewCancelBtnText: 'Cancelar / Editar',
+        reviewConfirmBtnText: 'Confirmar y Abrir WhatsApp',
         translating: 'Traduciendo...',
         progressStatus: 'Auto-corrigiendo gramática y traduciendo...',
         progressComplete: '✓ Traducción Verificada (100%)',
@@ -1479,6 +1491,18 @@ function applyDashboardLocalization() {
     document.getElementById('translate-btn').innerHTML = `<span>${t.translateBtn}</span> <span class="text-xs font-bold">↵</span>`;
     const waBtnLabel = document.getElementById('whatsappDirectBtnText');
     if (waBtnLabel) waBtnLabel.textContent = t.translateBtn || 'Send';
+    const rTitle = document.getElementById('reviewModalTitle');
+    if (rTitle && t.reviewModalTitle) rTitle.textContent = t.reviewModalTitle;
+    const rSub = document.getElementById('reviewModalSubtitle');
+    if (rSub && t.reviewModalSubtitle) rSub.textContent = t.reviewModalSubtitle;
+    const rOrigH = document.getElementById('reviewOriginalHeader');
+    if (rOrigH && t.reviewOriginalHeader) rOrigH.textContent = t.reviewOriginalHeader;
+    const rTransH = document.getElementById('reviewTranslatedHeader');
+    if (rTransH && t.reviewTranslatedHeader) rTransH.innerHTML = `<span>${t.reviewTranslatedHeader}</span> <span class="text-emerald-500 font-normal text-[9px]">(Editable)</span>`;
+    const rCancel = document.getElementById('reviewCancelBtnText');
+    if (rCancel && t.reviewCancelBtnText) rCancel.textContent = t.reviewCancelBtnText;
+    const rConfirm = document.getElementById('reviewConfirmBtnText');
+    if (rConfirm && t.reviewConfirmBtnText) rConfirm.textContent = t.reviewConfirmBtnText;
 
     // Instant Translation Status & Mode Indicator
     const instantLabel = document.getElementById('instantModeLabel');
@@ -2394,7 +2418,7 @@ async function confirmAndSend() {
     }
 }
 
-// Direct Personal WhatsApp Dispatch (Universal wa.me protocol - Bulletproof)
+// Direct Personal WhatsApp Dispatch with Verified Translation Review
 async function handleSendPersonalWhatsApp() {
     let targetPhone = '';
     if (currentTicket && currentTicket.customer_phone) {
@@ -2421,105 +2445,173 @@ async function handleSendPersonalWhatsApp() {
     }
 
     const t = I18N[dashboardMode];
-    const hitlBox = document.getElementById('target-review-box');
     const inputEl = document.getElementById('agent-input');
-    let reviewedText = hitlBox ? hitlBox.value.trim() : '';
     let originalDraft = inputEl ? inputEl.value.trim() : '';
 
-    if (!reviewedText && !originalDraft && !currentAttachment) {
-        alert(dashboardMode === 'es' ? 'Por favor escriba un mensaje antes de abrir WhatsApp.' : 'Please enter a message before dispatching via WhatsApp.');
+    if (!originalDraft && !currentAttachment) {
+        alert(dashboardMode === 'es' ? 'Por favor escriba un mensaje antes de enviar.' : 'Please enter a message before sending.');
         return;
     }
 
     const waBtn = document.getElementById('whatsapp-direct-btn');
     const waText = document.getElementById('whatsappDirectBtnText');
-    const originalWaText = waText ? waText.textContent : '';
+    const originalWaText = waText ? waText.textContent : (dashboardMode === 'es' ? 'Enviar' : 'Send');
     if (waBtn) waBtn.disabled = true;
-    if (waText) waText.textContent = dashboardMode === 'es' ? 'Preparando...' : 'Preparing...';
+    if (waText) waText.textContent = dashboardMode === 'es' ? 'Traduciendo...' : 'Translating...';
 
     try {
-        let spanishMessage = reviewedText;
-        let englishMessage = originalDraft;
+        let translatedText = originalDraft;
 
-        if (!spanishMessage && originalDraft) {
+        if (originalDraft) {
             try {
+                const targetLang = (currentTicket && currentTicket.target_lang) 
+                    ? currentTicket.target_lang 
+                    : (dashboardMode === 'es' ? 'en' : 'es');
                 const transRes = await fetch('/api/translate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         text: originalDraft, 
-                        targetLang: t.targetLang || 'es' 
+                        targetLang: targetLang 
                     }),
-                    signal: AbortSignal.timeout(3500)
+                    signal: AbortSignal.timeout(4000)
                 });
                 if (transRes.ok) {
                     const transData = await transRes.json();
-                    spanishMessage = transData.translated || originalDraft;
+                    translatedText = transData.translated || originalDraft;
                 } else {
-                    spanishMessage = originalDraft;
+                    translatedText = originalDraft;
                 }
             } catch (transErr) {
                 console.warn('Translate API warning, using original draft:', transErr);
-                spanishMessage = originalDraft;
+                translatedText = originalDraft;
             }
-        } else if (!spanishMessage && !originalDraft && currentAttachment) {
-            spanishMessage = 'Adjunto: ' + currentAttachment.name;
-            englishMessage = 'Attachment: ' + currentAttachment.name;
+        } else if (!originalDraft && currentAttachment) {
+            translatedText = dashboardMode === 'es' ? ('Adjunto: ' + currentAttachment.name) : ('Attachment: ' + currentAttachment.name);
         }
 
+        // Store pending dispatch state
+        window.pendingWhatsAppDispatch = {
+            cleanPhone: cleanPhone,
+            targetPhone: targetPhone,
+            originalDraft: originalDraft,
+            translatedText: translatedText,
+            attachment: currentAttachment ? { name: currentAttachment.name, file: currentAttachment } : null
+        };
+
+        // Populate Review Modal
+        const recipientLabel = document.getElementById('reviewRecipientLabel');
+        if (recipientLabel) {
+            const displayName = currentTicket?.customer_name 
+                ? `${currentTicket.customer_name} (${targetPhone})` 
+                : targetPhone;
+            recipientLabel.textContent = displayName;
+        }
+
+        const origBox = document.getElementById('reviewOriginalText');
+        if (origBox) origBox.textContent = originalDraft || '(Attachment only)';
+
+        const transBox = document.getElementById('reviewTranslatedText');
+        if (transBox) {
+            transBox.value = translatedText;
+            const charCount = document.getElementById('reviewCharCount');
+            if (charCount) charCount.textContent = `${translatedText.length} characters`;
+            transBox.oninput = () => {
+                if (charCount) charCount.textContent = `${transBox.value.length} characters`;
+            };
+        }
+
+        const attachNotice = document.getElementById('reviewAttachmentNotice');
+        const attachName = document.getElementById('reviewAttachmentName');
+        if (currentAttachment && attachNotice && attachName) {
+            attachName.textContent = currentAttachment.name;
+            attachNotice.classList.remove('hidden');
+        } else if (attachNotice) {
+            attachNotice.classList.add('hidden');
+        }
+
+        // Show Modal
+        const modal = document.getElementById('whatsAppReviewModal');
+        if (modal) modal.classList.remove('hidden');
+        if (transBox) transBox.focus();
+
+    } catch (err) {
+        console.error('Error preparing review translation:', err);
+        alert((dashboardMode === 'es' ? 'Error al preparar traducción: ' : 'Error preparing translation: ') + err.message);
+    } finally {
+        if (waBtn) waBtn.disabled = false;
+        if (waText) waText.textContent = originalWaText;
+    }
+}
+window.handleSendPersonalWhatsApp = handleSendPersonalWhatsApp;
+
+// Confirm reviewed translation and launch WhatsApp wa.me
+async function confirmWhatsAppDispatch() {
+    if (!window.pendingWhatsAppDispatch) return;
+    const { cleanPhone, originalDraft, attachment } = window.pendingWhatsAppDispatch;
+    const transBox = document.getElementById('reviewTranslatedText');
+    let finalTranslatedMessage = transBox ? transBox.value.trim() : window.pendingWhatsAppDispatch.translatedText;
+    
+    if (!finalTranslatedMessage && !originalDraft && !attachment) return;
+
+    const confirmBtn = document.getElementById('reviewConfirmBtn');
+    const confirmBtnText = document.getElementById('reviewConfirmBtnText');
+    const origConfirmText = confirmBtnText ? confirmBtnText.textContent : '';
+    if (confirmBtn) confirmBtn.disabled = true;
+    if (confirmBtnText) confirmBtnText.textContent = dashboardMode === 'es' ? 'Abriendo WhatsApp...' : 'Opening WhatsApp...';
+
+    try {
         let mediaUrl = null;
-        if (currentAttachment) {
+        if (attachment && attachment.file) {
             try {
-                mediaUrl = await uploadMediaToStorage(currentAttachment);
+                mediaUrl = await uploadMediaToStorage(attachment.file);
                 if (mediaUrl) {
-                    spanishMessage += '\n\n📎 Adjunto: ' + mediaUrl;
-                    englishMessage += '\n\n📎 Attachment: ' + mediaUrl;
+                    finalTranslatedMessage += '\n\n📎 Adjunto: ' + mediaUrl;
                 }
             } catch (upErr) {
                 console.warn('Media upload warning during WhatsApp dispatch:', upErr);
             }
         }
 
-        const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(spanishMessage);
+        // Record message in active conversation transcript as DELIVERED
+        if (currentTicket) {
+            if (!currentTicket.messages) currentTicket.messages = [];
+            const newMsg = {
+                id: 'msg_' + Date.now(),
+                sender: 'agent',
+                body: finalTranslatedMessage,
+                original_draft: originalDraft,
+                media_url: mediaUrl,
+                status: 'DELIVERED',
+                timestamp: new Date().toISOString()
+            };
+            currentTicket.messages.push(newMsg);
+            currentTicket.updated_at = new Date().toISOString();
+            currentTicket.snippet = finalTranslatedMessage.substring(0, 70);
 
-        const toast = document.getElementById('waDispatchToast');
-        const toastLink = document.getElementById('waDispatchToastLink');
-        const toastMsg = document.getElementById('waDispatchToastMsg');
-        if (toast && toastLink) {
-            toastLink.href = waUrl;
-            if (toastMsg) {
-                toastMsg.textContent = dashboardMode === 'es'
-                    ? 'Abriendo WhatsApp para +' + cleanPhone + '. Si no abre solo, toque el botón:'
-                    : 'Opening WhatsApp for +' + cleanPhone + '. If it did not open automatically, tap below:';
+            try {
+                await fetch('/api/tickets', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentTicket)
+                });
+            } catch (saveErr) {
+                console.warn('Ticket history save error:', saveErr);
             }
-            toast.classList.remove('hidden');
-            setTimeout(() => { if (toast) toast.classList.add('hidden'); }, 12000);
+
+            renderChatFeed(currentTicket.messages, true);
         }
 
-        if (currentTicket && currentTicket.id) {
-            fetch('/api/send-sms', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    to: cleanPhone,
-                    body: spanishMessage,
-                    ticketId: currentTicket.id,
-                    englishText: englishMessage || spanishMessage,
-                    spanishText: spanishMessage,
-                    provider: 'whatsapp',
-                    orgName: getSenderOrgName(),
-                    senderName: getSenderUserName(),
-                    targetLang: t.targetLang || 'es'
-                })
-            }).then(() => {
-                if (typeof fetchMessages === 'function') fetchMessages(currentTicket.id, true);
-            }).catch(e => console.warn('Abrevia audit log warning:', e));
-        }
-
+        // Clear composer inputs
+        const inputEl = document.getElementById('agent-input');
         if (inputEl) inputEl.value = '';
         if (typeof removeAttachment === 'function') removeAttachment();
-        cancelHITL();
 
+        // Close modal
+        closeWhatsAppReviewModal();
+
+        // Dispatch via wa.me protocol
+        const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(finalTranslatedMessage);
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         if (isMobile) {
             window.location.href = waUrl;
@@ -2530,15 +2622,25 @@ async function handleSendPersonalWhatsApp() {
             }
         }
     } catch (err) {
-        console.error('WhatsApp dispatch fallback error:', err);
-        const fallbackUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(originalDraft || reviewedText);
+        console.error('WhatsApp dispatch error:', err);
+        const fallbackUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(finalTranslatedMessage);
         window.open(fallbackUrl, '_blank');
+        closeWhatsAppReviewModal();
     } finally {
-        if (waBtn) waBtn.disabled = false;
-        if (waText) waText.textContent = originalWaText || (dashboardMode === 'es' ? 'Enviar' : 'Send');
+        if (confirmBtn) confirmBtn.disabled = false;
+        if (confirmBtnText) confirmBtnText.textContent = origConfirmText || (dashboardMode === 'es' ? 'Confirmar y Abrir WhatsApp' : 'Confirm & Open WhatsApp');
+        window.pendingWhatsAppDispatch = null;
     }
 }
-window.handleSendPersonalWhatsApp = handleSendPersonalWhatsApp;
+window.confirmWhatsAppDispatch = confirmWhatsAppDispatch;
+
+function closeWhatsAppReviewModal() {
+    const modal = document.getElementById('whatsAppReviewModal');
+    if (modal) modal.classList.add('hidden');
+    const inputEl = document.getElementById('agent-input');
+    if (inputEl) inputEl.focus();
+}
+window.closeWhatsAppReviewModal = closeWhatsAppReviewModal;
 
 // Cancel HITL review
 function cancelHITL() {

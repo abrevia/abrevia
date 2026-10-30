@@ -1,5 +1,5 @@
 // Abrevia — Service Worker for Desktop & Mobile Home Screen Shortcuts
-const CACHE_NAME = 'abrevia-v20261029-33';
+const CACHE_NAME = 'abrevia-v20261029-34';
 
 self.addEventListener('install', (event) => {
     self.skipWaiting();
