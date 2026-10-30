@@ -26,6 +26,12 @@
             const isSignedOut = localStorage.getItem('abrevia_signed_out') === 'true';
             if (isSignedOut) {
                 window.location.replace('/index.html?view=signed_out');
+                return;
+            }
+            const termsAccepted = localStorage.getItem('abrevia_beta_terms_accepted');
+            if (!termsAccepted) {
+                window.location.replace('/index.html?require_terms=true');
+                return;
             }
         })();
     </script>
@@ -1251,7 +1257,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_36"></script>
+    <script src="app.js?v=20261029_37"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">

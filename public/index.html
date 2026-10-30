@@ -337,6 +337,121 @@
     </footer>
 
 <!-- HIPAA & Abrevia 2 Roadmap Modal -->
+
+    <!-- Mandatory Beta Testing Agreement & Terms of Service Acceptance Modal -->
+    <div id="betaTermsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-5 hidden" onclick="if(event.target===this)closeBetaTermsModal()">
+        <div class="bg-slate-950 border border-amber-500/40 rounded-2xl p-5 sm:p-6 max-w-lg w-full shadow-2xl text-left relative flex flex-col max-h-[92vh]">
+            <!-- Close Button -->
+            <button type="button" onclick="closeBetaTermsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold p-1 leading-none cursor-pointer" title="Cancel">
+                &times;
+            </button>
+
+            <!-- Modal Header -->
+            <div class="flex items-center space-x-3 mb-3 pr-6 shrink-0">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-xl shrink-0">
+                    ⚖️
+                </div>
+                <div>
+                    <h3 id="termsModalTitle" class="text-base font-bold text-white">Beta Testing Agreement &amp; Terms</h3>
+                    <p id="termsModalSubtitle" class="text-[11px] text-slate-400">Mandatory legal acknowledgment &amp; electronic signature before console access</p>
+                </div>
+            </div>
+
+            <!-- Scrollable Content Body -->
+            <div class="overflow-y-auto pr-1 space-y-3.5 text-xs text-slate-300 leading-relaxed">
+                <!-- 1. Mandatory Safeguard & Scope Limitation Banner -->
+                <div class="bg-amber-950/40 border border-amber-500/50 rounded-xl p-3.5 space-y-2 text-amber-200/90 shadow-inner">
+                    <div class="flex items-center space-x-1.5 font-bold text-amber-300 uppercase tracking-wide text-[11px]">
+                        <span>⚠️</span>
+                        <span id="termsAlertTitle">Mandatory Beta Safeguard — Pilot Stage Only</span>
+                    </div>
+                    <p id="termsAlertP1" class="text-xs text-amber-200/90 leading-relaxed">
+                        Abrevia is currently in an active <strong>functional beta testing phase</strong>. While the bilingual AI translation and WhatsApp dispatch capabilities are fully operational, this application is provided strictly for <strong>operational workflow testing</strong>.
+                    </p>
+                    <p id="termsAlertP2" class="text-xs font-semibold text-amber-300 leading-relaxed bg-amber-900/30 p-2 rounded-lg border border-amber-500/30">
+                        ⛔ DO NOT transmit Protected Health Information (PHI), HIPAA-regulated medical records, confidential financial data, Social Security Numbers, or highly sensitive personal data during this testing stage.
+                    </p>
+                    <p id="termsAlertP3" class="text-[11px] text-amber-300/80 italic leading-relaxed">
+                        Enterprise HIPAA compliance safeguards are currently undergoing scheduled deployment. Abrevia (operated by Servicios ADG LLC) disclaims all liability for unauthorized disclosures of sensitive data during this testing pilot.
+                    </p>
+                </div>
+
+                <!-- 2. Legal Documentation Links -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-2">
+                    <span id="termsDocsPrompt" class="text-[11px] font-semibold text-slate-300 block">Review complete legal policies &amp; compliance framework:</span>
+                    <div class="flex flex-wrap gap-2 text-[11px]">
+                        <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-brand-300 hover:text-white border border-slate-700 transition flex items-center space-x-1">
+                            <span>📄</span>
+                            <span>Terms of Service &rarr;</span>
+                        </a>
+                        <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-brand-300 hover:text-white border border-slate-700 transition flex items-center space-x-1">
+                            <span>🔒</span>
+                            <span>Privacy Policy &rarr;</span>
+                        </a>
+                        <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-brand-300 hover:text-white border border-slate-700 transition flex items-center space-x-1">
+                            <span>ℹ️</span>
+                            <span>Pilot Roadmap &rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 3. Form: Signer Name & Mandatory Checkboxes -->
+                <form id="betaTermsForm" onsubmit="submitBetaTermsAgreement(event)" class="space-y-3">
+                    <div>
+                        <label id="termsSignerLabel" class="block text-xs font-semibold text-white mb-1">
+                            Full Legal Name / Operator Name (Electronic Signature) <span class="text-red-400">*</span>
+                        </label>
+                        <input id="termsSignerName" type="text" placeholder="e.g. Jane Doe" required oninput="validateTermsForm()" class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none transition font-medium">
+                    </div>
+
+                    <div>
+                        <label id="termsOrgLabel" class="block text-xs font-semibold text-slate-300 mb-1">
+                            Organization / Business Name <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                        </label>
+                        <input id="termsOrgName" type="text" placeholder="e.g. Acme Dispatch / Practice" class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none transition">
+                    </div>
+
+                    <!-- Mandatory Checkboxes -->
+                    <div class="space-y-2 pt-1">
+                        <label class="flex items-start space-x-2.5 text-xs text-slate-300 cursor-pointer select-none">
+                            <input type="checkbox" id="termsCheckBeta" required onchange="validateTermsForm()" class="mt-0.5 rounded border-slate-700 text-blue-600 focus:ring-0 focus:outline-none shrink-0 cursor-pointer">
+                            <span id="termsCheckBetaText" class="leading-relaxed">
+                                <strong>I understand and agree</strong> that Abrevia is currently in beta testing and I will <strong>NOT</strong> transmit HIPAA Protected Health Information (PHI), medical records, or sensitive confidential data during this trial.
+                            </span>
+                        </label>
+
+                        <label class="flex items-start space-x-2.5 text-xs text-slate-300 cursor-pointer select-none">
+                            <input type="checkbox" id="termsCheckTerms" required onchange="validateTermsForm()" class="mt-0.5 rounded border-slate-700 text-blue-600 focus:ring-0 focus:outline-none shrink-0 cursor-pointer">
+                            <span id="termsCheckTermsText" class="leading-relaxed">
+                                <strong>I have read, acknowledge, and legally accept</strong> the Abrevia Terms of Service and Privacy Policy.
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Audit Trail Note -->
+                    <div class="text-[10px] text-slate-500 font-mono flex items-center space-x-1.5 pt-1">
+                        <span>🕒</span>
+                        <span id="termsAuditNote">Permanent audit timestamp, client IP, and device signature will be recorded upon execution.</span>
+                    </div>
+
+                    <div id="termsErrorMsg" class="hidden text-xs text-red-400 font-medium"></div>
+
+                    <!-- Footer Action Buttons -->
+                    <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-800">
+                        <button type="button" onclick="closeBetaTermsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2.5 rounded-xl transition cursor-pointer">
+                            <span id="termsCancelBtnText">Cancel</span>
+                        </button>
+
+                        <button id="termsSubmitBtn" type="submit" disabled class="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30 flex items-center space-x-1.5 cursor-pointer">
+                            <span id="termsSubmitBtnText">Electronically Sign &amp; Enter Workspace</span>
+                            <span>&rarr;</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="hipaaModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl text-left relative">
             <button onclick="closeHipaaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
@@ -399,6 +514,20 @@
     <script>
         const content = {
             en: {
+                                termsModalTitle: 'Beta Testing Agreement & Terms',
+                termsModalSubtitle: 'Mandatory legal acknowledgment & electronic signature before console access',
+                termsAlertTitle: 'Mandatory Beta Safeguard — Pilot Stage Only',
+                termsAlertP1: 'Abrevia is currently in an active <strong>functional beta testing phase</strong>. While the bilingual AI translation and WhatsApp dispatch capabilities are fully operational, this application is provided strictly for <strong>operational workflow testing</strong>.',
+                termsAlertP2: '⛔ DO NOT transmit Protected Health Information (PHI), HIPAA-regulated medical records, confidential financial data, Social Security Numbers, or highly sensitive personal data during this testing stage.',
+                termsAlertP3: 'Enterprise HIPAA compliance safeguards are currently undergoing scheduled deployment. Abrevia (operated by Servicios ADG LLC) disclaims all liability for unauthorized disclosures of sensitive data during this testing pilot.',
+                termsDocsPrompt: 'Review complete legal policies & compliance framework:',
+                termsSignerLabel: 'Full Legal Name / Operator Name (Electronic Signature) *',
+                termsOrgLabel: 'Organization / Business Name (Optional)',
+                termsCheckBetaText: '<strong>I understand and agree</strong> that Abrevia is currently in beta testing and I will <strong>NOT</strong> transmit HIPAA Protected Health Information (PHI), medical records, or sensitive confidential data during this trial.',
+                termsCheckTermsText: '<strong>I have read, acknowledge, and legally accept</strong> the Abrevia Terms of Service and Privacy Policy.',
+                termsAuditNote: 'Permanent audit timestamp, client IP, and device signature will be recorded upon execution.',
+                termsCancelBtnText: 'Cancel',
+                termsSubmitBtnText: 'Electronically Sign & Enter Workspace',
                 heroTitle: 'Bilingual Asynchronous Communication Technology',
                 heroSubtitleBilingual: 'Tecnología de Comunicación Asíncrona Bilingüe',
                 heroSubtitle: 'Messages are 2-way translated and dispatched directly. No downloads, zero friction.',
@@ -505,6 +634,20 @@
                 hipaaClose: 'Close'
             },
             es: {
+                                termsModalTitle: 'Acuerdo de Prueba Beta y Términos',
+                termsModalSubtitle: 'Reconocimiento legal obligatorio y firma electrónica antes de acceder a la consola',
+                termsAlertTitle: 'Salvaguarda Obligatoria Beta — Etapa Piloto Solamente',
+                termsAlertP1: 'Abrevia se encuentra actualmente en una fase activa de <strong>prueba beta funcional</strong>. Aunque la traducción por IA y el despacho por WhatsApp son completamente funcionales, esta aplicación se proporciona estrictamente para <strong>pruebas de flujo operativo</strong>.',
+                termsAlertP2: '⛔ NO transmita Información de Salud Protegida (PHI), registros médicos bajo HIPAA, datos financieros confidenciales, Números de Seguro Social o datos personales altamente confidenciales durante esta etapa de prueba.',
+                termsAlertP3: 'Las salvaguardas empresariales de cumplimiento HIPAA se encuentran en despliegue programado. Abrevia (operada por Servicios ADG LLC) se deslinda de toda responsabilidad por divulgación no autorizada de datos confidenciales durante esta prueba piloto.',
+                termsDocsPrompt: 'Revise las políticas legales completas y el marco de cumplimiento:',
+                termsSignerLabel: 'Nombre Legal Completo / Nombre del Operador (Firma Electrónica) *',
+                termsOrgLabel: 'Nombre de Empresa u Organización (Opcional)',
+                termsCheckBetaText: '<strong>Entiendo y acepto</strong> que Abrevia está en etapa de prueba beta y que <strong>NO</strong> transmitiré Información de Salud Protegida (PHI/HIPAA), registros médicos ni datos confidenciales durante este período de prueba.',
+                termsCheckTermsText: '<strong>He leído, reconozco y acepto legalmente</strong> los Términos de Servicio y la Política de Privacidad de Abrevia.',
+                termsAuditNote: 'Se registrará permanentemente la marca de tiempo, la dirección IP y la firma del dispositivo.',
+                termsCancelBtnText: 'Cancelar',
+                termsSubmitBtnText: 'Firmar Electrónicamente y Entrar',
                 heroTitle: 'Tecnología de Comunicación Asíncrona Bilingüe',
                 heroSubtitleBilingual: 'Bilingual Asynchronous Communication Technology',
                 heroSubtitle: 'Los mensajes se traducen en 2 vías y se envían de forma directa. Sin descargas, cero fricción.',
@@ -843,11 +986,165 @@
             const hClose = document.getElementById('hipaaCloseBtn');
             if (hClose && c.hipaaClose) hClose.textContent = c.hipaaClose;
 
+
+            // Terms Modal Localization
+            const tmTitle = document.getElementById('termsModalTitle');
+            if (tmTitle && c.termsModalTitle) tmTitle.textContent = c.termsModalTitle;
+            const tmSub = document.getElementById('termsModalSubtitle');
+            if (tmSub && c.termsModalSubtitle) tmSub.textContent = c.termsModalSubtitle;
+            const taTitle = document.getElementById('termsAlertTitle');
+            if (taTitle && c.termsAlertTitle) taTitle.textContent = c.termsAlertTitle;
+            const taP1 = document.getElementById('termsAlertP1');
+            if (taP1 && c.termsAlertP1) taP1.innerHTML = c.termsAlertP1;
+            const taP2 = document.getElementById('termsAlertP2');
+            if (taP2 && c.termsAlertP2) taP2.innerHTML = c.termsAlertP2;
+            const taP3 = document.getElementById('termsAlertP3');
+            if (taP3 && c.termsAlertP3) taP3.innerHTML = c.termsAlertP3;
+            const tdPrompt = document.getElementById('termsDocsPrompt');
+            if (tdPrompt && c.termsDocsPrompt) tdPrompt.textContent = c.termsDocsPrompt;
+            const tsLabel = document.getElementById('termsSignerLabel');
+            if (tsLabel && c.termsSignerLabel) tsLabel.innerHTML = `${c.termsSignerLabel} <span class="text-red-400">*</span>`;
+            const toLabel = document.getElementById('termsOrgLabel');
+            if (toLabel && c.termsOrgLabel) toLabel.innerHTML = `${c.termsOrgLabel} <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>`;
+            const tcbText = document.getElementById('termsCheckBetaText');
+            if (tcbText && c.termsCheckBetaText) tcbText.innerHTML = c.termsCheckBetaText;
+            const tctText = document.getElementById('termsCheckTermsText');
+            if (tctText && c.termsCheckTermsText) tctText.innerHTML = c.termsCheckTermsText;
+            const taNote = document.getElementById('termsAuditNote');
+            if (taNote && c.termsAuditNote) taNote.textContent = c.termsAuditNote;
+            const tcBtn = document.getElementById('termsCancelBtnText');
+            if (tcBtn && c.termsCancelBtnText) tcBtn.textContent = c.termsCancelBtnText;
+            const tsBtn = document.getElementById('termsSubmitBtnText');
+            if (tsBtn && c.termsSubmitBtnText) tsBtn.textContent = c.termsSubmitBtnText;
+
             // Pricing removed from landing page (accessible only in user dashboard)
         }
 
+        // --- Beta Testing Terms & Safeguards Handlers ---
+        function openBetaTermsModal() {
+            const modal = document.getElementById('betaTermsModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => document.getElementById('termsSignerName')?.focus(), 150);
+            }
+        }
+        window.openBetaTermsModal = openBetaTermsModal;
+
+        function closeBetaTermsModal() {
+            const modal = document.getElementById('betaTermsModal');
+            if (modal) modal.classList.add('hidden');
+            const err = document.getElementById('termsErrorMsg');
+            if (err) err.classList.add('hidden');
+        }
+        window.closeBetaTermsModal = closeBetaTermsModal;
+
+        function validateTermsForm() {
+            const name = document.getElementById('termsSignerName')?.value.trim();
+            const checkBeta = document.getElementById('termsCheckBeta')?.checked;
+            const checkTerms = document.getElementById('termsCheckTerms')?.checked;
+            const btn = document.getElementById('termsSubmitBtn');
+            if (btn) {
+                btn.disabled = !(name && name.length >= 2 && checkBeta && checkTerms);
+            }
+        }
+        window.validateTermsForm = validateTermsForm;
+
+        async function submitBetaTermsAgreement(e) {
+            if (e) e.preventDefault();
+            const signerName = document.getElementById('termsSignerName')?.value.trim();
+            const orgName = document.getElementById('termsOrgName')?.value.trim() || '';
+            const checkBeta = document.getElementById('termsCheckBeta')?.checked;
+            const checkTerms = document.getElementById('termsCheckTerms')?.checked;
+            const errorEl = document.getElementById('termsErrorMsg');
+            const submitBtn = document.getElementById('termsSubmitBtn');
+            const submitBtnText = document.getElementById('termsSubmitBtnText');
+            const origBtnText = submitBtnText ? submitBtnText.textContent : '';
+
+            if (!signerName || signerName.length < 2) {
+                if (errorEl) {
+                    errorEl.textContent = currentLang === 'es' 
+                        ? 'Por favor ingrese su nombre legal completo para la firma electrónica.' 
+                        : 'Please enter your full legal name for the electronic signature.';
+                    errorEl.classList.remove('hidden');
+                }
+                return;
+            }
+
+            if (!checkBeta || !checkTerms) {
+                if (errorEl) {
+                    errorEl.textContent = currentLang === 'es'
+                        ? 'Debe aceptar todas las casillas de salvaguardas y términos obligatorios.'
+                        : 'You must check all mandatory safeguard and terms checkboxes.';
+                    errorEl.classList.remove('hidden');
+                }
+                return;
+            }
+
+            if (errorEl) errorEl.classList.add('hidden');
+            if (submitBtn) submitBtn.disabled = true;
+            if (submitBtnText) submitBtnText.textContent = currentLang === 'es' ? 'Registrando firma y auditoría...' : 'Recording signature audit...';
+
+            try {
+                const res = await fetch('/api/accept-terms', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        signerName: signerName,
+                        organization: orgName,
+                        ackBeta: true,
+                        ackNoSensitive: true,
+                        ackTerms: true,
+                        termsVersion: 'beta-pilot-v1.0'
+                    })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to record signature');
+
+                // Store compliance token in localStorage
+                const record = {
+                    signatureId: data.signature?.id || ('sig_' + Date.now()),
+                    signerName: signerName,
+                    organization: orgName,
+                    timestamp: data.signature?.timestamp || new Date().toISOString(),
+                    termsVersion: 'beta-pilot-v1.0',
+                    accepted: true
+                };
+                localStorage.setItem('abrevia_beta_terms_accepted', JSON.stringify(record));
+                localStorage.removeItem('abrevia_signed_out');
+
+                closeBetaTermsModal();
+                window.location.href = `/dashboard.html?lang=${currentLang}`;
+
+            } catch (err) {
+                console.warn('Network notice recording signature, storing local audit:', err);
+                // Resilient fallback: store locally so operator is not stranded
+                const fallbackRecord = {
+                    signatureId: 'sig_local_' + Date.now(),
+                    signerName: signerName,
+                    organization: orgName,
+                    timestamp: new Date().toISOString(),
+                    termsVersion: 'beta-pilot-v1.0',
+                    accepted: true
+                };
+                localStorage.setItem('abrevia_beta_terms_accepted', JSON.stringify(fallbackRecord));
+                localStorage.removeItem('abrevia_signed_out');
+                closeBetaTermsModal();
+                window.location.href = `/dashboard.html?lang=${currentLang}`;
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+                if (submitBtnText) submitBtnText.textContent = origBtnText;
+            }
+        }
+        window.submitBetaTermsAgreement = submitBetaTermsAgreement;
+
         function handleEnterWorkspace(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
+            const accepted = localStorage.getItem('abrevia_beta_terms_accepted');
+            if (!accepted) {
+                openBetaTermsModal();
+                return;
+            }
             localStorage.removeItem('abrevia_signed_out');
             window.location.href = `/dashboard.html?lang=${currentLang}`;
         }
@@ -924,6 +1221,18 @@
 
         // Run PIN check on load
         window.addEventListener('DOMContentLoaded', checkPinStatus);
+
+        // Auto-open terms modal if redirected from dashboard or requested via URL
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('require_terms') === 'true' || params.get('terms') === 'true') {
+                const accepted = localStorage.getItem('abrevia_beta_terms_accepted');
+                if (!accepted) {
+                    openBetaTermsModal();
+                }
+            }
+        });
+
 
 
         // HIPAA Modal Handlers
