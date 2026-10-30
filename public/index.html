@@ -59,51 +59,16 @@
     <main class="max-w-3xl mx-auto w-full px-6 py-8 sm:py-12 flex-grow flex flex-col items-center justify-center text-center">
         
         <!-- Clean, Bold, Minimal Headline -->
-        <h1 id="heroTitle" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-2 leading-tight">
+        <h1 id="heroTitle" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-2 sm:mb-3 leading-tight">
             Bilingual Asynchronous Communication Technology
         </h1>
-        <div id="heroIndustries" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-3">
-            <a id="indLogistics" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistics" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 hover:text-white border border-brand-500/30 hover:border-brand-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Logistics & Dispatch use cases on GitHub">
-                <span>🚚 Logistics</span>
-            </a>
-            <a id="indField" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#field-services" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white border border-indigo-500/30 hover:border-indigo-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Field Services & Contractors use cases on GitHub">
-                <span>🛠️ Field Services</span>
-            </a>
-            <a id="indOperations" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#operations" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-white border border-emerald-500/30 hover:border-emerald-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Operations & Dispatch on GitHub">
-                <span>⚡ Operations</span>
-            </a>
-            <a id="indTitle6" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#title-vi-overview" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Federal Title VI Language Access Compliance on GitHub">
-                <span>🏛️ Title VI Sectors</span>
-            </a>
-        </div>
-        <!-- Crisp Minimal Subtitle -->
-        <p id="heroSubtitle" class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-4 leading-relaxed">
-            Messages are 2-way translated and dispatched directly. No downloads, zero friction.
-        </p>
 
-        <!-- Who is this app for? Link to GitHub Guide -->
-        <div class="mb-6">
-            <a id="whoIsThisForHeroBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition shadow-sm hover:scale-[1.02]">
-                <span>🏛️</span>
-                <span id="whoIsThisForHeroText">Who is this app for? Federal Title VI & Use Cases &rarr;</span>
-            </a>
-        </div>
-
-        <!-- Effortless Minimal Launchpad -->
-        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 sm:p-7 max-w-md w-full shadow-2xl backdrop-blur-sm text-center mb-6 sm:mb-8">
-            
-            <!-- Operator Directional Flow -->
-            <div class="inline-flex items-center justify-center space-x-2 bg-slate-950/80 border border-slate-800 px-3.5 py-2 rounded-xl mb-4 w-full">
-                <span class="text-xs font-semibold text-slate-300">🇺🇸 English Operator</span>
-                <span class="text-brand-400 font-bold">&rarr;</span>
-                <span class="text-xs font-semibold text-emerald-400">📱 Recipient Mobile (WhatsApp &amp; Message)</span>
-            </div>
-
+        <!-- Effortless Minimal Launchpad (Directly at top, above description) -->
+        <div class="w-full max-w-md mx-auto mb-5 sm:mb-6">
             <!-- Directional Flow Hint -->
-            <p id="profileHint" class="text-xs text-slate-400 mb-5">
-                You type in English &rarr; Constituent receives Spanish translation directly on their phone.
+            <p id="profileHint" class="text-xs text-slate-400 mb-2.5 sm:mb-3">
+                You write in English (.a) &rarr; Recipient receives Spanish translation (.b)
             </p>
-
 
             <!-- PIN Unlock Card (Shown when user signed out with a PIN) -->
             <div id="pinUnlockCard" class="hidden w-full bg-slate-950 border border-brand-500/40 rounded-2xl p-5 sm:p-6 text-center shadow-xl shadow-brand-500/10 mb-4">
@@ -131,25 +96,49 @@
 
             <!-- Standard 1-Click Launch Button Container -->
             <div id="launchContainer">
-                <button id="launchBtn" onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm sm:text-base group">
+                <button id="launchBtn" onclick="handleEnterWorkspace(event)" class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 px-6 rounded-2xl transition shadow-xl shadow-blue-500/25 flex items-center justify-center space-x-2 text-sm sm:text-base group cursor-pointer active:scale-[0.98]">
                     <span id="launchBtnText">Launch Operator Console</span>
                     <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </button>
             </div>
+        </div>
 
-            <!-- Prominent Trust Notes & Frictionless Onboarding (Enhanced Visibility) -->
-            <div class="mt-6 pt-2 space-y-3.5">
-                <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm sm:text-base font-semibold text-slate-200">
-                    <span id="trustNote1" class="flex items-center gap-1.5">🔒 Secure Operations</span>
-                    <span class="text-slate-600 font-bold">&bull;</span>
-                    <span id="trustNote2" class="flex items-center gap-1.5">📱 Zero App Downloads</span>
-                </div>
-                <div>
-                    <span class="inline-flex items-center justify-center px-5 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 text-sm sm:text-base font-bold shadow-md shadow-emerald-950/40 tracking-wide">
-                        <span id="trustNote3">✨ Start Free &bull; No Credit Card Required</span>
-                    </span>
-                </div>
-            </div>
+        <!-- Crisp Minimal Subtitle (Description of the Product) -->
+        <p id="heroSubtitle" class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-3 sm:mb-4 leading-relaxed">
+            Messages are 2-way translated and dispatched directly. No downloads, zero friction.
+        </p>
+
+        <!-- Prominent Trust Notes & Frictionless Onboarding -->
+        <div class="mb-4 sm:mb-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:text-sm font-semibold text-slate-300">
+            <span id="trustNote1" class="flex items-center gap-1.5">🔒 Secure Operations</span>
+            <span class="text-slate-600 font-bold">&bull;</span>
+            <span id="trustNote2" class="flex items-center gap-1.5">📱 Zero App Downloads</span>
+            <span class="text-slate-600 font-bold">&bull;</span>
+            <span id="trustNote3" class="text-emerald-400 font-bold">✨ Start Free &bull; No Credit Card Required</span>
+        </div>
+
+        <!-- Industry Pills -->
+        <div id="heroIndustries" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-3.5">
+            <a id="indLogistics" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#logistics" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 hover:text-white border border-brand-500/30 hover:border-brand-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Logistics & Dispatch use cases on GitHub">
+                <span>🚚 Logistics</span>
+            </a>
+            <a id="indField" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#field-services" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white border border-indigo-500/30 hover:border-indigo-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Field Services & Contractors use cases on GitHub">
+                <span>🛠️ Field Services</span>
+            </a>
+            <a id="indOperations" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#operations" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-white border border-emerald-500/30 hover:border-emerald-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Operations & Dispatch on GitHub">
+                <span>⚡ Operations</span>
+            </a>
+            <a id="indTitle6" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md#title-vi-overview" target="_blank" rel="noopener noreferrer" class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-500/50 transition hover:scale-105 inline-flex items-center space-x-1 cursor-pointer shadow-sm" title="View Federal Title VI Language Access Compliance on GitHub">
+                <span>🏛️ Title VI Sectors</span>
+            </a>
+        </div>
+
+        <!-- Who is this app for? Link to GitHub Guide -->
+        <div class="mb-6">
+            <a id="whoIsThisForHeroBtn" href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition shadow-sm hover:scale-[1.02]">
+                <span>🏛️</span>
+                <span id="whoIsThisForHeroText">Who is this app for? Federal Title VI & Use Cases &rarr;</span>
+            </a>
         </div>
 
         <!-- 3 Quiet Minimal Pillars (Row - Headlines Only) -->
