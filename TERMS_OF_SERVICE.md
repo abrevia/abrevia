@@ -5,7 +5,7 @@
 ---
 
 ### 1. Acceptance of Terms & Eligibility
-By accessing, installing, downloading, or using this real-time communication platform, messaging application, related APIs, and client interfaces (collectively, the **"Service"**), you enter into a legally binding agreement with the platform operator (**"Company," "we," "us," or "our"**). If you do not agree to these Terms of Service (**"Terms"**), you must not access, install, or use the Service.
+By accessing, installing, downloading, or using this real-time communication platform, messaging application, related APIs, and client interfaces (collectively, the **"Service"**), you enter into a legally binding agreement with the platform operator, **Servicios ADG LLC** (**"Company," "we," "us," or "our"**). The Service is engineered and deployed exclusively for operations within the United States. If you do not agree to these Terms of Service (**"Terms"**), you must not access, install, or use the Service.
 
 You affirm that you are at least 18 years of age (or the legal age of majority in your jurisdiction) and possess full legal capacity to execute this binding agreement. If you use the Service on behalf of an entity, corporation, or partnership, you represent and warrant that you hold full legal authority to bind that entity to these Terms.
 
@@ -75,6 +75,6 @@ We reserve the right, without prior notice or liability, to immediately suspend,
 ---
 
 ### 11. Governing Law, Binding Arbitration & Class Action Waiver
-These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which the Company is registered, without regard to conflict of law principles. Any dispute, controversy, or claim arising out of or relating to these Terms or the Service shall be settled exclusively by individual, binding arbitration administered by a recognized arbitral body.
+These Terms and any claim or dispute arising out of or related to the Service shall be governed by and construed in accordance with the laws of the United States and the State of registration of Servicios ADG LLC, without regard to conflict of law principles. Any dispute, controversy, or claim arising out of or relating to these Terms or the Service shall be settled exclusively by individual, binding arbitration administered by the American Arbitration Association (AAA) under its Commercial Arbitration Rules and the Federal Arbitration Act (FAA).
 
 **CLASS ACTION WAIVER: YOU AGREE THAT ALL CLAIMS AND DISPUTES MUST BE BROUGHT IN AN INDIVIDUAL CAPACITY AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS ACTION, COLLECTIVE ACTION, PRIVATE ATTORNEY GENERAL ACTION, OR REPRESENTATIVE PROCEEDING.**

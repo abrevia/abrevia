@@ -2570,7 +2570,8 @@ async function handleSendPersonalWhatsApp() {
     }
 
     if (cleanPhone.length === 10 && !targetPhone.startsWith('+')) {
-        cleanPhone = (dashboardMode === 'es' ? '52' : '1') + cleanPhone;
+        // Abrevia is deployed exclusively in the USA: 10-digit numbers default to U.S. (+1)
+        cleanPhone = '1' + cleanPhone;
     }
 
     const t = I18N[dashboardMode];
@@ -3309,6 +3310,11 @@ async function startThreadWithContact(phone) {
 function normalizeClientPhone(phone) {
     if (!phone) return '';
     let clean = phone.trim().replace(/[^\d+]/g, '');
+    const digits = clean.replace(/\D/g, '');
+    // Standard U.S. 10-digit phone normalization (Abrevia is U.S. domestic)
+    if (digits.length === 10 && !clean.startsWith('+')) {
+        return '+1' + digits;
+    }
     if (!clean.startsWith('+')) clean = '+' + clean;
     return clean;
 }

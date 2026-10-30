@@ -83,11 +83,12 @@ Because of our Zero Data Retention architecture:
 
 ---
 
-## 7. Data Subject Rights (GDPR, CCPA/CPRA, LGPD)
+## 7. United States Privacy Frameworks (CCPA / CPRA & State Data Privacy Laws)
 
-Data protection frameworks provide rights of access, rectification, portability, and erasure. Because our servers do not store personal profiles, identifiers, or message histories on persistent media:
-* Requests to **access**, **export**, or **delete** historical communications are inherently self-executing at the server level, as all session content is permanently purged upon delivery.
-* If you wish to purge communication data stored on your personal device, you may do so directly by clearing local client application cache or uninstalling the client.
+Abrevia operates exclusively within the United States. Under U.S. federal and state consumer privacy statutes (including the California Consumer Privacy Act / CPRA and state data privacy frameworks):
+* **No Sale or Sharing of Personal Data:** We do not sell, rent, monetize, or share user communications, contact records, or metadata with third-party advertisers or data brokers.
+* **Self-Executing Deletion & Zero Retention:** Because our servers process communications purely in volatile memory (RAM) and do not store message histories or consumer profiles on persistent media, statutory rights of access, portability, and erasure are inherently self-executing. Data is permanently purged from memory upon delivery.
+* **Device-Level Control:** Any cached conversation data residing locally on your device can be cleared at any time by clearing your browser cache or locking/resetting your local workspace session.
 
 ---
 
