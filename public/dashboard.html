@@ -785,137 +785,86 @@
 
     <!-- Dedicated Settings & Preferences Modal -->
     <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full flex flex-col shadow-2xl relative overflow-hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full flex flex-col shadow-2xl relative overflow-hidden">
             
             <!-- Modal Header -->
-            <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
-                <div class="flex items-center space-x-2">
-                    <span class="text-base">⚙️</span>
-                    <h3 id="settingsModalTitle" class="text-sm font-bold text-white">Settings & Preferences</h3>
-                </div>
+            <div class="px-5 py-3 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
+                <h3 id="settingsModalTitle" class="text-sm font-bold text-white">Settings</h3>
                 <button type="button" onclick="closeSettingsModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 leading-none transition cursor-pointer" title="Close">
                     &times;
                 </button>
             </div>
 
-            <!-- Modal Body -->
-            <div class="p-4 sm:p-5 space-y-3.5 text-xs text-slate-300">
-                <!-- Section: Organization & Sender Profile -->
-                <div>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Organization & Sender Profile</span>
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="text-base">🏢</span>
-                            <div>
-                                <span class="text-white font-medium block">Sender Identity</span>
-                                <span class="text-[10px] text-slate-400 block">Configure organization name &amp; outbound signature</span>
-                            </div>
-                        </div>
-                        <button id="senderProfileSettingsBtn" onclick="openSenderProfileModal()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition cursor-pointer">
-                            <span id="senderProfileQuickLabel">Abrevia</span>
-                        </button>
-                    </div>
-                </div>
+            <!-- Modal Body (Streamlined Clickable Text Rows) -->
+            <div class="p-2 sm:p-3 space-y-0.5 text-xs text-slate-300">
+                <!-- Sender Identity -->
+                <button id="senderProfileSettingsBtn" onclick="openSenderProfileModal()" type="button" class="w-full text-left py-2 px-3 rounded-lg hover:bg-slate-800/80 active:bg-slate-800 flex items-center justify-between transition cursor-pointer group">
+                    <span class="text-sm font-medium text-slate-200 group-hover:text-white transition">Sender Identity</span>
+                    <span class="text-xs text-slate-400 flex items-center space-x-1">
+                        <span id="senderProfileQuickLabel" class="max-w-[120px] truncate text-slate-400">Abrevia</span>
+                        <span class="text-slate-500 group-hover:text-slate-300 transition">›</span>
+                    </span>
+                </button>
 
-                <!-- Section: Operator Preferences -->
-                <div>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Operator Preferences</span>
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span id="soundToggleIcon" class="text-base">🔔</span>
-                            <div>
-                                <span class="text-white font-medium block">Sound Notifications</span>
-                                <span class="text-[10px] text-slate-400 block">Audio chime when constituent replies</span>
-                            </div>
-                        </div>
-                        <button id="soundToggleBtn" onclick="toggleSoundAlerts()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition cursor-pointer">
-                            <span id="soundToggleLabel">Alerts</span>
-                        </button>
-                    </div>
-                </div>
+                <!-- Sound Notifications -->
+                <button id="soundToggleBtn" onclick="toggleSoundAlerts()" type="button" class="w-full text-left py-2 px-3 rounded-lg hover:bg-slate-800/80 active:bg-slate-800 flex items-center justify-between transition cursor-pointer group">
+                    <span class="text-sm font-medium text-slate-200 group-hover:text-white transition">Sound Notifications</span>
+                    <span class="text-xs flex items-center space-x-1">
+                        <span id="soundToggleIcon" class="hidden">🔔</span>
+                        <span id="soundToggleLabel" class="text-brand-400 font-semibold text-xs">Alerts</span>
+                        <span class="text-slate-500 group-hover:text-slate-300 transition">›</span>
+                    </span>
+                </button>
 
-                <!-- Section: Subscription & Billing -->
-                <div>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Subscription & Billing</span>
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="text-base">💳</span>
-                            <div>
-                                <span class="text-white font-medium block">Billing & Plan</span>
-                                <span class="text-[10px] text-slate-400 block">Manage subscription, card & invoices</span>
-                            </div>
-                        </div>
-                        <button id="billingBtn" onclick="openBillingModal()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition cursor-pointer">
-                            <span id="billingBtnText">Billing</span>
-                        </button>
-                    </div>
-                </div>
+                <!-- Billing & Plan -->
+                <button id="billingBtn" onclick="openBillingModal()" type="button" class="w-full text-left py-2 px-3 rounded-lg hover:bg-slate-800/80 active:bg-slate-800 flex items-center justify-between transition cursor-pointer group">
+                    <span id="billingBtnText" class="text-sm font-medium text-slate-200 group-hover:text-white transition">Billing &amp; Plan</span>
+                    <span class="text-xs text-slate-500 group-hover:text-slate-300 transition">›</span>
+                </button>
 
-                <!-- Section: HIPAA Compliance & Pre-Signed BAA -->
-                <div>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">HIPAA Compliance & Legal Safeguards</span>
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="text-base">🛡️</span>
-                            <div>
-                                <span class="text-white font-medium block">HIPAA BAA Agreement</span>
-                                <span class="text-[10px] text-slate-400 block">Download pre-signed BAA (PDF) & compliance roadmap</span>
-                            </div>
-                        </div>
-                        <button id="hipaaBaaBtn" onclick="openHipaaBaaModal()" type="button" class="bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:text-emerald-200 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center space-x-1.5 shadow-sm">
-                            <span>📄</span>
-                            <span>Get BAA</span>
-                        </button>
-                    </div>
-                </div>
+                <!-- HIPAA BAA Agreement -->
+                <button id="hipaaBaaBtn" onclick="openHipaaBaaModal()" type="button" class="w-full text-left py-2 px-3 rounded-lg hover:bg-slate-800/80 active:bg-slate-800 flex items-center justify-between transition cursor-pointer group">
+                    <span class="text-sm font-medium text-slate-200 group-hover:text-white transition">HIPAA BAA Agreement</span>
+                    <span class="text-xs text-emerald-400 font-medium flex items-center space-x-1">
+                        <span>Get BAA</span>
+                        <span class="text-slate-500 group-hover:text-slate-300 transition">›</span>
+                    </span>
+                </button>
 
-                <!-- Section: Application & Shortcuts -->
-                <div>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Application & Shortcuts</span>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button id="installAppBtn" onclick="triggerPwaInstall()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2.5 transition text-left shadow-sm cursor-pointer">
-                            <span class="text-base">📲</span>
-                            <div>
-                                <span id="installAppBtnText" class="text-xs font-semibold block text-white">Add Shortcut</span>
-                                <span class="text-[9px] text-slate-400 block">Desktop & Mobile PWA</span>
-                            </div>
-                        </button>
-                        <button id="dashShareBtn" onclick="shareAbreviaApp()" type="button" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-300 hover:text-white flex items-center space-x-2.5 transition text-left shadow-sm cursor-pointer">
-                            <span class="text-brand-400 text-base">↗</span>
-                            <div>
-                                <span id="dashShareBtnText" class="text-xs font-semibold block text-white">Share App</span>
-                                <span class="text-[9px] text-slate-400 block">Copy Operator Link</span>
-                            </div>
-                        </button>
-                    </div>
-                </div>
+                <!-- Add Shortcut -->
+                <button id="installAppBtn" onclick="triggerPwaInstall()" type="button" class="w-full text-left py-2 px-3 rounded-lg hover:bg-slate-800/80 active:bg-slate-800 flex items-center justify-between transition cursor-pointer group">
+                    <span id="installAppBtnText" class="text-sm font-medium text-slate-200 group-hover:text-white transition">Add Shortcut</span>
+                    <span class="text-xs text-slate-500 group-hover:text-slate-300 transition">›</span>
+                </button>
 
-                <!-- Section: Session Security -->
-                <div class="pt-2 border-t border-slate-800/60 space-y-2">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Session Security &amp; Lockout</span>
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span class="text-base">🔢</span>
-                            <div>
-                                <span class="text-white font-medium block">4-Digit Security PIN</span>
-                                <span class="text-[10px] text-slate-400 block" id="settingsPinStatus">Configure or change workspace PIN</span>
-                            </div>
-                        </div>
-                        <button id="setPinSettingsBtn" onclick="openPinConfigModal()" type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-200 text-xs font-semibold transition cursor-pointer">
-                            <span id="setPinBtnLabel">Set PIN</span>
-                        </button>
-                    </div>
+                <!-- Share App -->
+                <button id="dashShareBtn" onclick="shareAbreviaApp()" type="button" class="w-full text-left py-2 px-3 rounded-lg hover:bg-slate-800/80 active:bg-slate-800 flex items-center justify-between transition cursor-pointer group">
+                    <span id="dashShareBtnText" class="text-sm font-medium text-slate-200 group-hover:text-white transition">Share App</span>
+                    <span class="text-xs text-slate-500 group-hover:text-slate-300 transition">›</span>
+                </button>
 
-                    <button id="signOutLink" onclick="handleSignOutOrLock()" type="button" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 hover:text-red-200 p-2.5 rounded-xl flex items-center justify-center space-x-2 transition font-semibold text-xs cursor-pointer">
-                        <span>🚪</span>
-                        <span id="signOutBtnText">Sign Out / Lock Session</span>
-                    </button>
-                </div>
+                <div class="my-1 border-t border-slate-800/60"></div>
+
+                <!-- Security PIN -->
+                <button id="setPinSettingsBtn" onclick="openPinConfigModal()" type="button" class="w-full text-left py-2 px-3 rounded-lg hover:bg-slate-800/80 active:bg-slate-800 flex items-center justify-between transition cursor-pointer group">
+                    <span class="text-sm font-medium text-slate-200 group-hover:text-white transition">Security PIN</span>
+                    <span class="text-xs text-slate-400 group-hover:text-slate-300 transition flex items-center space-x-1">
+                        <span id="settingsPinStatus" class="hidden"></span>
+                        <span id="setPinBtnLabel">Set PIN</span>
+                        <span class="text-slate-500 group-hover:text-slate-300 transition">›</span>
+                    </span>
+                </button>
+
+                <!-- Sign Out / Lock Session -->
+                <button id="signOutLink" onclick="handleSignOutOrLock()" type="button" class="w-full text-left py-2 px-3 rounded-lg hover:bg-red-500/10 active:bg-red-500/20 text-red-400 hover:text-red-300 flex items-center justify-between transition cursor-pointer group">
+                    <span id="signOutBtnText" class="text-sm font-medium transition">Sign Out / Lock Session</span>
+                    <span class="text-xs text-red-400/60 group-hover:text-red-300 transition">›</span>
+                </button>
             </div>
 
             <!-- Modal Footer -->
-            <div class="p-3 border-t border-slate-800 bg-slate-950/60 shrink-0 flex justify-end">
-                <button onclick="closeSettingsModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-5 py-2 rounded-xl transition cursor-pointer">
+            <div class="px-4 py-2.5 border-t border-slate-800 bg-slate-950/60 shrink-0 flex justify-end">
+                <button onclick="closeSettingsModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition cursor-pointer">
                     Close
                 </button>
             </div>
@@ -1236,7 +1185,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_28"></script>
+    <script src="app.js?v=20261029_29"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">

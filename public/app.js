@@ -127,8 +127,17 @@ function toggleSoundAlerts() {
 function updateSoundAlertsUI() {
     const icon = document.getElementById('soundToggleIcon');
     const btn = document.getElementById('soundToggleBtn');
+    const soundLbl = document.getElementById('soundToggleLabel');
     if (icon) {
         icon.textContent = soundAlertsEnabled ? '🔔' : '🔕';
+    }
+    if (soundLbl) {
+        soundLbl.textContent = soundAlertsEnabled 
+            ? (dashboardMode === 'es' ? 'Activado' : 'On') 
+            : (dashboardMode === 'es' ? 'Silenciado' : 'Muted');
+        soundLbl.className = soundAlertsEnabled 
+            ? 'text-brand-400 font-semibold text-xs' 
+            : 'text-slate-500 font-medium text-xs';
     }
     if (btn) {
         btn.title = soundAlertsEnabled 
@@ -165,7 +174,7 @@ const I18N = {
     en: {
         consoleBadge: 'Console Status',
         consoleStatus: 'Active',
-        billingBtn: 'Billing',
+        billingBtn: 'Billing & Plan',
         whoIsThisForBtn: 'Who is this for?',
         dashShareBtn: 'Share',
         wrapUpShareTitle: 'Share Abrevia with your Team',
@@ -348,7 +357,7 @@ const I18N = {
     es: {
         consoleBadge: 'Estado de Consola',
         consoleStatus: 'Activo',
-        billingBtn: 'Facturación',
+        billingBtn: 'Facturación y Plan',
         whoIsThisForBtn: '¿Para quién es?',
         dashShareBtn: 'Compartir',
         wrapUpShareTitle: 'Comparta Abrevia con su Equipo',
