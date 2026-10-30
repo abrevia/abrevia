@@ -339,120 +339,150 @@
 <!-- HIPAA & Abrevia 2 Roadmap Modal -->
 
     <!-- Mandatory Beta Testing Agreement & Terms of Service Acceptance Modal -->
-    <div id="betaTermsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-5 hidden" onclick="if(event.target===this)closeBetaTermsModal()">
-        <div class="bg-slate-950 border border-amber-500/40 rounded-2xl p-5 sm:p-6 max-w-lg w-full shadow-2xl text-left relative flex flex-col max-h-[92vh]">
+    <div id="betaTermsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-5 hidden" onclick="if(event.target===this)closeBetaTermsModal()">
+        <div class="bg-slate-950 border border-amber-500/40 rounded-2xl p-5 sm:p-6 max-w-xl w-full shadow-2xl text-left relative flex flex-col max-h-[94vh]">
             <!-- Close Button -->
             <button type="button" onclick="closeBetaTermsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold p-1 leading-none cursor-pointer" title="Cancel">
                 &times;
             </button>
 
             <!-- Modal Header -->
-            <div class="flex items-center space-x-3 mb-3 pr-6 shrink-0">
+            <div class="flex items-center space-x-3 mb-2.5 pr-6 shrink-0">
                 <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-xl shrink-0">
                     ⚖️
                 </div>
                 <div>
-                    <h3 id="termsModalTitle" class="text-base font-bold text-white">Beta Testing Agreement &amp; Terms</h3>
-                    <p id="termsModalSubtitle" class="text-[11px] text-slate-400">Mandatory legal acknowledgment &amp; electronic signature before console access</p>
+                    <h3 id="termsModalTitle" class="text-base font-bold text-white">Terms of Service &amp; Beta Testing Agreement</h3>
+                    <p id="termsModalSubtitle" class="text-[11px] text-slate-400">Mandatory legal clickwrap consent &amp; electronic signature before console entry</p>
                 </div>
             </div>
 
-            <!-- Scrollable Content Body -->
-            <div class="overflow-y-auto pr-1 space-y-3.5 text-xs text-slate-300 leading-relaxed">
-                <!-- 1. Mandatory Safeguard & Scope Limitation Banner -->
-                <div class="bg-amber-950/40 border border-amber-500/50 rounded-xl p-3.5 space-y-2 text-amber-200/90 shadow-inner">
-                    <div class="flex items-center space-x-1.5 font-bold text-amber-300 uppercase tracking-wide text-[11px]">
-                        <span>⚠️</span>
-                        <span id="termsAlertTitle">Mandatory Beta Safeguard — Pilot Stage Only</span>
-                    </div>
-                    <p id="termsAlertP1" class="text-xs text-amber-200/90 leading-relaxed">
-                        Abrevia is currently in an active <strong>functional beta testing phase</strong>. While the bilingual AI translation and WhatsApp dispatch capabilities are fully operational, this application is provided strictly for <strong>operational workflow testing</strong>.
-                    </p>
-                    <p id="termsAlertP2" class="text-xs font-semibold text-amber-300 leading-relaxed bg-amber-900/30 p-2 rounded-lg border border-amber-500/30">
-                        ⛔ DO NOT transmit Protected Health Information (PHI), HIPAA-regulated medical records, confidential financial data, Social Security Numbers, or highly sensitive personal data during this testing stage.
-                    </p>
-                    <p id="termsAlertP3" class="text-[11px] text-amber-300/80 italic leading-relaxed">
-                        Enterprise HIPAA compliance safeguards are currently undergoing scheduled deployment. Abrevia (operated by Servicios ADG LLC) disclaims all liability for unauthorized disclosures of sensitive data during this testing pilot.
-                    </p>
+            <!-- Top Disclaimer Summary (Plain Language Above Scroll Container) -->
+            <div class="bg-amber-950/40 border border-amber-500/50 rounded-xl p-3 mb-2 text-xs text-amber-200/90 leading-relaxed shrink-0 shadow-inner">
+                <div class="flex items-center space-x-1.5 font-bold text-amber-300 uppercase tracking-wide text-[10px] mb-1">
+                    <span>⚠️</span>
+                    <span id="termsAlertTitle">Important Operational &amp; Legal Notice</span>
                 </div>
-
-                <!-- 2. Legal Documentation Links -->
-                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-2">
-                    <span id="termsDocsPrompt" class="text-[11px] font-semibold text-slate-300 block">Review complete legal policies &amp; compliance framework:</span>
-                    <div class="flex flex-wrap gap-2 text-[11px]">
-                        <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-brand-300 hover:text-white border border-slate-700 transition flex items-center space-x-1">
-                            <span>📄</span>
-                            <span>Terms of Service &rarr;</span>
-                        </a>
-                        <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-brand-300 hover:text-white border border-slate-700 transition flex items-center space-x-1">
-                            <span>🔒</span>
-                            <span>Privacy Policy &rarr;</span>
-                        </a>
-                        <a href="https://github.com/serviciosadg/abrevia/blob/main/WHO_IS_THIS_FOR.md" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-brand-300 hover:text-white border border-slate-700 transition flex items-center space-x-1">
-                            <span>ℹ️</span>
-                            <span>Pilot Roadmap &rarr;</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 3. Form: Signer Name & Mandatory Checkboxes -->
-                <form id="betaTermsForm" onsubmit="submitBetaTermsAgreement(event)" class="space-y-3">
-                    <div>
-                        <label id="termsSignerLabel" class="block text-xs font-semibold text-white mb-1">
-                            Full Legal Name / Operator Name (Electronic Signature) <span class="text-red-400">*</span>
-                        </label>
-                        <input id="termsSignerName" type="text" placeholder="e.g. Jane Doe" required oninput="validateTermsForm()" class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none transition font-medium">
-                    </div>
-
-                    <div>
-                        <label id="termsOrgLabel" class="block text-xs font-semibold text-slate-300 mb-1">
-                            Organization / Business Name <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
-                        </label>
-                        <input id="termsOrgName" type="text" placeholder="e.g. Acme Dispatch / Practice" class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none transition">
-                    </div>
-
-                    <!-- Mandatory Checkboxes -->
-                    <div class="space-y-2 pt-1">
-                        <label class="flex items-start space-x-2.5 text-xs text-slate-300 cursor-pointer select-none">
-                            <input type="checkbox" id="termsCheckBeta" required onchange="validateTermsForm()" class="mt-0.5 rounded border-slate-700 text-blue-600 focus:ring-0 focus:outline-none shrink-0 cursor-pointer">
-                            <span id="termsCheckBetaText" class="leading-relaxed">
-                                <strong>I understand and agree</strong> that Abrevia is currently in beta testing and I will <strong>NOT</strong> transmit HIPAA Protected Health Information (PHI), medical records, or sensitive confidential data during this trial.
-                            </span>
-                        </label>
-
-                        <label class="flex items-start space-x-2.5 text-xs text-slate-300 cursor-pointer select-none">
-                            <input type="checkbox" id="termsCheckTerms" required onchange="validateTermsForm()" class="mt-0.5 rounded border-slate-700 text-blue-600 focus:ring-0 focus:outline-none shrink-0 cursor-pointer">
-                            <span id="termsCheckTermsText" class="leading-relaxed">
-                                <strong>I have read, acknowledge, and legally accept</strong> the Abrevia Terms of Service and Privacy Policy.
-                            </span>
-                        </label>
-                    </div>
-
-                    <!-- Audit Trail Note -->
-                    <div class="text-[10px] text-slate-500 font-mono flex items-center space-x-1.5 pt-1">
-                        <span>🕒</span>
-                        <span id="termsAuditNote">Permanent audit timestamp, client IP, and device signature will be recorded upon execution.</span>
-                    </div>
-
-                    <div id="termsErrorMsg" class="hidden text-xs text-red-400 font-medium"></div>
-
-                    <!-- Footer Action Buttons -->
-                    <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-800">
-                        <button type="button" onclick="closeBetaTermsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2.5 rounded-xl transition cursor-pointer">
-                            <span id="termsCancelBtnText">Cancel</span>
-                        </button>
-
-                        <button id="termsSubmitBtn" type="submit" disabled class="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30 flex items-center space-x-1.5 cursor-pointer">
-                            <span id="termsSubmitBtnText">Electronically Sign &amp; Enter Workspace</span>
-                            <span>&rarr;</span>
-                        </button>
-                    </div>
-                </form>
+                <p id="termsSummaryNotice" class="text-[11px] leading-relaxed">
+                    This application routes messages using real-time ephemeral transmission and automated translation engines. Communications are not archived on our servers and cannot be recovered once delivered. This application does not support emergency calls (911/112) and must never be used for life-critical, medical triage, or high-risk operational instructions. By continuing, you agree to an individual binding arbitration clause, strict acceptable use rules, and comprehensive liability caps.
+                </p>
             </div>
+
+            <!-- Scroll-to-Accept Requirement Hint -->
+            <div class="flex items-center justify-between text-[10px] mb-1 shrink-0 px-1">
+                <span id="scrollPromptHint" class="text-amber-400 font-semibold flex items-center space-x-1">
+                    <span>▼</span>
+                    <span>Please scroll to the bottom of the agreement to unlock acceptance</span>
+                </span>
+                <span id="scrollPercentBadge" class="text-slate-500 font-mono">0% Scrolled</span>
+            </div>
+
+            <!-- Scrollable Agreement Text Box (Fixed Height, Monitored onScroll) -->
+            <div id="termsScrollBox" onscroll="handleTermsScroll(this)" class="flex-grow overflow-y-auto border border-slate-800 bg-slate-900/60 rounded-xl p-3.5 text-[11px] text-slate-300 space-y-3 leading-relaxed shadow-inner max-h-48 sm:max-h-56 select-text overscroll-contain">
+                <div class="font-bold text-white text-xs border-b border-slate-800 pb-1.5 flex items-center justify-between">
+                    <span>ABREVIA TERMS OF SERVICE &amp; ACCEPTABLE USE POLICY</span>
+                    <span class="text-[10px] text-emerald-400 font-mono font-normal">v1.0-beta</span>
+                </div>
+                <div class="text-[10px] text-slate-400 uppercase tracking-wider">Last Modified: October 29, 2026</div>
+
+                <div>
+                    <h4 class="font-bold text-slate-200 text-xs mb-0.5">1. Acceptance of Terms &amp; Eligibility</h4>
+                    <p>By accessing, installing, or using Abrevia (the &ldquo;Service&rdquo;), you enter into a legally binding agreement with the platform operator. You affirm that you are at least 18 years of age and hold full legal capacity to enter this agreement. If acting on behalf of an entity, you warrant you hold legal authority to bind that entity.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-200 text-xs mb-0.5">2. Real-Time Operations &amp; Zero-Retention Architecture</h4>
+                    <p>The Service operates as an ephemeral real-time relay. Delivered messages and media are routed through volatile RAM and are NOT stored or archived on persistent databases. Once delivered, data is irrecoverable. The Company maintains zero capacity to restore past message logs.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-200 text-xs mb-0.5">3. Acceptable Use Policy (AUP) &amp; Absolute Prohibitions</h4>
+                    <p>You warrant you will not: (a) transmit malware, injection payloads, or exploit scripts; (b) execute automated scraping, botting, or denial-of-service calls; (c) transmit harassing, defamatory, or exploitative material; (d) reverse engineer or derive underlying protocols; (e) impersonate any party; or (f) transmit unlawful communications in violation of wiretap, privacy, or export laws.</p>
+                </div>
+
+                <div class="bg-amber-900/20 border border-amber-500/30 p-2.5 rounded-lg text-amber-200">
+                    <h4 class="font-bold text-amber-300 text-xs mb-0.5">4. Machine Translation &amp; Automated Processing Disclaimer</h4>
+                    <p>THE SERVICE INCLUDES AUTOMATED MACHINE TRANSLATION. YOU EXPRESSLY ACKNOWLEDGE THESE PROCESSES ARE EXPERIMENTAL AND SUSCEPTIBLE TO LINGUISTIC INACCURACIES, SYSTEMIC HALLUCINATIONS, CONTEXTUAL OMISSIONS, CRITICAL NEGATION DROPS, AND TRANSCRIPTION ERRORS. THE COMPANY DISCLAIMS ALL WARRANTIES REGARDING TRANSLATION ACCURACY.</p>
+                </div>
+
+                <div class="bg-red-950/30 border border-red-500/30 p-2.5 rounded-lg text-red-200">
+                    <h4 class="font-bold text-red-300 text-xs mb-0.5">5. Exclusion of High-Stakes, Emergency Services &amp; PHI</h4>
+                    <p>THE SERVICE IS NOT AN EMERGENCY CONDUIT (NO 911/112 DISPATCH). The Service is strictly prohibited for life-critical, surgical, clinical medical triage, or vehicular navigation. YOU STRICTLY AGREE NOT TO TRANSMIT PROTECTED HEALTH INFORMATION (PHI) OR HIPAA-REGULATED MEDICAL DATA DURING THIS BETA TESTING STAGE.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-200 text-xs mb-0.5">6. Limitation of Liability &amp; Consequential Damages Waiver</h4>
+                    <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL THE COMPANY BE LIABLE FOR ANY INDIRECT, PUNITIVE, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES. TOTAL AGGREGATE LIABILITY IS CAPPED AT THE GREATER OF FEES PAID IN THE PRIOR 3 MONTHS OR $100.00 USD.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-200 text-xs mb-0.5">7. Mandatory Binding Arbitration &amp; Class Action Waiver</h4>
+                    <p>ALL DISPUTES SHALL BE SETTLED EXCLUSIVELY VIA INDIVIDUAL BINDING ARBITRATION. YOU EXPRESSLY WAIVE ANY RIGHT TO PARTICIPATE IN A CLASS ACTION, COLLECTIVE PROCEEDING, OR REPRESENTATIVE ACTION.</p>
+                </div>
+
+                <div class="pt-1 text-[10px] text-slate-400 border-t border-slate-800">
+                    Full policies: <a href="https://github.com/serviciosadg/abrevia/blob/main/TERMS_OF_SERVICE.md" target="_blank" class="text-brand-400 underline">Terms of Service</a> &bull; <a href="https://github.com/serviciosadg/abrevia/blob/main/PRIVACY_POLICY.md" target="_blank" class="text-brand-400 underline">Zero-Data-Retention Privacy Policy</a>.
+                </div>
+            </div>
+
+            <!-- Form: Electronic Signature & Strict Checkbox Controls -->
+            <form id="betaTermsForm" onsubmit="submitBetaTermsAgreement(event)" class="space-y-2.5 pt-2 shrink-0">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div>
+                        <label id="termsSignerLabel" class="block text-[11px] font-semibold text-white mb-0.5">
+                            Full Legal Name (Electronic Signature) <span class="text-red-400">*</span>
+                        </label>
+                        <input id="termsSignerName" type="text" placeholder="e.g. Jane Doe" required oninput="validateTermsForm()" class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label id="termsOrgLabel" class="block text-[11px] font-semibold text-slate-300 mb-0.5">
+                            Organization / Business <span class="text-slate-500 text-[10px] font-normal">(Optional)</span>
+                        </label>
+                        <input id="termsOrgName" type="text" placeholder="e.g. Acme Dispatch" class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition">
+                    </div>
+                </div>
+
+                <!-- Phase 3 Clickwrap Checkbox (Disabled until full scroll completes) -->
+                <div class="bg-slate-900/50 border border-slate-800 p-2.5 rounded-xl space-y-1.5">
+                    <label class="flex items-start space-x-2.5 text-xs text-slate-300 cursor-pointer select-none">
+                        <input type="checkbox" id="termsCheckAgreement" disabled onchange="validateTermsForm()" class="mt-0.5 rounded border-slate-700 text-blue-600 focus:ring-0 focus:outline-none shrink-0 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+                        <span id="termsCheckAgreementText" class="text-[11px] leading-relaxed">
+                            I have read, understood, and agree to be bound by the Terms of Service, Acceptable Use Policy, and Arbitration Clause, and I certify that I am at least 18 years of age.
+                        </span>
+                    </label>
+
+                    <label class="flex items-start space-x-2.5 text-xs text-slate-300 cursor-pointer select-none">
+                        <input type="checkbox" id="termsCheckBetaNoPhi" disabled onchange="validateTermsForm()" class="mt-0.5 rounded border-slate-700 text-blue-600 focus:ring-0 focus:outline-none shrink-0 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+                        <span id="termsCheckBetaNoPhiText" class="text-[11px] leading-relaxed text-amber-200/90">
+                            I acknowledge that Abrevia is in functional beta testing and agree NOT to transmit HIPAA PHI, medical records, or sensitive confidential data.
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Audit Trail Microcopy -->
+                <div class="text-[9px] text-slate-500 font-mono flex items-center justify-between">
+                    <span>🕒 Immutable audit timestamp, IP &amp; browser cryptographic token recorded upon execution.</span>
+                    <span id="termsDeclineSubtext" class="text-slate-500 text-right">No messages can be sent or received without active acceptance.</span>
+                </div>
+
+                <div id="termsErrorMsg" class="hidden text-xs text-red-400 font-medium"></div>
+
+                <!-- Phase 3 Primary & Secondary Action Buttons -->
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
+                    <button type="button" onclick="declineAndExitTerms()" class="bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs px-3.5 py-2 rounded-xl transition cursor-pointer shrink-0" title="Decline Terms and Exit">
+                        <span id="termsDeclineBtnText">Decline / Exit</span>
+                    </button>
+
+                    <button id="termsSubmitBtn" type="submit" disabled class="bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30 flex items-center space-x-1.5 cursor-pointer">
+                        <span id="termsSubmitBtnText">Agree &amp; Continue</span>
+                        <span>&rarr;</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div id="hipaaModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+<div id="hipaaModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl text-left relative">
             <button onclick="closeHipaaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold p-1">
                 &times;
@@ -514,7 +544,12 @@
     <script>
         const content = {
             en: {
-                                termsModalTitle: 'Beta Testing Agreement & Terms',
+                                                termsSummaryNotice: 'This application routes messages using real-time ephemeral transmission and automated translation engines. Communications are not archived on our servers and cannot be recovered once delivered. This application does not support emergency calls (911/112) and must never be used for life-critical, medical triage, or high-risk operational instructions. By continuing, you agree to an individual binding arbitration clause, strict acceptable use rules, and comprehensive liability caps.',
+                termsCheckAgreementText: 'I have read, understood, and agree to be bound by the Terms of Service, Acceptable Use Policy, and Arbitration Clause, and I certify that I am at least 18 years of age.',
+                termsCheckBetaNoPhiText: 'I acknowledge that Abrevia is in functional beta testing and agree NOT to transmit HIPAA PHI, medical records, or sensitive confidential data.',
+                termsDeclineBtnText: 'Decline / Exit',
+                termsSubmitBtnText: 'Agree & Continue',
+                termsModalTitle: 'Beta Testing Agreement & Terms',
                 termsModalSubtitle: 'Mandatory legal acknowledgment & electronic signature before console access',
                 termsAlertTitle: 'Mandatory Beta Safeguard — Pilot Stage Only',
                 termsAlertP1: 'Abrevia is currently in an active <strong>functional beta testing phase</strong>. While the bilingual AI translation and WhatsApp dispatch capabilities are fully operational, this application is provided strictly for <strong>operational workflow testing</strong>.',
@@ -634,7 +669,12 @@
                 hipaaClose: 'Close'
             },
             es: {
-                                termsModalTitle: 'Acuerdo de Prueba Beta y Términos',
+                                                termsSummaryNotice: 'Esta aplicación enruta mensajes mediante transmisión efímera en tiempo real y motores de traducción automatizados. Las comunicaciones no se archivan en nuestros servidores y no se pueden recuperar una vez entregadas. Esta aplicación no admite llamadas de emergencia (911/112) y nunca debe utilizarse para instrucciones médicas críticas o de alto riesgo. Al continuar, usted acepta una cláusula de arbitraje vinculante individual, reglas estrictas de uso aceptable y límites integrales de responsabilidad.',
+                termsCheckAgreementText: 'He leído, comprendido y acepto estar sujeto a los Términos de Servicio, la Política de Uso Aceptable y la Cláusula de Arbitraje, y certifico que tengo al menos 18 años de edad.',
+                termsCheckBetaNoPhiText: 'Reconozco que Abrevia está en prueba beta funcional y acepto NO transmitir PHI de HIPAA, registros médicos ni datos confidenciales sensibles.',
+                termsDeclineBtnText: 'Rechazar / Salir',
+                termsSubmitBtnText: 'Aceptar y Continuar',
+                termsModalTitle: 'Acuerdo de Prueba Beta y Términos',
                 termsModalSubtitle: 'Reconocimiento legal obligatorio y firma electrónica antes de acceder a la consola',
                 termsAlertTitle: 'Salvaguarda Obligatoria Beta — Etapa Piloto Solamente',
                 termsAlertP1: 'Abrevia se encuentra actualmente en una fase activa de <strong>prueba beta funcional</strong>. Aunque la traducción por IA y el despacho por WhatsApp son completamente funcionales, esta aplicación se proporciona estrictamente para <strong>pruebas de flujo operativo</strong>.',
@@ -1016,15 +1056,40 @@
             if (tcBtn && c.termsCancelBtnText) tcBtn.textContent = c.termsCancelBtnText;
             const tsBtn = document.getElementById('termsSubmitBtnText');
             if (tsBtn && c.termsSubmitBtnText) tsBtn.textContent = c.termsSubmitBtnText;
+            const tsnNotice = document.getElementById('termsSummaryNotice');
+            if (tsnNotice && c.termsSummaryNotice) tsnNotice.textContent = c.termsSummaryNotice;
+            const tcaText = document.getElementById('termsCheckAgreementText');
+            if (tcaText && c.termsCheckAgreementText) tcaText.textContent = c.termsCheckAgreementText;
+            const tcbnpText = document.getElementById('termsCheckBetaNoPhiText');
+            if (tcbnpText && c.termsCheckBetaNoPhiText) tcbnpText.textContent = c.termsCheckBetaNoPhiText;
+            const tdBtn = document.getElementById('termsDeclineBtnText');
+            if (tdBtn && c.termsDeclineBtnText) tdBtn.textContent = c.termsDeclineBtnText;
 
             // Pricing removed from landing page (accessible only in user dashboard)
         }
 
-        // --- Beta Testing Terms & Safeguards Handlers ---
+        // --- Beta Testing Terms & Safeguards Handlers (Phase 3 Clickwrap) ---
+        let hasScrolledToBottom = false;
+
         function openBetaTermsModal() {
             const modal = document.getElementById('betaTermsModal');
             if (modal) {
                 modal.classList.remove('hidden');
+                hasScrolledToBottom = false;
+                const scrollBox = document.getElementById('termsScrollBox');
+                if (scrollBox) scrollBox.scrollTop = 0;
+                const checkAgree = document.getElementById('termsCheckAgreement');
+                const checkBeta = document.getElementById('termsCheckBetaNoPhi');
+                if (checkAgree) { checkAgree.checked = false; checkAgree.disabled = true; }
+                if (checkBeta) { checkBeta.checked = false; checkBeta.disabled = true; }
+                const hint = document.getElementById('scrollPromptHint');
+                if (hint) {
+                    hint.className = 'text-amber-400 font-semibold flex items-center space-x-1';
+                    hint.innerHTML = '<span>▼</span><span>Please scroll to the bottom of the agreement to unlock acceptance</span>';
+                }
+                const badge = document.getElementById('scrollPercentBadge');
+                if (badge) badge.textContent = '0% Scrolled';
+                validateTermsForm();
                 setTimeout(() => document.getElementById('termsSignerName')?.focus(), 150);
             }
         }
@@ -1038,27 +1103,72 @@
         }
         window.closeBetaTermsModal = closeBetaTermsModal;
 
+        function handleTermsScroll(el) {
+            if (!el) return;
+            const scrollPosition = el.scrollTop + el.clientHeight;
+            const totalHeight = el.scrollHeight;
+            const percent = Math.min(100, Math.round((scrollPosition / totalHeight) * 100));
+
+            const badge = document.getElementById('scrollPercentBadge');
+            if (badge) badge.textContent = `${percent}% Scrolled`;
+
+            if (!hasScrolledToBottom && (scrollPosition >= totalHeight - 16)) {
+                hasScrolledToBottom = true;
+                const checkAgree = document.getElementById('termsCheckAgreement');
+                const checkBeta = document.getElementById('termsCheckBetaNoPhi');
+                if (checkAgree) checkAgree.disabled = false;
+                if (checkBeta) checkBeta.disabled = false;
+
+                const hint = document.getElementById('scrollPromptHint');
+                if (hint) {
+                    hint.className = 'text-emerald-400 font-semibold flex items-center space-x-1';
+                    hint.innerHTML = '<span>✓</span><span>Complete agreement scrolled &amp; reviewed</span>';
+                }
+                validateTermsForm();
+            }
+        }
+        window.handleTermsScroll = handleTermsScroll;
+
         function validateTermsForm() {
             const name = document.getElementById('termsSignerName')?.value.trim();
-            const checkBeta = document.getElementById('termsCheckBeta')?.checked;
-            const checkTerms = document.getElementById('termsCheckTerms')?.checked;
+            const checkAgree = document.getElementById('termsCheckAgreement')?.checked;
+            const checkBeta = document.getElementById('termsCheckBetaNoPhi')?.checked;
             const btn = document.getElementById('termsSubmitBtn');
             if (btn) {
-                btn.disabled = !(name && name.length >= 2 && checkBeta && checkTerms);
+                btn.disabled = !(hasScrolledToBottom && checkAgree && checkBeta && name && name.length >= 2);
             }
         }
         window.validateTermsForm = validateTermsForm;
+
+        function declineAndExitTerms() {
+            closeBetaTermsModal();
+            const alertMsg = (currentLang === 'es')
+                ? 'Ha rechazado los Términos de Servicio. No se pueden enviar ni recibir mensajes sin la aceptación activa de los términos.'
+                : 'Declining these terms will prevent account creation and terminate your connection. No messages can be sent or received without active acceptance.';
+            alert(alertMsg);
+        }
+        window.declineAndExitTerms = declineAndExitTerms;
 
         async function submitBetaTermsAgreement(e) {
             if (e) e.preventDefault();
             const signerName = document.getElementById('termsSignerName')?.value.trim();
             const orgName = document.getElementById('termsOrgName')?.value.trim() || '';
-            const checkBeta = document.getElementById('termsCheckBeta')?.checked;
-            const checkTerms = document.getElementById('termsCheckTerms')?.checked;
+            const checkAgree = document.getElementById('termsCheckAgreement')?.checked;
+            const checkBeta = document.getElementById('termsCheckBetaNoPhi')?.checked;
             const errorEl = document.getElementById('termsErrorMsg');
             const submitBtn = document.getElementById('termsSubmitBtn');
             const submitBtnText = document.getElementById('termsSubmitBtnText');
             const origBtnText = submitBtnText ? submitBtnText.textContent : '';
+
+            if (!hasScrolledToBottom) {
+                if (errorEl) {
+                    errorEl.textContent = currentLang === 'es'
+                        ? 'Por favor desplace el texto hasta el final para revisar todos los términos.'
+                        : 'Please scroll to the bottom of the terms to complete review.';
+                    errorEl.classList.remove('hidden');
+                }
+                return;
+            }
 
             if (!signerName || signerName.length < 2) {
                 if (errorEl) {
@@ -1070,11 +1180,11 @@
                 return;
             }
 
-            if (!checkBeta || !checkTerms) {
+            if (!checkAgree || !checkBeta) {
                 if (errorEl) {
                     errorEl.textContent = currentLang === 'es'
-                        ? 'Debe aceptar todas las casillas de salvaguardas y términos obligatorios.'
-                        : 'You must check all mandatory safeguard and terms checkboxes.';
+                        ? 'Debe marcar las casillas de verificación obligatorias para aceptar los términos.'
+                        : 'You must check the mandatory agreement checkboxes to continue.';
                     errorEl.classList.remove('hidden');
                 }
                 return;
@@ -1118,7 +1228,6 @@
 
             } catch (err) {
                 console.warn('Network notice recording signature, storing local audit:', err);
-                // Resilient fallback: store locally so operator is not stranded
                 const fallbackRecord = {
                     signatureId: 'sig_local_' + Date.now(),
                     signerName: signerName,
