@@ -58,7 +58,7 @@
     </header>
 
     <!-- Main App Split View -->
-    <div class="flex flex-grow overflow-hidden relative">
+    <div class="flex flex-grow min-h-0 overflow-hidden relative">
         
         <!-- Sidebar: Active Conversations -->
         <aside id="conversationsSidebar" class="w-full md:w-80 bg-slate-950/70 border-r border-slate-800 flex flex-col shrink-0">
@@ -121,10 +121,10 @@
         </aside>
 
         <!-- Main Workspace -->
-        <main id="chatWorkspace" class="hidden md:flex flex-grow min-w-0 flex-col bg-slate-900 justify-between overflow-hidden w-full">
+        <main id="chatWorkspace" class="hidden md:flex flex-grow min-w-0 min-h-0 flex-col bg-slate-900 justify-between overflow-hidden w-full">
             
             <!-- Conversation Header with Auto-Saved Contact Info -->
-            <div class="bg-slate-950/40 border-b border-slate-800 px-3.5 sm:px-6 py-2.5 sm:py-3.5 flex justify-between items-center shrink-0 gap-2">
+            <div class="bg-slate-950/40 border-b border-slate-800 px-2.5 sm:px-6 py-2 sm:py-3 flex justify-between items-center shrink-0 gap-2">
                 <div class="flex items-center space-x-2.5 sm:space-x-3 min-w-0 flex-1 mr-3">
                     <!-- Mobile Back to Conversations Button -->
                     <button id="mobileBackBtn" type="button" onclick="closeMobileConversation()" class="md:hidden bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1 shrink-0" title="Back to conversations">
@@ -156,7 +156,7 @@
                     </button>
 
                     <!-- Deselect / Return to Neutral State (Desktop) -->
-                    <button id="closeThreadBtn" type="button" onclick="closeMobileConversation()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-xs px-2 py-1.5 rounded-lg transition items-center space-x-1 shadow-sm shrink-0" title="Deselect active conversation">
+                    <button id="closeThreadBtn" type="button" onclick="closeMobileConversation()" class="hidden sm:flex bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-xs px-2 py-1.5 rounded-lg transition items-center space-x-1 shadow-sm shrink-0" title="Deselect active conversation">
                         <span>✕</span>
                         <span id="closeThreadBtnText" class="hidden xl:inline text-[11px]">Close</span>
                     </button>
@@ -170,7 +170,7 @@
             </div>
 
             <!-- Messages Feed -->
-            <div id="chatFeed" class="flex-grow min-w-0 w-full overflow-y-auto overflow-x-hidden p-3.5 sm:p-6 space-y-4">
+            <div id="chatFeed" class="flex-grow min-h-0 min-w-0 w-full overflow-y-auto overflow-x-hidden p-3 sm:p-6 space-y-3.5">
                 <div class="text-center py-12">
                     <div class="w-12 h-12 rounded-2xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-center mx-auto mb-3">
                         <img src="/assets/logo.png?v=3" alt="" class="h-6 w-6 opacity-60">
@@ -181,7 +181,7 @@
             </div>
 
             <!-- Agent Composer Workspace (Abrevia 1 Instant Dispatch) -->
-            <div id="inputArea" class="bg-slate-950 border-t border-slate-800 p-3 sm:p-4 shrink-0 hidden">
+            <div id="inputArea" class="bg-slate-950 border-t border-slate-800 p-2.5 sm:p-4 shrink-0 hidden pb-[max(0.75rem,env(safe-area-inset-bottom))]">
                 <div class="max-w-4xl mx-auto space-y-2.5 sm:space-y-3">
                     
                     <!-- 1. Agent Input with Attachment Paperclip, Templates & Scheduling -->
@@ -195,43 +195,55 @@
                             <span class="text-[10px] text-red-400 font-mono">10DLC Compliant</span>
                         </div>
 
-                        <div class="flex items-center space-x-1.5 sm:space-x-2">
-                            <!-- Paperclip Attachment Button -->
-                            <button id="attachBtn" type="button" onclick="triggerFileInput()" title="Attach file, photo or document" class="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-brand-500 text-slate-400 hover:text-white transition shrink-0 flex items-center justify-center">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                                </svg>
-                            </button>
-                            <input type="file" id="fileInput" onchange="handleFileSelected(event)" class="hidden" accept="image/*,.pdf,.doc,.docx,.txt">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                            <!-- Full-Width Input on Mobile -->
+                            <div class="flex-grow min-w-0 w-full relative">
+                                <input id="agent-input" type="text" placeholder="Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)..." class="w-full bg-slate-900 border border-slate-700 focus:border-brand-500 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-2.5 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none transition shadow-inner">
+                            </div>
 
-                            <!-- Bilingual Quick Templates Button (⚡ Templates) -->
-                            <button id="templatesBtn" type="button" onclick="openTemplatesModal()" title="Bilingual Quick Response Templates (Macros)" class="px-2.5 py-2 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-brand-500 text-slate-300 hover:text-brand-300 transition shrink-0 flex items-center space-x-1 font-semibold text-xs shadow-sm">
-                                <span class="text-brand-400 font-bold">⚡</span>
-                                <span id="templatesBtnText" class="hidden sm:inline">Templates</span>
-                            </button>
+                            <!-- Mobile Action Toolbar (Tools Left, Dispatch Buttons Right) -->
+                            <div class="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 shrink-0 w-full sm:w-auto">
+                                <!-- Auxiliary Tools: Attach, Templates, Schedule -->
+                                <div class="flex items-center space-x-1 sm:space-x-1.5 shrink-0">
+                                    <!-- Paperclip Attachment Button -->
+                                    <button id="attachBtn" type="button" onclick="triggerFileInput()" title="Attach file, photo or document" class="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-brand-500 text-slate-300 hover:text-white transition shrink-0 flex items-center justify-center">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                                        </svg>
+                                    </button>
+                                    <input type="file" id="fileInput" onchange="handleFileSelected(event)" class="hidden" accept="image/*,.pdf,.doc,.docx,.txt">
 
-                            <input id="agent-input" type="text" placeholder="Type your reply in English (e.g. Your delivery is scheduled for tomorrow at 2 PM)..." class="flex-grow min-w-0 bg-slate-900 border border-slate-700 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                                    <!-- Bilingual Quick Templates Button (⚡ Templates) -->
+                                    <button id="templatesBtn" type="button" onclick="openTemplatesModal()" title="Bilingual Quick Response Templates (Macros)" class="px-2.5 py-2 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-brand-500 text-slate-300 hover:text-brand-300 transition shrink-0 flex items-center space-x-1 font-semibold text-xs shadow-sm">
+                                        <span class="text-brand-400 font-bold">⚡</span>
+                                        <span id="templatesBtnText" class="hidden sm:inline">Templates</span>
+                                    </button>
 
-                            <!-- Scheduled Dispatch Button (⏱️) -->
-                            <button id="scheduleBtn" type="button" onclick="openScheduleModal()" title="Schedule message for delayed delivery" class="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-amber-500 text-slate-400 hover:text-amber-300 transition shrink-0 flex items-center justify-center shadow-sm">
-                                <span class="text-xs sm:text-sm">⏱️</span>
-                            </button>
+                                    <!-- Scheduled Dispatch Button (⏱️) -->
+                                    <button id="scheduleBtn" type="button" onclick="openScheduleModal()" title="Schedule message for delayed delivery" class="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-amber-500 text-slate-300 hover:text-amber-300 transition shrink-0 flex items-center justify-center shadow-sm">
+                                        <span class="text-xs sm:text-sm">⏱️</span>
+                                    </button>
+                                </div>
 
-                            <!-- Direct Personal WhatsApp Dispatch Button (wa.me) -->
-                            <button id="whatsapp-direct-btn" type="button" onclick="handleSendPersonalWhatsApp()" title="Open translated message directly in your personal WhatsApp" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5 shadow-md shadow-emerald-500/20 border border-emerald-400/30">
-                                <span>💬</span>
-                                <span class="hidden sm:inline" id="whatsappDirectBtnText">WhatsApp</span>
-                            </button>
+                                <!-- Primary Dispatch Buttons: WhatsApp & Send -->
+                                <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+                                    <!-- Direct Personal WhatsApp Dispatch Button (wa.me) -->
+                                    <button id="whatsapp-direct-btn" type="button" onclick="handleSendPersonalWhatsApp()" title="Open translated message directly in your personal WhatsApp" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-xs font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5 shadow-md shadow-emerald-500/20 border border-emerald-400/30">
+                                        <span>💬</span>
+                                        <span id="whatsappDirectBtnText">WhatsApp</span>
+                                    </button>
 
-                            <!-- Send / Translate Button -->
-                            <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send via Automated Relay" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5 shadow-md shadow-brand-500/20">
-                                <span id="translateBtnText">Send</span>
-                                <span class="text-xs font-bold">↵</span>
-                            </button>
+                                    <!-- Send / Translate Button -->
+                                    <button id="translate-btn" onclick="handleTranslateAndSend()" title="Press Enter to Send via Automated Relay" class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white text-xs font-semibold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl transition shrink-0 flex items-center space-x-1.5 shadow-md shadow-brand-500/20">
+                                        <span id="translateBtnText">Send</span>
+                                        <span class="text-xs font-bold">↵</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Status & Prominent Dedicated HITL Button Bar -->
-                        <div class="flex items-center justify-between text-[11px] px-1 mt-2.5 text-slate-400 gap-2">
+                        <div class="flex items-center justify-between text-[11px] px-1 mt-2 text-slate-400 gap-2">
                             <div class="flex items-center space-x-2 min-w-0 truncate">
                                 <span class="inline-flex items-center space-x-1.5 text-emerald-400 font-medium shrink-0">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
@@ -1225,7 +1237,7 @@ Responda ALTO para no recibir más mensajes.</div>
     <!-- Hidden File Input for Device Contacts Sync / vCard / CSV Import -->
     <input type="file" id="contactsFileInput" accept=".vcf,.vcard,.csv,text/vcard,text/csv,text/plain" class="hidden" onchange="handleContactsFileSelected(event)">
 
-    <script src="app.js?v=20261029_25"></script>
+    <script src="app.js?v=20261029_26"></script>
 
     <!-- Wrap Up Session & Security Modal (PIN Setup & Optional Updates) -->
     <div id="wrapUpModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
